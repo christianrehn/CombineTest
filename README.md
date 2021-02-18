@@ -1,4 +1,5 @@
 Settings:
+* Directory to watch
 * Number of shots per session
 * Distance carry or total
 * Distances: between x and y/only the given values semicolon separated
