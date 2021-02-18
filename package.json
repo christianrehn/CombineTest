@@ -1,0 +1,34 @@
+{
+  "name": "ApproachShot",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "start": "npm run build && electron ./dist/main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "CR7",
+  "devDependencies": {
+    "@types/react": "^16.9.44",
+    "@types/react-dom": "^16.9.8",
+    "copy-webpack-plugin": "^6.0.3",
+    "css-loader": "^4.2.0",
+    "electron": "^9.1.2",
+    "html-webpack-plugin": "^4.3.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "sass": "^1.26.10",
+    "sass-loader": "^9.0.3",
+    "style-loader": "^1.2.1",
+    "ts-loader": "^8.0.2",
+    "typescript": "^3.9.7",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
+  },
+  "dependencies": {
+    "@types/react-toggle": "^4.0.2",
+    "react-toggle": "^4.1.1"
+  }
+}

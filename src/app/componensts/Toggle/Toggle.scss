@@ -1,0 +1,45 @@
+
+.toggle {
+    display: none;
+}
+
+/* The container and background */
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: gray;
+    border-radius: 50px;
+    transition: all 0.4s;
+}
+
+/* The sliding button */
+.slider:before {
+    position: absolute;
+    content: "";
+    width: 26px;
+    height: 26px;
+    left: 2px;
+    top: 2px;
+    background-color: #eee;
+    border-radius: 50px;
+    transition: all 0.4s;
+}
+
+/* On checked */
+input:checked + .slider {
+    background-color: #d39a2f;
+}
+input:checked + .slider:before {
+    transform: translateX(28px);
+}
