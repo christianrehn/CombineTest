@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
-    "start": "npm run build && electron ./dist/main.js",
+    "start": "yarn build && electron ./dist/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -29,6 +29,13 @@
   },
   "dependencies": {
     "@types/react-toggle": "^4.0.2",
+    "chokidar": "^3.5.1",
+    "fsevents": "2.3.2",
+    "node-sass": "^5.0.0",
     "react-toggle": "^4.1.1"
+  },
+  "resolutions": {
+    "fsevents": "1.2.13",
+    "**/fsevents": "1.2.13"
   }
 }
