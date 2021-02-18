@@ -4,7 +4,7 @@ import { TrayMenu } from '@/electron/TrayMenu';
 import { AlarmWindow } from '@/electron/AlarmWindow';
 
 
-app.on('ready', () => {
+app.on('ready', (): void => {
   appManager.setTray(new TrayMenu());
   appManager.setWindow('AlarmWindow', new AlarmWindow());
 });

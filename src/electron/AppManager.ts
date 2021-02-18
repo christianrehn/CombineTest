@@ -32,4 +32,4 @@ class AppManager {
   }
 }
 
-export const appManager = new AppManager();
+export const appManager: AppManager = new AppManager();
