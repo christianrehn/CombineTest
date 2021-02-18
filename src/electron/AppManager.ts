@@ -1,7 +1,7 @@
-import { AlarmWindow } from './AlarmWindow';
+import { MainWindow } from './MainWindow';
 import { TrayMenu } from './TrayMenu';
 
-export type ManagerTypes = AlarmWindow;
+export type ManagerTypes = MainWindow;
 
 class AppManager {
   private trayMenu!: TrayMenu;

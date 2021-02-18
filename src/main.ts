@@ -1,10 +1,10 @@
 import { app, BrowserWindow } from 'electron';
 import { appManager } from '@/electron/AppManager';
 import { TrayMenu } from '@/electron/TrayMenu';
-import { AlarmWindow } from '@/electron/AlarmWindow';
+import { MainWindow } from '@/electron/MainWindow';
 
 
 app.on('ready', (): void => {
   appManager.setTray(new TrayMenu());
-  appManager.setWindow('AlarmWindow', new AlarmWindow());
+  appManager.setWindow('AlarmWindow', new MainWindow());
 });
