@@ -1,7 +1,6 @@
 import React from 'react';
 import Chokidar, {FSWatcher} from 'chokidar';
 import './MainPage.scss';
-import Toggle from '@/app/componensts/Toggle/Toggle';
 
 /**
  * ERROR in ./node_modules/fsevents/fsevents.node 1:0
@@ -64,26 +63,61 @@ const MainPage = () => {
 
     return (
         <div className="main-page">
-            <div className="main-page__header">
-                <h3> Alarms </h3>
-                <button> +</button>
-            </div>
-            <ul className="alarms-holder">
-                {
-                    mockAlarms.map((alarm: Alarm) => (
-                        <li className="alarm-item">
-                            <div>
-                                <p className="alarm-item__time"> {alarm.time} </p>
-                                <p className="alarm-item__label"> {alarm.label} </p>
-                            </div>
+            <div className="main-page-left"
+                 style={{
+                     float: "left",
+                     width: 500,
+                     minWidth: 300,
+                     height: "100%",
+                     paddingTop: 20,
+                 }}>
+                <div className="main-page__header">
+                    <h3> Next Challenge </h3>
+                </div>
+                <div style={{
+                    marginTop: 100,
+                    backgroundColor: "white",
+                    color: "#234050",
+                    textAlign: "center",
+                    width: "70%",
+                    paddingTop: 50,
+                    paddingBottom: 50,
+                    display: "inline-block"
+                }}>
+                    <p style={{fontSize: 120,}}>60</p>
+                    <p style={{fontSize: 60,}}>Meter</p>
+                </div>
+                {/*<ul className="alarms-holder">*/}
+                {/*    {*/}
+                {/*        mockAlarms.map((alarm: Alarm) => (*/}
+                {/*            <li className="alarm-item">*/}
+                {/*                <div>*/}
+                {/*                    <p className="alarm-item__time"> {alarm.time} </p>*/}
+                {/*                    <p className="alarm-item__label"> {alarm.label} </p>*/}
+                {/*                </div>*/}
 
-                            <div className="alarm-item__toggle">
-                                <Toggle/>
-                            </div>
-                        </li>
-                    ))
-                }
-            </ul>
+                {/*                <div className="alarm-item__toggle">*/}
+                {/*                    <Toggle/>*/}
+                {/*                </div>*/}
+                {/*            </li>*/}
+                {/*        ))*/}
+                {/*    }*/}
+                {/*</ul>*/}
+            </div>
+            <div className="main-page-right"
+                 style={{
+                     float: "left",
+                     minWidth: 700,
+                     height: "100%",
+                     borderColor: "white",
+                     borderStyle: "solid",
+                     borderLeftWidth: 5,
+                     paddingTop: 20
+                 }}>
+                <div className="main-page__header">
+                    <h3> Last Shot </h3>
+                </div>
+            </div>
         </div>
     );
 }
