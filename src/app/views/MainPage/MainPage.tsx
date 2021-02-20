@@ -2,17 +2,6 @@ import React from 'react';
 import Chokidar, {FSWatcher} from 'chokidar';
 import './MainPage.scss';
 
-/**
- * ERROR in ./node_modules/fsevents/fsevents.node 1:0
- * Module parse failed: Unexpected character '�' (1:0)
- *
- * npm rebuild fsevents --update-binary
- */
-type Alarm = {
-    label: string;
-    message: string;
-    time: string;
-}
 
 const startWatcher = (path: string): void => {
     const onWatcherReady = () => {
@@ -50,7 +39,13 @@ const startWatcher = (path: string): void => {
         });
 }
 
-const MainPage = () => {
+type Alarm = {
+    label: string;
+    message: string;
+    time: string;
+}
+
+const MainPage: React.FC<{}> = (): JSX.Element => {
     const mockAlarms = [
         {
             label: 'Alarm',

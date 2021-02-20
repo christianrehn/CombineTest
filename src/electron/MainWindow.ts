@@ -1,5 +1,8 @@
 import {app, BrowserWindow} from 'electron';
 
+/**
+ * Creates the electron browser window.
+ */
 export class MainWindow {
     public readonly window: BrowserWindow;
 
@@ -21,10 +24,10 @@ export class MainWindow {
         })
         mainWindow.maximize();
 
-        // Load our index.html
+        // load index.html
         mainWindow.loadURL(`file://${app.getAppPath()}/index.html`)
 
-        // Open the DevTools.
+        // open DevTools
         mainWindow.webContents.openDevTools();
 
         return mainWindow;
