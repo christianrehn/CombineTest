@@ -3,13 +3,12 @@ import Chokidar, {FSWatcher} from 'chokidar';
 import './MainPage.scss';
 import {assert} from 'chai';
 import {parseLastShotCsv} from "@/app/views/MainPage/LastShotCsvParser";
-import * as path from "path";
 
 
 /**
  * Create random number between [min, max[.
  */
-function createRandomNumber(min: number, max: number) {
+function createRandomNumber(min: number, max: number): number {
     assert(min < max, "min >= max");
 
     return Math.floor(Math.random() * Math.floor(max - min)) + min;
@@ -30,47 +29,47 @@ interface IMainPageProps {
 export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.Element => {
     const minDistance: number = 10;
     const maxDistance: number = 60;
-    const [shotData, setShotData] = React.useState<IShotData | undefined>();
+    const [shotDatas, setShotDatas] = React.useState<IShotData []>([]);
     const [nextDistance, setNextDistance] = React.useState<number>(createRandomNumber(minDistance, maxDistance));
+    const nextDistanceRef: React.MutableRefObject<number> = React.useRef<number>(nextDistance);
 
-    const lastShotFileChanged = async (targetDistance: number): Promise<void> => {
+    const lastShotFileChanged = async (): Promise<void> => {
         const lastShotData: any = await parseLastShotCsv(props.lastShotCsvPath);
         const shotIdFromLastShotFile: number = lastShotData["shot_id"];
-        if (shotIdFromLastShotFile !== shotData?.id) {
-            console.log("next shot has been executed");
-            setShotData({
-                id: shotIdFromLastShotFile,
-                carry: lastShotData["carry_m"],
-                offline: lastShotData["offline_m"],
-                targetDistance
-            });
-            setNextDistance(createRandomNumber(minDistance, maxDistance));
+        if (!!shotIdFromLastShotFile) {
+            if (shotDatas.length <= 0 || shotIdFromLastShotFile !== shotDatas[shotDatas.length].id) {
+                console.log("next shot has been executed");
+                const shotDatasClone = [...shotDatas];
+                shotDatasClone.push({
+                    id: shotIdFromLastShotFile,
+                    carry: lastShotData["carry_m"],
+                    offline: lastShotData["offline_m"],
+                    targetDistance: nextDistanceRef.current
+                });
+                setShotDatas(shotDatasClone);
+            }
         }
     }
 
-    const [watcher, setWatcher] = React.useState<FSWatcher | undefined>();
     React.useEffect((): void => {
         console.log("startWatcher");
-        setWatcher(Chokidar.watch(
+        const watcher: FSWatcher = Chokidar.watch(
             props.lastShotCsvPath,
             {
                 ignored: /[\/\\]\./,
                 persistent: true
-            }));
-    }, [props.lastShotCsvPath])
-
-    if (!!watcher) {
-        (watcher as FSWatcher)
-            .on('add', function (path: string): void {
+            });
+        watcher
+            .on('add', (path: string): void => {
                 console.log('File', path, 'has been added');
-                lastShotFileChanged(nextDistance);
+                lastShotFileChanged();
             })
             .on('addDir', function (path: string): void {
                 console.log('Directory', path, 'has been added');
             })
-            .on('change', async (path: string): Promise<void> => {
+            .on('change', (path: string): void => {
                 console.log('File', path, 'has been changed');
-                lastShotFileChanged(nextDistance);
+                lastShotFileChanged();
             })
             .on('unlink', function (path: string): void {
                 console.log('File', path, 'has been removed');
@@ -88,14 +87,21 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                 // This event should be triggered everytime something happens.
                 // console.log('Raw event info:', event, path, details);
             });
-    }
 
-    const deltaDistance: number | undefined = !!shotData ? shotData.carry - shotData.targetDistance : undefined;
-    const absoluteDeviation: number | undefined = !!shotData && !!deltaDistance
-        ? Math.sqrt(deltaDistance * deltaDistance + shotData.offline * shotData.offline)
+    }, [props.lastShotCsvPath])
+
+    React.useEffect((): void => {
+        // a new shot has been added -> create new distance for next shot
+        nextDistanceRef.current = createRandomNumber(minDistance, maxDistance);
+        setNextDistance(nextDistanceRef.current);
+    }, [shotDatas]);
+
+    const deltaDistance: number | undefined = shotDatas.length > 0 ? shotDatas[shotDatas.length - 1].carry - shotDatas[shotDatas.length - 1].targetDistance : undefined;
+    const absoluteDeviation: number | undefined = shotDatas.length > 0 && !!deltaDistance
+        ? Math.sqrt(deltaDistance * deltaDistance + shotDatas[shotDatas.length - 1].offline * shotDatas[shotDatas.length - 1].offline)
         : undefined;
-    const relativeDeviation: number | undefined = !!shotData && !!absoluteDeviation
-        ? absoluteDeviation / shotData.targetDistance
+    const relativeDeviation: number | undefined = shotDatas.length > 0 && !!absoluteDeviation
+        ? absoluteDeviation / shotDatas[shotDatas.length - 1].targetDistance
         : undefined;
 
     return (
@@ -141,19 +147,19 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                 <table className="shot-data-holder">
                     <tr className="shot-item">
                         <td className="shot-item__label">Shot Id</td>
-                        <td className="shot-item__data"> {shotData?.id} </td>
+                        <td className="shot-item__data"> {shotDatas.length > 0 ? shotDatas[shotDatas.length - 1].id : ""} </td>
                     </tr>
                     <tr className="shot-item">
                         <td className="shot-item__label">Carry</td>
-                        <td className="shot-item__data"> {!!shotData ? `${shotData.carry.toFixed(2)} Meter` : ""} </td>
+                        <td className="shot-item__data"> {shotDatas.length > 0 ? `${shotDatas[shotDatas.length - 1].carry.toFixed(2)} Meter` : ""} </td>
                     </tr>
                     <tr className="shot-item">
                         <td className="shot-item__label">Offline</td>
-                        <td className="shot-item__data"> {!!shotData ? `${shotData.offline.toFixed(2)} Meter` : ""} </td>
+                        <td className="shot-item__data"> {shotDatas.length > 0 ? `${shotDatas[shotDatas.length - 1].offline.toFixed(2)} Meter` : ""} </td>
                     </tr>
                     <tr className="shot-item">
                         <td className="shot-item__label">Soll Distanz</td>
-                        <td className="shot-item__data"> {!!shotData ? `${shotData.targetDistance} Meter` : ""} </td>
+                        <td className="shot-item__data"> {shotDatas.length > 0 ? `${shotDatas[shotDatas.length - 1].targetDistance} Meter` : ""} </td>
                     </tr>
                     <tr className="shot-item">
                         <td className="shot-item__label">Absolute Abweichung</td>
