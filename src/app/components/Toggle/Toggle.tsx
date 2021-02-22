@@ -1,5 +1,5 @@
 import React from 'react';
-import './Toggle.scss';
+// import './Toggle.scss';
 
 type ToggleProps = {
   checked?: boolean;
@@ -11,7 +11,7 @@ const Toggle = ({
 }: ToggleProps) => {
   return (
     <label className="toggle">
-      <input type="checkbox" 
+      <input type="checkbox"
         onChange={handler}
       />
       <span className="slider"></span>
