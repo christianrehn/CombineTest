@@ -1,0 +1,15 @@
+{
+    "extends": ["stylelint-config-sass-guidelines", "stylelint-config-prettier"],
+    "plugins": ["stylelint-scss"],
+    "defaultSeverity": "warning",
+    "rules": {
+        "scss/at-extend-no-missing-placeholder": true,
+        "selector-max-id": 2,
+        "max-nesting-depth": 3,
+        "indentation": 4,
+        "scss/selector-no-redundant-nesting-selector": null,
+        "scss/at-rule-no-unknown": null,
+        "selector-class-pattern": "([a-z]+[A-Z][a-z]+)|([a-z]+)-([a-z])+|([a-z]+)",
+        "selector-max-compound-selectors": 6
+    }
+}

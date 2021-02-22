@@ -1,15 +1,64 @@
 {
-  "env": {
-    "browser": true,
-    "es6": true,
-    "node": true
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
   },
-    "extends": [
-      "eslint:recommended",
-      "plugin:@typescript-eslint/eslint-recommended",
-      "plugin:@typescript-eslint/recommended",
-      "plugin:import/errors",
-      "plugin:import/warnings"
+  "plugins": [
+    "react-hooks",
+    "import"
+  ],
+  "rules": {
+    "react-hooks/rules-of-hooks": 2,
+    "react-hooks/exhaustive-deps": 1,
+    "import/no-unresolved": 2,
+    "import/named": 2,
+    "no-console": [
+      2,
+      {
+        "allow": [
+          "time",
+          "timeEnd",
+          "error"
+        ]
+      }
     ],
-    "parser": "@typescript-eslint/parser"
+    "no-alert": "error",
+    "no-debugger": "error"
+  },
+  "overrides": [
+    {
+      "files": [
+        "src/**/*.js",
+        "src/**/*.jsx",
+        "src/**/*.ts",
+        "src/**/*.tsx"
+      ],
+      "rules": {
+      }
+    },
+    {
+      "files": [
+        "src/**/__tests__/**/*.*"
+      ],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ],
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [
+        ".ts",
+        ".tsx"
+      ]
+    },
+    "import/resolver": {
+      "typescript": {
+        "directory": "./"
+      }
+    },
+    "import/ignore": [
+      "lodash"
+    ]
+  }
 }
