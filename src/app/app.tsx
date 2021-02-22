@@ -1,7 +1,8 @@
-import React from 'react';
-import './app.scss';
-import {SettingsPage} from "@/app/views/SettingsPage/SettingsPage";
-import {MainPage} from "@/app/views/MainPage/MainPage";
+import {hot} from 'react-hot-loader';
+import * as React from 'react';
+// import './App.scss';
+import {SettingsPage} from "./views/SettingsPage/SettingsPage";
+import {MainPage} from "./views/MainPage/MainPage";
 
 const App: React.FC<{}> = (): JSX.Element => {
     const [showSettings, setShowSettings] = React.useState<boolean>(false);
@@ -17,4 +18,4 @@ const App: React.FC<{}> = (): JSX.Element => {
     );
 }
 
-export default App;
+export default hot(module)(App);
