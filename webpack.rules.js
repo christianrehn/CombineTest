@@ -24,4 +24,14 @@ module.exports = [
             }
         }
     },
+    {
+        test: /\.scss$/,
+        exclude: /(node_modules|\.webpack)/,
+        loaders: [
+            "style-loader",
+            "css-loader",
+            "postcss-loader",
+            "sass-loader"
+        ]
+    }
 ];

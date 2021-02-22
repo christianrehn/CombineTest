@@ -1,6 +1,6 @@
 import {hot} from 'react-hot-loader';
 import * as React from 'react';
-// import './App.scss';
+import './App.scss';
 import {SettingsPage} from "./views/SettingsPage/SettingsPage";
 import {MainPage} from "./views/MainPage/MainPage";
 
