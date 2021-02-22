@@ -1,5 +1,5 @@
 import React from 'react';
-import './SettingsPage.scss';
+// import './SettingsPage.scss';
 
 
 export const SettingsPage: React.FC<{}> = (): JSX.Element => {
