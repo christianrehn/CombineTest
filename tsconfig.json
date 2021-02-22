@@ -1,17 +1,23 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "allowJs": true,
     "module": "commonjs",
-    "strict": true,
-    "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "jsx": "react",
-    "baseUrl": "./",
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
+      "*": [
+        "node_modules/*"
+      ],
     },
-  }
+    "jsx": "react"
+  },
+  "include": [
+    "src/**/*"
+  ]
 }
