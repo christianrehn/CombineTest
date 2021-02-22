@@ -1,8 +1,8 @@
 import React from 'react';
 import Chokidar, {FSWatcher} from 'chokidar';
-import './MainPage.scss';
+// import './MainPage.scss';
 import {assert} from 'chai';
-import {parseLastShotCsv} from "@/app/views/MainPage/LastShotCsvParser";
+import {parseLastShotCsv} from "./LastShotCsvParser";
 
 
 /**
