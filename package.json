@@ -69,6 +69,7 @@
         "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
         "@electron-forge/maker-zip": "^6.0.0-beta.54",
         "@electron-forge/plugin-webpack": "6.0.0-beta.54",
+        "@hot-loader/react-dom": "^17.0.1",
         "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
         "@typescript-eslint/eslint-plugin": "^4.0.1",
         "@typescript-eslint/parser": "^4.0.1",
@@ -80,12 +81,12 @@
         "eslint-plugin-react-hooks": "^4.2.0",
         "fork-ts-checker-webpack-plugin": "^5.0.14",
         "node-loader": "^1.0.1",
+        "node-sass": "^4.14.1",
         "postcss-loader": "^4.2.0",
         "sass-loader": "^9.0.3",
         "style-loader": "^1.2.1",
         "ts-loader": "^8.0.2",
-        "typescript": "^4.0.2",
-        "node-sass": "^4.14.1"
+        "typescript": "^4.0.2"
     },
     "dependencies": {
         "@types/chai": "^4.2.15",
@@ -95,7 +96,7 @@
         "csv-parser": "^3.0.0",
         "electron-squirrel-startup": "^1.0.0",
         "react": "^17.0.1",
-        "react-dom": "^17.0.1",
+        "react-dom": "npm:@hot-loader/react-dom",
         "react-hot-loader": "^4.13.0"
     }
 }

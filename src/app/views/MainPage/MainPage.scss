@@ -1,62 +1,70 @@
 .main-page {
     width: 100%;
     height: 100%;
-    //padding: 10px;
-    //position: relative;
-    //box-sizing: border-box;
-    //display: grid;
-    //grid-template-rows: 35px auto;
+    padding: 10px;
+    position: relative;
 
     &__header {
-    //    display: flex;
-    //    align-items: center;
-    //    justify-content: space-between;
-    //    box-sizing: border-box;
-    //    padding: 10px 0;
-
         h3 {
             font-size: 50px;
             text-align: center;
         }
+    }
 
-    //    button {
-    //        border: none;
-    //        background: none;
-    //        outline: none;
-    //
-    //        font-size: 25px;
-    //        color: var(--font-white);
-    //        cursor: pointer;
-    //    }
-    //
+    &__next-challenge {
+        float: left;
+        width: 500px;
+        min-width: 300px;
+        height: 100%;
+        padding-top: 20px;
+    }
+
+    &__next-distance {
+        margin-top: 100px;
+        background: white;
+        color: #234050;
+        text-align: center;
+        width: 70%;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        display: inline-block;
+    }
+
+    &__next-distance-number {
+        font-size: 120px;
+    }
+
+    &__next-distance-unit {
+        font-size: 60px;
+    }
+
+    &__last-shot {
+        float: left;
+        min-width: 200px;
+        height: 100%;
+        border-color: white;
+        border-style: solid;
+        border-left-width: 5px;
+        padding-top: 20px;
+    }
+
+    &__shot-data-holder {
+        margin-top: 90px;
     }
 }
 
-//.alarms-holder {
-//    width: 100%;
-//    height: 100%;
-//    display: flex;
-//    flex-direction: column;
-//    overflow: auto;
-//    box-sizing: border-box;
-//}
-//
-//.alarm-item {
-//    padding: 15px 0;
-//    box-sizing: border-box;
-//    display: grid;
-//    grid-template-columns: auto 90px;
-//    border-bottom: 1px solid #eeeeee;
-//
-//    &__time {
-//        font-size: 40px;
-//        color: var(--font-white);
-//    }
-//
-//    &__toggle {
-//        display: flex;
-//        align-items: center;
-//        justify-content: center;
-//    }
-//
-//}
+.shot-item {
+    font-size: 20px;
+
+    &__label {
+    }
+
+    &__data {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    &__unit {
+    }
+
+}

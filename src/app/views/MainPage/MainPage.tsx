@@ -1,6 +1,6 @@
 import React from 'react';
 import Chokidar, {FSWatcher} from 'chokidar';
-// import './MainPage.scss';
+import './MainPage.scss';
 import {assert} from 'chai';
 import {parseLastShotCsv} from "./LastShotCsvParser";
 
@@ -124,93 +124,78 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
     console.log("shotDatas", shotDatas);
     return (
         <div className="main-page">
-            <div className="main-page-next-challenge"
-                 style={{
-                     float: "left",
-                     width: 500,
-                     minWidth: 300,
-                     height: "100%",
-                     paddingTop: 20,
-                 }}>
+            <div className="main-page__next-challenge">
                 <div className="main-page__header">
                     <h3> Next Challenge </h3>
                 </div>
-                <div style={{
-                    marginTop: 100,
-                    backgroundColor: "white",
-                    color: "#234050",
-                    textAlign: "center",
-                    width: "70%",
-                    paddingTop: 50,
-                    paddingBottom: 50,
-                    display: "inline-block"
-                }}>
-                    <p style={{fontSize: 120,}}>{nextDistance}</p>
-                    <p style={{fontSize: 60,}}>Meter</p>
+                <div className="main-page__next-distance">
+                    <p className="main-page__next-distance-number">{nextDistance}</p>
+                    <p className="main-page__next-distance-unit">Meter</p>
                 </div>
             </div>
-            <div className="main-page-last-shot"
-                 style={{
-                     float: "left",
-                     minWidth: 700,
-                     height: "100%",
-                     borderColor: "white",
-                     borderStyle: "solid",
-                     borderLeftWidth: 5,
-                     paddingTop: 20
-                 }}>
+            <div className="main-page__last-shot">
                 <div className="main-page__header">
                     <h3> Last Shot </h3>
                 </div>
-                <table className="shot-data-holder">
-                    <tr className="shot-item">
+                <table className="main-page__shot-data-holder">
+                    <tbody>
+                    <tr id="shotId" className="shot-item">
                         <td className="shot-item__label">Shot Id</td>
                         <td className="shot-item__data"> {shotDatas.length > 0 ? `${shotDatas[shotDatas.length - 1].id} / ${shotDatas.length}` : ""} </td>
+                        <td className="shot-item__unit"></td>
                     </tr>
-                    <tr className="shot-item">
+                    <tr id="carry" className="shot-item">
                         <td className="shot-item__label">Carry</td>
-                        <td className="shot-item__data"> {shotDatas.length > 0 ? `${shotDatas[shotDatas.length - 1].carry.toFixed(2)} Meter` : ""} </td>
+                        <td className="shot-item__data"> {shotDatas.length > 0 ? `${shotDatas[shotDatas.length - 1].carry.toFixed(2)}` : ""} </td>
+                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `Meter` : ""} </td>
                     </tr>
-                    <tr className="shot-item">
+                    <tr id="offline" className="shot-item">
                         <td className="shot-item__label">Offline</td>
-                        <td className="shot-item__data"> {shotDatas.length > 0 ? `${shotDatas[shotDatas.length - 1].offline.toFixed(2)} Meter` : ""} </td>
+                        <td className="shot-item__data"> {shotDatas.length > 0 ? `${shotDatas[shotDatas.length - 1].offline.toFixed(2)}` : ""} </td>
+                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `Meter` : ""} </td>
                     </tr>
-                    <tr className="shot-item">
+                    <tr id="targetDistance" className="shot-item">
                         <td className="shot-item__label">Soll Distanz</td>
-                        <td className="shot-item__data"> {shotDatas.length > 0 ? `${shotDatas[shotDatas.length - 1].targetDistance} Meter` : ""} </td>
+                        <td className="shot-item__data"> {shotDatas.length > 0 ? `${shotDatas[shotDatas.length - 1].targetDistance}` : ""} </td>
+                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `Meter` : ""} </td>
                     </tr>
-                    <tr className="shot-item">
+                    <tr id="absoluteDeviation" className="shot-item">
                         <td className="shot-item__label">Absolute Abweichung</td>
                         <td className="shot-item__data"> {
-                            !!absoluteDeviation ? `${absoluteDeviation.toFixed(2)} Meter` : ""
+                            !!absoluteDeviation ? `${absoluteDeviation.toFixed(2)}` : ""
                         } </td>
+                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `Meter` : ""} </td>
                     </tr>
-                    <tr className="shot-item">
+                    <tr id="relativeDeviation" className="shot-item">
                         <td className="shot-item__label">Relative Abweichung</td>
                         <td className="shot-item__data"> {
-                            !!relativeDeviation ? `${relativeDeviation.toFixed(2)} Meter` : ""
+                            !!relativeDeviation ? `${relativeDeviation.toFixed(2)}` : ""
                         } </td>
+                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `Meter` : ""} </td>
                     </tr>
-                    <tr className="shot-item">
+                    <tr id="absoluteDeviationSum" className="shot-item">
                         <td className="shot-item__label">Summe Absolute Abweichung</td>
                         <td className="shot-item__data"> {
                             shotDatas.length > 0 ? `${
                                 shotDatas
                                     .map((shotData: IShotData) => computeAbsoluteDeviation(shotData))
                                     .reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0)
-                                    .toFixed(2)} Meter` : ""
+                                    .toFixed(2)}` : ""
                         } </td>
+                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `Meter` : ""} </td>
                     </tr>
-                    <tr className="shot-item">
+                    <tr id="relativeDeviationSum" className="shot-item">
                         <td className="shot-item__label">Summe Relative Abweichung</td>
                         <td className="shot-item__data"> {
                             shotDatas.length > 0 ? `${
                                 shotDatas
                                     .map((shotData: IShotData) => computeRelativeDeviation(shotData))
                                     .reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0)
-                                    .toFixed(2)} Meter` : ""
+                                    .toFixed(2)}` : ""
                         } </td>
+                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `Meter` : ""} </td>
                     </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
