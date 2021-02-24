@@ -171,10 +171,10 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                         <td className="shot-item__data"> {
                             !!relativeDeviation ? `${relativeDeviation.toFixed(2)}` : ""
                         } </td>
-                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `Meter` : ""} </td>
+                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `%` : ""} </td>
                     </tr>
                     <tr id="absoluteDeviationSum" className="shot-item">
-                        <td className="shot-item__label">Summe Absolute Abweichung</td>
+                        <td className="shot-item__label">Summe Absolute Abweichungen</td>
                         <td className="shot-item__data"> {
                             shotDatas.length > 0 ? `${
                                 shotDatas
@@ -185,7 +185,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                         <td className="shot-item__unit"> {shotDatas.length > 0 ? `Meter` : ""} </td>
                     </tr>
                     <tr id="relativeDeviationSum" className="shot-item">
-                        <td className="shot-item__label">Summe Relative Abweichung</td>
+                        <td className="shot-item__label">Summe Relative Abweichungen</td>
                         <td className="shot-item__data"> {
                             shotDatas.length > 0 ? `${
                                 shotDatas
@@ -193,7 +193,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                                     .reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0)
                                     .toFixed(2)}` : ""
                         } </td>
-                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `Meter` : ""} </td>
+                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `%` : ""} </td>
                     </tr>
                     </tbody>
                 </table>

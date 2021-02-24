@@ -1,4 +1,5 @@
 import {app, BrowserWindow} from 'electron';
+import electronIsDev from "electron-is-dev";
 
 /**
  * Creates the electron browser window.
@@ -28,7 +29,9 @@ export class MainWindow {
         mainWindow.loadURL(`file://${app.getAppPath()}/index.html`)
 
         // open DevTools
-        mainWindow.webContents.openDevTools();
+        if (electronIsDev) {
+            mainWindow.webContents.openDevTools();
+        }
 
         return mainWindow;
     }
