@@ -1,6 +1,5 @@
 import {app, BrowserWindow} from 'electron';
-import {appManager} from "./electron/AppManager";
-import {TrayMenu} from "./electron/TrayMenu";
+import electronIsDev from "electron-is-dev";
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 
@@ -10,6 +9,12 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 }
 
 const createWindow = (): void => {
+    if (electronIsDev) {
+        console.log('Running in development');
+    } else {
+        console.log('Running in production');
+    }
+
     // Create the browser window.
     const mainWindow = new BrowserWindow({
         fullscreenable: true,
@@ -27,7 +32,9 @@ const createWindow = (): void => {
     mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    if (electronIsDev) {
+        mainWindow.webContents.openDevTools();
+    }
 };
 
 // This method will be called when Electron has finished
@@ -37,7 +44,7 @@ const createWindow = (): void => {
 //     appManager.setTray(new TrayMenu());
 //     appManager.setWindow('MainWindow', createWindow);
 // });
-app.on('ready', ():void => {
+app.on('ready', (): void => {
     return createWindow();
 });
 
@@ -50,13 +57,10 @@ app.on('window-all-closed', (): void => {
     }
 });
 
-// app.on('activate', () => {
-//     // On OS X it's common to re-create a window in the app when the
-//     // dock icon is clicked and there are no other windows open.
-//     if (BrowserWindow.getAllWindows().length === 0) {
-//         createWindow();
-//     }
-// });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
+app.on('activate', () => {
+    // On OS X it's common to re-create a window in the app when the
+    // dock icon is clicked and there are no other windows open.
+    if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow();
+    }
+});
