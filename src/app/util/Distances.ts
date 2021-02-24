@@ -1,5 +1,7 @@
 import {assert} from "chai";
 
+const BGV_DISTANCES: number[] = [6, 14, 22, 30, 38, 46, 54, 62, 70];
+
 /**
  * Create random number between [min, max[.
  */
@@ -30,7 +32,7 @@ export class RandomDistances implements IDistances {
 }
 
 export class FixedDistances implements IDistances {
-    readonly distances: number[] = [10, 20, 30];
+    readonly distances: number[] = BGV_DISTANCES;
 
     public getNext(index: number): number {
         assert(index >= 0, "index < 0");
@@ -40,7 +42,7 @@ export class FixedDistances implements IDistances {
 }
 
 export class RandomFromFixedDistances implements IDistances {
-    readonly distances: number[] = [10, 20, 30, 40];
+    readonly distances: number[] = BGV_DISTANCES;
     private distancesNotYetReturned: number[] = [...this.distances];
     private distancesReturnedMap: Map<number, number> = new Map<number, number>();
 
