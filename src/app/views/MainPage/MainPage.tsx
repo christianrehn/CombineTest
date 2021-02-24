@@ -3,16 +3,7 @@ import Chokidar, {FSWatcher} from 'chokidar';
 import './MainPage.scss';
 import {assert} from 'chai';
 import {parseLastShotCsv} from "./LastShotCsvParser";
-
-
-/**
- * Create random number between [min, max[.
- */
-function createRandomNumber(min: number, max: number): number {
-    assert(min < max, "min >= max");
-
-    return Math.floor(Math.random() * Math.floor(max - min)) + min;
-}
+import {IDistances} from "../../util/Distances";
 
 
 interface IShotData {
@@ -24,6 +15,7 @@ interface IShotData {
 
 interface IMainPageProps {
     lastShotCsvPath: string;
+    distances: IDistances;
 }
 
 const computeAbsoluteDeviation = (shotData: IShotData): number => {
@@ -43,19 +35,18 @@ const computeRelativeDeviation = (shotData: IShotData): number => {
 }
 
 export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.Element => {
-    const minDistance: number = 10;
-    const maxDistance: number = 60;
+
     const [shotData, setShotData] = React.useState<IShotData | undefined>();
     const [shotDatas, setShotDatas] = React.useState<IShotData[]>([]);
 
-    const [nextDistance, setNextDistance] = React.useState<number>(createRandomNumber(minDistance, maxDistance));
+    const [nextDistance, setNextDistance] = React.useState<number>(props.distances.getNext());
     const nextDistanceRef: React.MutableRefObject<number> = React.useRef<number>(nextDistance);
 
     const lastShotFileChanged = async (): Promise<void> => {
         const lastShotData: any = await parseLastShotCsv(props.lastShotCsvPath);
         const shotIdFromLastShotFile: number = lastShotData["shot_id"];
         if (!!shotIdFromLastShotFile) {
-            if (shotDatas.length <= 0 || shotIdFromLastShotFile !== shotDatas[shotDatas.length].id) {
+            if (shotDatas.length <= 0 || shotIdFromLastShotFile !== shotDatas[shotDatas.length - 1].id) {
                 console.log(`shot id=${shotIdFromLastShotFile} has been executed`);
                 setShotData({
                     id: shotIdFromLastShotFile,
@@ -113,7 +104,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
             const shotDatasClone: IShotData[] = [...shotDatas];
             shotDatasClone.push(shotData);
             setShotDatas(shotDatasClone);
-            nextDistanceRef.current = createRandomNumber(minDistance, maxDistance);
+            nextDistanceRef.current = props.distances.getNext();
             setNextDistance(nextDistanceRef.current);
         }
     }, [shotData]);
@@ -121,7 +112,14 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
     const absoluteDeviation: number | undefined = shotDatas.length > 0 ? computeAbsoluteDeviation(shotDatas[shotDatas.length - 1]) : undefined;
     const relativeDeviation: number | undefined = shotDatas.length > 0 ? computeRelativeDeviation(shotDatas[shotDatas.length - 1]) : undefined;
 
-    console.log("shotDatas", shotDatas);
+    const absoluteDeviationSum: number = shotDatas
+        .map((shotData: IShotData) => computeAbsoluteDeviation(shotData))
+        .reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0);
+    const relativeDeviationSum: number = shotDatas
+        .map((shotData: IShotData) => computeRelativeDeviation(shotData))
+        .reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0) * 100;
+
+    console.log("shotDatas", shotDatas)
     return (
         <div className="main-page">
             <div className="main-page__next-challenge">
@@ -139,10 +137,10 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                 </div>
                 <table className="main-page__shot-data-holder">
                     <tbody>
-                    <tr id="shotId" className="shot-item">
-                        <td className="shot-item__label">Shot Id</td>
-                        <td className="shot-item__data"> {shotDatas.length > 0 ? `${shotDatas[shotDatas.length - 1].id} / ${shotDatas.length}` : ""} </td>
-                        <td className="shot-item__unit"></td>
+                    <tr id="targetDistance" className="shot-item">
+                        <td className="shot-item__label">Soll Distanz</td>
+                        <td className="shot-item__data"> {shotDatas.length > 0 ? `${shotDatas[shotDatas.length - 1].targetDistance}` : ""} </td>
+                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `Meter` : ""} </td>
                     </tr>
                     <tr id="carry" className="shot-item">
                         <td className="shot-item__label">Carry</td>
@@ -152,11 +150,6 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                     <tr id="offline" className="shot-item">
                         <td className="shot-item__label">Offline</td>
                         <td className="shot-item__data"> {shotDatas.length > 0 ? `${shotDatas[shotDatas.length - 1].offline.toFixed(2)}` : ""} </td>
-                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `Meter` : ""} </td>
-                    </tr>
-                    <tr id="targetDistance" className="shot-item">
-                        <td className="shot-item__label">Soll Distanz</td>
-                        <td className="shot-item__data"> {shotDatas.length > 0 ? `${shotDatas[shotDatas.length - 1].targetDistance}` : ""} </td>
                         <td className="shot-item__unit"> {shotDatas.length > 0 ? `Meter` : ""} </td>
                     </tr>
                     <tr id="absoluteDeviation" className="shot-item">
@@ -169,29 +162,45 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                     <tr id="relativeDeviation" className="shot-item">
                         <td className="shot-item__label">Relative Abweichung</td>
                         <td className="shot-item__data"> {
-                            !!relativeDeviation ? `${relativeDeviation.toFixed(2)}` : ""
+                            !!relativeDeviation ? `${(relativeDeviation * 100).toFixed(1)}` : ""
                         } </td>
                         <td className="shot-item__unit"> {shotDatas.length > 0 ? `%` : ""} </td>
+                    </tr>
+                    <tr id="shotId" className="shot-item">
+                        <td className="shot-item__label">Shot Id</td>
+                        <td className="shot-item__data"> {shotDatas.length > 0 ? `${shotDatas[shotDatas.length - 1].id}` : ""} </td>
+                        <td className="shot-item__unit"></td>
+                    </tr>
+                    <tr id="numberOfShots" className="shot-item">
+                        <td className="shot-item__label">Number of Shots</td>
+                        <td className="shot-item__data"> {shotDatas.length} </td>
+                        <td className="shot-item__unit"></td>
                     </tr>
                     <tr id="absoluteDeviationSum" className="shot-item">
                         <td className="shot-item__label">Summe Absolute Abweichungen</td>
                         <td className="shot-item__data"> {
-                            shotDatas.length > 0 ? `${
-                                shotDatas
-                                    .map((shotData: IShotData) => computeAbsoluteDeviation(shotData))
-                                    .reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0)
-                                    .toFixed(2)}` : ""
+                            shotDatas.length > 0 ? `${absoluteDeviationSum.toFixed(2)}` : ""
+                        } </td>
+                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `Meter` : ""} </td>
+                    </tr>
+                    <tr id="absoluteDeviationAvg" className="shot-item">
+                        <td className="shot-item__label">Durchschnitt Absolute Abweichungen</td>
+                        <td className="shot-item__data"> {
+                            shotDatas.length > 0 ? `${(absoluteDeviationSum / shotDatas.length).toFixed(2)}` : ""
                         } </td>
                         <td className="shot-item__unit"> {shotDatas.length > 0 ? `Meter` : ""} </td>
                     </tr>
                     <tr id="relativeDeviationSum" className="shot-item">
                         <td className="shot-item__label">Summe Relative Abweichungen</td>
                         <td className="shot-item__data"> {
-                            shotDatas.length > 0 ? `${
-                                shotDatas
-                                    .map((shotData: IShotData) => computeRelativeDeviation(shotData))
-                                    .reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0)
-                                    .toFixed(2)}` : ""
+                            shotDatas.length > 0 ? `${relativeDeviationSum.toFixed(1)}` : ""
+                        } </td>
+                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `%` : ""} </td>
+                    </tr>
+                    <tr id="relativeDeviationAvg" className="shot-item">
+                        <td className="shot-item__label">Durchschnitt Relative Abweichungen</td>
+                        <td className="shot-item__data"> {
+                            shotDatas.length > 0 ? `${(relativeDeviationSum / shotDatas.length).toFixed(1)}` : ""
                         } </td>
                         <td className="shot-item__unit"> {shotDatas.length > 0 ? `%` : ""} </td>
                     </tr>

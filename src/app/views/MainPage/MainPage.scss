@@ -50,11 +50,16 @@
 
     &__shot-data-holder {
         margin-top: 90px;
+        border-spacing: 5px;
     }
 }
 
+.shot-item, .shot-item__label,.shot-item__data,.shot-item__unit {
+    border: 0px;
+    padding: 15px;
+}
 .shot-item {
-    font-size: 20px;
+    font-size: 30px;
 
     &__label {
     }
