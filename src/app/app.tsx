@@ -6,12 +6,15 @@ import {MainPage} from "./views/MainPage/MainPage";
 
 const App: React.FC<{}> = (): JSX.Element => {
     const [showSettings, setShowSettings] = React.useState<boolean>(false);
+    const lastShotCsvPath: string = process.platform !== 'darwin'
+        ? "C:/Program Files (x86)/Foresight Sports Experience/System/LastShot.CSV"
+        : "/Users/rehn/WebstormProjects/ApproachShot/data/LastShot.CSV";
     return (
         <div className="app">
             {showSettings
                 ? <SettingsPage/>
                 : <MainPage
-                    lastShotCsvPath={"/Users/rehn/WebstormProjects/ApproachShot/data/LastShot.CSV"}
+                    lastShotCsvPath={lastShotCsvPath}
                 />
             }
         </div>
