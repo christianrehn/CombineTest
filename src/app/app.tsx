@@ -3,6 +3,7 @@ import * as React from 'react';
 import './App.scss';
 import {SettingsPage} from "./views/SettingsPage/SettingsPage";
 import {MainPage} from "./views/MainPage/MainPage";
+import {FixedDistances, RandomDistances} from "./util/Distances";
 
 const App: React.FC<{}> = (): JSX.Element => {
     const [showSettings, setShowSettings] = React.useState<boolean>(false);
@@ -15,6 +16,8 @@ const App: React.FC<{}> = (): JSX.Element => {
                 ? <SettingsPage/>
                 : <MainPage
                     lastShotCsvPath={lastShotCsvPath}
+                    // distances={new RandomDistances()}
+                    distances={new FixedDistances()}
                 />
             }
         </div>
