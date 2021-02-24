@@ -47,15 +47,13 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
         const lastShotData: any = await parseLastShotCsv(props.lastShotCsvPath);
         const shotIdFromLastShotFile: number = lastShotData["shot_id"];
         if (!!shotIdFromLastShotFile) {
-            if (shotDatas.length <= 0 || shotIdFromLastShotFile !== shotDatas[shotDatas.length - 1].id) {
-                console.log(`shot id=${shotIdFromLastShotFile} has been executed`);
-                setShotData({
-                    id: shotIdFromLastShotFile,
-                    carry: lastShotData["carry_m"],
-                    offline: lastShotData["offline_m"],
-                    targetDistance: nextDistanceRef.current
-                });
-            }
+            console.log(`shot id=${shotIdFromLastShotFile} has been executed`);
+            setShotData({
+                id: shotIdFromLastShotFile,
+                carry: lastShotData["carry_m"],
+                offline: lastShotData["offline_m"],
+                targetDistance: nextDistanceRef.current
+            });
         }
     }
 
@@ -100,14 +98,29 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
     }, [props.lastShotCsvPath])
 
     React.useEffect((): void => {
-        if (!!shotData) {
-            // a new shot has been executes -> add it to array and create new distance for next shot
-            const shotDatasClone: IShotData[] = [...shotDatas];
-            shotDatasClone.push(shotData);
-            setShotDatas(shotDatasClone);
-            console.log("getNext 2")
-            nextDistanceRef.current = props.distances.getNext(shotDatasClone.length);
-            setNextDistance(nextDistanceRef.current);
+        console.log("useEffect triggered by shotData change");
+
+        if (!!shotData && (shotDatas.length === 0 || shotData.id !== shotDatas[shotDatas.length - 1].id)) {
+            // new shot detected
+
+            if (shotDatas.length >= props.numberOfShots) {
+                // shot executed but number of shots was already reached -> ignore
+                console.log(`shot id=${shotData.id} executed but number of shots was already reached -> ignore`);
+            } else {
+                // add new shot to array
+                const shotDatasClone: IShotData[] = [...shotDatas];
+                shotDatasClone.push(shotData);
+                setShotDatas(shotDatasClone);
+
+                // pick new distance for next shot
+                if (shotDatasClone.length < props.numberOfShots) {
+                    nextDistanceRef.current = props.distances.getNext(shotDatasClone.length);
+                } else {
+                    console.log("all shots executed");
+                    nextDistanceRef.current = undefined;
+                }
+                setNextDistance(nextDistanceRef.current);
+            }
         }
     }, [shotData]);
 
@@ -126,16 +139,27 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
         <div className="main-page">
             <div className="main-page__next-challenge">
                 <div className="main-page__header">
-                    <h3> Next Challenge </h3>
+                    {!!nextDistance ?
+                        <h3> Next Challenge </h3>
+                        : <h3> Done </h3>}
                 </div>
-                <div className="main-page__next-distance">
-                    <p className="main-page__next-distance-number">{nextDistance}</p>
-                    <p className="main-page__next-distance-unit">Meter</p>
-                </div>
+                {!!nextDistance
+                    ? <div className="main-page__next-distance">
+                        <p className="main-page__next-distance-number">{nextDistance}</p>
+                        <p className="main-page__next-distance-unit">Meter</p>
+                    </div>
+                    : <button className="main-page__restart" onClick={() => {
+                        console.log("restart");
+                        setShotDatas([]);
+                        nextDistanceRef.current = props.distances.getNext(0);
+                        setNextDistance(nextDistanceRef.current);
+                    }}>
+                        Restart
+                    </button>}
             </div>
             <div className="main-page__last-shot">
                 <div className="main-page__header">
-                    <h3> Last Shot </h3>
+                    <h3> Shot {shotDatas.length} / {props.numberOfShots} </h3>
                 </div>
                 <table className="main-page__shot-data-holder">
                     <tbody>
@@ -167,16 +191,6 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                             !!relativeDeviation ? `${(relativeDeviation * 100).toFixed(1)}` : ""
                         } </td>
                         <td className="shot-item__unit"> {shotDatas.length > 0 ? `%` : ""} </td>
-                    </tr>
-                    <tr id="shotId" className="shot-item">
-                        <td className="shot-item__label">Shot Id</td>
-                        <td className="shot-item__data"> {shotDatas.length > 0 ? `${shotDatas[shotDatas.length - 1].id}` : ""} </td>
-                        <td className="shot-item__unit"></td>
-                    </tr>
-                    <tr id="numberOfShots" className="shot-item">
-                        <td className="shot-item__label">Number of Shots</td>
-                        <td className="shot-item__data"> {shotDatas.length} </td>
-                        <td className="shot-item__unit"></td>
                     </tr>
                     <tr id="absoluteDeviationSum" className="shot-item">
                         <td className="shot-item__label">Summe Absolute Abweichungen</td>
