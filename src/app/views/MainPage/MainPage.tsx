@@ -39,7 +39,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
     const [shotData, setShotData] = React.useState<IShotData | undefined>();
     const [shotDatas, setShotDatas] = React.useState<IShotData[]>([]);
 
-    const [nextDistance, setNextDistance] = React.useState<number>(props.distances.getNext());
+    const [nextDistance, setNextDistance] = React.useState<number>(props.distances.getNext(shotDatas.length));
     const nextDistanceRef: React.MutableRefObject<number> = React.useRef<number>(nextDistance);
 
     const lastShotFileChanged = async (): Promise<void> => {
@@ -104,7 +104,8 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
             const shotDatasClone: IShotData[] = [...shotDatas];
             shotDatasClone.push(shotData);
             setShotDatas(shotDatasClone);
-            nextDistanceRef.current = props.distances.getNext();
+            console.log("getNext 2")
+            nextDistanceRef.current = props.distances.getNext(shotDatasClone.length);
             setNextDistance(nextDistanceRef.current);
         }
     }, [shotData]);
