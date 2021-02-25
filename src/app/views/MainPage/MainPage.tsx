@@ -5,6 +5,7 @@ import {parseLastShotCsv} from "./LastShotCsvParser";
 import {IDistances} from "../../util/Distances";
 import {ShotsSvg} from "../../components/ShotsSvg/ShotsSvg";
 import {computeAbsoluteDeviation, computeRelativeDeviation, IShotData} from "../../model/ShotData";
+import {LastShotData} from "../../components/LastShotData/LastShotData";
 
 
 interface IMainPageProps {
@@ -122,7 +123,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
     console.log("shotDatas", shotDatas)
     return (
         <div className="main-page">
-            <div id="main-page__next-challenge" className="main-page__next-challenge">
+            <div className="main-page__next-challenge">
                 <div className="main-page__header">
                     {!!nextDistance ?
                         <h3> Next Challenge </h3>
@@ -142,81 +143,36 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                         Restart
                     </button>}
             </div>
-            <div id="main-page__last-shot" className="main-page__last-shot">
+            <div className="main-page__last-shot">
                 <div className="main-page__header">
                     <h3> Shot {shotDatas.length} / {props.numberOfShots} </h3>
                 </div>
-                <table className="last-shot-data-holder">
-                    <tbody>
-                    <tr id="targetDistance" className="last-shot-item">
-                        <td className="last-shot-item__label">Soll Distanz</td>
-                        <td className="last-shot-item__data"> {!!lastShot ? `${lastShot.targetDistance}` : ""} </td>
-                        <td className="last-shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
-                    </tr>
-                    <tr id="carry" className="last-shot-item">
-                        <td className="last-shot-item__label">Carry</td>
-                        <td className="last-shot-item__data"> {!!lastShot ? `${lastShot.carry.toFixed(2)}` : ""} </td>
-                        <td className="last-shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
-                    </tr>
-                    <tr id="offline" className="last-shot-item">
-                        <td className="last-shot-item__label">Offline</td>
-                        <td className="last-shot-item__data"> {!!lastShot ? `${lastShot.offline.toFixed(2)}` : ""} </td>
-                        <td className="last-shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
-                    </tr>
-                    <tr id="absoluteDeviation" className="last-shot-item">
-                        <td className="last-shot-item__label">Absolute Abweichung</td>
-                        <td className="last-shot-item__data"> {
-                            !!absoluteDeviation ? `${absoluteDeviation.toFixed(2)}` : ""
-                        } </td>
-                        <td className="last-shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
-                    </tr>
-                    <tr id="relativeDeviation" className="last-shot-item">
-                        <td className="last-shot-item__label">Relative Abweichung</td>
-                        <td className="last-shot-item__data"> {
-                            !!relativeDeviation ? `${(relativeDeviation * 100).toFixed(1)}` : ""
-                        } </td>
-                        <td className="shot-item__unit"> {!!lastShot ? `%` : ""} </td>
-                    </tr>
-                    <tr id="absoluteDeviationSum" className="last-shot-item">
-                        <td className="last-shot-item__label">Summe Absolute Abweichungen</td>
-                        <td className="last-shot-item__data"> {
-                            !!lastShot ? `${absoluteDeviationSum.toFixed(2)}` : ""
-                        } </td>
-                        <td className="last-shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
-                    </tr>
-                    <tr id="absoluteDeviationAvg" className="last-shot-item">
-                        <td className="last-shot-item__label">Durchschnitt Absolute Abweichungen</td>
-                        <td className="last-shot-item__data"> {
-                            !!lastShot ? `${(absoluteDeviationSum / shotDatas.length).toFixed(2)}` : ""
-                        } </td>
-                        <td className="last-shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
-                    </tr>
-                    <tr id="relativeDeviationSum" className="last-shot-item">
-                        <td className="last-shot-item__label">Summe Relative Abweichungen</td>
-                        <td className="last-shot-item__data"> {
-                            !!lastShot ? `${relativeDeviationSum.toFixed(1)}` : ""
-                        } </td>
-                        <td className="last-shot-item__unit"> {!!lastShot ? `%` : ""} </td>
-                    </tr>
-                    <tr id="relativeDeviationAvg" className="last-shot-item">
-                        <td className="last-shot-item__label">Durchschnitt Relative Abweichungen</td>
-                        <td className="last-shot-item__data"> {
-                            !!lastShot ? `${(relativeDeviationSum / shotDatas.length).toFixed(1)}` : ""
-                        } </td>
-                        <td className="last-shot-item__unit"> {!!lastShot ? `%` : ""} </td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div className="main-page__last-shot-data">
+                    <LastShotData
+                        lastShot={lastShot}
+                        absoluteDeviation={absoluteDeviation}
+                        relativeDeviation={relativeDeviation}
+                        absoluteDeviationSum={absoluteDeviationSum}
+                        shotDatas={shotDatas}
+                        relativeDeviationSum={relativeDeviationSum}
+                    />
+                </div>
             </div>
-            <div id="shots" className="main-page__shots">
+            <div className="main-page__shots">
                 <div className="main-page__header">
                     <h3>All Shots</h3>
                 </div>
                 <div className="main-page__shots_svg">
-                    {ShotsSvg(svgNumberOfCircles, absoluteDeviationMax, svgScaleFactor, shotDatas)}
+                    <ShotsSvg
+                        svgNumberOfCircles={svgNumberOfCircles}
+                        absoluteDeviationMax={absoluteDeviationMax}
+                        svgScaleFactor={svgScaleFactor}
+                        shotDatas={shotDatas}
+                    />
                 </div>
             </div>
         </div>
-    );
+    )
+        ;
 }
 

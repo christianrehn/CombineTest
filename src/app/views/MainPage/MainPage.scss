@@ -70,18 +70,20 @@
         padding-top: 20px;
         margin-left: 50px;
     }
+
+    &__last-shot-data {
+        margin-top: 90px;
+    }
 }
 
-.last-shot-data-holder {
-    margin-top: 90px;
-}
 
-.shot-item, .shot-item__label, .shot-item__data, .shot-item__unit {
+
+.last-shot-item, .last-shot-item__label, .last-shot-item__data, .last-shot-item__unit {
     border: 0px;
     padding: 11px;
 }
 
-last-shot-item {
+.last-shot-item {
     font-size: 20px;
 
     &__label {
