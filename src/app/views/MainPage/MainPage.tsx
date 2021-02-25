@@ -230,11 +230,11 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                     </tbody>
                 </table>
             </div>
-            <div id="main-page__svg" className="main-page__shots">
+            <div id="shots" className="shots">
                 <div className="main-page__header">
                     <h3>All Shots</h3>
                 </div>
-                <div className="main-page__svg">
+                <div className="shots_svg">
                     <svg width="100%" height="100%" viewBox="-110 -110.5 220.3 220.2"
                          preserveAspectRatio="xMidYMid meet"
                          xmlns="http://www.w3.org/2000/svg">
@@ -247,35 +247,35 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                         <rect x="-110" y="-110.4" width="220.3" height="220.4" fill="url(#grid)"></rect>
 
                         {/* x-, y-axis*/}
-                        <path className="main-page__svg_axis" d="M0,-110 v220"/>
-                        <path className="main-page__svg_axis" d="M-110,0 h220"/>
+                        <path className="shots_svg_axis" d="M0,-110 v220"/>
+                        <path className="shots_svg_axis" d="M-110,0 h220"/>
 
                         {/* circles around 0,0 */}
                         {
                             Array.from({length: svgNumberOfCircles}, (_, i) => (absoluteDeviationMax / svgNumberOfCircles) * (i + 1)).map((factor) => {
-                                return <g key={`main-page__svg_circle_${factor}`}>
-                                    <circle className="main-page__svg_circle" r={factor * svgScaleFactor}/>
+                                return <g key={`shots_svg_circle_${factor}`}>
+                                    <circle className="shots_svg_circle" r={factor * svgScaleFactor}/>
                                     {/* x-axis positive */}
-                                    <text className="main-page__svg_circletext"
+                                    <text className="shots_svg_circletext"
                                           x={factor * svgScaleFactor}
-                                          y={absoluteDeviationMax / svgNumberOfCircles}
+                                          y={absoluteDeviationMax / svgNumberOfCircles + 3}
                                     > {factor.toFixed(0)}
                                     </text>
                                     {/* x-axis negative */}
-                                    <text className="main-page__svg_circletext"
+                                    <text className="shots_svg_circletext"
                                           x={-(factor * svgScaleFactor) - 1}
-                                          y={absoluteDeviationMax / svgNumberOfCircles}
+                                          y={absoluteDeviationMax / svgNumberOfCircles + 3}
                                     > {-factor.toFixed(0)}
                                     </text>
                                     {/* y-axis positive */}
-                                    <text className="main-page__svg_circletext"
-                                          x={absoluteDeviationMax / svgNumberOfCircles}
+                                    <text className="shots_svg_circletext"
+                                          x={absoluteDeviationMax / svgNumberOfCircles + 3}
                                           y={-(factor * svgScaleFactor)}
                                     > {factor.toFixed(0)}
                                     </text>
                                     {/* y-axis negative */}
-                                    <text className="main-page__svg_circletext"
-                                          x={absoluteDeviationMax / svgNumberOfCircles}
+                                    <text className="shots_svg_circletext"
+                                          x={absoluteDeviationMax / svgNumberOfCircles + 3}
                                           y={factor * svgScaleFactor}
                                     > {-factor.toFixed(0)}
                                     </text>
@@ -286,13 +286,13 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                         {/*circle for current shot*/}
                         {
                             shotDatas.map((shotData: IShotData, index: number) => {
-                                return <g key={`main-page__svg_shotcircle_${index}`}>
+                                return <g key={`shots_svg_shotcircle_${index}`}>
                                     <circle
-                                        className={shotDatas.length === index + 1 ? 'main-page__svg_lastshotcircle' : 'main-page__svg_shotcircle'}
+                                        className={shotDatas.length === index + 1 ? 'shots_svg_lastshotcircle' : 'shots_svg_shotcircle'}
                                         cx={shotData.offline * svgScaleFactor}
                                         cy={(shotData.targetDistance - shotData.carry) * svgScaleFactor}/>
                                     <text
-                                        className={shotDatas.length === index + 1 ? 'main-page__svg_lastshotcircletext' : 'main-page__svg_shotcircletext'}
+                                        className={shotDatas.length === index + 1 ? 'shots_svg_lastshotcircletext' : 'shots_svg_shotcircletext'}
                                         x={shotData.offline * svgScaleFactor}
                                         y={(shotData.targetDistance - shotData.carry) * svgScaleFactor}
                                     > {index + 1}
