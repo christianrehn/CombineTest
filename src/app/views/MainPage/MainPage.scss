@@ -75,26 +75,3 @@
         margin-top: 90px;
     }
 }
-
-
-
-.last-shot-item, .last-shot-item__label, .last-shot-item__data, .last-shot-item__unit {
-    border: 0px;
-    padding: 11px;
-}
-
-.last-shot-item {
-    font-size: 20px;
-
-    &__label {
-    }
-
-    &__data {
-        display: flex;
-        justify-content: flex-end;
-    }
-
-    &__unit {
-    }
-
-}
