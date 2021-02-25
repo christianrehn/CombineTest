@@ -130,14 +130,21 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
     const absoluteDeviationSum: number = shotDatas
         .map((shotData: IShotData) => computeAbsoluteDeviation(shotData))
         .reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0);
+    const absoluteDeviationMax: number = shotDatas
+        .map((shotData: IShotData) => computeAbsoluteDeviation(shotData))
+        .reduce((accumulator: number, currentValue: number) => accumulator > currentValue ? accumulator : currentValue, 0) || 10;
     const relativeDeviationSum: number = shotDatas
         .map((shotData: IShotData) => computeRelativeDeviation(shotData))
         .reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0) * 100;
 
+    const lastShot: IShotData | undefined = shotDatas.length > 0 ? shotDatas[shotDatas.length - 1] : undefined;
+    const svgScaleFactor: number = !!absoluteDeviationMax ? 100 / absoluteDeviationMax : 10;
+    const svgNumberOfCircles: number = 6;
+
     console.log("shotDatas", shotDatas)
     return (
         <div className="main-page">
-            <div className="main-page__next-challenge">
+            <div id="main-page__next-challenge" className="main-page__next-challenge">
                 <div className="main-page__header">
                     {!!nextDistance ?
                         <h3> Next Challenge </h3>
@@ -157,7 +164,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                         Restart
                     </button>}
             </div>
-            <div className="main-page__last-shot">
+            <div id="main-page__last-shot" className="main-page__last-shot">
                 <div className="main-page__header">
                     <h3> Shot {shotDatas.length} / {props.numberOfShots} </h3>
                 </div>
@@ -165,69 +172,136 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                     <tbody>
                     <tr id="targetDistance" className="shot-item">
                         <td className="shot-item__label">Soll Distanz</td>
-                        <td className="shot-item__data"> {shotDatas.length > 0 ? `${shotDatas[shotDatas.length - 1].targetDistance}` : ""} </td>
-                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `Meter` : ""} </td>
+                        <td className="shot-item__data"> {!!lastShot ? `${lastShot.targetDistance}` : ""} </td>
+                        <td className="shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
                     </tr>
                     <tr id="carry" className="shot-item">
                         <td className="shot-item__label">Carry</td>
-                        <td className="shot-item__data"> {shotDatas.length > 0 ? `${shotDatas[shotDatas.length - 1].carry.toFixed(2)}` : ""} </td>
-                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `Meter` : ""} </td>
+                        <td className="shot-item__data"> {!!lastShot ? `${lastShot.carry.toFixed(2)}` : ""} </td>
+                        <td className="shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
                     </tr>
                     <tr id="offline" className="shot-item">
                         <td className="shot-item__label">Offline</td>
-                        <td className="shot-item__data"> {shotDatas.length > 0 ? `${shotDatas[shotDatas.length - 1].offline.toFixed(2)}` : ""} </td>
-                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `Meter` : ""} </td>
+                        <td className="shot-item__data"> {!!lastShot ? `${lastShot.offline.toFixed(2)}` : ""} </td>
+                        <td className="shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
                     </tr>
                     <tr id="absoluteDeviation" className="shot-item">
                         <td className="shot-item__label">Absolute Abweichung</td>
                         <td className="shot-item__data"> {
                             !!absoluteDeviation ? `${absoluteDeviation.toFixed(2)}` : ""
                         } </td>
-                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `Meter` : ""} </td>
+                        <td className="shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
                     </tr>
                     <tr id="relativeDeviation" className="shot-item">
                         <td className="shot-item__label">Relative Abweichung</td>
                         <td className="shot-item__data"> {
                             !!relativeDeviation ? `${(relativeDeviation * 100).toFixed(1)}` : ""
                         } </td>
-                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `%` : ""} </td>
+                        <td className="shot-item__unit"> {!!lastShot ? `%` : ""} </td>
                     </tr>
                     <tr id="absoluteDeviationSum" className="shot-item">
                         <td className="shot-item__label">Summe Absolute Abweichungen</td>
                         <td className="shot-item__data"> {
-                            shotDatas.length > 0 ? `${absoluteDeviationSum.toFixed(2)}` : ""
+                            !!lastShot ? `${absoluteDeviationSum.toFixed(2)}` : ""
                         } </td>
-                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `Meter` : ""} </td>
+                        <td className="shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
                     </tr>
                     <tr id="absoluteDeviationAvg" className="shot-item">
                         <td className="shot-item__label">Durchschnitt Absolute Abweichungen</td>
                         <td className="shot-item__data"> {
-                            shotDatas.length > 0 ? `${(absoluteDeviationSum / shotDatas.length).toFixed(2)}` : ""
+                            !!lastShot ? `${(absoluteDeviationSum / shotDatas.length).toFixed(2)}` : ""
                         } </td>
-                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `Meter` : ""} </td>
+                        <td className="shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
                     </tr>
                     <tr id="relativeDeviationSum" className="shot-item">
                         <td className="shot-item__label">Summe Relative Abweichungen</td>
                         <td className="shot-item__data"> {
-                            shotDatas.length > 0 ? `${relativeDeviationSum.toFixed(1)}` : ""
+                            !!lastShot ? `${relativeDeviationSum.toFixed(1)}` : ""
                         } </td>
-                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `%` : ""} </td>
+                        <td className="shot-item__unit"> {!!lastShot ? `%` : ""} </td>
                     </tr>
                     <tr id="relativeDeviationAvg" className="shot-item">
                         <td className="shot-item__label">Durchschnitt Relative Abweichungen</td>
                         <td className="shot-item__data"> {
-                            shotDatas.length > 0 ? `${(relativeDeviationSum / shotDatas.length).toFixed(1)}` : ""
+                            !!lastShot ? `${(relativeDeviationSum / shotDatas.length).toFixed(1)}` : ""
                         } </td>
-                        <td className="shot-item__unit"> {shotDatas.length > 0 ? `%` : ""} </td>
+                        <td className="shot-item__unit"> {!!lastShot ? `%` : ""} </td>
                     </tr>
                     </tbody>
                 </table>
-                {/*<div className="svg">*/}
-                {/*    <svg width="100%" height="100%" viewBox="0 0 2287 1276">*/}
-                {/*        <rect x="20" y="20"*/}
-                {/*              width="300" height="120" />*/}
-                {/*    </svg>*/}
-                {/*</div>*/}
+            </div>
+            <div id="main-page__svg" className="main-page__shots">
+                <div className="main-page__header">
+                    <h3>All Shots</h3>
+                </div>
+                <div className="main-page__svg">
+                    <svg width="100%" height="100%" viewBox="-110 -110.5 220.3 220.2"
+                         preserveAspectRatio="xMidYMid meet"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <pattern id="grid" patternUnits="userSpaceOnUse" width="10" height="10" x="0" y="0">
+                                <path d="M0,0 v10 h10" stroke="#57c4ff" fill="none"/>
+                            </pattern>
+                        </defs>
+                        {/* background grid*/}
+                        <rect x="-110" y="-110.4" width="220.3" height="220.4" fill="url(#grid)"></rect>
+
+                        {/* x-, y-axis*/}
+                        <path className="main-page__svg_axis" d="M0,-110 v220"/>
+                        <path className="main-page__svg_axis" d="M-110,0 h220"/>
+
+                        {/* circles around 0,0 */}
+                        {
+                            Array.from({length: svgNumberOfCircles}, (_, i) => (absoluteDeviationMax / svgNumberOfCircles) * (i + 1)).map((factor) => {
+                                return <g key={`main-page__svg_circle_${factor}`}>
+                                    <circle className="main-page__svg_circle" r={factor * svgScaleFactor}/>
+                                    {/* x-axis positive */}
+                                    <text className="main-page__svg_circletext"
+                                          x={factor * svgScaleFactor}
+                                          y={absoluteDeviationMax / svgNumberOfCircles}
+                                    > {factor.toFixed(0)}
+                                    </text>
+                                    {/* x-axis negative */}
+                                    <text className="main-page__svg_circletext"
+                                          x={-(factor * svgScaleFactor) - 1}
+                                          y={absoluteDeviationMax / svgNumberOfCircles}
+                                    > {-factor.toFixed(0)}
+                                    </text>
+                                    {/* y-axis positive */}
+                                    <text className="main-page__svg_circletext"
+                                          x={absoluteDeviationMax / svgNumberOfCircles}
+                                          y={-(factor * svgScaleFactor)}
+                                    > {factor.toFixed(0)}
+                                    </text>
+                                    {/* y-axis negative */}
+                                    <text className="main-page__svg_circletext"
+                                          x={absoluteDeviationMax / svgNumberOfCircles}
+                                          y={factor * svgScaleFactor}
+                                    > {-factor.toFixed(0)}
+                                    </text>
+                                </g>
+                            })
+                        }
+
+                        {/*circle for current shot*/}
+                        {
+                            shotDatas.map((shotData: IShotData, index: number) => {
+                                return <g key={`main-page__svg_shotcircle_${index}`}>
+                                    <circle
+                                        className={shotDatas.length === index + 1 ? 'main-page__svg_lastshotcircle' : 'main-page__svg_shotcircle'}
+                                        cx={shotData.offline * svgScaleFactor}
+                                        cy={(shotData.targetDistance - shotData.carry) * svgScaleFactor}/>
+                                    <text
+                                        className={shotDatas.length === index + 1 ? 'main-page__svg_lastshotcircletext' : 'main-page__svg_shotcircletext'}
+                                        x={shotData.offline * svgScaleFactor}
+                                        y={(shotData.targetDistance - shotData.carry) * svgScaleFactor}
+                                    > {index + 1}
+                                    </text>
+                                </g>
+                            })
+                        }
+                    </svg>
+                </div>
             </div>
         </div>
     );

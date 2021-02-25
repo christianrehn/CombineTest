@@ -6,15 +6,14 @@
 
     &__header {
         h3 {
-            font-size: 53px;
+            font-size: 40px;
             text-align: center;
         }
     }
 
     &__next-challenge {
         float: left;
-        width: 500px;
-        min-width: 300px;
+        width: 400px;
         height: 100%;
         padding-top: 20px;
     }
@@ -52,7 +51,6 @@
 
     &__last-shot {
         float: left;
-        min-width: 200px;
         height: 100%;
         border-color: white;
         border-style: solid;
@@ -63,14 +61,84 @@
     &__shot-data-holder {
         margin-top: 90px;
     }
+
+    &__shots {
+        float: left;
+        width: 600px;
+        height: 100%;
+        padding-top: 20px;
+        margin-left: 50px;
+    }
+
+    &__svg {
+        margin-top: 100px;
+        background: white;
+
+        &_axis {
+            stroke: black;
+            stroke-width: 0.6;
+        }
+
+        &_circle {
+            stroke: black;
+            stroke-width: 0.2;
+            fill: none;
+            cx: 0;
+            cy: 0;
+        }
+
+        &_circletext {
+            text-anchor: middle;
+            stroke: black;
+            stroke-width: 0.2;
+            fill: black;
+            font-size: 6px;
+            alignment-baseline: middle;
+        }
+
+        &_shotcircle, &_lastshotcircle {
+            stroke-width: 1;
+            fill: none;
+            r: 5;
+            text: "1";
+            text-anchor: middle;
+        }
+
+        &_shotcircle {
+            stroke: blue;
+        }
+
+        &_lastshotcircle {
+            stroke: red;
+        }
+
+        &_shotcircletext, &_lastshotcircletext {
+            text-anchor: middle;
+            stroke-width: 0.2;
+            font-size: 8px;
+            alignment-baseline: middle;
+        }
+
+        &_shotcircletext {
+            stroke: blue;
+            fill: blue;
+        }
+
+        &_lastshotcircletext {
+            stroke: red;
+            fill: red;
+        }
+    }
 }
 
-.shot-item, .shot-item__label,.shot-item__data,.shot-item__unit {
+
+.shot-item, .shot-item__label, .shot-item__data, .shot-item__unit {
     border: 0px;
     padding: 11px;
 }
+
 .shot-item {
-    font-size: 30px;
+    font-size: 20px;
 
     &__label {
     }

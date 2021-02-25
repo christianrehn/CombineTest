@@ -1,8 +1,8 @@
 {
   "name": "approachshot",
-  "productName": "approachshot",
-  "version": "0.0.5",
-  "description": "My Electron application description",
+  "productName": "Approach Shot",
+  "version": "0.1.0",
+  "description": "Practice approach shots with FSX2020 and GCQuad",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
