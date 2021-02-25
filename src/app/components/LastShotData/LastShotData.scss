@@ -1,20 +1,35 @@
-.last-shot-item, .last-shot-item__label, .last-shot-item__data, .last-shot-item__unit {
-    border: 0px;
-    padding: 11px;
+.last-shot-table {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-left: 3ex;
+    padding-right: 5ex;
 }
 
-.last-shot-item {
-    font-size: 20px;
+.last-shot__row {
+    font-size: 24px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
 
-    &__label {
-    }
+.last-shot-item__label, .last-shot-item__data, .last-shot-item__unit {
+    border: 0px;
+    padding-bottom: 0.8em;
+}
 
-    &__data {
-        display: flex;
-        justify-content: flex-end;
-    }
+.last-shot-item__label {
+    width: 40ex;
+    text-align: right;
+    padding-right: 2ex;
+}
 
-    &__unit {
-    }
+.last-shot-item__data {
+    width: 6ex;
+    text-align: right;
+    padding-right: 1ex;
+}
 
+.last-shot-item__unit {
+    text-align: left;
 }

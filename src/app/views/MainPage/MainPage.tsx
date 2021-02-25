@@ -77,8 +77,6 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
     }, [props.lastShotCsvPath])
 
     React.useEffect((): void => {
-        console.log("useEffect triggered by shotData change");
-
         if (!!shotData && (shotDatas.length === 0 || shotData.id !== shotDatas[shotDatas.length - 1].id)) {
             // new shot detected
 
@@ -122,19 +120,19 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
 
     console.log("shotDatas", shotDatas)
     return (
-        <div className="main-page">
-            <div className="main-page__next-challenge">
+        <div className="main-page__container">
+            <div className="main-page__next-challenge-flex-item main-page__flex-item">
                 <div className="main-page__header">
                     {!!nextDistance ?
-                        <h3> Next Challenge </h3>
-                        : <h3> Done </h3>}
+                        <h3>Next</h3>
+                        : <h3>Done</h3>}
                 </div>
                 {!!nextDistance
-                    ? <div className="main-page__next-distance">
+                    ? <div className="main-page__next-distance main-page__box">
                         <p className="main-page__next-distance-number">{nextDistance}</p>
                         <p className="main-page__next-distance-unit">Meter</p>
                     </div>
-                    : <button className="main-page__restart" onClick={() => {
+                    : <button className="main-page__restart main-page__box" onClick={() => {
                         console.log("restart");
                         setShotDatas([]);
                         nextDistanceRef.current = props.distances.getNext(0);
@@ -143,7 +141,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                         Restart
                     </button>}
             </div>
-            <div className="main-page__last-shot">
+            <div className="main-page__last-shot-flex-item main-page__flex-item">
                 <div className="main-page__header">
                     <h3> Shot {shotDatas.length} / {props.numberOfShots} </h3>
                 </div>
@@ -158,7 +156,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                     />
                 </div>
             </div>
-            <div className="main-page__shots">
+            <div className="main-page__shots-flex-item main-page__flex-item">
                 <div className="main-page__header">
                     <h3>All Shots</h3>
                 </div>
