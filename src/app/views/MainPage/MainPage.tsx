@@ -1,38 +1,16 @@
 import React from 'react';
 import Chokidar, {FSWatcher} from 'chokidar';
 import './MainPage.scss';
-import {assert} from 'chai';
 import {parseLastShotCsv} from "./LastShotCsvParser";
 import {IDistances} from "../../util/Distances";
+import {ShotsSvg} from "../../components/ShotsSvg/ShotsSvg";
+import {computeAbsoluteDeviation, computeRelativeDeviation, IShotData} from "../../model/ShotData";
 
-
-interface IShotData {
-    id: number,
-    carry: number,
-    offline: number,
-    targetDistance: number,
-}
 
 interface IMainPageProps {
     lastShotCsvPath: string;
     numberOfShots: number;
     distances: IDistances;
-}
-
-const computeAbsoluteDeviation = (shotData: IShotData): number => {
-    assert(!!shotData, "!shotData");
-
-    const deltaDistance: number = shotData.carry - shotData.targetDistance;
-    const absoluteDeviation: number = Math.sqrt(deltaDistance * deltaDistance + shotData.offline * shotData.offline);
-    return absoluteDeviation;
-}
-
-const computeRelativeDeviation = (shotData: IShotData): number => {
-    assert(!!shotData, "!shotData");
-
-    const absoluteDeviation: number = computeAbsoluteDeviation(shotData);
-    const relativeDeviation: number = absoluteDeviation / shotData.targetDistance;
-    return relativeDeviation;
 }
 
 export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.Element => {
@@ -168,139 +146,74 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                 <div className="main-page__header">
                     <h3> Shot {shotDatas.length} / {props.numberOfShots} </h3>
                 </div>
-                <table className="main-page__shot-data-holder">
+                <table className="last-shot-data-holder">
                     <tbody>
-                    <tr id="targetDistance" className="shot-item">
-                        <td className="shot-item__label">Soll Distanz</td>
-                        <td className="shot-item__data"> {!!lastShot ? `${lastShot.targetDistance}` : ""} </td>
-                        <td className="shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
+                    <tr id="targetDistance" className="last-shot-item">
+                        <td className="last-shot-item__label">Soll Distanz</td>
+                        <td className="last-shot-item__data"> {!!lastShot ? `${lastShot.targetDistance}` : ""} </td>
+                        <td className="last-shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
                     </tr>
-                    <tr id="carry" className="shot-item">
-                        <td className="shot-item__label">Carry</td>
-                        <td className="shot-item__data"> {!!lastShot ? `${lastShot.carry.toFixed(2)}` : ""} </td>
-                        <td className="shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
+                    <tr id="carry" className="last-shot-item">
+                        <td className="last-shot-item__label">Carry</td>
+                        <td className="last-shot-item__data"> {!!lastShot ? `${lastShot.carry.toFixed(2)}` : ""} </td>
+                        <td className="last-shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
                     </tr>
-                    <tr id="offline" className="shot-item">
-                        <td className="shot-item__label">Offline</td>
-                        <td className="shot-item__data"> {!!lastShot ? `${lastShot.offline.toFixed(2)}` : ""} </td>
-                        <td className="shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
+                    <tr id="offline" className="last-shot-item">
+                        <td className="last-shot-item__label">Offline</td>
+                        <td className="last-shot-item__data"> {!!lastShot ? `${lastShot.offline.toFixed(2)}` : ""} </td>
+                        <td className="last-shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
                     </tr>
-                    <tr id="absoluteDeviation" className="shot-item">
-                        <td className="shot-item__label">Absolute Abweichung</td>
-                        <td className="shot-item__data"> {
+                    <tr id="absoluteDeviation" className="last-shot-item">
+                        <td className="last-shot-item__label">Absolute Abweichung</td>
+                        <td className="last-shot-item__data"> {
                             !!absoluteDeviation ? `${absoluteDeviation.toFixed(2)}` : ""
                         } </td>
-                        <td className="shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
+                        <td className="last-shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
                     </tr>
-                    <tr id="relativeDeviation" className="shot-item">
-                        <td className="shot-item__label">Relative Abweichung</td>
-                        <td className="shot-item__data"> {
+                    <tr id="relativeDeviation" className="last-shot-item">
+                        <td className="last-shot-item__label">Relative Abweichung</td>
+                        <td className="last-shot-item__data"> {
                             !!relativeDeviation ? `${(relativeDeviation * 100).toFixed(1)}` : ""
                         } </td>
                         <td className="shot-item__unit"> {!!lastShot ? `%` : ""} </td>
                     </tr>
-                    <tr id="absoluteDeviationSum" className="shot-item">
-                        <td className="shot-item__label">Summe Absolute Abweichungen</td>
-                        <td className="shot-item__data"> {
+                    <tr id="absoluteDeviationSum" className="last-shot-item">
+                        <td className="last-shot-item__label">Summe Absolute Abweichungen</td>
+                        <td className="last-shot-item__data"> {
                             !!lastShot ? `${absoluteDeviationSum.toFixed(2)}` : ""
                         } </td>
-                        <td className="shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
+                        <td className="last-shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
                     </tr>
-                    <tr id="absoluteDeviationAvg" className="shot-item">
-                        <td className="shot-item__label">Durchschnitt Absolute Abweichungen</td>
-                        <td className="shot-item__data"> {
+                    <tr id="absoluteDeviationAvg" className="last-shot-item">
+                        <td className="last-shot-item__label">Durchschnitt Absolute Abweichungen</td>
+                        <td className="last-shot-item__data"> {
                             !!lastShot ? `${(absoluteDeviationSum / shotDatas.length).toFixed(2)}` : ""
                         } </td>
-                        <td className="shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
+                        <td className="last-shot-item__unit"> {!!lastShot ? `Meter` : ""} </td>
                     </tr>
-                    <tr id="relativeDeviationSum" className="shot-item">
-                        <td className="shot-item__label">Summe Relative Abweichungen</td>
-                        <td className="shot-item__data"> {
+                    <tr id="relativeDeviationSum" className="last-shot-item">
+                        <td className="last-shot-item__label">Summe Relative Abweichungen</td>
+                        <td className="last-shot-item__data"> {
                             !!lastShot ? `${relativeDeviationSum.toFixed(1)}` : ""
                         } </td>
-                        <td className="shot-item__unit"> {!!lastShot ? `%` : ""} </td>
+                        <td className="last-shot-item__unit"> {!!lastShot ? `%` : ""} </td>
                     </tr>
-                    <tr id="relativeDeviationAvg" className="shot-item">
-                        <td className="shot-item__label">Durchschnitt Relative Abweichungen</td>
-                        <td className="shot-item__data"> {
+                    <tr id="relativeDeviationAvg" className="last-shot-item">
+                        <td className="last-shot-item__label">Durchschnitt Relative Abweichungen</td>
+                        <td className="last-shot-item__data"> {
                             !!lastShot ? `${(relativeDeviationSum / shotDatas.length).toFixed(1)}` : ""
                         } </td>
-                        <td className="shot-item__unit"> {!!lastShot ? `%` : ""} </td>
+                        <td className="last-shot-item__unit"> {!!lastShot ? `%` : ""} </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
-            <div id="shots" className="shots">
+            <div id="shots" className="main-page__shots">
                 <div className="main-page__header">
                     <h3>All Shots</h3>
                 </div>
-                <div className="shots_svg">
-                    <svg width="100%" height="100%" viewBox="-110 -110.5 220.3 220.2"
-                         preserveAspectRatio="xMidYMid meet"
-                         xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <pattern id="grid" patternUnits="userSpaceOnUse" width="10" height="10" x="0" y="0">
-                                <path d="M0,0 v10 h10" stroke="#57c4ff" fill="none"/>
-                            </pattern>
-                        </defs>
-                        {/* background grid*/}
-                        <rect x="-110" y="-110.4" width="220.3" height="220.4" fill="url(#grid)"></rect>
-
-                        {/* x-, y-axis*/}
-                        <path className="shots_svg_axis" d="M0,-110 v220"/>
-                        <path className="shots_svg_axis" d="M-110,0 h220"/>
-
-                        {/* circles around 0,0 */}
-                        {
-                            Array.from({length: svgNumberOfCircles}, (_, i) => (absoluteDeviationMax / svgNumberOfCircles) * (i + 1)).map((factor) => {
-                                return <g key={`shots_svg_circle_${factor}`}>
-                                    <circle className="shots_svg_circle" r={factor * svgScaleFactor}/>
-                                    {/* x-axis positive */}
-                                    <text className="shots_svg_circletext"
-                                          x={factor * svgScaleFactor}
-                                          y={absoluteDeviationMax / svgNumberOfCircles + 3}
-                                    > {factor.toFixed(0)}
-                                    </text>
-                                    {/* x-axis negative */}
-                                    <text className="shots_svg_circletext"
-                                          x={-(factor * svgScaleFactor) - 1}
-                                          y={absoluteDeviationMax / svgNumberOfCircles + 3}
-                                    > {-factor.toFixed(0)}
-                                    </text>
-                                    {/* y-axis positive */}
-                                    <text className="shots_svg_circletext"
-                                          x={absoluteDeviationMax / svgNumberOfCircles + 3}
-                                          y={-(factor * svgScaleFactor)}
-                                    > {factor.toFixed(0)}
-                                    </text>
-                                    {/* y-axis negative */}
-                                    <text className="shots_svg_circletext"
-                                          x={absoluteDeviationMax / svgNumberOfCircles + 3}
-                                          y={factor * svgScaleFactor}
-                                    > {-factor.toFixed(0)}
-                                    </text>
-                                </g>
-                            })
-                        }
-
-                        {/*circle for current shot*/}
-                        {
-                            shotDatas.map((shotData: IShotData, index: number) => {
-                                return <g key={`shots_svg_shotcircle_${index}`}>
-                                    <circle
-                                        className={shotDatas.length === index + 1 ? 'shots_svg_lastshotcircle' : 'shots_svg_shotcircle'}
-                                        cx={shotData.offline * svgScaleFactor}
-                                        cy={(shotData.targetDistance - shotData.carry) * svgScaleFactor}/>
-                                    <text
-                                        className={shotDatas.length === index + 1 ? 'shots_svg_lastshotcircletext' : 'shots_svg_shotcircletext'}
-                                        x={shotData.offline * svgScaleFactor}
-                                        y={(shotData.targetDistance - shotData.carry) * svgScaleFactor}
-                                    > {index + 1}
-                                    </text>
-                                </g>
-                            })
-                        }
-                    </svg>
+                <div className="main-page__shots_svg">
+                    {ShotsSvg(svgNumberOfCircles, absoluteDeviationMax, svgScaleFactor, shotDatas)}
                 </div>
             </div>
         </div>

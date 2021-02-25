@@ -1,0 +1,55 @@
+.shots_svg_axis {
+    stroke: black;
+    stroke-width: 0.6;
+}
+
+.shots_svg_circle {
+    stroke: black;
+    stroke-width: 0.2;
+    fill: none;
+    cx: 0;
+    cy: 0;
+}
+
+.shots_svg_circletext {
+    text-anchor: middle;
+    stroke: black;
+    stroke-width: 0.2;
+    fill: black;
+    font-size: 6px;
+    alignment-baseline: middle;
+}
+
+.shots_svg_shotcircle, .shots_svg_lastshotcircle {
+    stroke-width: 1;
+    fill: none;
+    r: 5;
+    text: "1";
+    text-anchor: middle;
+}
+
+.shots_svg_shotcircle {
+    stroke: blue;
+}
+
+.shots_svg_lastshotcircle {
+    stroke: red;
+}
+
+.shots_svg_shotcircletext, .shots_svg_lastshotcircletext {
+    text-anchor: middle;
+    stroke-width: 0.2;
+    font-size: 8px;
+    alignment-baseline: middle;
+}
+
+.shots_svg_shotcircletext {
+    stroke: blue;
+    fill: blue;
+}
+
+.shots_svg_lastshotcircletext {
+    stroke: red;
+    fill: red;
+}
+
