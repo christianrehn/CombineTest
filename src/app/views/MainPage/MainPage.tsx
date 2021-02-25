@@ -172,7 +172,6 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                 </div>
             </div>
         </div>
-    )
-        ;
+    );
 }
 
