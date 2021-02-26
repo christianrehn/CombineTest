@@ -1,5 +1,5 @@
 {
-    "name": "approachshot",
+    "name": "Approach Shot",
     "productName": "Approach Shot",
     "version": "0.1.2",
     "description": "Practice approach shots with FSX2020 and GCQuad",
@@ -21,13 +21,12 @@
         "forge": {
             "packagerConfig": {
                 "icon": "src/assets/icons/win/icon.ico",
-                "setupIcon": "src/assets/icons/win/icon.ico"
             },
             "makers": [
                 {
                     "name": "@electron-forge/maker-squirrel",
                     "config": {
-                        "name": "approachshot"
+                        "setupIcon": "src/assets/icons/win/icon.ico"
                     }
                 },
                 {
