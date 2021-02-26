@@ -1,6 +1,19 @@
 module.exports = {
     packagerConfig: {
-        "icon": "src/assets/icons/win/icon.ico"
+        icon: "src/assets/icons/win/icon.ico",
+        ignore: [
+            "data",
+            "out",
+            "build",
+            ".+.test.js",
+            ".*.env",
+            ".eslintrc",
+            ".gitignore",
+            "README.md",
+            "yarn.lock",
+            ".jshintrc",
+            ".babelrc"
+        ]
     },
     makers: [
         {
@@ -8,6 +21,19 @@ module.exports = {
             config: {
                 setupIcon: __dirname + "/src/assets/icons/win/icon.ico",
                 skipUpdateIcon: true
+            }
+        },
+        {
+            name: "@electron-forge/maker-wix",
+            config: {
+                icon: __dirname + "/src/assets/icons/win/icon.ico",
+                ui: {
+                    chooseDirectory: true,
+                    // images: {
+                    //     background: "[...]/path/to/background-493x312.bmp",
+                    //     banner: "[...]/path/to/banner-493x58.bmp"
+                    // }
+                },
             }
         },
         {
