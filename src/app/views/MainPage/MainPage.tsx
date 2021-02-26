@@ -136,23 +136,29 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
 
     return (
         <div className="main-page__container">
-            <div className="main-page__next-challenge-flex-item main-page__flex-item">
+            <div className="main-page__next-shot-flex-item main-page__flex-item">
                 <div className="main-page__header">
                     {!!nextDistance ?
                         <h3>Next</h3>
                         : <h3>Done</h3>}
                 </div>
-                <NextDistanceBox
-                    nextDistance={nextDistance}
-                    restart={restart}
-                />
-                <DistancesGeneratorSelect/>
+                <div className="main-page__NextDistanceBox">
+                    <NextDistanceBox
+                        nextDistance={nextDistance}
+                        restart={restart}
+                    />
+                </div>
+                <div className="main-page__DistancesGeneratorSelect">
+                    <DistancesGeneratorSelect
+                        distancesGenerators={props.distancesGenerators}
+                    />
+                </div>
             </div>
             <div className="main-page__last-shot-flex-item main-page__flex-item">
                 <div className="main-page__header">
                     <h3> Shot {shotDatas.length} / {props.numberOfShots} </h3>
                 </div>
-                <div className="main-page__last-shot-data">
+                <div className="main-page__LastShotData">
                     <LastShotData
                         lastShot={lastShot}
                         absoluteDeviation={absoluteDeviation}
@@ -167,7 +173,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                 <div className="main-page__header">
                     <h3>All Shots</h3>
                 </div>
-                <div className="main-page__shots_svg">
+                <div className="main-page__ShotsSvg">
                     <ShotsSvg
                         svgNumberOfCircles={svgNumberOfCircles}
                         absoluteDeviationMax={absoluteDeviationMax}

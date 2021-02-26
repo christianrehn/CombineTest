@@ -1,14 +1,21 @@
 import React from "react";
 import './DistancesGeneratorSelect.scss';
+import {IDistancesGenerator} from "../../model/DistancesGenerator";
 
 export interface IDistancesGeneratorSelectProps {
+    distancesGenerators: IDistancesGenerator[];
 }
 
 export const DistancesGeneratorSelect: React.FC<IDistancesGeneratorSelectProps> = (props: IDistancesGeneratorSelectProps): JSX.Element => {
-    return (<select name="DistancesGenerators" id="DistancesGenerators">
-        <option value="volvo">Volvo</option>
-        <option value="saab">Saab</option>
-        <option value="mercedes">Mercedes</option>
-        <option value="audi">Audi</option>
-    </select>);
+    return (
+        <div className="distances-generators-select-container">
+            <select name="DistancesGenerators" id="DistancesGenerators" className="distances-generators-select">
+                {
+                    props.distancesGenerators.map((distancesGenerator: IDistancesGenerator) => {
+                        const name: string = distancesGenerator.getName();
+                        return <option value="name">{name}</option>
+                    })
+                }
+            </select>
+        </div>);
 }

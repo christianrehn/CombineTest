@@ -11,22 +11,6 @@
     padding-top: 20px;
 }
 
-.main-page__next-challenge-flex-item {
-    flex: 1;
-}
-
-.main-page__last-shot-flex-item {
-    border-color: var(--font-white);
-    border-style: solid;
-    border-left-width: 5px;
-    border-color: var(--font-white);
-    flex: 2;
-}
-
-.main-page__shots-flex-item {
-    flex: 2;
-}
-
 .main-page__header {
     h3 {
         font-size: 40px;
@@ -35,16 +19,30 @@
     }
 }
 
-.main-page__last-shot-data {
+// next shot
+.main-page__next-shot-flex-item {
+    flex: 1;
 }
 
-.main-page__shots_svg {
+// last shot
+.main-page__last-shot-flex-item {
+    border-color: var(--font-white);
+    border-style: solid;
+    border-left-width: 5px;
+    border-color: var(--font-white);
+    flex: 2;
+}
+
+.main-page__LastShotData {
+}
+
+// shots
+.main-page__shots-flex-item {
+    flex: 2;
+}
+
+.main-page__ShotsSvg {
     background: var(--font-white);
     margin-right: 2ex;
 }
-
-.last-shot__row_all_shots_data_start {
-    margin-top: 2em;
-}
-
 
