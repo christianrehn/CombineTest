@@ -3,7 +3,12 @@ import * as React from 'react';
 import './App.scss';
 import {SettingsPage} from "./views/SettingsPage/SettingsPage";
 import {MainPage} from "./views/MainPage/MainPage";
-import {FixedDistances, RandomDistances, RandomFromFixedDistances} from "./util/Distances";
+import {
+    BGV_DISTANCES,
+    FixedDistancesGenerator,
+    RandomDistancesGenerator,
+    RandomFromFixedDistancesGenerator
+} from "./model/DistancesGenerator";
 
 const App: React.FC<{}> = (): JSX.Element => {
     const [showSettings, setShowSettings] = React.useState<boolean>(false);
@@ -17,9 +22,11 @@ const App: React.FC<{}> = (): JSX.Element => {
                 : <MainPage
                     lastShotCsvPath={lastShotCsvPath}
                     numberOfShots={18}
-                    // distances={new RandomDistances()}
-                    // distances={new FixedDistances()}
-                    distances={new RandomFromFixedDistances()}
+                    distancesGenerators={[
+                        new RandomFromFixedDistancesGenerator(),
+                        new RandomDistancesGenerator(BGV_DISTANCES),
+                        new FixedDistancesGenerator(10, 80),
+                    ]}
                 />
             }
         </div>

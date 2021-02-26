@@ -2,24 +2,29 @@ import React from 'react';
 import Chokidar, {FSWatcher} from 'chokidar';
 import './MainPage.scss';
 import {parseLastShotCsv} from "./LastShotCsvParser";
-import {IDistances} from "../../util/Distances";
+import {IDistancesGenerator} from "../../model/DistancesGenerator";
 import {ShotsSvg} from "../../components/ShotsSvg/ShotsSvg";
 import {computeAbsoluteDeviation, computeRelativeDeviation, IShotData} from "../../model/ShotData";
 import {LastShotData} from "../../components/LastShotData/LastShotData";
-
+import {assert} from "chai";
 
 interface IMainPageProps {
     lastShotCsvPath: string;
     numberOfShots: number;
-    distances: IDistances;
+    distancesGenerators: IDistancesGenerator[];
 }
 
 export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.Element => {
+    assert(!!props, "!props");
+    assert(props.distancesGenerators.length > 0, "props.distancesGenerators.length <= 0");
+
+    const [selectedDistancesGenerator, setSelectedDistancesGenerator] =
+        React.useState<IDistancesGenerator>(props.distancesGenerators[0]);
 
     const [shotData, setShotData] = React.useState<IShotData | undefined>();
     const [shotDatas, setShotDatas] = React.useState<IShotData[]>([]);
 
-    const [nextDistance, setNextDistance] = React.useState<number>(props.distances.getNext(shotDatas.length));
+    const [nextDistance, setNextDistance] = React.useState<number>(selectedDistancesGenerator.getNext(shotDatas.length));
     const nextDistanceRef: React.MutableRefObject<number> = React.useRef<number>(nextDistance);
 
     const lastShotFileChanged = async (): Promise<void> => {
@@ -91,7 +96,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
 
                 // pick new distance for next shot
                 if (shotDatasClone.length < props.numberOfShots) {
-                    nextDistanceRef.current = props.distances.getNext(shotDatasClone.length);
+                    nextDistanceRef.current = selectedDistancesGenerator.getNext(shotDatasClone.length);
                 } else {
                     console.log("all shots executed");
                     nextDistanceRef.current = undefined;
@@ -100,6 +105,12 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
             }
         }
     }, [shotData]);
+
+    const restart = (): void => {
+        setShotDatas([]);
+        nextDistanceRef.current = selectedDistancesGenerator.getNext(0);
+        setNextDistance(nextDistanceRef.current);
+    }
 
     const absoluteDeviation: number | undefined = shotDatas.length > 0 ? computeAbsoluteDeviation(shotDatas[shotDatas.length - 1]) : undefined;
     const relativeDeviation: number | undefined = shotDatas.length > 0 ? computeRelativeDeviation(shotDatas[shotDatas.length - 1]) : undefined;
@@ -119,6 +130,8 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
     const svgNumberOfCircles: number = 6;
 
     console.log("shotDatas", shotDatas)
+
+
     return (
         <div className="main-page__container">
             <div className="main-page__next-challenge-flex-item main-page__flex-item">
@@ -132,11 +145,8 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                         <p className="main-page__next-distance-number">{nextDistance}</p>
                         <p className="main-page__next-distance-unit">Meter</p>
                     </div>
-                    : <button className="main-page__restart main-page__box" onClick={() => {
-                        console.log("restart");
-                        setShotDatas([]);
-                        nextDistanceRef.current = props.distances.getNext(0);
-                        setNextDistance(nextDistanceRef.current);
+                    : <button className="main-page__restart main-page__box" onClick={(): void => {
+                        restart();
                     }}>
                         Restart
                     </button>}
