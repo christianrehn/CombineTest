@@ -23,9 +23,9 @@ const App: React.FC<{}> = (): JSX.Element => {
                     lastShotCsvPath={lastShotCsvPath}
                     numberOfShots={18}
                     distancesGenerators={[
-                        new RandomFromFixedDistancesGenerator(),
-                        new RandomDistancesGenerator(BGV_DISTANCES),
-                        new FixedDistancesGenerator(10, 80),
+                        new RandomFromFixedDistancesGenerator(BGV_DISTANCES),
+                        new FixedDistancesGenerator(BGV_DISTANCES),
+                        new RandomDistancesGenerator(10, 80),
                     ]}
                 />
             }
