@@ -1,7 +1,7 @@
 {
   "name": "approachshot",
   "productName": "Approach Shot",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Practice approach shots with FSX2020 and GCQuad",
   "main": ".webpack/main",
   "scripts": {
@@ -19,7 +19,9 @@
   "license": "MIT",
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+          "icon": "src/assets/golf-icon-orig.png"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
