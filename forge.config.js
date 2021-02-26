@@ -1,19 +1,19 @@
 module.exports = {
     packagerConfig: {
         icon: "src/assets/icons/win/icon.ico",
-        ignore: [
-            "data",
-            "out",
-            "build",
-            ".+.test.js",
-            ".*.env",
-            ".eslintrc",
-            ".gitignore",
-            "README.md",
-            "yarn.lock",
-            ".jshintrc",
-            ".babelrc"
-        ]
+        // ignore: [
+        //     "data",
+        //     "out",
+        //     "build",
+        //     ".+.test.js",
+        //     ".*.env",
+        //     ".eslintrc",
+        //     ".gitignore",
+        //     "README.md",
+        //     "yarn.lock",
+        //     ".jshintrc",
+        //     ".babelrc"
+        // ]
     },
     makers: [
         {
