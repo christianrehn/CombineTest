@@ -9,10 +9,10 @@ import {LastShotData} from "../../components/LastShotData/LastShotData";
 import {assert} from "chai";
 import {DistancesGeneratorSelect} from "../../components/DistancesGeneratorSelect/DistancesGeneratorSelect";
 import {NextDistanceBox} from "../../components/NextDistanceBox/NextDistanceBox";
+import {NumberOfShotsInput} from "../../components/NumberOfShotsInput/NumberOfShotsInput";
 
 interface IMainPageProps {
     lastShotCsvPath: string;
-    numberOfShots: number;
     distancesGenerators: IDistancesGenerator[];
 }
 
@@ -22,6 +22,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
 
     const [selectedDistancesGenerator, setSelectedDistancesGenerator] =
         React.useState<IDistancesGenerator>(props.distancesGenerators[0]);
+    const [numberOfShots, setNumberOfShots] = React.useState<number>(props.distancesGenerators[0].getNumberOfDistances() * 2);
 
     const [shotData, setShotData] = React.useState<IShotData | undefined>();
     const [shotDatas, setShotDatas] = React.useState<IShotData[]>([]);
@@ -87,7 +88,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
         if (!!shotData && (shotDatas.length === 0 || shotData.id !== shotDatas[shotDatas.length - 1].id)) {
             // new shot detected
 
-            if (shotDatas.length >= props.numberOfShots) {
+            if (shotDatas.length >= numberOfShots) {
                 // shot executed but number of shots was already reached -> ignore
                 console.log(`shot id=${shotData.id} executed but number of shots was already reached -> ignore`);
             } else {
@@ -97,7 +98,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                 setShotDatas(shotDatasClone);
 
                 // pick new distance for next shot
-                if (shotDatasClone.length < props.numberOfShots) {
+                if (shotDatasClone.length < numberOfShots) {
                     nextDistanceRef.current = selectedDistancesGenerator.getNext(shotDatasClone.length);
                 } else {
                     console.log("all shots executed");
@@ -113,8 +114,10 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
         if (!!distancesGenerator) {
             distancesGenerator.reset();
             setSelectedDistancesGenerator(distancesGenerator);
+            setNumberOfShots(distancesGenerator.getNumberOfDistances() * 2);
         } else {
             selectedDistancesGenerator.reset();
+            setNumberOfShots(selectedDistancesGenerator.getNumberOfDistances() * 2);
         }
         setShotDatas([]);
         nextDistanceRef.current = (distancesGenerator || selectedDistancesGenerator).getNext(0);
@@ -152,19 +155,31 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                 <div className="main-page__NextDistanceBox">
                     <NextDistanceBox
                         nextDistance={nextDistance}
-                        restart={restart}
+                        onClick={restart}
                     />
                 </div>
                 <div className="main-page__DistancesGeneratorSelect">
                     <DistancesGeneratorSelect
                         distancesGenerators={props.distancesGenerators}
-                        restart={restart}
+                        onChange={restart}
+                    />
+                </div>
+                <div className="main-page__NumberOfShotsInput">
+                    <NumberOfShotsInput
+                        value={numberOfShots}
+                        onChange={(value: number): void => {
+                            if (value > 0) {
+                                if (!nextDistance || value > shotDatas.length) {
+                                    setNumberOfShots(value);
+                                }
+                            }
+                        }}
                     />
                 </div>
             </div>
             <div className="main-page__last-shot-flex-item main-page__flex-item">
                 <div className="main-page__header">
-                    <h3> Shot {shotDatas.length} / {props.numberOfShots} </h3>
+                    <h3> Shot {shotDatas.length} / {numberOfShots} </h3>
                 </div>
                 <div className="main-page__LastShotData">
                     <LastShotData

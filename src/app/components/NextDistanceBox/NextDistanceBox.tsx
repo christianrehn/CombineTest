@@ -3,7 +3,7 @@ import './NextDistanceBox.scss';
 
 export interface INextDistanceBoxProps {
     nextDistance: number,
-    restart: () => void
+    onClick: () => void
 }
 
 export const NextDistanceBox: React.FC<INextDistanceBoxProps> = (props: INextDistanceBoxProps): JSX.Element => {
@@ -13,7 +13,7 @@ export const NextDistanceBox: React.FC<INextDistanceBoxProps> = (props: INextDis
             <p className="next-distance-unit">Meter</p>
         </div>
         : <button className="restart box" onClick={(): void => {
-            props.restart();
+            props.onClick();
         }}>
             Restart
         </button>;

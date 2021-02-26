@@ -20,6 +20,7 @@ export interface IDistancesGenerator {
     reset: () => void;
     getName: () => string;
     getDescription: () => string;
+    getNumberOfDistances: () => number;
 }
 
 export class RandomDistancesGenerator implements IDistancesGenerator {
@@ -48,6 +49,10 @@ export class RandomDistancesGenerator implements IDistancesGenerator {
     public getDescription(): string {
         return `Random Distances between ${this.minIncludedDistance} and ${this.maxExcludedDistance}`;
     }
+
+    getNumberOfDistances(): number {
+        return 10;
+    }
 }
 
 export class FixedDistancesGenerator implements IDistancesGenerator {
@@ -73,6 +78,10 @@ export class FixedDistancesGenerator implements IDistancesGenerator {
 
     public getDescription(): string {
         return `Fixed Distances in fixed order: ${this.distances}`;
+    }
+
+    getNumberOfDistances(): number {
+        return this.distances.length;
     }
 }
 
@@ -124,5 +133,9 @@ export class RandomFromFixedDistancesGenerator implements IDistancesGenerator {
 
     public getDescription(): string {
         return `Fixed Distances in random order: ${this.distances}`;
+    }
+
+    getNumberOfDistances(): number {
+        return this.distances.length;
     }
 }

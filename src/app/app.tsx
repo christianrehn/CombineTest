@@ -21,7 +21,6 @@ const App: React.FC<{}> = (): JSX.Element => {
                 ? <SettingsPage/>
                 : <MainPage
                     lastShotCsvPath={lastShotCsvPath}
-                    numberOfShots={18}
                     distancesGenerators={[
                         new RandomFromFixedDistancesGenerator(BGV_DISTANCES),
                         new FixedDistancesGenerator(BGV_DISTANCES),
