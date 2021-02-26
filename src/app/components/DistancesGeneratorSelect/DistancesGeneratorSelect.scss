@@ -1,9 +1,14 @@
 .distances-generators-select-container {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
+    flex-direction: column;
+    float: left;
+    min-width: 10em;
+    width: 100%;
 }
 
-.distances-generators.select {
-    //align-content: center;
+.distances-generators-select {
+}
+
+.select-css {
+    margin: .5em 0;
 }

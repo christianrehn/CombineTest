@@ -108,9 +108,16 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
         }
     }, [shotData]);
 
-    const restart = (): void => {
+    const restart = (distancesGenerator?: IDistancesGenerator): void => {
+        console.log("restart distancesGenerator=", distancesGenerator?.getName());
+        if (!!distancesGenerator) {
+            distancesGenerator.reset();
+            setSelectedDistancesGenerator(distancesGenerator);
+        } else {
+            selectedDistancesGenerator.reset();
+        }
         setShotDatas([]);
-        nextDistanceRef.current = selectedDistancesGenerator.getNext(0);
+        nextDistanceRef.current = (distancesGenerator || selectedDistancesGenerator).getNext(0);
         setNextDistance(nextDistanceRef.current);
     }
 
@@ -151,6 +158,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                 <div className="main-page__DistancesGeneratorSelect">
                     <DistancesGeneratorSelect
                         distancesGenerators={props.distancesGenerators}
+                        restart={restart}
                     />
                 </div>
             </div>

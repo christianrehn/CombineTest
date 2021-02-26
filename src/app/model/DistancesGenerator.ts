@@ -17,7 +17,9 @@ const createRandomNumber = (minIncluded: number, maxExcluded: number): number =>
 
 export interface IDistancesGenerator {
     getNext: (index: number) => number;
+    reset: () => void;
     getName: () => string;
+    getDescription: () => string;
 }
 
 export class RandomDistancesGenerator implements IDistancesGenerator {
@@ -29,6 +31,10 @@ export class RandomDistancesGenerator implements IDistancesGenerator {
         this.maxExcludedDistance = maxExcludedDistance;
     }
 
+    reset(): void {
+        // nothing to do
+    }
+
     public getNext(index: number): number {
         assert(index >= 0, "index < 0");
 
@@ -36,6 +42,10 @@ export class RandomDistancesGenerator implements IDistancesGenerator {
     }
 
     public getName(): string {
+        return `RD ${this.minIncludedDistance} - ${this.maxExcludedDistance}`;
+    }
+
+    public getDescription(): string {
         return `Random Distances between ${this.minIncludedDistance} and ${this.maxExcludedDistance}`;
     }
 }
@@ -47,6 +57,10 @@ export class FixedDistancesGenerator implements IDistancesGenerator {
         this.distances = distances;
     }
 
+    reset(): void {
+        // nothing to do
+    }
+
     public getNext(index: number): number {
         assert(index >= 0, "index < 0");
 
@@ -54,6 +68,10 @@ export class FixedDistancesGenerator implements IDistancesGenerator {
     }
 
     public getName(): string {
+        return `FD in FO: ${this.distances}`;
+    }
+
+    public getDescription(): string {
         return `Fixed Distances in fixed order: ${this.distances}`;
     }
 }
@@ -66,6 +84,11 @@ export class RandomFromFixedDistancesGenerator implements IDistancesGenerator {
     constructor(distances: number[]) {
         this.distances = distances;
         this.distancesNotYetReturned = [...distances];
+    }
+
+    reset(): void {
+        this.distancesNotYetReturned = [...this.distances];
+        this.distancesReturnedMap = new Map<number, number>()
     }
 
     public getNext(index: number): number {
@@ -96,6 +119,10 @@ export class RandomFromFixedDistancesGenerator implements IDistancesGenerator {
     }
 
     public getName(): string {
+        return `FR in RO: ${this.distances}`;
+    }
+
+    public getDescription(): string {
         return `Fixed Distances in random order: ${this.distances}`;
     }
 }

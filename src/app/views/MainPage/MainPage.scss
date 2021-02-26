@@ -13,7 +13,7 @@
 
 .main-page__header {
     h3 {
-        font-size: 40px;
+        font-size: var(--font-site-header);
         text-align: center;
         margin-bottom: 50px;
     }
@@ -22,6 +22,12 @@
 // next shot
 .main-page__next-shot-flex-item {
     flex: 1;
+    margin-left: 2ex;
+    margin-right: 2ex;
+}
+
+.main-page__DistancesGeneratorSelect {
+    margin-top: 5em;
 }
 
 // last shot

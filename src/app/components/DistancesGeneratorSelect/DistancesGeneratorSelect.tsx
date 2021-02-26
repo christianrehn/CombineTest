@@ -4,16 +4,34 @@ import {IDistancesGenerator} from "../../model/DistancesGenerator";
 
 export interface IDistancesGeneratorSelectProps {
     distancesGenerators: IDistancesGenerator[];
+    restart: (selectedDistancesGenerator: IDistancesGenerator) => void
 }
 
 export const DistancesGeneratorSelect: React.FC<IDistancesGeneratorSelectProps> = (props: IDistancesGeneratorSelectProps): JSX.Element => {
     return (
         <div className="distances-generators-select-container">
-            <select name="DistancesGenerators" id="DistancesGenerators" className="distances-generators-select">
+            <label
+                className="distances-generators-select-label"
+                htmlFor="distances-generators-select">Distances Generator</label>
+            <select
+                id="distances-generators-select"
+                className="distances-generators-select select-css"
+                title="Select a distances generator. Changing this value will lead to a restart"
+                onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
+                    props.restart(props.distancesGenerators[Number(event.target.value)]);
+                }}
+            >
                 {
-                    props.distancesGenerators.map((distancesGenerator: IDistancesGenerator) => {
-                        const name: string = distancesGenerator.getName();
-                        return <option value="name">{name}</option>
+                    props.distancesGenerators.map((distancesGenerator: IDistancesGenerator, index: number) => {
+                        return (
+                            <option
+                                key={`distancesGeneratorOption_${index}`}
+                                value={index}
+                                title={distancesGenerator.getDescription()}
+                            >
+                                {distancesGenerator.getName()}
+                            </option>
+                        );
                     })
                 }
             </select>
