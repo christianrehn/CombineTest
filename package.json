@@ -1,108 +1,109 @@
 {
-  "name": "approachshot",
-  "productName": "Approach Shot",
-  "version": "0.1.2",
-  "description": "Practice approach shots with FSX2020 and GCQuad",
-  "main": ".webpack/main",
-  "scripts": {
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts ."
-  },
-  "keywords": [],
-  "author": {
-    "name": "CR7",
-    "email": "rehn@itestra.de"
-  },
-  "license": "MIT",
-  "config": {
-    "forge": {
-      "packagerConfig": {
-        "icon": "src/assets/icons/win/icon.ico"
-      },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "approachshot"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ],
-      "plugins": [
-        [
-          "@electron-forge/plugin-webpack",
-          {
-            "mainConfig": "./webpack.main.config.js",
-            "renderer": {
-              "config": "./webpack.renderer.config.js",
-              "entryPoints": [
+    "name": "approachshot",
+    "productName": "Approach Shot",
+    "version": "0.1.2",
+    "description": "Practice approach shots with FSX2020 and GCQuad",
+    "main": ".webpack/main",
+    "scripts": {
+        "start": "electron-forge start",
+        "package": "electron-forge package",
+        "make": "electron-forge make",
+        "publish": "electron-forge publish",
+        "lint": "eslint --ext .ts ."
+    },
+    "keywords": [],
+    "author": {
+        "name": "CR7",
+        "email": "rehn@itestra.de"
+    },
+    "license": "MIT",
+    "config": {
+        "forge": {
+            "packagerConfig": {
+                "icon": "src/assets/icons/win/icon.ico",
+                "setupIcon": "src/assets/icons/win/icon.ico"
+            },
+            "makers": [
                 {
-                  "html": "./src/index.html",
-                  "js": "./src/renderer.tsx",
-                  "name": "main_window"
+                    "name": "@electron-forge/maker-squirrel",
+                    "config": {
+                        "name": "approachshot"
+                    }
+                },
+                {
+                    "name": "@electron-forge/maker-zip",
+                    "platforms": [
+                        "darwin"
+                    ]
+                },
+                {
+                    "name": "@electron-forge/maker-deb",
+                    "config": {}
+                },
+                {
+                    "name": "@electron-forge/maker-rpm",
+                    "config": {}
                 }
-              ]
-            }
-          }
-        ]
-      ]
+            ],
+            "plugins": [
+                [
+                    "@electron-forge/plugin-webpack",
+                    {
+                        "mainConfig": "./webpack.main.config.js",
+                        "renderer": {
+                            "config": "./webpack.renderer.config.js",
+                            "entryPoints": [
+                                {
+                                    "html": "./src/index.html",
+                                    "js": "./src/renderer.tsx",
+                                    "name": "main_window"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            ]
+        }
+    },
+    "devDependencies": {
+        "@electron-forge/cli": "^6.0.0-beta.54",
+        "@electron-forge/maker-deb": "^6.0.0-beta.54",
+        "@electron-forge/maker-rpm": "^6.0.0-beta.54",
+        "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
+        "@electron-forge/maker-zip": "^6.0.0-beta.54",
+        "@electron-forge/plugin-webpack": "6.0.0-beta.54",
+        "@hot-loader/react-dom": "^17.0.1",
+        "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
+        "@typescript-eslint/eslint-plugin": "^4.0.1",
+        "@typescript-eslint/parser": "^4.0.1",
+        "css-loader": "^4.3.0",
+        "electron": "11.3.0",
+        "electron-icon-builder": "^2.0.1",
+        "eslint": "^7.6.0",
+        "eslint-import-resolver-typescript": "^2.4.0",
+        "eslint-plugin-import": "^2.22.1",
+        "eslint-plugin-react-hooks": "^4.2.0",
+        "fork-ts-checker-webpack-plugin": "^5.0.14",
+        "node-loader": "^1.0.1",
+        "node-sass": "^4.14.1",
+        "postcss-loader": "^4.2.0",
+        "sass-loader": "^9.0.3",
+        "style-loader": "^1.2.1",
+        "ts-loader": "^8.0.2",
+        "typescript": "^4.0.2"
+    },
+    "dependencies": {
+        "@types/chai": "^4.2.15",
+        "@types/react": "^17.0.2",
+        "@types/react-dom": "^17.0.1",
+        "chai": "^4.3.0",
+        "chokidar": "^3.5.1",
+        "csv-parser": "^3.0.0",
+        "electron-is-dev": "^1.2.0",
+        "electron-squirrel-startup": "^1.0.0",
+        "fg-select-css": "^3.2.0",
+        "react": "^17.0.1",
+        "react-dom": "npm:@hot-loader/react-dom",
+        "react-hot-loader": "^4.13.0"
     }
-  },
-  "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.54",
-    "@electron-forge/maker-deb": "^6.0.0-beta.54",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.54",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
-    "@electron-forge/maker-zip": "^6.0.0-beta.54",
-    "@electron-forge/plugin-webpack": "6.0.0-beta.54",
-    "@hot-loader/react-dom": "^17.0.1",
-    "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
-    "@typescript-eslint/eslint-plugin": "^4.0.1",
-    "@typescript-eslint/parser": "^4.0.1",
-    "css-loader": "^4.3.0",
-    "electron": "11.3.0",
-    "electron-icon-builder": "^2.0.1",
-    "eslint": "^7.6.0",
-    "eslint-import-resolver-typescript": "^2.4.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "fork-ts-checker-webpack-plugin": "^5.0.14",
-    "node-loader": "^1.0.1",
-    "node-sass": "^4.14.1",
-    "postcss-loader": "^4.2.0",
-    "sass-loader": "^9.0.3",
-    "style-loader": "^1.2.1",
-    "ts-loader": "^8.0.2",
-    "typescript": "^4.0.2"
-  },
-  "dependencies": {
-    "@types/chai": "^4.2.15",
-    "@types/react": "^17.0.2",
-    "@types/react-dom": "^17.0.1",
-    "chai": "^4.3.0",
-    "chokidar": "^3.5.1",
-    "csv-parser": "^3.0.0",
-    "electron-is-dev": "^1.2.0",
-    "electron-squirrel-startup": "^1.0.0",
-    "fg-select-css": "^3.2.0",
-    "react": "^17.0.1",
-    "react-dom": "npm:@hot-loader/react-dom",
-    "react-hot-loader": "^4.13.0"
-  }
 }
