@@ -29,10 +29,10 @@ module.exports = {
                 icon: __dirname + "/src/assets/icons/win/icon.ico",
                 ui: {
                     chooseDirectory: true,
-                    // images: {
-                    //     background: "[...]/path/to/background-493x312.bmp",
-                    //     banner: "[...]/path/to/banner-493x58.bmp"
-                    // }
+                    images: {
+                        background: __dirname + "/src/assets/wix/background.bmp",
+                        banner: __dirname + "/src/assets/wix/banner.bmp"
+                    }
                 },
             }
         },
