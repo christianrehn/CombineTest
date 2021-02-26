@@ -7,6 +7,8 @@ import {ShotsSvg} from "../../components/ShotsSvg/ShotsSvg";
 import {computeAbsoluteDeviation, computeRelativeDeviation, IShotData} from "../../model/ShotData";
 import {LastShotData} from "../../components/LastShotData/LastShotData";
 import {assert} from "chai";
+import {DistancesGeneratorSelect} from "../../components/DistancesGeneratorSelect/DistancesGeneratorSelect";
+import {NextDistanceBox} from "../../components/NextDistanceBox/NextDistanceBox";
 
 interface IMainPageProps {
     lastShotCsvPath: string;
@@ -140,16 +142,11 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                         <h3>Next</h3>
                         : <h3>Done</h3>}
                 </div>
-                {!!nextDistance
-                    ? <div className="main-page__next-distance main-page__box">
-                        <p className="main-page__next-distance-number">{nextDistance}</p>
-                        <p className="main-page__next-distance-unit">Meter</p>
-                    </div>
-                    : <button className="main-page__restart main-page__box" onClick={(): void => {
-                        restart();
-                    }}>
-                        Restart
-                    </button>}
+                <NextDistanceBox
+                    nextDistance={nextDistance}
+                    restart={restart}
+                />
+                <DistancesGeneratorSelect/>
             </div>
             <div className="main-page__last-shot-flex-item main-page__flex-item">
                 <div className="main-page__header">

@@ -21,8 +21,8 @@ export interface IDistancesGenerator {
 }
 
 export class RandomDistancesGenerator implements IDistancesGenerator {
-    readonly minIncludedDistance: number;
-    readonly maxExcludedDistance: number;
+    private readonly minIncludedDistance: number;
+    private readonly maxExcludedDistance: number;
 
     constructor(minIncludedDistance: number, maxExcludedDistance: number) {
         this.minIncludedDistance = minIncludedDistance;
@@ -41,7 +41,7 @@ export class RandomDistancesGenerator implements IDistancesGenerator {
 }
 
 export class FixedDistancesGenerator implements IDistancesGenerator {
-    readonly distances: number[];
+    private readonly distances: number[];
 
     constructor(distances: number[]) {
         this.distances = distances;
@@ -59,9 +59,14 @@ export class FixedDistancesGenerator implements IDistancesGenerator {
 }
 
 export class RandomFromFixedDistancesGenerator implements IDistancesGenerator {
-    readonly distances: number[] = BGV_DISTANCES;
-    private distancesNotYetReturned: number[] = [...this.distances];
+    private readonly distances: number[];
+    private distancesNotYetReturned: number[];
     private distancesReturnedMap: Map<number, number> = new Map<number, number>();
+
+    constructor(distances: number[]) {
+        this.distances = distances;
+        this.distancesNotYetReturned = [...distances];
+    }
 
     public getNext(index: number): number {
         console.log("getNext, index=", index);
