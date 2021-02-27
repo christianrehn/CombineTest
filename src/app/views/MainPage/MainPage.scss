@@ -1,4 +1,9 @@
 .main-page__container {
+    --margin-horizontal: 5ex;
+    --settings-icon-width: 6ex;
+}
+
+.main-page__container {
     width: 100%;
     height: 100%;
     position: relative;
@@ -22,8 +27,8 @@
 // next shot
 .main-page__next-shot-flex-item {
     flex: 1;
-    margin-left: 2ex;
-    margin-right: 2ex;
+    margin-left: var(--margin-horizontal);
+    margin-right: var(--margin-horizontal);
 }
 
 .main-page__DistancesGeneratorSelect {
@@ -49,6 +54,15 @@
 
 .main-page__ShotsSvg {
     background: var(--font-white);
-    margin-right: 2ex;
+    margin-right: var(--margin-horizontal);
 }
 
+.main-page__settings-flex-item {
+}
+
+.main-page__settings-img {
+    background: var(--font-white);
+    width: var(--settings-icon-width);
+    height: var(--settings-icon-width);
+    margin-left: calc(-1 * (var(--margin-horizontal) + var(--settings-icon-width)) + 3ex);
+}

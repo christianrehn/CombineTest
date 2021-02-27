@@ -10,6 +10,7 @@ import {assert} from "chai";
 import {DistancesGeneratorSelect} from "../../components/DistancesGeneratorSelect/DistancesGeneratorSelect";
 import {NextDistanceBox} from "../../components/NextDistanceBox/NextDistanceBox";
 import {NumberOfShotsInput} from "../../components/NumberOfShotsInput/NumberOfShotsInput";
+import settingsIcon from '../../../assets/settings.png';
 
 interface IMainPageProps {
     lastShotCsvPath: string;
@@ -143,7 +144,6 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
 
     console.log("shotDatas", shotDatas)
 
-
     return (
         <div className="main-page__container">
             <div className="main-page__next-shot-flex-item main-page__flex-item">
@@ -205,7 +205,15 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                     />
                 </div>
             </div>
+            <div className="main-page__settings-flex-item main-page__flex-item">
+                            <span className="btn-settings"
+                                  onClick={(): void => {
+                                  }}>
+                <img className="main-page__settings-img"
+                     src={settingsIcon}
+                     alt="Settings"/>
+            </span>
+            </div>
         </div>
     );
 }
-
