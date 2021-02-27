@@ -10,6 +10,7 @@ import {assert} from "chai";
 import {NextDistanceBox} from "../../components/NextDistanceBox/NextDistanceBox";
 import {NumberOfShotsInput} from "../../components/NumberOfShotsInput/NumberOfShotsInput";
 import settingsIcon from '../../../assets/settings.png';
+import {RestartButton} from "../../components/RestartButton/RestartButton";
 
 interface IMainPageProps {
     lastShotCsvPath: string;
@@ -138,16 +139,17 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
         <div className="main-page page">
             <div className="next-shot-flex-item flex-item">
                 <div className="page-header">
-                    {!!nextDistance ?
-                        <h3>Next</h3>
-                        : <h3>Done</h3>}
+                    <h3>Next</h3>
                 </div>
-                {props.selectedDistancesGenerator.getName()}
-                {props.numberOfShots}
                 <div className="NextDistanceBox">
                     <NextDistanceBox
                         nextDistance={nextDistance}
-                        onClick={restart}
+                        selectedDistancesGenerator={props.selectedDistancesGenerator}
+                    />
+                </div>
+                <div className="RestartButton">
+                    <RestartButton
+                        handleRestartButtonClicked={restart}
                     />
                 </div>
             </div>

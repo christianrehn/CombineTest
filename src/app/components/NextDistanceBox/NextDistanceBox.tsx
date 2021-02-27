@@ -1,20 +1,16 @@
 import React from "react";
 import './NextDistanceBox.scss';
+import {IDistancesGenerator} from "../../model/DistancesGenerator";
 
 export interface INextDistanceBoxProps {
-    nextDistance: number,
-    onClick: () => void
+    nextDistance: number;
+    selectedDistancesGenerator: IDistancesGenerator;
 }
 
 export const NextDistanceBox: React.FC<INextDistanceBoxProps> = (props: INextDistanceBoxProps): JSX.Element => {
-    return !!props.nextDistance
-        ? <div className="next-distance box">
-            <p className="next-distance-number">{props.nextDistance}</p>
-            <p className="next-distance-unit">Meter</p>
-        </div>
-        : <button className="restart box" onClick={(): void => {
-            props.onClick();
-        }}>
-            Restart
-        </button>;
+    return (
+        <div className="next-distance box">
+            <p className="next-distance-number">{!!props.nextDistance ? props.nextDistance : "DONE"}</p>
+            <p className="next-distance-unit"> {!!props.nextDistance ? "Meter" : <span>&nbsp;</span>}</p>
+        </div>);
 }
