@@ -1,42 +1,19 @@
-.main-page__container {
-    --margin-horizontal: 5ex;
-    --settings-icon-width: 6ex;
-}
-
-.main-page__container {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-}
-
-.main-page__flex-item {
-    height: 100%;
-    padding-top: 20px;
-}
-
-.main-page__header {
-    h3 {
-        font-size: var(--font-site-header);
-        text-align: center;
-        margin-bottom: 50px;
-    }
+.main-page {
 }
 
 // next shot
-.main-page__next-shot-flex-item {
+.main-page .next-shot-flex-item {
     flex: 1;
-    margin-left: var(--margin-horizontal);
-    margin-right: var(--margin-horizontal);
+    margin-left: var(--page-margin-horizontal);
+    margin-right: var(--page-margin-horizontal);
 }
 
-.main-page__DistancesGeneratorSelect {
+.main-page .DistancesGeneratorSelect {
     margin-top: 5em;
 }
 
 // last shot
-.main-page__last-shot-flex-item {
+.main-page .last-shot-flex-item {
     border-color: var(--font-white);
     border-style: solid;
     border-left-width: 5px;
@@ -44,25 +21,18 @@
     flex: 2;
 }
 
-.main-page__LastShotData {
+.main-page .LastShotData {
 }
 
 // shots
-.main-page__shots-flex-item {
+.main-page .shots-flex-item {
     flex: 2;
 }
 
-.main-page__ShotsSvg {
+.main-page .ShotsSvg {
     background: var(--font-white);
-    margin-right: var(--margin-horizontal);
+    margin-right: var(--page-margin-horizontal);
 }
 
-.main-page__settings-flex-item {
-}
-
-.main-page__settings-img {
-    background: var(--font-white);
-    width: var(--settings-icon-width);
-    height: var(--settings-icon-width);
-    margin-left: calc(-1 * (var(--margin-horizontal) + var(--settings-icon-width)) + 3ex);
+.main-page .page-change-flex-item {
 }

@@ -51,7 +51,7 @@ export class RandomDistancesGenerator implements IDistancesGenerator {
     }
 
     getNumberOfDistances(): number {
-        return 10;
+        return 1;
     }
 }
 

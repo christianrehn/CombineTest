@@ -7,28 +7,26 @@ import {ShotsSvg} from "../../components/ShotsSvg/ShotsSvg";
 import {computeAbsoluteDeviation, computeRelativeDeviation, IShotData} from "../../model/ShotData";
 import {LastShotData} from "../../components/LastShotData/LastShotData";
 import {assert} from "chai";
-import {DistancesGeneratorSelect} from "../../components/DistancesGeneratorSelect/DistancesGeneratorSelect";
 import {NextDistanceBox} from "../../components/NextDistanceBox/NextDistanceBox";
 import {NumberOfShotsInput} from "../../components/NumberOfShotsInput/NumberOfShotsInput";
 import settingsIcon from '../../../assets/settings.png';
 
 interface IMainPageProps {
     lastShotCsvPath: string;
-    distancesGenerators: IDistancesGenerator[];
+    selectedDistancesGenerator: IDistancesGenerator;
+    numberOfShots: number;
+    handleSettingsClicked: () => void;
 }
 
 export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.Element => {
     assert(!!props, "!props");
-    assert(props.distancesGenerators.length > 0, "props.distancesGenerators.length <= 0");
-
-    const [selectedDistancesGenerator, setSelectedDistancesGenerator] =
-        React.useState<IDistancesGenerator>(props.distancesGenerators[0]);
-    const [numberOfShots, setNumberOfShots] = React.useState<number>(props.distancesGenerators[0].getNumberOfDistances() * 2);
+    assert(!!props.selectedDistancesGenerator, "!props.selectedDistancesGenerator");
+    assert(!!props.handleSettingsClicked, "!props.handleSettingsClicked");
 
     const [shotData, setShotData] = React.useState<IShotData | undefined>();
     const [shotDatas, setShotDatas] = React.useState<IShotData[]>([]);
 
-    const [nextDistance, setNextDistance] = React.useState<number>(selectedDistancesGenerator.getNext(shotDatas.length));
+    const [nextDistance, setNextDistance] = React.useState<number>(props.selectedDistancesGenerator.getNext(shotDatas.length));
     const nextDistanceRef: React.MutableRefObject<number> = React.useRef<number>(nextDistance);
 
     const lastShotFileChanged = async (): Promise<void> => {
@@ -89,7 +87,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
         if (!!shotData && (shotDatas.length === 0 || shotData.id !== shotDatas[shotDatas.length - 1].id)) {
             // new shot detected
 
-            if (shotDatas.length >= numberOfShots) {
+            if (shotDatas.length >= props.numberOfShots) {
                 // shot executed but number of shots was already reached -> ignore
                 console.log(`shot id=${shotData.id} executed but number of shots was already reached -> ignore`);
             } else {
@@ -99,8 +97,8 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                 setShotDatas(shotDatasClone);
 
                 // pick new distance for next shot
-                if (shotDatasClone.length < numberOfShots) {
-                    nextDistanceRef.current = selectedDistancesGenerator.getNext(shotDatasClone.length);
+                if (shotDatasClone.length < props.numberOfShots) {
+                    nextDistanceRef.current = props.selectedDistancesGenerator.getNext(shotDatasClone.length);
                 } else {
                     console.log("all shots executed");
                     nextDistanceRef.current = undefined;
@@ -110,18 +108,10 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
         }
     }, [shotData]);
 
-    const restart = (distancesGenerator?: IDistancesGenerator): void => {
-        console.log("restart distancesGenerator=", distancesGenerator?.getName());
-        if (!!distancesGenerator) {
-            distancesGenerator.reset();
-            setSelectedDistancesGenerator(distancesGenerator);
-            setNumberOfShots(distancesGenerator.getNumberOfDistances() * 2);
-        } else {
-            selectedDistancesGenerator.reset();
-            setNumberOfShots(selectedDistancesGenerator.getNumberOfDistances() * 2);
-        }
+    const restart = (): void => {
+        props.selectedDistancesGenerator.reset();
         setShotDatas([]);
-        nextDistanceRef.current = (distancesGenerator || selectedDistancesGenerator).getNext(0);
+        nextDistanceRef.current = (props.selectedDistancesGenerator).getNext(0);
         setNextDistance(nextDistanceRef.current);
     }
 
@@ -145,43 +135,27 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
     console.log("shotDatas", shotDatas)
 
     return (
-        <div className="main-page__container">
-            <div className="main-page__next-shot-flex-item main-page__flex-item">
-                <div className="main-page__header">
+        <div className="main-page page">
+            <div className="next-shot-flex-item flex-item">
+                <div className="page-header">
                     {!!nextDistance ?
                         <h3>Next</h3>
                         : <h3>Done</h3>}
                 </div>
-                <div className="main-page__NextDistanceBox">
+                {props.selectedDistancesGenerator.getName()}
+                {props.numberOfShots}
+                <div className="NextDistanceBox">
                     <NextDistanceBox
                         nextDistance={nextDistance}
                         onClick={restart}
                     />
                 </div>
-                <div className="main-page__DistancesGeneratorSelect">
-                    <DistancesGeneratorSelect
-                        distancesGenerators={props.distancesGenerators}
-                        onChange={restart}
-                    />
-                </div>
-                <div className="main-page__NumberOfShotsInput">
-                    <NumberOfShotsInput
-                        value={numberOfShots}
-                        onChange={(value: number): void => {
-                            if (value > 0) {
-                                if (!nextDistance || value > shotDatas.length) {
-                                    setNumberOfShots(value);
-                                }
-                            }
-                        }}
-                    />
-                </div>
             </div>
-            <div className="main-page__last-shot-flex-item main-page__flex-item">
-                <div className="main-page__header">
-                    <h3> Shot {shotDatas.length} / {numberOfShots} </h3>
+            <div className="last-shot-flex-item flex-item">
+                <div className="page-header">
+                    <h3> Shot {shotDatas.length} / {props.numberOfShots} </h3>
                 </div>
-                <div className="main-page__LastShotData">
+                <div className="LastShotData">
                     <LastShotData
                         lastShot={lastShot}
                         absoluteDeviation={absoluteDeviation}
@@ -192,11 +166,11 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                     />
                 </div>
             </div>
-            <div className="main-page__shots-flex-item main-page__flex-item">
-                <div className="main-page__header">
+            <div className="shots-flex-item flex-item">
+                <div className="page-header">
                     <h3>All Shots</h3>
                 </div>
-                <div className="main-page__ShotsSvg">
+                <div className="ShotsSvg">
                     <ShotsSvg
                         svgNumberOfCircles={svgNumberOfCircles}
                         absoluteDeviationMax={absoluteDeviationMax}
@@ -205,13 +179,15 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                     />
                 </div>
             </div>
-            <div className="main-page__settings-flex-item main-page__flex-item">
-                            <span className="btn-settings"
+            <div className="page-change-flex-item flex-item">
+                            <span className="page-change-span"
                                   onClick={(): void => {
+                                      console.log(props.handleSettingsClicked())
                                   }}>
-                <img className="main-page__settings-img"
+                <img className="page-change-img"
                      src={settingsIcon}
-                     alt="Settings"/>
+                     alt="Settings"
+                />
             </span>
             </div>
         </div>

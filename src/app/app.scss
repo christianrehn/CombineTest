@@ -20,35 +20,41 @@ article, aside, canvas, details, embed,
 figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
 }
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
-	display: block;
+    display: block;
 }
+
 body {
-	line-height: 1;
+    line-height: 1;
 }
+
 ol, ul {
-	list-style: none;
+    list-style: none;
 }
+
 blockquote, q {
-	quotes: none;
+    quotes: none;
 }
+
 blockquote:before, blockquote:after,
 q:before, q:after {
-	content: '';
-	content: none;
+    content: '';
+    content: none;
 }
+
 table {
-	border-collapse: collapse;
-	border-spacing: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
 html, body, #root {
@@ -59,17 +65,47 @@ html, body, #root {
     font-family: 'Roboto Mono', monospace;
 }
 
-:root {
-  --bg: #234050;
-  --font-white: #eeeeee;
-  --font-site-normal: 24px;
-  --font-site-header: 40px;
-  --background-dark: #234050;
+.app {
+    width: 100%;
+    height: 100%;
+    background-color: #234050;
+    color: var(--font-white);
 }
 
-.app {
-  width: 100%;
-  height: 100%;
-  background-color: #234050;
-  color: var(--font-white);
+:root {
+    --bg: #234050;
+    --font-white: #eeeeee;
+    --font-site-normal: 24px;
+    --font-site-header: 40px;
+    --background-dark: #234050;
+    --page-margin-horizontal: 5ex;
+    --page-change-icon-width: 6ex;
+}
+
+.page-change-img {
+    background: var(--font-white);
+    width: var(--page-change-icon-width);
+    height: var(--page-change-icon-width);
+    margin-left: calc(-1 * (var(--page-margin-horizontal) + var(--page-change-icon-width)) + 3ex);
+}
+
+.page .flex-item {
+    height: 100%;
+    padding-top: 20px;
+}
+
+.page {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+}
+
+.page-header {
+    h3 {
+        font-size: var(--font-site-header);
+        text-align: center;
+        margin-bottom: 50px;
+    }
 }

@@ -1,4 +1,19 @@
 .settings-page {
-    width: 100%;
-    height: 100%;
+}
+
+.settings-page .settings-flex-item {
+    flex: 1;
+    margin-left: var(--page-margin-horizontal);
+    margin-right: var(--page-margin-horizontal);
+}
+
+
+.settings-page .page-change-flex-item {
+}
+
+.settings-page .page-change-img {
+    background: var(--font-white);
+    width: var(--page-change-icon-width);
+    height: var(--page-change-icon-width);
+    margin-left: calc(-1 * (var(--page-margin-horizontal) + var(--page-change-icon-width)) + 3ex);
 }

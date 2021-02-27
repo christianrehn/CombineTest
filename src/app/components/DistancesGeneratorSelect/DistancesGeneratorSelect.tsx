@@ -4,7 +4,8 @@ import {IDistancesGenerator} from "../../model/DistancesGenerator";
 
 export interface IDistancesGeneratorSelectProps {
     distancesGenerators: IDistancesGenerator[];
-    onChange: (selectedDistancesGenerator: IDistancesGenerator) => void
+    selectedDistancesGenerator: IDistancesGenerator;
+    handleDistancesGeneratorChanged: (selectedDistancesGenerator: IDistancesGenerator) => void
 }
 
 export const DistancesGeneratorSelect: React.FC<IDistancesGeneratorSelectProps> = (props: IDistancesGeneratorSelectProps): JSX.Element => {
@@ -12,13 +13,14 @@ export const DistancesGeneratorSelect: React.FC<IDistancesGeneratorSelectProps> 
         <div className="distances-generators-select-container">
             <label
                 className="distances-generators-select-label"
-                htmlFor="distances-generators-select">Distances Generator</label>
+                htmlFor="distances-generators-select">Select Distances</label>
             <select
                 id="distances-generators-select"
                 className="distances-generators-select select-css"
                 title="Select a distances generator. Changing this value will lead to a restart"
+                value={props.distancesGenerators.indexOf(props.selectedDistancesGenerator)}
                 onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                    props.onChange(props.distancesGenerators[Number(event.target.value)]);
+                    props.handleDistancesGeneratorChanged(props.distancesGenerators[Number(event.target.value)]);
                 }}
             >
                 {
