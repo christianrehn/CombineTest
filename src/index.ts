@@ -1,7 +1,11 @@
-import {app, BrowserWindow} from 'electron';
+import {app, BrowserWindow, ipcMain} from 'electron';
 import electronIsDev from "electron-is-dev";
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
+
+/**
+ * Electron Main-Prozess.
+ */
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -9,6 +13,7 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 }
 
 const createWindow = (): void => {
+    console.log('appPath: ', app.getAppPath());
     if (electronIsDev) {
         console.log('Running in development');
     } else {
@@ -35,6 +40,11 @@ const createWindow = (): void => {
     if (electronIsDev) {
         mainWindow.webContents.openDevTools();
     }
+
+    ipcMain.on('appPath', (event: Electron.IpcMainEvent, arg: any): void => {
+        // event.reply('appPath', app.getAppPath())
+        event.returnValue = app.getAppPath();
+    })
 };
 
 // This method will be called when Electron has finished

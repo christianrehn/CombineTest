@@ -1,25 +1,26 @@
 import React from 'react';
 import Chokidar, {FSWatcher} from 'chokidar';
 import './MainPage.scss';
-import {parseLastShotCsv} from "../../model/LastShotCsvParser";
+import {parseCsv} from "../../model/CsvParser";
 import {IDistancesGenerator} from "../../model/DistancesGenerator";
 import {ShotsSvg} from "../../components/ShotsSvg/ShotsSvg";
 import {computeAbsoluteDeviation, computeRelativeDeviation, IShotData} from "../../model/ShotData";
 import {LastShotData} from "../../components/LastShotData/LastShotData";
 import {assert} from "chai";
 import {NextDistanceBox} from "../../components/NextDistanceBox/NextDistanceBox";
-import {NumberOfShotsInput} from "../../components/NumberOfShotsInput/NumberOfShotsInput";
 import settingsIcon from '../../../assets/settings.png';
 import {RestartButton} from "../../components/RestartButton/RestartButton";
 
 interface IMainPageProps {
     lastShotCsvPath: string;
+    averageShotsFromFairway: any;
     selectedDistancesGenerator: IDistancesGenerator;
     numberOfShots: number;
     handleSettingsClicked: () => void;
 }
 
 export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.Element => {
+    console.log("averageShotsFromFairway", props.averageShotsFromFairway);
     assert(!!props, "!props");
     assert(!!props.selectedDistancesGenerator, "!props.selectedDistancesGenerator");
     assert(!!props.handleSettingsClicked, "!props.handleSettingsClicked");
@@ -31,7 +32,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
     const nextDistanceRef: React.MutableRefObject<number> = React.useRef<number>(nextDistance);
 
     const lastShotFileChanged = async (): Promise<void> => {
-        const lastShotData: any = await parseLastShotCsv(props.lastShotCsvPath);
+        const lastShotData: any = await parseCsv(props.lastShotCsvPath);
         const shotIdFromLastShotFile: number = lastShotData["shot_id"];
         if (!!shotIdFromLastShotFile) {
             console.log(`shot id=${shotIdFromLastShotFile} has been executed`);

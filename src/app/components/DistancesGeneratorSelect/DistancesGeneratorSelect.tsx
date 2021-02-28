@@ -29,9 +29,9 @@ export const DistancesGeneratorSelect: React.FC<IDistancesGeneratorSelectProps> 
                             <option
                                 key={`distancesGeneratorOption_${index}`}
                                 value={index}
-                                title={distancesGenerator.getDescription()}
+                                // title={distancesGenerator.getDescription()}
                             >
-                                {distancesGenerator.getName()}
+                                {distancesGenerator.getDescription()}
                             </option>
                         );
                     })

@@ -1,22 +1,26 @@
 import {hot} from 'react-hot-loader';
 import * as React from 'react';
-import {assert} from "chai";
 import './App.scss';
 import {SettingsPage} from "./views/SettingsPage/SettingsPage";
 import {MainPage} from "./views/MainPage/MainPage";
 import {
     BGV_DISTANCES,
-    FixedDistancesGenerator, IDistancesGenerator,
+    FixedDistancesGenerator,
+    IDistancesGenerator,
     RandomDistancesGenerator,
     RandomFromFixedDistancesGenerator
 } from "./model/DistancesGenerator";
+import {parseCsv} from "./model/CsvParser";
+import averageShotsFromFairwayCsvPath from "../data/fairway.csv";
+import * as path from "path";
+import {ipcRenderer} from "electron";
 
 const App: React.FC<{}> = (): JSX.Element => {
     const [showSettings, setShowSettings] = React.useState<boolean>(false);
 
     const lastShotCsvPath: string = process.platform !== 'darwin'
         ? "C:/Program Files (x86)/Foresight Sports Experience/System/LastShot.CSV"
-        : "/Users/rehn/WebstormProjects/ApproachShot/data/LastShot.CSV";
+        : "/Users/rehn/WebstormProjects/ApproachShot/test/data/LastShot.CSV";
 
     const [distancesGenerators, setDistancesGenerators] = React.useState<IDistancesGenerator[]>([
         new RandomFromFixedDistancesGenerator(BGV_DISTANCES),
@@ -27,6 +31,19 @@ const App: React.FC<{}> = (): JSX.Element => {
         React.useState<IDistancesGenerator>(distancesGenerators[0]);
 
     const [numberOfShots, setNumberOfShots] = React.useState<number>(selectedDistancesGenerator.getNumberOfDistances() * 2);
+
+    const [averageShotsFromFairway, setAverageShotsFromFairway] = React.useState<any>();
+
+    React.useEffect((): void => {
+        const importCsv = async (filePath: string): Promise<void> => {
+            setAverageShotsFromFairway(await parseCsv(filePath));
+        }
+
+        const appPath = ipcRenderer.sendSync('appPath', undefined);
+        const filePath: string = path.join(appPath, '.webpack/renderer', averageShotsFromFairwayCsvPath);
+        console.log("filePath", filePath);
+        importCsv(filePath);
+    }, [])
 
     return (
         <div className="app">
@@ -53,6 +70,7 @@ const App: React.FC<{}> = (): JSX.Element => {
                 />
                 : <MainPage
                     lastShotCsvPath={lastShotCsvPath}
+                    averageShotsFromFairway={averageShotsFromFairway}
                     selectedDistancesGenerator={selectedDistancesGenerator}
                     numberOfShots={numberOfShots}
                     handleSettingsClicked={(): void => {

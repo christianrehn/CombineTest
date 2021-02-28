@@ -1,15 +1,18 @@
 import {default as csv} from 'csv-parser';
+import {assert} from "chai";
 import {createReadStream} from "fs";
 import * as util from "util";
 import * as stream from "stream";
 
 const pipeline = util.promisify(stream.pipeline);
 
-export const parseLastShotCsv = async (lastShotCsvPath: string): Promise<any> => {
+export const parseCsv = async (csvPath: string): Promise<any> => {
+    assert(!!csvPath, "!csvPath");
+
     const results: any[] = [];
     try {
         await pipeline(
-            createReadStream(lastShotCsvPath),
+            createReadStream(csvPath),
             csv(
                 {
                     mapHeaders: ({header, index}): string => {
@@ -38,7 +41,7 @@ export const parseLastShotCsv = async (lastShotCsvPath: string): Promise<any> =>
         );
 
         if (!!results && Array.isArray(results) && results.length > 0) {
-            return results[0];
+            return results.length > 1 ? results : results[0];
         }
         return undefined;
     } catch (error) {
