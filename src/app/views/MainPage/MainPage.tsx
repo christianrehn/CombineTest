@@ -1,7 +1,7 @@
 import React from 'react';
 import Chokidar, {FSWatcher} from 'chokidar';
 import './MainPage.scss';
-import {parseLastShotCsv} from "./LastShotCsvParser";
+import {parseLastShotCsv} from "../../model/LastShotCsvParser";
 import {IDistancesGenerator} from "../../model/DistancesGenerator";
 import {ShotsSvg} from "../../components/ShotsSvg/ShotsSvg";
 import {computeAbsoluteDeviation, computeRelativeDeviation, IShotData} from "../../model/ShotData";
