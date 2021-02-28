@@ -36,18 +36,15 @@ module.exports = [
     },
     {
         test: /\.css$/,
-        use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
+        use: [{loader: 'style-loader'}, {loader: 'css-loader'}],
     },
-    // {
-    //     test: /\.(png|jpe?g|gif|jp2|webp)$/,
-    //     loader: 'file-loader',
-    //     options: {
-    //         name: '[name].[ext]',
-    //     },
-    // },
     {
-        test: /\.(woff|ttf|eot|svg|png|jpg|jpeg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        include: /assets/,
+        test: /\.(svg|png)$/i,
         loader: 'url-loader',
+    },
+    {
+        test: /\.(txt|csv)$/i,
+        loader: 'file-loader',
+        options: {},
     },
 ];
