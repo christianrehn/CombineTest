@@ -30,7 +30,7 @@ export const DistancesGeneratorSelect: React.FC<IDistancesGeneratorSelectProps> 
                                 key={`distancesGeneratorOption_${index}`}
                                 value={index}
                             >
-                                {distancesGenerator.getDescription()}
+                                {distancesGenerator.description}
                             </option>
                         );
                     })

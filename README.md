@@ -1,5 +1,6 @@
 TODO:
 * Read-Fehler abfangen -> erneut lesen nach kurzer Wartezeit
+  * Auswahl Total oder Carry
 * Übersicht anzeigen nach Abschluss aller Schüsse
 * Ranking mit den besten Werten -> Username eingeben
 * SVG Grafik mit x/y-Achse und letzten Schuss einzeichnen (ggf. auch die anderen -> mit Nummer)

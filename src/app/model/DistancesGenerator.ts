@@ -1,7 +1,7 @@
 import {assert} from "chai";
 import * as math from "mathjs";
 import {Unit} from "mathjs";
-import {AverageShotsGroundTypeEnum} from "./AverageShots";
+import {AverageStrokesDataGroundTypeEnum} from "./AverageStrokesData";
 
 export const BGV_DISTANCES: number[] = [6, 14, 22, 30, 38, 46, 54, 62, 70];
 
@@ -21,23 +21,22 @@ const createRandomNumber = (minIncluded: number, maxExcluded: number): number =>
 export interface IDistancesGenerator {
     getNext: (index: number) => Unit;
     reset: () => void;
-    getName: () => string;
-    getDescription: () => string;
-    getNumberOfDistances: () => number;
-    getUnit: () => string;
-    averageShotsGroundTypeEnum: AverageShotsGroundTypeEnum;
+    description: string;
+    numberOfDistances: number;
+    unit: string;
+    averageShotsGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
 }
 
 export class RandomDistancesGenerator implements IDistancesGenerator {
-    private readonly minIncludedDistance: number;
-    private readonly maxExcludedDistance: number;
-    private readonly unit: string;
-    private readonly _averageShotsGroundTypeEnum: AverageShotsGroundTypeEnum;
+    private readonly _minIncludedDistance: number;
+    private readonly _maxExcludedDistance: number;
+    private readonly _unit: string;
+    private readonly _averageShotsGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
 
-    constructor(minIncludedDistance: number, maxExcludedDistance: number, unit: string, averageShotsGroundTypeEnum: AverageShotsGroundTypeEnum) {
-        this.minIncludedDistance = minIncludedDistance;
-        this.maxExcludedDistance = maxExcludedDistance;
-        this.unit = unit;
+    constructor(minIncludedDistance: number, maxExcludedDistance: number, unit: string, averageShotsGroundTypeEnum: AverageStrokesDataGroundTypeEnum) {
+        this._minIncludedDistance = minIncludedDistance;
+        this._maxExcludedDistance = maxExcludedDistance;
+        this._unit = unit;
         this._averageShotsGroundTypeEnum = averageShotsGroundTypeEnum;
     }
 
@@ -48,38 +47,34 @@ export class RandomDistancesGenerator implements IDistancesGenerator {
     public getNext(index: number): Unit {
         assert(index >= 0, "index < 0");
 
-        return math.unit(createRandomNumber(this.minIncludedDistance, this.maxExcludedDistance), this.unit);
+        return math.unit(createRandomNumber(this._minIncludedDistance, this._maxExcludedDistance), this._unit);
     }
 
-    public getName(): string {
-        return this.getDescription();
+    get description(): string {
+        return `Random Distances between ${this._minIncludedDistance} and ${this._maxExcludedDistance} ${this._unit} from ${this.averageShotsGroundTypeEnum}`;
     }
 
-    public getDescription(): string {
-        return `Random Distances between ${this.minIncludedDistance} and ${this.maxExcludedDistance} ${this.unit} from ${this.averageShotsGroundTypeEnum}`;
-    }
-
-    getNumberOfDistances(): number {
+    get numberOfDistances(): number {
         return 1;
     }
 
-    getUnit(): string {
-        return this.unit;
+    get unit(): string {
+        return this._unit;
     }
 
-    get averageShotsGroundTypeEnum(): AverageShotsGroundTypeEnum {
+    get averageShotsGroundTypeEnum(): AverageStrokesDataGroundTypeEnum {
         return this._averageShotsGroundTypeEnum;
     }
 }
 
 export class FixedDistancesGenerator implements IDistancesGenerator {
-    protected readonly distances: number[];
-    protected readonly unit: string;
-    protected readonly _averageShotsGroundTypeEnum: AverageShotsGroundTypeEnum;
+    protected readonly _distances: number[];
+    protected readonly _unit: string;
+    protected readonly _averageShotsGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
 
-    constructor(distances: number[], unit: string, averageShotsGroundTypeEnum: AverageShotsGroundTypeEnum) {
-        this.distances = distances;
-        this.unit = unit;
+    constructor(distances: number[], unit: string, averageShotsGroundTypeEnum: AverageStrokesDataGroundTypeEnum) {
+        this._distances = distances;
+        this._unit = unit;
         this._averageShotsGroundTypeEnum = averageShotsGroundTypeEnum;
     }
 
@@ -90,26 +85,22 @@ export class FixedDistancesGenerator implements IDistancesGenerator {
     public getNext(index: number): Unit {
         assert(index >= 0, "index < 0");
 
-        return math.unit(this.distances[index % this.distances.length], this.unit);
+        return math.unit(this._distances[index % this._distances.length], this._unit);
     }
 
-    public getName(): string {
-        return this.getDescription();
+    get description(): string {
+        return `Fixed Distances in fixed order: ${this._distances} ${this._unit} from ${this.averageShotsGroundTypeEnum}`;
     }
 
-    public getDescription(): string {
-        return `Fixed Distances in fixed order: ${this.distances} ${this.unit} from ${this.averageShotsGroundTypeEnum}`;
+    get numberOfDistances(): number {
+        return this._distances.length;
     }
 
-    public getNumberOfDistances(): number {
-        return this.distances.length;
+    get unit(): string {
+        return this._unit;
     }
 
-    public getUnit(): string {
-        return this.unit;
-    }
-
-    get averageShotsGroundTypeEnum(): AverageShotsGroundTypeEnum {
+    get averageShotsGroundTypeEnum(): AverageStrokesDataGroundTypeEnum {
         return this._averageShotsGroundTypeEnum;
     }
 }
@@ -118,13 +109,13 @@ export class RandomFromFixedDistancesGenerator extends FixedDistancesGenerator i
     private distancesNotYetReturned: number[];
     private distancesReturnedMap: Map<number, number> = new Map<number, number>();
 
-    constructor(distances: number[], unit: string, averageShotsGroundTypeEnum: AverageShotsGroundTypeEnum) {
+    constructor(distances: number[], unit: string, averageShotsGroundTypeEnum: AverageStrokesDataGroundTypeEnum) {
         super(distances, unit, averageShotsGroundTypeEnum);
         this.distancesNotYetReturned = [...distances];
     }
 
     reset(): void {
-        this.distancesNotYetReturned = [...this.distances];
+        this.distancesNotYetReturned = [...this._distances];
         this.distancesReturnedMap = new Map<number, number>()
     }
 
@@ -134,12 +125,12 @@ export class RandomFromFixedDistancesGenerator extends FixedDistancesGenerator i
 
         if (this.distancesReturnedMap.has(index)) {
             // value for this index has already been returned earlier
-            return math.unit(this.distancesReturnedMap.get(index), this.unit);
+            return math.unit(this.distancesReturnedMap.get(index), this._unit);
         }
 
         if (this.distancesNotYetReturned.length === 0) {
             // all distances values have been randomly picked one time -> restart with all distances values
-            this.distancesNotYetReturned = [...this.distances];
+            this.distancesNotYetReturned = [...this._distances];
         }
 
         // pick and remove one element of distancesNotYetReturned
@@ -150,10 +141,10 @@ export class RandomFromFixedDistancesGenerator extends FixedDistancesGenerator i
         // remember picked element
         this.distancesReturnedMap.set(index, next[0]);
 
-        return math.unit(next[0], this.unit);
+        return math.unit(next[0], this._unit);
     }
 
-    public getDescription(): string {
-        return `Fixed Distances in random order: ${this.distances} ${this.unit} from ${this.averageShotsGroundTypeEnum}`;
+    get description(): string {
+        return `Fixed Distances in random order: ${this._distances} ${this._unit} from ${this.averageShotsGroundTypeEnum}`;
     }
 }

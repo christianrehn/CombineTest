@@ -2,35 +2,37 @@ import React from "react";
 import './NextDistanceBox.scss';
 import {assert} from "chai";
 import {Unit} from "mathjs";
-import {AverageShotsGroundTypeEnum, IAverageShots} from "../../model/AverageShots";
+import {AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "../../model/AverageStrokesData";
 import {IDistancesGenerator} from "../../model/DistancesGenerator";
-import {linear} from "everpolate";
 
 export interface INextDistanceBoxProps {
     nextDistance: Unit;
     selectedDistancesGenerator: IDistancesGenerator;
-    averageShotsMap: Map<AverageShotsGroundTypeEnum, IAverageShots>;
+    averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>;
 }
 
 export const NextDistanceBox: React.FC<INextDistanceBoxProps> = (props: INextDistanceBoxProps): JSX.Element => {
     assert(!!props, "!props");
     assert(!!props.selectedDistancesGenerator, "!props.selectedDistancesGenerator");
 
-    const averageShots: IAverageShots = props.averageShotsMap.get(props.selectedDistancesGenerator.averageShotsGroundTypeEnum)
+    const nextDistanceInDistancesGeneratorUnit: number =
+        !!props.nextDistance
+            ? props.nextDistance.toNumber(props.selectedDistancesGenerator.unit)
+            : undefined;
 
-    const nextDistanceInAverageShotsUnit: number = !!averageShots && !!props.nextDistance ? props.nextDistance.toNumber(averageShots.unit) : undefined;
-    const nextDistanceInDistancesGeneratorUnit: number = !!props.nextDistance ? props.nextDistance.toNumber(props.selectedDistancesGenerator.getUnit()) : undefined;
-
-    const averageStrokes: number[] = !!averageShots ? linear(nextDistanceInAverageShotsUnit, averageShots.distances, averageShots.strokes) : null;
+    const averageStrokesFromNextDistance: number =
+        props.averageStrokesDataMap.get(props.selectedDistancesGenerator.averageShotsGroundTypeEnum)?.computeAverageStrokesToHole(
+            props.nextDistance,
+        );
 
     return (
         <div className="next-distance box">
             <p className="next-distance-number">{!!nextDistanceInDistancesGeneratorUnit ? nextDistanceInDistancesGeneratorUnit : "DONE"}</p>
-            <p className="next-distance-unit"> {!!nextDistanceInDistancesGeneratorUnit ? props.selectedDistancesGenerator.getUnit() :
+            <p className="next-distance-unit"> {!!nextDistanceInDistancesGeneratorUnit ? props.selectedDistancesGenerator.unit :
                 <span>&nbsp;</span>}</p>
-            <p className="next-distance-average-strokes-label">{!!averageStrokes ? "Average Strokes to Hole" :
+            <p className="next-distance-average-strokes-label">{!!averageStrokesFromNextDistance ? "Average Strokes to Hole" :
                 <span>&nbsp;</span>}</p>
-            <p className="next-distance-average-strokes">{!!averageStrokes && averageStrokes.length > 0 ? averageStrokes[0].toFixed(2) :
+            <p className="next-distance-average-strokes">{!!averageStrokesFromNextDistance ? averageStrokesFromNextDistance.toFixed(3) :
                 <span>&nbsp;</span>}</p>
         </div>);
 }

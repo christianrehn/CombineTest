@@ -12,18 +12,18 @@ import settingsIcon from '../../../assets/settings.png';
 import {RestartButton} from "../../components/RestartButton/RestartButton";
 import * as math from 'mathjs'
 import {Unit} from 'mathjs'
-import {AverageShotsGroundTypeEnum, IAverageShots} from "../../model/AverageShots";
+import {AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "../../model/AverageStrokesData";
 
 interface IMainPageProps {
     lastShotCsvPath: string;
-    averageShotsMap: Map<AverageShotsGroundTypeEnum, IAverageShots>;
+    averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>;
     selectedDistancesGenerator: IDistancesGenerator;
     numberOfShots: number;
     handleSettingsClicked: () => void;
 }
 
 export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.Element => {
-    console.log("averageShotsMap", props.averageShotsMap);
+    console.log("averageShotsMap", props.averageStrokesDataMap);
     assert(!!props, "!props");
     assert(!!props.selectedDistancesGenerator, "!props.selectedDistancesGenerator");
     assert(!!props.handleSettingsClicked, "!props.handleSettingsClicked");
@@ -129,14 +129,14 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
 
     const absoluteDeviationSum: Unit = shotDatas
         .map((shotData: IShotData) => computeAbsoluteDeviation(shotData))
-        .reduce((accumulator: Unit, currentValue: Unit) => math.add(accumulator, currentValue) as Unit, math.unit(0, props.selectedDistancesGenerator.getUnit()));
+        .reduce((accumulator: Unit, currentValue: Unit) => math.add(accumulator, currentValue) as Unit, math.unit(0, props.selectedDistancesGenerator.unit));
     const absoluteDeviationMax: Unit =
         shotDatas
             .map((shotData: IShotData) => computeAbsoluteDeviation(shotData))
             .reduce((accumulator: Unit, currentValue: Unit) => accumulator > currentValue
                 ? accumulator
                 : currentValue,
-                math.unit(0, props.selectedDistancesGenerator.getUnit()))
+                math.unit(0, props.selectedDistancesGenerator.unit))
     ;
     const relativeDeviationSum: number = shotDatas
         .map((shotData: IShotData) => computeRelativeDeviation(shotData))
@@ -149,13 +149,13 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
         <div className="main-page page">
             <div className="next-shot-flex-item flex-item">
                 <div className="page-header">
-                    <h3>Next</h3>
+                    <h3>Next Carry</h3>
                 </div>
                 <div className="NextDistanceBox">
                     <NextDistanceBox
                         nextDistance={nextDistance}
                         selectedDistancesGenerator={props.selectedDistancesGenerator}
-                        averageShotsMap={props.averageShotsMap}
+                        averageStrokesDataMap={props.averageStrokesDataMap}
                     />
                 </div>
                 <div className="RestartButton">
@@ -176,7 +176,8 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                         absoluteDeviationSum={absoluteDeviationSum}
                         shotDatas={shotDatas}
                         relativeDeviationSum={relativeDeviationSum}
-                        unit={props.selectedDistancesGenerator.getUnit()}
+                        selectedDistancesGenerator={props.selectedDistancesGenerator}
+                        averageStrokesDataMap={props.averageStrokesDataMap}
                     />
                 </div>
             </div>
@@ -189,7 +190,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                         svgNumberOfCircles={svgNumberOfCircles}
                         absoluteDeviationMax={absoluteDeviationMax}
                         shotDatas={shotDatas}
-                        unit={props.selectedDistancesGenerator.getUnit()}
+                        unit={props.selectedDistancesGenerator.unit}
                     />
                 </div>
             </div>
