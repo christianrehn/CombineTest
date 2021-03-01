@@ -13,14 +13,18 @@ import {RestartButton} from "../../components/RestartButton/RestartButton";
 
 interface IMainPageProps {
     lastShotCsvPath: string;
+    averageShotsFromTee: any;
     averageShotsFromFairway: any;
+    averageShotsFromGreen: any;
     selectedDistancesGenerator: IDistancesGenerator;
     numberOfShots: number;
     handleSettingsClicked: () => void;
 }
 
 export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.Element => {
+    console.log("averageShotsFromTee", props.averageShotsFromTee);
     console.log("averageShotsFromFairway", props.averageShotsFromFairway);
+    console.log("averageShotsFromGreen", props.averageShotsFromGreen);
     assert(!!props, "!props");
     assert(!!props.selectedDistancesGenerator, "!props.selectedDistancesGenerator");
     assert(!!props.handleSettingsClicked, "!props.handleSettingsClicked");

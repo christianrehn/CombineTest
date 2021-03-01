@@ -11,9 +11,12 @@ import {
     RandomFromFixedDistancesGenerator
 } from "./model/DistancesGenerator";
 import {parseCsv} from "./model/CsvParser";
-import averageShotsFromFairwayCsvPath from "../data/fairway.csv";
 import * as path from "path";
 import {ipcRenderer} from "electron";
+import averageShotsFromTeeCsvPath from "../data/tee.csv";
+import averageShotsFromFairwayCsvPath from "../data/fairway.csv";
+import averageShotsFromGreenCsvPath from "../data/green.csv";
+import {Dispatch, SetStateAction} from "react";
 
 const App: React.FC<{}> = (): JSX.Element => {
     const [showSettings, setShowSettings] = React.useState<boolean>(false);
@@ -32,17 +35,19 @@ const App: React.FC<{}> = (): JSX.Element => {
 
     const [numberOfShots, setNumberOfShots] = React.useState<number>(selectedDistancesGenerator.getNumberOfDistances() * 2);
 
+    const [averageShotsFromTee, setAverageShotsFromTee] = React.useState<any>();
     const [averageShotsFromFairway, setAverageShotsFromFairway] = React.useState<any>();
+    const [averageShotsFromGreen, setAverageShotsFromGreen] = React.useState<any>();
 
     React.useEffect((): void => {
-        const importCsv = async (filePath: string): Promise<void> => {
-            setAverageShotsFromFairway(await parseCsv(filePath));
+        const importCsv = async (filePath: string, setAverageShots: Dispatch<SetStateAction<any>>): Promise<void> => {
+            setAverageShots(await parseCsv(filePath));
         }
 
         const appPath = ipcRenderer.sendSync('appPath', undefined);
-        const filePath: string = path.join(appPath, '.webpack/renderer', averageShotsFromFairwayCsvPath);
-        console.log("filePath", filePath);
-        importCsv(filePath);
+        importCsv(path.join(appPath, '.webpack/renderer', averageShotsFromTeeCsvPath), setAverageShotsFromTee);
+        importCsv(path.join(appPath, '.webpack/renderer', averageShotsFromFairwayCsvPath), setAverageShotsFromFairway);
+        importCsv(path.join(appPath, '.webpack/renderer', averageShotsFromGreenCsvPath), setAverageShotsFromGreen);
     }, [])
 
     return (
@@ -70,7 +75,9 @@ const App: React.FC<{}> = (): JSX.Element => {
                 />
                 : <MainPage
                     lastShotCsvPath={lastShotCsvPath}
+                    averageShotsFromTee={averageShotsFromTee}
                     averageShotsFromFairway={averageShotsFromFairway}
+                    averageShotsFromGreen={averageShotsFromGreen}
                     selectedDistancesGenerator={selectedDistancesGenerator}
                     numberOfShots={numberOfShots}
                     handleSettingsClicked={(): void => {
