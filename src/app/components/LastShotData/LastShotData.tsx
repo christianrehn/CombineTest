@@ -180,6 +180,13 @@ export const LastShotData: React.FC<ILastShotData> = (props: ILastShotData): JSX
                     className="last-shot-item__unit"> {distanceUnit} </div>
             </div>
             <div className="last-shot__row">
+                <div className="last-shot-item__label">Total</div>
+                <div
+                    className="last-shot-item__data"> {!!props.lastShot ? props.lastShot.totalDistance.toNumber(props.selectedDistancesGenerator.unit).toFixed(2) : ""} </div>
+                <div
+                    className="last-shot-item__unit"> {distanceUnit} </div>
+            </div>
+            <div className="last-shot__row">
                 <div className="last-shot-item__label">Offline</div>
                 <div
                     className="last-shot-item__data"> {!!props.lastShot ? props.lastShot.offline.toNumber(props.selectedDistancesGenerator.unit).toFixed(2) : ""} </div>
