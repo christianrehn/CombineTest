@@ -127,22 +127,6 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
     const absoluteDeviation: Unit | undefined = shotDatas.length > 0 ? computeAbsoluteDeviation(shotDatas[shotDatas.length - 1]) : undefined;
     const relativeDeviation: number | undefined = shotDatas.length > 0 ? computeRelativeDeviation(shotDatas[shotDatas.length - 1]) : undefined;
 
-    const absoluteDeviationSum: Unit = shotDatas
-        .map((shotData: IShotData) => computeAbsoluteDeviation(shotData))
-        .reduce((accumulator: Unit, currentValue: Unit) => math.add(accumulator, currentValue) as Unit, math.unit(0, props.selectedDistancesGenerator.unit));
-    const absoluteDeviationMax: Unit =
-        shotDatas
-            .map((shotData: IShotData) => computeAbsoluteDeviation(shotData))
-            .reduce((accumulator: Unit, currentValue: Unit) => accumulator > currentValue
-                ? accumulator
-                : currentValue,
-                math.unit(0, props.selectedDistancesGenerator.unit))
-    ;
-    const relativeDeviationSum: number = shotDatas
-        .map((shotData: IShotData) => computeRelativeDeviation(shotData))
-        .reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0) * 100;
-
-
     console.log("shotDatas", shotDatas)
 
     return (
@@ -173,9 +157,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                         lastShot={lastShot}
                         absoluteDeviation={absoluteDeviation}
                         relativeDeviation={relativeDeviation}
-                        absoluteDeviationSum={absoluteDeviationSum}
                         shotDatas={shotDatas}
-                        relativeDeviationSum={relativeDeviationSum}
                         selectedDistancesGenerator={props.selectedDistancesGenerator}
                         averageStrokesDataMap={props.averageStrokesDataMap}
                     />
@@ -188,9 +170,8 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                 <div className="ShotsSvg">
                     <ShotsSvg
                         svgNumberOfCircles={svgNumberOfCircles}
-                        absoluteDeviationMax={absoluteDeviationMax}
                         shotDatas={shotDatas}
-                        unit={props.selectedDistancesGenerator.unit}
+                        selectedDistancesGenerator={props.selectedDistancesGenerator}
                     />
                 </div>
             </div>

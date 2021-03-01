@@ -1,20 +1,30 @@
 import React from "react";
 import {assert} from "chai";
-import {IShotData} from "../../model/ShotData";
+import {computeAbsoluteDeviation, IShotData} from "../../model/ShotData";
 import './ShotsSvg.scss';
+import * as math from "mathjs";
 import {Unit} from "mathjs";
+import {IDistancesGenerator} from "../../model/DistancesGenerator";
 
 export interface IShotsSvg {
     svgNumberOfCircles: number,
-    absoluteDeviationMax: Unit,
     shotDatas: IShotData[],
-    unit: string
+    selectedDistancesGenerator: IDistancesGenerator;
 }
 
 export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
     assert(!!props, "!props");
 
-    const absoluteDeviationMaxAsNumber: number = props.absoluteDeviationMax.toNumber(props.unit);
+    const absoluteDeviationMax: Unit =
+        props.shotDatas
+            .map((shotData: IShotData) => computeAbsoluteDeviation(shotData))
+            .reduce((accumulator: Unit, currentValue: Unit) => accumulator > currentValue
+                ? accumulator
+                : currentValue,
+                math.unit(0, props.selectedDistancesGenerator.unit))
+    ;
+
+    const absoluteDeviationMaxAsNumber: number = absoluteDeviationMax.toNumber(props.selectedDistancesGenerator.unit);
     console.log("absoluteDeviationMaxAsNumber", absoluteDeviationMaxAsNumber);
     console.log("props.svgNumberOfCircles", props.svgNumberOfCircles)
 
@@ -74,15 +84,15 @@ export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
         {/*circle for current shot*/}
         {
             props.shotDatas.map((shotData: IShotData, index: number) => {
-                const deltaY: number = shotData.targetDistance.toNumber(props.unit) - shotData.carry.toNumber(props.unit);
+                const deltaY: number = shotData.targetDistance.toNumber(props.selectedDistancesGenerator.unit) - shotData.carry.toNumber(props.selectedDistancesGenerator.unit);
                 return <g key={`shots_svg_shotcircle_${index}`}>
                     <circle
                         className={props.shotDatas.length === index + 1 ? 'shots_svg_lastshotcircle' : 'shots_svg_shotcircle'}
-                        cx={shotData.offline.toNumber(props.unit) * svgScaleFactor}
+                        cx={shotData.offline.toNumber(props.selectedDistancesGenerator.unit) * svgScaleFactor}
                         cy={deltaY * svgScaleFactor}/>
                     <text
                         className={props.shotDatas.length === index + 1 ? 'shots_svg_lastshotcircletext' : 'shots_svg_shotcircletext'}
-                        x={shotData.offline.toNumber(props.unit) * svgScaleFactor}
+                        x={shotData.offline.toNumber(props.selectedDistancesGenerator.unit) * svgScaleFactor}
                         y={deltaY * svgScaleFactor}
                     > {index + 1}
                     </text>
