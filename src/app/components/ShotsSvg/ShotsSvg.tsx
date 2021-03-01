@@ -2,7 +2,6 @@ import React from "react";
 import {assert} from "chai";
 import {computeAbsoluteDeviation, IShotData} from "../../model/ShotData";
 import './ShotsSvg.scss';
-import * as math from "mathjs";
 import {Unit} from "mathjs";
 import {IDistancesGenerator} from "../../model/DistancesGenerator";
 
@@ -15,16 +14,13 @@ export interface IShotsSvg {
 export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
     assert(!!props, "!props");
 
-    const absoluteDeviationMax: Unit =
+    const absoluteDeviationMaxAsNumber: number =
         props.shotDatas
             .map((shotData: IShotData) => computeAbsoluteDeviation(shotData))
-            .reduce((accumulator: Unit, currentValue: Unit) => accumulator > currentValue
-                ? accumulator
-                : currentValue,
-                math.unit(0, props.selectedDistancesGenerator.unit))
-    ;
-
-    const absoluteDeviationMaxAsNumber: number = absoluteDeviationMax.toNumber(props.selectedDistancesGenerator.unit);
+            .reduce((accumulator: number, absoluteDeviation: Unit) => {
+                const absoluteDeviationAsNumber: number = absoluteDeviation.toNumber(props.selectedDistancesGenerator.unit);
+                return accumulator > absoluteDeviationAsNumber ? accumulator : absoluteDeviationAsNumber
+            }, 0);
     console.log("absoluteDeviationMaxAsNumber", absoluteDeviationMaxAsNumber);
     console.log("props.svgNumberOfCircles", props.svgNumberOfCircles)
 

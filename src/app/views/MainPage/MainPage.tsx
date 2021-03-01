@@ -130,7 +130,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
         <div className="main-page page">
             <div className="next-shot-flex-item flex-item">
                 <div className="page-header">
-                    <h3>Next Carry</h3>
+                    <h3>Carry</h3>
                 </div>
                 <div className="NextDistanceBox">
                     <NextDistanceBox
