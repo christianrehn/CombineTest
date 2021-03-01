@@ -6,7 +6,20 @@ import * as stream from "stream";
 
 const pipeline = util.promisify(stream.pipeline);
 
-export const parseCsv = async (csvPath: string): Promise<any> => {
+export enum CsvTypeEnum {
+    LAST_SHOT,
+    AVERAGE_SHOTS_TO_HOLE
+}
+
+export const parseCsvToFirstRowAsObject = async (csvPath: string): Promise<any> => {
+    return parseCsv(csvPath, CsvTypeEnum.LAST_SHOT)
+}
+
+export const parseCsvToArrayOfColumnArrays = async (csvPath: string): Promise<[number[], number[]]> => {
+    return parseCsv(csvPath, CsvTypeEnum.AVERAGE_SHOTS_TO_HOLE)
+}
+
+const parseCsv = async (csvPath: string, csvReturnTypeEnum: CsvTypeEnum): Promise<any> => {
     assert(!!csvPath, "!csvPath");
 
     const results: any[] = [];
@@ -41,7 +54,20 @@ export const parseCsv = async (csvPath: string): Promise<any> => {
         );
 
         if (!!results && Array.isArray(results) && results.length > 0) {
-            return results.length > 1 ? results : results[0];
+            switch (csvReturnTypeEnum) {
+                case CsvTypeEnum.LAST_SHOT:
+                    return results[0];
+                case CsvTypeEnum.AVERAGE_SHOTS_TO_HOLE:
+                    const distances: number[] = results.map((result, index: number) => {
+                            return Number(Object.values(result)[0]);
+                        }
+                    );
+                    const strokes: number[] = results.map((result, index: number) => {
+                            return Number(Object.values(result)[1]);
+                        }
+                    );
+                    return [distances, strokes];
+            }
         }
         return undefined;
     } catch (error) {

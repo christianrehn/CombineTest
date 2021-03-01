@@ -1,7 +1,7 @@
 import React from 'react';
 import Chokidar, {FSWatcher} from 'chokidar';
 import './MainPage.scss';
-import {parseCsv} from "../../model/CsvParser";
+import {parseCsvToFirstRowAsObject} from "../../model/CsvParser";
 import {IDistancesGenerator} from "../../model/DistancesGenerator";
 import {ShotsSvg} from "../../components/ShotsSvg/ShotsSvg";
 import {computeAbsoluteDeviation, computeRelativeDeviation, IShotData} from "../../model/ShotData";
@@ -12,21 +12,18 @@ import settingsIcon from '../../../assets/settings.png';
 import {RestartButton} from "../../components/RestartButton/RestartButton";
 import * as math from 'mathjs'
 import {Unit} from 'mathjs'
+import {AverageShotsGroundTypeEnum, IAverageShots} from "../../model/AverageShots";
 
 interface IMainPageProps {
     lastShotCsvPath: string;
-    averageShotsFromTee: any;
-    averageShotsFromFairway: any;
-    averageShotsFromGreen: any;
+    averageShotsMap: Map<AverageShotsGroundTypeEnum, IAverageShots>;
     selectedDistancesGenerator: IDistancesGenerator;
     numberOfShots: number;
     handleSettingsClicked: () => void;
 }
 
 export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.Element => {
-    console.log("averageShotsFromTee", props.averageShotsFromTee);
-    console.log("averageShotsFromFairway", props.averageShotsFromFairway);
-    console.log("averageShotsFromGreen", props.averageShotsFromGreen);
+    console.log("averageShotsMap", props.averageShotsMap);
     assert(!!props, "!props");
     assert(!!props.selectedDistancesGenerator, "!props.selectedDistancesGenerator");
     assert(!!props.handleSettingsClicked, "!props.handleSettingsClicked");
@@ -38,7 +35,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
     const nextDistanceRef: React.MutableRefObject<Unit> = React.useRef<Unit>(nextDistance);
 
     const lastShotFileChanged = async (): Promise<void> => {
-        const lastShotData: any = await parseCsv(props.lastShotCsvPath);
+        const lastShotData: any = await parseCsvToFirstRowAsObject(props.lastShotCsvPath);
         const shotIdFromLastShotFile: number = lastShotData["shot_id"];
         if (!!shotIdFromLastShotFile) {
             console.log(`shot id=${shotIdFromLastShotFile} has been executed`);
@@ -157,7 +154,8 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                 <div className="NextDistanceBox">
                     <NextDistanceBox
                         nextDistance={nextDistance}
-                        unit={props.selectedDistancesGenerator.getUnit()}
+                        selectedDistancesGenerator={props.selectedDistancesGenerator}
+                        averageShotsMap={props.averageShotsMap}
                     />
                 </div>
                 <div className="RestartButton">

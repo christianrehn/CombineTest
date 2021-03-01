@@ -61,6 +61,7 @@
         "csv-parser": "^3.0.0",
         "electron-is-dev": "^1.2.0",
         "electron-squirrel-startup": "^1.0.0",
+        "everpolate": "^0.0.3",
         "fg-select-css": "^3.2.0",
         "mathjs": "^9.2.0",
         "react": "^17.0.1",

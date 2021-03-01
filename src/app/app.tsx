@@ -1,6 +1,5 @@
 import {hot} from 'react-hot-loader';
 import * as React from 'react';
-import {Dispatch, SetStateAction} from 'react';
 import './App.scss';
 import {SettingsPage} from "./views/SettingsPage/SettingsPage";
 import {MainPage} from "./views/MainPage/MainPage";
@@ -11,12 +10,13 @@ import {
     RandomDistancesGenerator,
     RandomFromFixedDistancesGenerator
 } from "./model/DistancesGenerator";
-import {parseCsv} from "./model/CsvParser";
+import {parseCsvToArrayOfColumnArrays} from "./model/CsvParser";
 import * as path from "path";
 import {ipcRenderer} from "electron";
 import averageShotsFromTeeCsvPath from "../data/tee.csv";
 import averageShotsFromFairwayCsvPath from "../data/fairway.csv";
 import averageShotsFromGreenCsvPath from "../data/green.csv";
+import {AverageShots, AverageShotsGroundTypeEnum, IAverageShots} from "./model/AverageShots";
 
 const App: React.FC<{}> = (): JSX.Element => {
     const [showSettings, setShowSettings] = React.useState<boolean>(false);
@@ -26,29 +26,30 @@ const App: React.FC<{}> = (): JSX.Element => {
         : "/Users/rehn/WebstormProjects/ApproachShot/test/data/LastShot.CSV";
 
     const [distancesGenerators, setDistancesGenerators] = React.useState<IDistancesGenerator[]>([
-        new RandomFromFixedDistancesGenerator(BGV_DISTANCES, "meter"),
-        new FixedDistancesGenerator(BGV_DISTANCES, "meter"),
-        new RandomFromFixedDistancesGenerator([10, 20, 30, 40, 50, 60, 70], "yards"),
-        new RandomDistancesGenerator(2, 5, "yards"),
+        new RandomFromFixedDistancesGenerator(BGV_DISTANCES, "meter", AverageShotsGroundTypeEnum.Fairway),
+        new FixedDistancesGenerator([400], "meter", AverageShotsGroundTypeEnum.Tee),
+        new RandomFromFixedDistancesGenerator([10, 20, 30, 40, 50, 60, 70], "yards", AverageShotsGroundTypeEnum.Fairway),
+        new RandomDistancesGenerator(10, 10, "yards", AverageShotsGroundTypeEnum.Fairway),
     ]);
     const [selectedDistancesGenerator, setSelectedDistancesGenerator] =
         React.useState<IDistancesGenerator>(distancesGenerators[0]);
 
     const [numberOfShots, setNumberOfShots] = React.useState<number>(selectedDistancesGenerator.getNumberOfDistances() * 2);
 
-    const [averageShotsFromTee, setAverageShotsFromTee] = React.useState<any>();
-    const [averageShotsFromFairway, setAverageShotsFromFairway] = React.useState<any>();
-    const [averageShotsFromGreen, setAverageShotsFromGreen] = React.useState<any>();
+    const [averageShotsMap, setAverageShotsMap] = React.useState<Map<AverageShotsGroundTypeEnum, IAverageShots>>(new Map<AverageShotsGroundTypeEnum, IAverageShots>());
 
     React.useEffect((): void => {
-        const importCsv = async (filePath: string, setAverageShots: Dispatch<SetStateAction<any>>): Promise<void> => {
-            setAverageShots(await parseCsv(filePath));
+        const importCsv = async (averageShotsGroundTypeEnum: AverageShotsGroundTypeEnum, filePath: string, unit: string): Promise<void> => {
+            const distancesAndStrokes: [number[], number[]] = await parseCsvToArrayOfColumnArrays(filePath);
+            const averageShots: IAverageShots = new AverageShots(averageShotsGroundTypeEnum, distancesAndStrokes[0], unit, distancesAndStrokes[1]);
+            averageShotsMap.set(averageShotsGroundTypeEnum, averageShots);
+            setAverageShotsMap(new Map(averageShotsMap));
         }
 
         const appPath = ipcRenderer.sendSync('appPath', undefined);
-        importCsv(path.join(appPath, '.webpack/renderer', averageShotsFromTeeCsvPath), setAverageShotsFromTee);
-        importCsv(path.join(appPath, '.webpack/renderer', averageShotsFromFairwayCsvPath), setAverageShotsFromFairway);
-        importCsv(path.join(appPath, '.webpack/renderer', averageShotsFromGreenCsvPath), setAverageShotsFromGreen);
+        importCsv(AverageShotsGroundTypeEnum.Tee, path.join(appPath, '.webpack/renderer', averageShotsFromTeeCsvPath), "yard");
+        importCsv(AverageShotsGroundTypeEnum.Fairway, path.join(appPath, '.webpack/renderer', averageShotsFromFairwayCsvPath), "yard");
+        importCsv(AverageShotsGroundTypeEnum.Green, path.join(appPath, '.webpack/renderer', averageShotsFromGreenCsvPath), "feet");
     }, [])
 
     return (
@@ -76,9 +77,7 @@ const App: React.FC<{}> = (): JSX.Element => {
                 />
                 : <MainPage
                     lastShotCsvPath={lastShotCsvPath}
-                    averageShotsFromTee={averageShotsFromTee}
-                    averageShotsFromFairway={averageShotsFromFairway}
-                    averageShotsFromGreen={averageShotsFromGreen}
+                    averageShotsMap={averageShotsMap}
                     selectedDistancesGenerator={selectedDistancesGenerator}
                     numberOfShots={numberOfShots}
                     handleSettingsClicked={(): void => {
