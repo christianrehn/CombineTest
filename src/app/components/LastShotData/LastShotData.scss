@@ -2,8 +2,8 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    padding-left: 3ex;
-    padding-right: 5ex;
+    padding-left: 1rem;
+    padding-right: 3rem;
 }
 
 .last-shot__row {
@@ -15,19 +15,19 @@
 
 .last-shot-item__label, .last-shot-item__data, .last-shot-item__unit {
     border: 0px;
-    padding-bottom: 0.8em;
+    padding-bottom: 1.5rem;
 }
 
 .last-shot-item__label {
-    width: 33ex;
+    width: 25rem;
     text-align: right;
-    padding-right: 2ex;
+    padding-right: 1rem;
 }
 
 .last-shot-item__data {
-    width: 7ex;
+    width: 7rem;
     text-align: right;
-    padding-right: 1ex;
+    padding-right: 1rem;
 }
 
 .last-shot-item__unit {
@@ -35,6 +35,14 @@
 }
 
 .last-shot__new_shots_data_section_start {
-    margin-top: 2em;
+    margin-top: 2rem;
+}
+
+.last-shot__gained-row {
+    color: orange;
+    font-size: 30px;
+}
+.last-shot__sum-gained-row {
+    font-weight: bolder;
 }
 

@@ -30,7 +30,7 @@ export const NextDistanceBox: React.FC<INextDistanceBoxProps> = (props: INextDis
             <p className="next-distance-number">{!!nextDistanceInDistancesGeneratorUnit ? nextDistanceInDistancesGeneratorUnit : "DONE"}</p>
             <p className="next-distance-unit"> {!!nextDistanceInDistancesGeneratorUnit ? props.selectedDistancesGenerator.unit :
                 <span>&nbsp;</span>}</p>
-            <p className="next-distance-average-strokes-label">{!!averageStrokesFromNextDistance ? "Average Strokes to Hole" :
+            <p className="next-distance-average-strokes-label">{!!averageStrokesFromNextDistance ? "Strokes to Hole" :
                 <span>&nbsp;</span>}</p>
             <p className="next-distance-average-strokes">{!!averageStrokesFromNextDistance ? averageStrokesFromNextDistance.toFixed(3) :
                 <span>&nbsp;</span>}</p>

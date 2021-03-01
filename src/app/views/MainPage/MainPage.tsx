@@ -124,9 +124,6 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
     const lastShot: IShotData | undefined = shotDatas.length > 0 ? shotDatas[shotDatas.length - 1] : undefined;
     const svgNumberOfCircles: number = 5;
 
-    const absoluteDeviation: Unit | undefined = shotDatas.length > 0 ? computeAbsoluteDeviation(shotDatas[shotDatas.length - 1]) : undefined;
-    const relativeDeviation: number | undefined = shotDatas.length > 0 ? computeRelativeDeviation(shotDatas[shotDatas.length - 1]) : undefined;
-
     console.log("shotDatas", shotDatas)
 
     return (
@@ -155,8 +152,6 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                 <div className="LastShotData">
                     <LastShotData
                         lastShot={lastShot}
-                        absoluteDeviation={absoluteDeviation}
-                        relativeDeviation={relativeDeviation}
                         shotDatas={shotDatas}
                         selectedDistancesGenerator={props.selectedDistancesGenerator}
                         averageStrokesDataMap={props.averageStrokesDataMap}
