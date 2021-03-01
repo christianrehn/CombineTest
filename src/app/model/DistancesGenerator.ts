@@ -1,4 +1,6 @@
 import {assert} from "chai";
+import {Unit} from "mathjs";
+import * as math from 'mathjs'
 
 export const BGV_DISTANCES: number[] = [6, 14, 22, 30, 38, 46, 54, 62, 70];
 
@@ -16,72 +18,86 @@ const createRandomNumber = (minIncluded: number, maxExcluded: number): number =>
 }
 
 export interface IDistancesGenerator {
-    getNext: (index: number) => number;
+    getNext: (index: number) => Unit;
     reset: () => void;
     getName: () => string;
     getDescription: () => string;
     getNumberOfDistances: () => number;
+
+    getUnit(): string;
 }
 
 export class RandomDistancesGenerator implements IDistancesGenerator {
     private readonly minIncludedDistance: number;
     private readonly maxExcludedDistance: number;
+    private readonly unit: string;
 
-    constructor(minIncludedDistance: number, maxExcludedDistance: number) {
+    constructor(minIncludedDistance: number, maxExcludedDistance: number, unit: string) {
         this.minIncludedDistance = minIncludedDistance;
         this.maxExcludedDistance = maxExcludedDistance;
+        this.unit = unit;
     }
 
     reset(): void {
         // nothing to do
     }
 
-    public getNext(index: number): number {
+    public getNext(index: number): Unit {
         assert(index >= 0, "index < 0");
 
-        return createRandomNumber(this.minIncludedDistance, this.maxExcludedDistance);
+        return math.unit(createRandomNumber(this.minIncludedDistance, this.maxExcludedDistance), this.unit);
     }
 
     public getName(): string {
-        return `RD ${this.minIncludedDistance} - ${this.maxExcludedDistance}`;
+        return this.getDescription();
     }
 
     public getDescription(): string {
-        return `Random Distances between ${this.minIncludedDistance} and ${this.maxExcludedDistance}`;
+        return `Random Distances between ${this.minIncludedDistance} and ${this.maxExcludedDistance} ${this.unit}`;
     }
 
     getNumberOfDistances(): number {
         return 1;
     }
+
+    getUnit(): string {
+        return this.unit;
+    }
 }
 
 export class FixedDistancesGenerator implements IDistancesGenerator {
     private readonly distances: number[];
+    private readonly unit: string;
 
-    constructor(distances: number[]) {
+    constructor(distances: number[], unit: string) {
         this.distances = distances;
+        this.unit = unit;
     }
 
     reset(): void {
         // nothing to do
     }
 
-    public getNext(index: number): number {
+    public getNext(index: number): Unit {
         assert(index >= 0, "index < 0");
 
-        return this.distances[index % this.distances.length];
+        return math.unit(this.distances[index % this.distances.length], this.unit);
     }
 
     public getName(): string {
-        return `FD in FO: ${this.distances}`;
+        return this.getDescription();
     }
 
     public getDescription(): string {
-        return `Fixed Distances in fixed order: ${this.distances}`;
+        return `Fixed Distances in fixed order: ${this.distances} ${this.unit}`;
     }
 
     getNumberOfDistances(): number {
         return this.distances.length;
+    }
+
+    getUnit(): string {
+        return this.unit;
     }
 }
 
@@ -89,10 +105,12 @@ export class RandomFromFixedDistancesGenerator implements IDistancesGenerator {
     private readonly distances: number[];
     private distancesNotYetReturned: number[];
     private distancesReturnedMap: Map<number, number> = new Map<number, number>();
+    private readonly unit: string;
 
-    constructor(distances: number[]) {
+    constructor(distances: number[], unit: string) {
         this.distances = distances;
         this.distancesNotYetReturned = [...distances];
+        this.unit = unit;
     }
 
     reset(): void {
@@ -100,13 +118,13 @@ export class RandomFromFixedDistancesGenerator implements IDistancesGenerator {
         this.distancesReturnedMap = new Map<number, number>()
     }
 
-    public getNext(index: number): number {
+    public getNext(index: number): Unit {
         console.log("getNext, index=", index);
         assert(index >= 0, "index < 0");
 
         if (this.distancesReturnedMap.has(index)) {
             // value for this index has already been returned earlier
-            return this.distancesReturnedMap.get(index);
+            return math.unit(this.distancesReturnedMap.get(index), this.unit);
         }
 
         if (this.distancesNotYetReturned.length === 0) {
@@ -124,18 +142,22 @@ export class RandomFromFixedDistancesGenerator implements IDistancesGenerator {
         // remember picked element
         this.distancesReturnedMap.set(index, next[0]);
 
-        return next[0];
+        return math.unit(next[0], this.unit);
     }
 
     public getName(): string {
-        return `FR in RO: ${this.distances}`;
+        return this.getDescription();
     }
 
     public getDescription(): string {
-        return `Fixed Distances in random order: ${this.distances}`;
+        return `Fixed Distances in random order: ${this.distances} ${this.unit}`;
     }
 
     getNumberOfDistances(): number {
         return this.distances.length;
+    }
+
+    getUnit(): string {
+        return this.unit;
     }
 }

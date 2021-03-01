@@ -1,5 +1,6 @@
 import {hot} from 'react-hot-loader';
 import * as React from 'react';
+import {Dispatch, SetStateAction} from 'react';
 import './App.scss';
 import {SettingsPage} from "./views/SettingsPage/SettingsPage";
 import {MainPage} from "./views/MainPage/MainPage";
@@ -16,7 +17,6 @@ import {ipcRenderer} from "electron";
 import averageShotsFromTeeCsvPath from "../data/tee.csv";
 import averageShotsFromFairwayCsvPath from "../data/fairway.csv";
 import averageShotsFromGreenCsvPath from "../data/green.csv";
-import {Dispatch, SetStateAction} from "react";
 
 const App: React.FC<{}> = (): JSX.Element => {
     const [showSettings, setShowSettings] = React.useState<boolean>(false);
@@ -26,9 +26,10 @@ const App: React.FC<{}> = (): JSX.Element => {
         : "/Users/rehn/WebstormProjects/ApproachShot/test/data/LastShot.CSV";
 
     const [distancesGenerators, setDistancesGenerators] = React.useState<IDistancesGenerator[]>([
-        new RandomFromFixedDistancesGenerator(BGV_DISTANCES),
-        new FixedDistancesGenerator(BGV_DISTANCES),
-        new RandomDistancesGenerator(2, 5),
+        new RandomFromFixedDistancesGenerator(BGV_DISTANCES, "meter"),
+        new FixedDistancesGenerator(BGV_DISTANCES, "meter"),
+        new RandomFromFixedDistancesGenerator([10, 20, 30, 40, 50, 60, 70], "yards"),
+        new RandomDistancesGenerator(2, 5, "yards"),
     ]);
     const [selectedDistancesGenerator, setSelectedDistancesGenerator] =
         React.useState<IDistancesGenerator>(distancesGenerators[0]);

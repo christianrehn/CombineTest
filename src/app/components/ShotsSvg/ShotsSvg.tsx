@@ -1,15 +1,28 @@
 import React from "react";
+import {assert} from "chai";
 import {IShotData} from "../../model/ShotData";
 import './ShotsSvg.scss';
+import {Unit} from "mathjs";
 
 export interface IShotsSvg {
     svgNumberOfCircles: number,
-    absoluteDeviationMax: number,
-    svgScaleFactor: number,
-    shotDatas: IShotData[]
+    absoluteDeviationMax: Unit,
+    shotDatas: IShotData[],
+    unit: string
 }
 
 export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
+    assert(!!props, "!props");
+
+    const absoluteDeviationMaxAsNumber: number = props.absoluteDeviationMax.toNumber(props.unit);
+    console.log("absoluteDeviationMaxAsNumber", absoluteDeviationMaxAsNumber);
+    console.log("props.svgNumberOfCircles", props.svgNumberOfCircles)
+
+    const scaleFactor: number = (Math.floor(absoluteDeviationMaxAsNumber / props.svgNumberOfCircles) + 1) * props.svgNumberOfCircles;
+    console.log("scaleFactor", scaleFactor);
+    const svgScaleFactor: number = 100 / scaleFactor;
+    const circleLabelPosition: number = scaleFactor / props.svgNumberOfCircles;
+
     return <svg width="100%" height="100%" viewBox="-110 -110.5 220.3 220.2"
                 preserveAspectRatio="xMidYMid meet"
                 xmlns="http://www.w3.org/2000/svg">
@@ -27,31 +40,31 @@ export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
 
         {/* circles around 0,0 */}
         {
-            Array.from({length: props.svgNumberOfCircles}, (_, i) => (props.absoluteDeviationMax / props.svgNumberOfCircles) * (i + 1)).map((factor) => {
+            Array.from({length: props.svgNumberOfCircles}, (_, i) => (circleLabelPosition) * (i + 1)).map((factor) => {
                 return <g key={`shots_svg_circle_${factor}`}>
-                    <circle className="shots_svg_circle" r={factor * props.svgScaleFactor}/>
+                    <circle className="shots_svg_circle" r={factor * svgScaleFactor}/>
                     {/* x-axis positive */}
                     <text className="shots_svg_circletext"
-                          x={factor * props.svgScaleFactor}
-                          y={props.absoluteDeviationMax / props.svgNumberOfCircles + 3}
+                          x={factor * svgScaleFactor}
+                          y={circleLabelPosition + 3}
                     > {factor.toFixed(0)}
                     </text>
                     {/* x-axis negative */}
                     <text className="shots_svg_circletext"
-                          x={-(factor * props.svgScaleFactor) - 1}
-                          y={props.absoluteDeviationMax / props.svgNumberOfCircles + 3}
+                          x={-(factor * svgScaleFactor) - 1}
+                          y={circleLabelPosition + 3}
                     > {-factor.toFixed(0)}
                     </text>
                     {/* y-axis positive */}
                     <text className="shots_svg_circletext"
-                          x={props.absoluteDeviationMax / props.svgNumberOfCircles + 3}
-                          y={-(factor * props.svgScaleFactor)}
+                          x={circleLabelPosition + 3}
+                          y={-(factor * svgScaleFactor)}
                     > {factor.toFixed(0)}
                     </text>
                     {/* y-axis negative */}
                     <text className="shots_svg_circletext"
-                          x={props.absoluteDeviationMax / props.svgNumberOfCircles + 3}
-                          y={factor * props.svgScaleFactor}
+                          x={circleLabelPosition + 3}
+                          y={factor * svgScaleFactor}
                     > {-factor.toFixed(0)}
                     </text>
                 </g>
@@ -61,15 +74,16 @@ export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
         {/*circle for current shot*/}
         {
             props.shotDatas.map((shotData: IShotData, index: number) => {
+                const deltaY: number = shotData.targetDistance.toNumber(props.unit) - shotData.carry.toNumber(props.unit);
                 return <g key={`shots_svg_shotcircle_${index}`}>
                     <circle
                         className={props.shotDatas.length === index + 1 ? 'shots_svg_lastshotcircle' : 'shots_svg_shotcircle'}
-                        cx={shotData.offline * props.svgScaleFactor}
-                        cy={(shotData.targetDistance - shotData.carry) * props.svgScaleFactor}/>
+                        cx={shotData.offline.toNumber(props.unit) * svgScaleFactor}
+                        cy={deltaY * svgScaleFactor}/>
                     <text
                         className={props.shotDatas.length === index + 1 ? 'shots_svg_lastshotcircletext' : 'shots_svg_shotcircletext'}
-                        x={shotData.offline * props.svgScaleFactor}
-                        y={(shotData.targetDistance - shotData.carry) * props.svgScaleFactor}
+                        x={shotData.offline.toNumber(props.unit) * svgScaleFactor}
+                        y={deltaY * svgScaleFactor}
                     > {index + 1}
                     </text>
                 </g>

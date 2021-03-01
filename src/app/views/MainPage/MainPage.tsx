@@ -10,6 +10,8 @@ import {assert} from "chai";
 import {NextDistanceBox} from "../../components/NextDistanceBox/NextDistanceBox";
 import settingsIcon from '../../../assets/settings.png';
 import {RestartButton} from "../../components/RestartButton/RestartButton";
+import * as math from 'mathjs'
+import {Unit} from 'mathjs'
 
 interface IMainPageProps {
     lastShotCsvPath: string;
@@ -32,8 +34,8 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
     const [shotData, setShotData] = React.useState<IShotData | undefined>();
     const [shotDatas, setShotDatas] = React.useState<IShotData[]>([]);
 
-    const [nextDistance, setNextDistance] = React.useState<number>(props.selectedDistancesGenerator.getNext(shotDatas.length));
-    const nextDistanceRef: React.MutableRefObject<number> = React.useRef<number>(nextDistance);
+    const [nextDistance, setNextDistance] = React.useState<Unit>(props.selectedDistancesGenerator.getNext(shotDatas.length));
+    const nextDistanceRef: React.MutableRefObject<Unit> = React.useRef<Unit>(nextDistance);
 
     const lastShotFileChanged = async (): Promise<void> => {
         const lastShotData: any = await parseCsv(props.lastShotCsvPath);
@@ -42,8 +44,9 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
             console.log(`shot id=${shotIdFromLastShotFile} has been executed`);
             setShotData({
                 id: shotIdFromLastShotFile,
-                carry: lastShotData["carry_m"],
-                offline: lastShotData["offline_m"],
+                carry: math.unit(lastShotData["carry_m"], "m"),
+                totalDistance: math.unit(lastShotData["total_distance_m"], "m"),
+                offline: math.unit(lastShotData["offline_m"], "m"),
                 targetDistance: nextDistanceRef.current
             });
         }
@@ -84,7 +87,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
             })
             .on('raw', function (event: string, path: string, details: any): void {
                 // This event should be triggered everytime something happens.
-                // console.log('Raw event info:', event, path, details);
+                console.log('Raw event info:', event, path, details);
             });
 
     }, [props.lastShotCsvPath])
@@ -121,22 +124,27 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
         setNextDistance(nextDistanceRef.current);
     }
 
-    const absoluteDeviation: number | undefined = shotDatas.length > 0 ? computeAbsoluteDeviation(shotDatas[shotDatas.length - 1]) : undefined;
+    const lastShot: IShotData | undefined = shotDatas.length > 0 ? shotDatas[shotDatas.length - 1] : undefined;
+    const svgNumberOfCircles: number = 5;
+
+    const absoluteDeviation: Unit | undefined = shotDatas.length > 0 ? computeAbsoluteDeviation(shotDatas[shotDatas.length - 1]) : undefined;
     const relativeDeviation: number | undefined = shotDatas.length > 0 ? computeRelativeDeviation(shotDatas[shotDatas.length - 1]) : undefined;
 
-    const absoluteDeviationSum: number = shotDatas
+    const absoluteDeviationSum: Unit = shotDatas
         .map((shotData: IShotData) => computeAbsoluteDeviation(shotData))
-        .reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0);
-    const absoluteDeviationMax: number = shotDatas
-        .map((shotData: IShotData) => computeAbsoluteDeviation(shotData))
-        .reduce((accumulator: number, currentValue: number) => accumulator > currentValue ? accumulator : currentValue, 0) || 10;
+        .reduce((accumulator: Unit, currentValue: Unit) => math.add(accumulator, currentValue) as Unit, math.unit(0, props.selectedDistancesGenerator.getUnit()));
+    const absoluteDeviationMax: Unit =
+        shotDatas
+            .map((shotData: IShotData) => computeAbsoluteDeviation(shotData))
+            .reduce((accumulator: Unit, currentValue: Unit) => accumulator > currentValue
+                ? accumulator
+                : currentValue,
+                math.unit(0, props.selectedDistancesGenerator.getUnit()))
+    ;
     const relativeDeviationSum: number = shotDatas
         .map((shotData: IShotData) => computeRelativeDeviation(shotData))
         .reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0) * 100;
 
-    const lastShot: IShotData | undefined = shotDatas.length > 0 ? shotDatas[shotDatas.length - 1] : undefined;
-    const svgScaleFactor: number = !!absoluteDeviationMax ? 100 / absoluteDeviationMax : 10;
-    const svgNumberOfCircles: number = 6;
 
     console.log("shotDatas", shotDatas)
 
@@ -149,7 +157,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                 <div className="NextDistanceBox">
                     <NextDistanceBox
                         nextDistance={nextDistance}
-                        selectedDistancesGenerator={props.selectedDistancesGenerator}
+                        unit={props.selectedDistancesGenerator.getUnit()}
                     />
                 </div>
                 <div className="RestartButton">
@@ -170,6 +178,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                         absoluteDeviationSum={absoluteDeviationSum}
                         shotDatas={shotDatas}
                         relativeDeviationSum={relativeDeviationSum}
+                        unit={props.selectedDistancesGenerator.getUnit()}
                     />
                 </div>
             </div>
@@ -181,8 +190,8 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                     <ShotsSvg
                         svgNumberOfCircles={svgNumberOfCircles}
                         absoluteDeviationMax={absoluteDeviationMax}
-                        svgScaleFactor={svgScaleFactor}
                         shotDatas={shotDatas}
+                        unit={props.selectedDistancesGenerator.getUnit()}
                     />
                 </div>
             </div>

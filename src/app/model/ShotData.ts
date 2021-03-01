@@ -1,24 +1,29 @@
 import {assert} from "chai";
+import {MathType, Unit} from "mathjs";
+import * as math from 'mathjs'
 
 export interface IShotData {
     id: number,
-    carry: number,
-    offline: number,
-    targetDistance: number,
+    carry: Unit,
+    totalDistance: Unit,
+    offline: Unit,
+    targetDistance: Unit,
 }
 
-export const computeAbsoluteDeviation = (shotData: IShotData): number => {
+export const computeAbsoluteDeviation = (shotData: IShotData): Unit => {
     assert(!!shotData, "!shotData");
 
-    const deltaDistance: number = shotData.carry - shotData.targetDistance;
-    const absoluteDeviation: number = Math.sqrt(deltaDistance * deltaDistance + shotData.offline * shotData.offline);
+    const deltaDistance: Unit = math.subtract(shotData.carry, shotData.targetDistance) as Unit;
+    const absoluteDeviation: MathType = math.sqrt(math.add(math.square(deltaDistance), math.square(shotData.offline)) as Unit);
     return absoluteDeviation;
 }
 
 export const computeRelativeDeviation = (shotData: IShotData): number => {
     assert(!!shotData, "!shotData");
+    console.log("shotData.targetDistance.formatUnits()", shotData.targetDistance.formatUnits());
 
-    const absoluteDeviation: number = computeAbsoluteDeviation(shotData);
-    const relativeDeviation: number = absoluteDeviation / shotData.targetDistance;
+    const absoluteDeviationAsNumber: number = computeAbsoluteDeviation(shotData).toNumber(shotData.targetDistance.formatUnits());
+    const targetDistanceAsNumber: number = shotData.targetDistance.toNumber(shotData.targetDistance.formatUnits());
+    const relativeDeviation: number = absoluteDeviationAsNumber / targetDistanceAsNumber;
     return relativeDeviation;
 }
