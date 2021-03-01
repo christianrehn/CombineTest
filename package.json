@@ -1,7 +1,7 @@
 {
     "name": "approachshot",
     "productName": "Approach Shot",
-    "version": "0.1.2",
+    "version": "0.2.0",
     "description": "Practice approach shots with FSX2020 and GCQuad",
     "main": ".webpack/main",
     "scripts": {
