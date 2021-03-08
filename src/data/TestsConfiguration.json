@@ -1,54 +1,5 @@
 [
     {
-        "name": "Test1",
-        "unit": "yards",
-        "distanceGenerator": {
-            "type": "RandomDistancesGenerator",
-            "minIncludedDistance": 2,
-            "maxExcludedDistance": 10,
-            "numberOfShots": 2
-        },
-        "startGroundType": "Tee",
-        "endGround": {
-            "type": "Fairway",
-            "to": 10
-        },
-        "endGround": {
-            "type": "SemiRough",
-            "to": 15
-        },
-        "endGround": {
-            "type": "Rough"
-        }
-    },
-    {
-        "name": "Test2",
-        "unit": "meter",
-        "distanceGenerator": {
-            "type": "FixedDistancesGenerator",
-            "distances": [
-                6,
-                14,
-                22,
-                30,
-                38,
-                46,
-                54,
-                62,
-                70
-            ],
-            "numberOfRounds": 1
-        },
-        "startGroundType": "Fairway",
-        "endGround": {
-            "type": "Green",
-            "radius": 5
-        },
-        "endGround": {
-            "type": "Fairway"
-        }
-    },
-    {
         "name": "Test2",
         "unit": "meter",
         "distanceGenerator": {
@@ -67,12 +18,88 @@
             "numberOfRounds": 2
         },
         "startGroundType": "Fairway",
-        "endGround": {
-            "type": "Green",
-            "radius": 5
+        "endGround": [
+            {
+                "type": "Green",
+                "radius": 5
+            },
+            {
+                "type": "Fairway"
+            }
+        ]
+    },
+    {
+        "name": "Test1",
+        "unit": "yards",
+        "distanceGenerator": {
+            "type": "RandomDistancesGenerator",
+            "minIncludedDistance": 2,
+            "maxExcludedDistance": 10,
+            "numberOfShots": 2
         },
-        "endGround": {
-            "type": "Fairway"
-        }
+        "startGroundType": "Tee",
+        "endGround": [
+            {
+                "type": "Fairway",
+                "to": 10
+            },
+            {
+                "type": "SemiRough",
+                "to": 15
+            },
+            {
+                "type": "Rough"
+            }
+        ]
+    },
+    {
+        "name": "Test2",
+        "unit": "meter",
+        "distanceGenerator": {
+            "type": "FixedDistancesGenerator",
+            "distances": [
+                370.33
+            ],
+            "numberOfRounds": 10
+        },
+        "startGroundType": "Tee",
+        "endGround": [
+            {
+                "type": "Fairway",
+                "to": 10
+            },
+            {
+                "type": "SemiRough",
+                "to": 15
+            },
+            {
+                "type": "Rough"
+            }
+        ]
+    },
+    {
+        "name": "Test2",
+        "unit": "yards",
+        "distanceGenerator": {
+            "type": "FixedDistancesGenerator",
+            "distances": [
+                405
+            ],
+            "numberOfRounds": 10
+        },
+        "startGroundType": "Tee",
+        "endGround": [
+            {
+                "type": "Fairway",
+                "to": 10
+            },
+            {
+                "type": "SemiRough",
+                "to": 15
+            },
+            {
+                "type": "Rough"
+            }
+        ]
     }
 ]

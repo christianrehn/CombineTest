@@ -11,8 +11,6 @@ interface ISettingsPageProps {
     handleDistancesGeneratorsChanged: (distancesGenerators: IDistancesGenerator[]) => void;
     selectedDistancesGenerator: IDistancesGenerator;
     handleDistancesGeneratorChanged: (selectedDistancesGenerator: IDistancesGenerator) => void;
-    numberOfShots: number;
-    handleNumberOfShotsChanged: (numberOfShots: number) => void;
     handleMainClicked: () => void;
 }
 
@@ -28,12 +26,6 @@ export const SettingsPage: React.FC<ISettingsPageProps> = (props: ISettingsPageP
                         distancesGenerators={props.distancesGenerators}
                         selectedDistancesGenerator={props.selectedDistancesGenerator}
                         handleDistancesGeneratorChanged={props.handleDistancesGeneratorChanged}
-                    />
-                </div>
-                <div className="NumberOfShotsInput">
-                    <NumberOfShotsInput
-                        numberOfShots={props.numberOfShots}
-                        handleNumberOfShotsChanged={props.handleNumberOfShotsChanged}
                     />
                 </div>
             </div>

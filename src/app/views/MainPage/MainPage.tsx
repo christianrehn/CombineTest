@@ -4,7 +4,7 @@ import './MainPage.scss';
 import {parseCsvToFirstRowAsObject} from "../../util/CsvParser";
 import {IDistancesGenerator} from "../../model/DistancesGenerator";
 import {ShotsSvg} from "../../components/ShotsSvg/ShotsSvg";
-import {computeAbsoluteDeviation, computeRelativeDeviation, IShotData} from "../../model/ShotData";
+import {IShotData} from "../../model/ShotData";
 import {LastShotData} from "../../components/LastShotData/LastShotData";
 import {assert} from "chai";
 import {NextDistanceBox} from "../../components/NextDistanceBox/NextDistanceBox";
@@ -18,15 +18,18 @@ interface IMainPageProps {
     lastShotCsvPath: string;
     averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>;
     selectedDistancesGenerator: IDistancesGenerator;
-    numberOfShots: number;
     handleSettingsClicked: () => void;
 }
 
 export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.Element => {
     console.log("averageShotsMap", props.averageStrokesDataMap);
     assert(!!props, "!props");
-    assert(!!props.selectedDistancesGenerator, "!props.selectedDistancesGenerator");
     assert(!!props.handleSettingsClicked, "!props.handleSettingsClicked");
+
+    if (!props.selectedDistancesGenerator) {
+        // configurartion has not yet been read
+        return null;
+    }
 
     const [shotData, setShotData] = React.useState<IShotData | undefined>();
     const [shotDatas, setShotDatas] = React.useState<IShotData[]>([]);
@@ -93,7 +96,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
         if (!!shotData && (shotDatas.length === 0 || shotData.id !== shotDatas[shotDatas.length - 1].id)) {
             // new shot detected
 
-            if (shotDatas.length >= props.numberOfShots) {
+            if (shotDatas.length >= props.selectedDistancesGenerator.numberOfShots) {
                 // shot executed but number of shots was already reached -> ignore
                 console.log(`shot id=${shotData.id} executed but number of shots was already reached -> ignore`);
             } else {
@@ -103,7 +106,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                 setShotDatas(shotDatasClone);
 
                 // pick new distance for next shot
-                if (shotDatasClone.length < props.numberOfShots) {
+                if (shotDatasClone.length < props.selectedDistancesGenerator.numberOfShots) {
                     nextDistanceRef.current = props.selectedDistancesGenerator.getNext(shotDatasClone.length);
                 } else {
                     console.log("all shots executed");
@@ -147,7 +150,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
             </div>
             <div className="last-shot-flex-item flex-item">
                 <div className="page-header">
-                    <h3> Shot {shotDatas.length} / {props.numberOfShots} </h3>
+                    <h3> Shot {shotDatas.length} / {props.selectedDistancesGenerator.numberOfShots} </h3>
                 </div>
                 <div className="LastShotData">
                     <LastShotData

@@ -4,19 +4,20 @@ import './App.scss';
 import {SettingsPage} from "./views/SettingsPage/SettingsPage";
 import {MainPage} from "./views/MainPage/MainPage";
 import {
-    BGV_DISTANCES,
     FixedDistancesGenerator,
     IDistancesGenerator,
     RandomDistancesGenerator,
     RandomFromFixedDistancesGenerator
 } from "./model/DistancesGenerator";
-import {parseCsvToArrayOfColumnArrays} from "./model/CsvParser";
+import {parseCsvToArrayOfColumnArrays} from "./util/CsvParser";
 import * as path from "path";
 import {ipcRenderer} from "electron";
+import testsConfigurations from "../data/TestsConfiguration.json";
 import averageShotsFromTeeCsvPath from "../data/tee.csv";
 import averageShotsFromFairwayCsvPath from "../data/fairway.csv";
 import averageShotsFromGreenCsvPath from "../data/green.csv";
 import {AverageStrokesData, AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "./model/AverageStrokesData";
+// import {parseJson} from "./util/JsonParser";
 
 const App: React.FC<{}> = (): JSX.Element => {
     const [showSettings, setShowSettings] = React.useState<boolean>(false);
@@ -25,19 +26,44 @@ const App: React.FC<{}> = (): JSX.Element => {
         ? "C:/Program Files (x86)/Foresight Sports Experience/System/LastShot.CSV"
         : "/Users/rehn/WebstormProjects/ApproachShot/test/data/LastShot.CSV";
 
-    const [distancesGenerators, setDistancesGenerators] = React.useState<IDistancesGenerator[]>([
-        new RandomFromFixedDistancesGenerator(BGV_DISTANCES, "meter", AverageStrokesDataGroundTypeEnum.Fairway),
-        new FixedDistancesGenerator([400], "meter", AverageStrokesDataGroundTypeEnum.Tee),
-        new RandomFromFixedDistancesGenerator([10, 20, 30, 40, 50, 60, 70], "yards", AverageStrokesDataGroundTypeEnum.Fairway),
-        new RandomDistancesGenerator(100, 100, "yards", AverageStrokesDataGroundTypeEnum.Fairway),
-        new RandomDistancesGenerator(91.44, 91.44, "meter", AverageStrokesDataGroundTypeEnum.Fairway),
-    ]);
-    const [selectedDistancesGenerator, setSelectedDistancesGenerator] =
-        React.useState<IDistancesGenerator>(distancesGenerators[0]);
+    const [distancesGenerators, setDistancesGenerators] = React.useState<IDistancesGenerator[]>([]);
+    const [selectedDistancesGenerator, setSelectedDistancesGenerator] = React.useState<IDistancesGenerator>();
 
-    const [numberOfShots, setNumberOfShots] = React.useState<number>(selectedDistancesGenerator.numberOfDistances * 2);
+    const [averageStrokesDataMap, setAverageStrokesDataMap] =
+        React.useState<Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>>(new Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>());
 
-    const [averageStrokesDataMap, setAverageStrokesDataMap] = React.useState<Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>>(new Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>());
+    React.useEffect((): void => {
+        console.log("testsConfigurations", testsConfigurations)
+        const distancesGenerators: IDistancesGenerator[] =
+            testsConfigurations
+                .map((testsConfiguration): IDistancesGenerator => {
+                    switch (testsConfiguration.distanceGenerator.type) {
+                        case "RandomDistancesGenerator":
+                            return new RandomDistancesGenerator(
+                                testsConfiguration.distanceGenerator.minIncludedDistance,
+                                testsConfiguration.distanceGenerator.maxExcludedDistance,
+                                testsConfiguration.unit,
+                                testsConfiguration.distanceGenerator.numberOfShots,
+                                testsConfiguration.startGroundType);
+                        case "FixedDistancesGenerator":
+                            return new FixedDistancesGenerator(
+                                testsConfiguration.distanceGenerator.distances,
+                                testsConfiguration.unit,
+                                testsConfiguration.distanceGenerator.numberOfRounds,
+                                testsConfiguration.startGroundType);
+                        case "RandomFromFixedDistancesGenerator":
+                            return new RandomFromFixedDistancesGenerator(
+                                testsConfiguration.distanceGenerator.distances,
+                                testsConfiguration.unit,
+                                testsConfiguration.distanceGenerator.numberOfRounds,
+                                testsConfiguration.startGroundType);
+                    }
+                })
+                .filter(distancesGenerator => !!distancesGenerator);
+        console.log("distancesGenerators", distancesGenerators);
+        setDistancesGenerators(distancesGenerators);
+        setSelectedDistancesGenerator(distancesGenerators[0]);
+    }, [testsConfigurations]);
 
     React.useEffect((): void => {
         const importCsv = async (averageShotsGroundTypeEnum: AverageStrokesDataGroundTypeEnum, filePath: string, unit: string): Promise<void> => {
@@ -65,11 +91,6 @@ const App: React.FC<{}> = (): JSX.Element => {
                     selectedDistancesGenerator={selectedDistancesGenerator}
                     handleDistancesGeneratorChanged={(selectedDistancesGenerator: IDistancesGenerator): void => {
                         setSelectedDistancesGenerator(selectedDistancesGenerator)
-                        setNumberOfShots(selectedDistancesGenerator.numberOfDistances * 2);
-                    }}
-                    numberOfShots={numberOfShots}
-                    handleNumberOfShotsChanged={(numberOfShots: number): void => {
-                        setNumberOfShots(numberOfShots)
                     }}
                     handleMainClicked={(): void => {
                         setShowSettings(false);
@@ -80,7 +101,6 @@ const App: React.FC<{}> = (): JSX.Element => {
                     lastShotCsvPath={lastShotCsvPath}
                     averageStrokesDataMap={averageStrokesDataMap}
                     selectedDistancesGenerator={selectedDistancesGenerator}
-                    numberOfShots={numberOfShots}
                     handleSettingsClicked={(): void => {
                         setShowSettings(true);
                     }

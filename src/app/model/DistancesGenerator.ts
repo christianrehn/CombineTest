@@ -9,7 +9,7 @@ export const BGV_DISTANCES: number[] = [6, 14, 22, 30, 38, 46, 54, 62, 70];
  * Create random integer between [min, max[.
  */
 const createRandomNumber = (minIncluded: number, maxExcluded: number): number => {
-    assert(minIncluded <= maxExcluded, "min > max");
+    assert(minIncluded <= maxExcluded, `min (${minIncluded}) > max (${maxExcluded})`);
 
     if (minIncluded === maxExcluded) {
         return minIncluded;
@@ -22,22 +22,45 @@ export interface IDistancesGenerator {
     getNext: (index: number) => Unit;
     reset: () => void;
     description: string;
-    numberOfDistances: number;
+    numberOfShots: number;
     unit: string;
     averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
 }
 
-export class RandomDistancesGenerator implements IDistancesGenerator {
+abstract class AbstractDistanceGenerator {
+    protected readonly _averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
+
+    private static getEnumKeyByEnumValue<T extends { [index: string]: string }>(myEnum: T, enumValue: string): keyof T | null {
+        let keys: string[] = Object.keys(myEnum).filter((x: string): boolean => myEnum[x] == enumValue);
+        return keys.length > 0 ? keys[0] : null;
+    }
+
+    constructor(startGroundType: string) {
+        this._averageShotsStartGroundTypeEnum =
+            AverageStrokesDataGroundTypeEnum[
+                AbstractDistanceGenerator.getEnumKeyByEnumValue(AverageStrokesDataGroundTypeEnum, startGroundType)
+                ];
+    }
+}
+
+export class RandomDistancesGenerator extends AbstractDistanceGenerator implements IDistancesGenerator {
     private readonly _minIncludedDistance: number;
     private readonly _maxExcludedDistance: number;
     private readonly _unit: string;
-    private readonly _averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
+    private readonly _numberOfShots: number;
 
-    constructor(minIncludedDistance: number, maxExcludedDistance: number, unit: string, averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum) {
+    constructor(
+        minIncludedDistance: number,
+        maxExcludedDistance: number,
+        unit: string,
+        numberOfShots: number,
+        startGroundType: string) {
+        super(startGroundType);
+
         this._minIncludedDistance = minIncludedDistance;
         this._maxExcludedDistance = maxExcludedDistance;
         this._unit = unit;
-        this._averageShotsStartGroundTypeEnum = averageShotsStartGroundTypeEnum;
+        this._numberOfShots = numberOfShots;
     }
 
     reset(): void {
@@ -54,8 +77,8 @@ export class RandomDistancesGenerator implements IDistancesGenerator {
         return `Random Distances between ${this._minIncludedDistance} and ${this._maxExcludedDistance} ${this._unit} from ${this.averageShotsStartGroundTypeEnum}`;
     }
 
-    get numberOfDistances(): number {
-        return 1;
+    get numberOfShots(): number {
+        return this._numberOfShots;
     }
 
     get unit(): string {
@@ -67,15 +90,21 @@ export class RandomDistancesGenerator implements IDistancesGenerator {
     }
 }
 
-export class FixedDistancesGenerator implements IDistancesGenerator {
+export class FixedDistancesGenerator extends AbstractDistanceGenerator implements IDistancesGenerator {
     protected readonly _distances: number[];
     protected readonly _unit: string;
-    protected readonly _averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
+    protected readonly _numberOfRounds: number;
 
-    constructor(distances: number[], unit: string, averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum) {
+    constructor(
+        distances: number[],
+        unit: string,
+        numberOfRounds: number,
+        startGroundType: string) {
+        super(startGroundType);
+
         this._distances = distances;
         this._unit = unit;
-        this._averageShotsStartGroundTypeEnum = averageShotsStartGroundTypeEnum;
+        this._numberOfRounds = numberOfRounds;
     }
 
     reset(): void {
@@ -92,8 +121,8 @@ export class FixedDistancesGenerator implements IDistancesGenerator {
         return `Fixed Distances in fixed order: ${this._distances} ${this._unit} from ${this.averageShotsStartGroundTypeEnum}`;
     }
 
-    get numberOfDistances(): number {
-        return this._distances.length;
+    get numberOfShots(): number {
+        return this._distances.length * this._numberOfRounds;
     }
 
     get unit(): string {
@@ -109,8 +138,12 @@ export class RandomFromFixedDistancesGenerator extends FixedDistancesGenerator i
     private distancesNotYetReturned: number[];
     private distancesReturnedMap: Map<number, number> = new Map<number, number>();
 
-    constructor(distances: number[], unit: string, averageShotsGroundTypeEnum: AverageStrokesDataGroundTypeEnum) {
-        super(distances, unit, averageShotsGroundTypeEnum);
+    constructor(
+        distances: number[],
+        unit: string,
+        numberOfRounds: number,
+        startGroundType: string) {
+        super(distances, unit, numberOfRounds, startGroundType);
         this.distancesNotYetReturned = [...distances];
     }
 
