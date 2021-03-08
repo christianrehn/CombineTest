@@ -1,7 +1,7 @@
 import React from 'react';
 import Chokidar, {FSWatcher} from 'chokidar';
 import './MainPage.scss';
-import {parseCsvToFirstRowAsObject} from "../../model/CsvParser";
+import {parseCsvToFirstRowAsObject} from "../../util/CsvParser";
 import {IDistancesGenerator} from "../../model/DistancesGenerator";
 import {ShotsSvg} from "../../components/ShotsSvg/ShotsSvg";
 import {computeAbsoluteDeviation, computeRelativeDeviation, IShotData} from "../../model/ShotData";
