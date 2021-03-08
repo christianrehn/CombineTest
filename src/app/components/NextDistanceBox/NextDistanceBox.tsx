@@ -21,7 +21,7 @@ export const NextDistanceBox: React.FC<INextDistanceBoxProps> = (props: INextDis
             : undefined;
 
     const averageStrokesFromNextDistance: number =
-        props.averageStrokesDataMap.get(props.selectedDistancesGenerator.averageShotsGroundTypeEnum)?.computeAverageStrokesToHole(
+        props.averageStrokesDataMap.get(props.selectedDistancesGenerator.averageShotsStartGroundTypeEnum)?.computeAverageStrokesToHole(
             props.nextDistance,
         );
 
