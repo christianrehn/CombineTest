@@ -24,20 +24,20 @@ export interface IDistancesGenerator {
     description: string;
     numberOfDistances: number;
     unit: string;
-    averageShotsGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
+    averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
 }
 
 export class RandomDistancesGenerator implements IDistancesGenerator {
     private readonly _minIncludedDistance: number;
     private readonly _maxExcludedDistance: number;
     private readonly _unit: string;
-    private readonly _averageShotsGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
+    private readonly _averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
 
-    constructor(minIncludedDistance: number, maxExcludedDistance: number, unit: string, averageShotsGroundTypeEnum: AverageStrokesDataGroundTypeEnum) {
+    constructor(minIncludedDistance: number, maxExcludedDistance: number, unit: string, averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum) {
         this._minIncludedDistance = minIncludedDistance;
         this._maxExcludedDistance = maxExcludedDistance;
         this._unit = unit;
-        this._averageShotsGroundTypeEnum = averageShotsGroundTypeEnum;
+        this._averageShotsStartGroundTypeEnum = averageShotsStartGroundTypeEnum;
     }
 
     reset(): void {
@@ -51,7 +51,7 @@ export class RandomDistancesGenerator implements IDistancesGenerator {
     }
 
     get description(): string {
-        return `Random Distances between ${this._minIncludedDistance} and ${this._maxExcludedDistance} ${this._unit} from ${this.averageShotsGroundTypeEnum}`;
+        return `Random Distances between ${this._minIncludedDistance} and ${this._maxExcludedDistance} ${this._unit} from ${this.averageShotsStartGroundTypeEnum}`;
     }
 
     get numberOfDistances(): number {
@@ -62,20 +62,20 @@ export class RandomDistancesGenerator implements IDistancesGenerator {
         return this._unit;
     }
 
-    get averageShotsGroundTypeEnum(): AverageStrokesDataGroundTypeEnum {
-        return this._averageShotsGroundTypeEnum;
+    get averageShotsStartGroundTypeEnum(): AverageStrokesDataGroundTypeEnum {
+        return this._averageShotsStartGroundTypeEnum;
     }
 }
 
 export class FixedDistancesGenerator implements IDistancesGenerator {
     protected readonly _distances: number[];
     protected readonly _unit: string;
-    protected readonly _averageShotsGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
+    protected readonly _averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
 
-    constructor(distances: number[], unit: string, averageShotsGroundTypeEnum: AverageStrokesDataGroundTypeEnum) {
+    constructor(distances: number[], unit: string, averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum) {
         this._distances = distances;
         this._unit = unit;
-        this._averageShotsGroundTypeEnum = averageShotsGroundTypeEnum;
+        this._averageShotsStartGroundTypeEnum = averageShotsStartGroundTypeEnum;
     }
 
     reset(): void {
@@ -89,7 +89,7 @@ export class FixedDistancesGenerator implements IDistancesGenerator {
     }
 
     get description(): string {
-        return `Fixed Distances in fixed order: ${this._distances} ${this._unit} from ${this.averageShotsGroundTypeEnum}`;
+        return `Fixed Distances in fixed order: ${this._distances} ${this._unit} from ${this.averageShotsStartGroundTypeEnum}`;
     }
 
     get numberOfDistances(): number {
@@ -100,8 +100,8 @@ export class FixedDistancesGenerator implements IDistancesGenerator {
         return this._unit;
     }
 
-    get averageShotsGroundTypeEnum(): AverageStrokesDataGroundTypeEnum {
-        return this._averageShotsGroundTypeEnum;
+    get averageShotsStartGroundTypeEnum(): AverageStrokesDataGroundTypeEnum {
+        return this._averageShotsStartGroundTypeEnum;
     }
 }
 
@@ -145,6 +145,6 @@ export class RandomFromFixedDistancesGenerator extends FixedDistancesGenerator i
     }
 
     get description(): string {
-        return `Fixed Distances in random order: ${this._distances} ${this._unit} from ${this.averageShotsGroundTypeEnum}`;
+        return `Fixed Distances in random order: ${this._distances} ${this._unit} from ${this.averageShotsStartGroundTypeEnum}`;
     }
 }
