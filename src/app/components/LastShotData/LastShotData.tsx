@@ -70,7 +70,7 @@ const shotsGainedData = (
 
 
     const averageStrokesFromTargetDistance: number =
-        props.averageStrokesDataMap.get(props.selectedDistancesGenerator.averageShotsGroundTypeEnum)?.computeAverageStrokesToHole(props.lastShot.targetDistance);
+        props.averageStrokesDataMap.get(props.selectedDistancesGenerator.averageShotsStartGroundTypeEnum)?.computeAverageStrokesToHole(props.lastShot.targetDistance);
 
     const absoluteDeviation: Unit = props.shotDatas.length > 0 ? computeAbsoluteDeviation(props.shotDatas[props.shotDatas.length - 1]) : undefined;
     const averageStrokesFromAbsoluteDeviation: number =
@@ -81,7 +81,7 @@ const shotsGainedData = (
 
     const strokesGainedSum: number = props.shotDatas
         .map((shotData: IShotData) => {
-                const averageStrokesFromTargetDistance: number = props.averageStrokesDataMap.get(props.selectedDistancesGenerator.averageShotsGroundTypeEnum).computeAverageStrokesToHole(shotData.targetDistance);
+                const averageStrokesFromTargetDistance: number = props.averageStrokesDataMap.get(props.selectedDistancesGenerator.averageShotsStartGroundTypeEnum).computeAverageStrokesToHole(shotData.targetDistance);
                 const absoluteDeviation: Unit = computeAbsoluteDeviation(shotData);
                 const averageStrokesFromAbsoluteDeviation: number =
                     props.averageStrokesDataMap.get(AverageStrokesDataGroundTypeEnum.Green).computeAverageStrokesToHole(absoluteDeviation);
