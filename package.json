@@ -1,7 +1,7 @@
 {
     "name": "strokesgainedtest",
     "productName": "Strokes Gained Test",
-    "version": "0.2.2",
+    "version": "0.5.0",
     "description": "Practice tee and approach shots with FSX2020 and GCQuad",
     "main": ".webpack/main",
     "scripts": {
