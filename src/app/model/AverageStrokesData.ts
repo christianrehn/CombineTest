@@ -12,6 +12,7 @@ export interface IAverageStrokesData {
 export enum AverageStrokesDataGroundTypeEnum {
     Tee = 'Tee',
     Fairway = 'Fairway',
+    Rough = 'Rough',
     Green = 'Green',
 }
 

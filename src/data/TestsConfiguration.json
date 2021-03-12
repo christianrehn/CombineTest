@@ -1,6 +1,6 @@
 [
     {
-        "name": "Test2",
+        "description": "18 fairway shots to a green with 5 meter radius from fixed distances in random order: 6, 14, 22, 30, 38, 46, 54, 62, 70 meter",
         "unit": "meter",
         "distanceGenerator": {
             "type": "RandomFromFixedDistancesGenerator",
@@ -18,18 +18,19 @@
             "numberOfRounds": 2
         },
         "startGroundType": "Fairway",
-        "endGround": [
+        "endGroundTypes": [
             {
                 "type": "Green",
-                "radius": 5
+                "to": 5
             },
             {
-                "type": "Fairway"
+                "type": "Fairway",
+                "from": 5
             }
         ]
     },
     {
-        "name": "Test1",
+        "description": "2 fairway shots to a green with 10 yards radius from random distances between 2 and 10 yards",
         "unit": "yards",
         "distanceGenerator": {
             "type": "RandomDistancesGenerator",
@@ -37,23 +38,19 @@
             "maxExcludedDistance": 10,
             "numberOfShots": 2
         },
-        "startGroundType": "Tee",
-        "endGround": [
+        "startGroundType": "Fairway",
+        "endGroundTypes": [
             {
-                "type": "Fairway",
+                "type": "Green",
                 "to": 10
             },
             {
-                "type": "SemiRough",
-                "to": 15
-            },
-            {
-                "type": "Rough"
+                "type": "Fairway"
             }
         ]
     },
     {
-        "name": "Test2",
+        "description": "10 tee shots par 4, fairway width: 24 meter plus 9 meter rough on each side",
         "unit": "meter",
         "distanceGenerator": {
             "type": "FixedDistancesGenerator",
@@ -63,22 +60,22 @@
             "numberOfRounds": 10
         },
         "startGroundType": "Tee",
-        "endGround": [
+        "endGroundTypes": [
             {
                 "type": "Fairway",
-                "to": 10
+                "to": 12
             },
             {
-                "type": "SemiRough",
-                "to": 15
+                "type": "Rough",
+                "to": 21
             },
             {
-                "type": "Rough"
+                "type": "OutOfBounds"
             }
         ]
     },
     {
-        "name": "Test2",
+        "description": "10 tee shots par 4, fairway 26 yards 10 10 yards rough on each side",
         "unit": "yards",
         "distanceGenerator": {
             "type": "FixedDistancesGenerator",
@@ -88,17 +85,17 @@
             "numberOfRounds": 10
         },
         "startGroundType": "Tee",
-        "endGround": [
+        "endGroundTypes": [
             {
                 "type": "Fairway",
-                "to": 10
+                "to": 13
             },
             {
-                "type": "SemiRough",
-                "to": 15
+                "type": "Rough",
+                "to": 23
             },
             {
-                "type": "Rough"
+                "type": "OutOfBounds"
             }
         ]
     }

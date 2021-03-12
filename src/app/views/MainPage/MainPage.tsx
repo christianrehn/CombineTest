@@ -2,7 +2,7 @@ import React from 'react';
 import Chokidar, {FSWatcher} from 'chokidar';
 import './MainPage.scss';
 import {parseCsvToFirstRowAsObject} from "../../util/CsvParser";
-import {IDistancesGenerator} from "../../model/DistancesGenerator";
+import {ITestConfiguration} from "../../model/DistancesGenerator";
 import {ShotsSvg} from "../../components/ShotsSvg/ShotsSvg";
 import {IShotData} from "../../model/ShotData";
 import {LastShotData} from "../../components/LastShotData/LastShotData";
@@ -17,7 +17,7 @@ import {AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "../../model
 interface IMainPageProps {
     lastShotCsvPath: string;
     averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>;
-    selectedDistancesGenerator: IDistancesGenerator;
+    selectedDistancesGenerator: ITestConfiguration;
     handleSettingsClicked: () => void;
 }
 

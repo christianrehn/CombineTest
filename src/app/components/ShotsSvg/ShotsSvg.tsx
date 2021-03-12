@@ -3,12 +3,12 @@ import {assert} from "chai";
 import {computeAbsoluteDeviation, IShotData} from "../../model/ShotData";
 import './ShotsSvg.scss';
 import {Unit} from "mathjs";
-import {IDistancesGenerator} from "../../model/DistancesGenerator";
+import {ITestConfiguration} from "../../model/DistancesGenerator";
 
 export interface IShotsSvg {
     svgNumberOfCircles: number,
     shotDatas: IShotData[],
-    selectedDistancesGenerator: IDistancesGenerator;
+    selectedDistancesGenerator: ITestConfiguration;
 }
 
 export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {

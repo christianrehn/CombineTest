@@ -5,7 +5,7 @@ import {SettingsPage} from "./views/SettingsPage/SettingsPage";
 import {MainPage} from "./views/MainPage/MainPage";
 import {
     FixedDistancesGenerator,
-    IDistancesGenerator,
+    ITestConfiguration,
     RandomDistancesGenerator,
     RandomFromFixedDistancesGenerator
 } from "./model/DistancesGenerator";
@@ -15,9 +15,9 @@ import {ipcRenderer} from "electron";
 import testsConfigurations from "../data/TestsConfiguration.json";
 import averageShotsFromTeeCsvPath from "../data/tee.csv";
 import averageShotsFromFairwayCsvPath from "../data/fairway.csv";
+import averageShotsFromRoughCsvPath from "../data/rough.csv";
 import averageShotsFromGreenCsvPath from "../data/green.csv";
 import {AverageStrokesData, AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "./model/AverageStrokesData";
-// import {parseJson} from "./util/JsonParser";
 
 const App: React.FC<{}> = (): JSX.Element => {
     const [showSettings, setShowSettings] = React.useState<boolean>(false);
@@ -26,41 +26,46 @@ const App: React.FC<{}> = (): JSX.Element => {
         ? "C:/Program Files (x86)/Foresight Sports Experience/System/LastShot.CSV"
         : "/Users/rehn/WebstormProjects/ApproachShot/test/data/LastShot.CSV";
 
-    const [distancesGenerators, setDistancesGenerators] = React.useState<IDistancesGenerator[]>([]);
-    const [selectedDistancesGenerator, setSelectedDistancesGenerator] = React.useState<IDistancesGenerator>();
+    const [distancesGenerators, setDistancesGenerators] = React.useState<ITestConfiguration[]>([]);
+    const [selectedDistancesGenerator, setSelectedDistancesGenerator] = React.useState<ITestConfiguration>();
 
     const [averageStrokesDataMap, setAverageStrokesDataMap] =
         React.useState<Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>>(new Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>());
 
     React.useEffect((): void => {
         console.log("testsConfigurations", testsConfigurations)
-        const distancesGenerators: IDistancesGenerator[] =
+        const distancesGenerators: ITestConfiguration[] =
             testsConfigurations
-                .map((testsConfiguration): IDistancesGenerator => {
+                .map((testsConfiguration): ITestConfiguration => {
                     switch (testsConfiguration.distanceGenerator.type) {
                         case "RandomDistancesGenerator":
                             return new RandomDistancesGenerator(
+                                testsConfiguration.description,
                                 testsConfiguration.distanceGenerator.minIncludedDistance,
                                 testsConfiguration.distanceGenerator.maxExcludedDistance,
                                 testsConfiguration.unit,
                                 testsConfiguration.distanceGenerator.numberOfShots,
-                                testsConfiguration.startGroundType);
+                                testsConfiguration.startGroundType,
+                                testsConfiguration.endGroundTypes);
                         case "FixedDistancesGenerator":
                             return new FixedDistancesGenerator(
+                                testsConfiguration.description,
                                 testsConfiguration.distanceGenerator.distances,
                                 testsConfiguration.unit,
                                 testsConfiguration.distanceGenerator.numberOfRounds,
-                                testsConfiguration.startGroundType);
+                                testsConfiguration.startGroundType,
+                                testsConfiguration.endGroundTypes);
                         case "RandomFromFixedDistancesGenerator":
                             return new RandomFromFixedDistancesGenerator(
+                                testsConfiguration.description,
                                 testsConfiguration.distanceGenerator.distances,
                                 testsConfiguration.unit,
                                 testsConfiguration.distanceGenerator.numberOfRounds,
-                                testsConfiguration.startGroundType);
+                                testsConfiguration.startGroundType,
+                                testsConfiguration.endGroundTypes);
                     }
                 })
                 .filter(distancesGenerator => !!distancesGenerator);
-        console.log("distancesGenerators", distancesGenerators);
         setDistancesGenerators(distancesGenerators);
         setSelectedDistancesGenerator(distancesGenerators[0]);
     }, [testsConfigurations]);
@@ -76,6 +81,7 @@ const App: React.FC<{}> = (): JSX.Element => {
         const appPath = ipcRenderer.sendSync('appPath', undefined);
         importCsv(AverageStrokesDataGroundTypeEnum.Tee, path.join(appPath, '.webpack/renderer', averageShotsFromTeeCsvPath), "yard");
         importCsv(AverageStrokesDataGroundTypeEnum.Fairway, path.join(appPath, '.webpack/renderer', averageShotsFromFairwayCsvPath), "yard");
+        importCsv(AverageStrokesDataGroundTypeEnum.Rough, path.join(appPath, '.webpack/renderer', averageShotsFromRoughCsvPath), "yard");
         importCsv(AverageStrokesDataGroundTypeEnum.Green, path.join(appPath, '.webpack/renderer', averageShotsFromGreenCsvPath), "feet");
     }, [])
 
@@ -84,12 +90,12 @@ const App: React.FC<{}> = (): JSX.Element => {
             {showSettings
                 ? <SettingsPage
                     distancesGenerators={distancesGenerators}
-                    handleDistancesGeneratorsChanged={(distancesGenerators: IDistancesGenerator[]): void => {
+                    handleDistancesGeneratorsChanged={(distancesGenerators: ITestConfiguration[]): void => {
                         setDistancesGenerators(distancesGenerators);
                     }
                     }
                     selectedDistancesGenerator={selectedDistancesGenerator}
-                    handleDistancesGeneratorChanged={(selectedDistancesGenerator: IDistancesGenerator): void => {
+                    handleDistancesGeneratorChanged={(selectedDistancesGenerator: ITestConfiguration): void => {
                         setSelectedDistancesGenerator(selectedDistancesGenerator)
                     }}
                     handleMainClicked={(): void => {

@@ -3,11 +3,11 @@ import './NextDistanceBox.scss';
 import {assert} from "chai";
 import {Unit} from "mathjs";
 import {AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "../../model/AverageStrokesData";
-import {IDistancesGenerator} from "../../model/DistancesGenerator";
+import {ITestConfiguration} from "../../model/DistancesGenerator";
 
 export interface INextDistanceBoxProps {
     nextDistance: Unit;
-    selectedDistancesGenerator: IDistancesGenerator;
+    selectedDistancesGenerator: ITestConfiguration;
     averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>;
 }
 

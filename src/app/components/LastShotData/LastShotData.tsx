@@ -5,7 +5,7 @@ import * as math from "mathjs";
 import {Unit} from "mathjs";
 import {AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "../../model/AverageStrokesData";
 import {assert} from "chai";
-import {IDistancesGenerator} from "../../model/DistancesGenerator";
+import {ITestConfiguration} from "../../model/DistancesGenerator";
 
 const SHOW_ADDITIONAL_DATA_FOR_ALL_SHOTS: boolean = false;
 
@@ -144,7 +144,7 @@ const shotsGainedData = (
 export interface ILastShotData {
     lastShot: IShotData,
     shotDatas: IShotData[],
-    selectedDistancesGenerator: IDistancesGenerator;
+    selectedDistancesGenerator: ITestConfiguration;
     averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>;
 }
 

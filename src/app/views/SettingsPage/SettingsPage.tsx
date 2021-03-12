@@ -1,16 +1,16 @@
 import React from 'react';
 import './SettingsPage.scss';
 import mainIcon from "../../../assets/main.png";
-import {IDistancesGenerator} from "../../model/DistancesGenerator";
+import {ITestConfiguration} from "../../model/DistancesGenerator";
 import {NextDistanceBox} from "../../components/NextDistanceBox/NextDistanceBox";
 import {DistancesGeneratorSelect} from "../../components/DistancesGeneratorSelect/DistancesGeneratorSelect";
 import {NumberOfShotsInput} from "../../components/NumberOfShotsInput/NumberOfShotsInput";
 
 interface ISettingsPageProps {
-    distancesGenerators: IDistancesGenerator[];
-    handleDistancesGeneratorsChanged: (distancesGenerators: IDistancesGenerator[]) => void;
-    selectedDistancesGenerator: IDistancesGenerator;
-    handleDistancesGeneratorChanged: (selectedDistancesGenerator: IDistancesGenerator) => void;
+    distancesGenerators: ITestConfiguration[];
+    handleDistancesGeneratorsChanged: (distancesGenerators: ITestConfiguration[]) => void;
+    selectedDistancesGenerator: ITestConfiguration;
+    handleDistancesGeneratorChanged: (selectedDistancesGenerator: ITestConfiguration) => void;
     handleMainClicked: () => void;
 }
 
@@ -23,9 +23,9 @@ export const SettingsPage: React.FC<ISettingsPageProps> = (props: ISettingsPageP
                 </div>
                 <div className="DistancesGeneratorSelect">
                     <DistancesGeneratorSelect
-                        distancesGenerators={props.distancesGenerators}
-                        selectedDistancesGenerator={props.selectedDistancesGenerator}
-                        handleDistancesGeneratorChanged={props.handleDistancesGeneratorChanged}
+                        testConfigurations={props.distancesGenerators}
+                        selectedTestConfiguration={props.selectedDistancesGenerator}
+                        handleTestConfigurationChanged={props.handleDistancesGeneratorChanged}
                     />
                 </div>
             </div>

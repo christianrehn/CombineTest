@@ -1,11 +1,11 @@
 import React from "react";
 import './DistancesGeneratorSelect.scss';
-import {IDistancesGenerator} from "../../model/DistancesGenerator";
+import {ITestConfiguration} from "../../model/DistancesGenerator";
 
 export interface IDistancesGeneratorSelectProps {
-    distancesGenerators: IDistancesGenerator[];
-    selectedDistancesGenerator: IDistancesGenerator;
-    handleDistancesGeneratorChanged: (selectedDistancesGenerator: IDistancesGenerator) => void
+    testConfigurations: ITestConfiguration[];
+    selectedTestConfiguration: ITestConfiguration;
+    handleTestConfigurationChanged: (selectedDistancesGenerator: ITestConfiguration) => void
 }
 
 export const DistancesGeneratorSelect: React.FC<IDistancesGeneratorSelectProps> = (props: IDistancesGeneratorSelectProps): JSX.Element => {
@@ -18,13 +18,13 @@ export const DistancesGeneratorSelect: React.FC<IDistancesGeneratorSelectProps> 
                 id="distances-generators-select"
                 className="distances-generators-select select-css"
                 title="Select a distances generator. Changing this value will lead to a restart"
-                value={props.distancesGenerators.indexOf(props.selectedDistancesGenerator)}
+                value={props.testConfigurations.indexOf(props.selectedTestConfiguration)}
                 onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                    props.handleDistancesGeneratorChanged(props.distancesGenerators[Number(event.target.value)]);
+                    props.handleTestConfigurationChanged(props.testConfigurations[Number(event.target.value)]);
                 }}
             >
                 {
-                    props.distancesGenerators.map((distancesGenerator: IDistancesGenerator, index: number) => {
+                    props.testConfigurations.map((distancesGenerator: ITestConfiguration, index: number) => {
                         return (
                             <option
                                 key={`distancesGeneratorOption_${index}`}
