@@ -2,7 +2,7 @@ import React from 'react';
 import Chokidar, {FSWatcher} from 'chokidar';
 import './MainPage.scss';
 import {parseCsvToFirstRowAsObject} from "../../util/CsvParser";
-import {ITestConfiguration} from "../../model/DistancesGenerator";
+import {ITestConfiguration} from "../../model/TestConfiguration";
 import {ShotsSvg} from "../../components/ShotsSvg/ShotsSvg";
 import {IShotData} from "../../model/ShotData";
 import {LastShotData} from "../../components/LastShotData/LastShotData";
@@ -12,17 +12,14 @@ import settingsIcon from '../../../assets/settings.png';
 import {RestartButton} from "../../components/RestartButton/RestartButton";
 import * as math from 'mathjs'
 import {Unit} from 'mathjs'
-import {AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "../../model/AverageStrokesData";
 
 interface IMainPageProps {
     lastShotCsvPath: string;
-    averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>;
     selectedDistancesGenerator: ITestConfiguration;
     handleSettingsClicked: () => void;
 }
 
 export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.Element => {
-    console.log("averageShotsMap", props.averageStrokesDataMap);
     assert(!!props, "!props");
     assert(!!props.handleSettingsClicked, "!props.handleSettingsClicked");
 
@@ -34,7 +31,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
     const [shotData, setShotData] = React.useState<IShotData | undefined>();
     const [shotDatas, setShotDatas] = React.useState<IShotData[]>([]);
 
-    const [nextDistance, setNextDistance] = React.useState<Unit>(props.selectedDistancesGenerator.getNext(shotDatas.length));
+    const [nextDistance, setNextDistance] = React.useState<Unit>(props.selectedDistancesGenerator.getNextDistance(shotDatas.length));
     const nextDistanceRef: React.MutableRefObject<Unit> = React.useRef<Unit>(nextDistance);
 
     const lastShotFileChanged = async (): Promise<void> => {
@@ -107,7 +104,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
 
                 // pick new distance for next shot
                 if (shotDatasClone.length < props.selectedDistancesGenerator.numberOfShots) {
-                    nextDistanceRef.current = props.selectedDistancesGenerator.getNext(shotDatasClone.length);
+                    nextDistanceRef.current = props.selectedDistancesGenerator.getNextDistance(shotDatasClone.length);
                 } else {
                     console.log("all shots executed");
                     nextDistanceRef.current = undefined;
@@ -120,7 +117,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
     const restart = (): void => {
         props.selectedDistancesGenerator.reset();
         setShotDatas([]);
-        nextDistanceRef.current = (props.selectedDistancesGenerator).getNext(0);
+        nextDistanceRef.current = (props.selectedDistancesGenerator).getNextDistance(0);
         setNextDistance(nextDistanceRef.current);
     }
 
@@ -138,8 +135,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                 <div className="NextDistanceBox">
                     <NextDistanceBox
                         nextDistance={nextDistance}
-                        selectedDistancesGenerator={props.selectedDistancesGenerator}
-                        averageStrokesDataMap={props.averageStrokesDataMap}
+                        selectedTestConfiguration={props.selectedDistancesGenerator}
                     />
                 </div>
                 <div className="RestartButton">
@@ -156,8 +152,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                     <LastShotData
                         lastShot={lastShot}
                         shotDatas={shotDatas}
-                        selectedDistancesGenerator={props.selectedDistancesGenerator}
-                        averageStrokesDataMap={props.averageStrokesDataMap}
+                        selectedTestConfiguration={props.selectedDistancesGenerator}
                     />
                 </div>
             </div>

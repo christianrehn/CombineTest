@@ -1,6 +1,6 @@
 import {assert} from "chai";
+import * as math from "mathjs";
 import {MathType, Unit} from "mathjs";
-import * as math from 'mathjs'
 
 export interface IShotData {
     id: number,

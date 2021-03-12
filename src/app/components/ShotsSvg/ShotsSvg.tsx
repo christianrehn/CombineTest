@@ -3,7 +3,7 @@ import {assert} from "chai";
 import {computeAbsoluteDeviation, IShotData} from "../../model/ShotData";
 import './ShotsSvg.scss';
 import {Unit} from "mathjs";
-import {ITestConfiguration} from "../../model/DistancesGenerator";
+import {ITestConfiguration} from "../../model/TestConfiguration";
 
 export interface IShotsSvg {
     svgNumberOfCircles: number,

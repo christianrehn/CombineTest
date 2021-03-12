@@ -1,22 +1,22 @@
 import React from "react";
-import './DistancesGeneratorSelect.scss';
-import {ITestConfiguration} from "../../model/DistancesGenerator";
+import './TestConfigurationSelect.scss';
+import {ITestConfiguration} from "../../model/TestConfiguration";
 
-export interface IDistancesGeneratorSelectProps {
+export interface ITestConfigurationSelectProps {
     testConfigurations: ITestConfiguration[];
     selectedTestConfiguration: ITestConfiguration;
     handleTestConfigurationChanged: (selectedDistancesGenerator: ITestConfiguration) => void
 }
 
-export const DistancesGeneratorSelect: React.FC<IDistancesGeneratorSelectProps> = (props: IDistancesGeneratorSelectProps): JSX.Element => {
+export const TestConfigurationSelect: React.FC<ITestConfigurationSelectProps> = (props: ITestConfigurationSelectProps): JSX.Element => {
     return (
-        <div className="distances-generators-select-container">
+        <div className="test-configuration-select-container">
             <label
-                className="distances-generators-select-label"
-                htmlFor="distances-generators-select">Select Distances</label>
+                className="test-configuration-select-label"
+                htmlFor="test-configuration-select">Select Distances</label>
             <select
-                id="distances-generators-select"
-                className="distances-generators-select select-css"
+                id="test-configuration-select"
+                className="test-configuration-select select-css"
                 title="Select a distances generator. Changing this value will lead to a restart"
                 value={props.testConfigurations.indexOf(props.selectedTestConfiguration)}
                 onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {

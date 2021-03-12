@@ -1,7 +1,7 @@
 import {assert} from "chai";
 import * as math from "mathjs";
 import {Unit} from "mathjs";
-import {AverageStrokesDataGroundTypeEnum} from "./AverageStrokesData";
+import {AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "./AverageStrokesData";
 
 export const BGV_DISTANCES: number[] = [6, 14, 22, 30, 38, 46, 54, 62, 70];
 
@@ -19,18 +19,23 @@ const createRandomNumber = (minIncluded: number, maxExcluded: number): number =>
 }
 
 export interface ITestConfiguration {
-    getNext: (index: number) => Unit;
+    getNextDistance: (index: number) => Unit;
     reset: () => void;
     description: string;
     numberOfShots: number;
     unit: string;
     averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
+
+    computeAverageStrokesFromStartDistance(startDistance: Unit): number;
+
+    computeAverageStrokesFromEndDistance(endDistance: Unit): number;
 }
 
-abstract class AbstractDistanceGenerator {
+abstract class AbstractTestConfiguration {
     protected readonly _description: string;
     protected readonly _averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
     protected readonly _endGroundTypes: IEndGroundType[];
+    protected readonly _averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>;
 
 
     private static getEnumKeyByEnumValue<T extends { [index: string]: string }>(myEnum: T, enumValue: string): keyof T | null {
@@ -38,17 +43,32 @@ abstract class AbstractDistanceGenerator {
         return keys.length > 0 ? keys[0] : null;
     }
 
-    constructor(description: string, startGroundType: string, endGroundTypes: IEndGroundType[]) {
+    constructor(
+        description: string,
+        startGroundType: string,
+        endGroundTypes: IEndGroundType[],
+        averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>
+    ) {
         this._description = description;
         this._averageShotsStartGroundTypeEnum =
             AverageStrokesDataGroundTypeEnum[
-                AbstractDistanceGenerator.getEnumKeyByEnumValue(AverageStrokesDataGroundTypeEnum, startGroundType)
+                AbstractTestConfiguration.getEnumKeyByEnumValue(AverageStrokesDataGroundTypeEnum, startGroundType)
                 ];
         this._endGroundTypes = endGroundTypes;
+        this._averageStrokesDataMap = averageStrokesDataMap;
     }
 
     get description(): string {
         return this._description;
+    }
+
+    public computeAverageStrokesFromStartDistance = (startDistance: Unit): number => {
+        return this._averageStrokesDataMap?.get(this._averageShotsStartGroundTypeEnum)?.computeAverageStrokesToHole(startDistance);
+    }
+
+    public computeAverageStrokesFromEndDistance = (endDistance: Unit): number => {
+        // CRTODO: use endGroundTypes
+        return this._averageStrokesDataMap?.get(AverageStrokesDataGroundTypeEnum.Green)?.computeAverageStrokesToHole(endDistance);
     }
 }
 
@@ -58,7 +78,7 @@ export interface IEndGroundType {
     to?: number
 }
 
-export class RandomDistancesGenerator extends AbstractDistanceGenerator implements ITestConfiguration {
+export class TestConfigurationWithRandomDistancesGenerator extends AbstractTestConfiguration implements ITestConfiguration {
     private readonly _minIncludedDistance: number;
     private readonly _maxExcludedDistance: number;
     private readonly _unit: string;
@@ -71,8 +91,10 @@ export class RandomDistancesGenerator extends AbstractDistanceGenerator implemen
         unit: string,
         numberOfShots: number,
         startGroundType: string,
-        endGroundTypes: any[]) {
-        super(description, startGroundType, endGroundTypes);
+        endGroundTypes: any[],
+        averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>
+    ) {
+        super(description, startGroundType, endGroundTypes, averageStrokesDataMap);
 
         this._minIncludedDistance = minIncludedDistance;
         this._maxExcludedDistance = maxExcludedDistance;
@@ -84,7 +106,7 @@ export class RandomDistancesGenerator extends AbstractDistanceGenerator implemen
         // nothing to do
     }
 
-    public getNext(index: number): Unit {
+    public getNextDistance(index: number): Unit {
         assert(index >= 0, "index < 0");
 
         return math.unit(createRandomNumber(this._minIncludedDistance, this._maxExcludedDistance), this._unit);
@@ -103,7 +125,7 @@ export class RandomDistancesGenerator extends AbstractDistanceGenerator implemen
     }
 }
 
-export class FixedDistancesGenerator extends AbstractDistanceGenerator implements ITestConfiguration {
+export class TestConfigurationWithFixedDistancesGenerator extends AbstractTestConfiguration implements ITestConfiguration {
     protected readonly _distances: number[];
     protected readonly _unit: string;
     protected readonly _numberOfRounds: number;
@@ -114,8 +136,10 @@ export class FixedDistancesGenerator extends AbstractDistanceGenerator implement
         unit: string,
         numberOfRounds: number,
         startGroundType: string,
-        endGroundTypes: any[]) {
-        super(description, startGroundType, endGroundTypes);
+        endGroundTypes: any[],
+        averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>
+    ) {
+        super(description, startGroundType, endGroundTypes, averageStrokesDataMap);
 
         this._distances = distances;
         this._unit = unit;
@@ -126,7 +150,7 @@ export class FixedDistancesGenerator extends AbstractDistanceGenerator implement
         // nothing to do
     }
 
-    public getNext(index: number): Unit {
+    public getNextDistance(index: number): Unit {
         assert(index >= 0, "index < 0");
 
         return math.unit(this._distances[index % this._distances.length], this._unit);
@@ -145,7 +169,7 @@ export class FixedDistancesGenerator extends AbstractDistanceGenerator implement
     }
 }
 
-export class RandomFromFixedDistancesGenerator extends FixedDistancesGenerator implements ITestConfiguration {
+export class TestConfigurationWithRandomFromFixedDistancesGenerator extends TestConfigurationWithFixedDistancesGenerator implements ITestConfiguration {
     private distancesNotYetReturned: number[];
     private distancesReturnedMap: Map<number, number> = new Map<number, number>();
 
@@ -155,8 +179,10 @@ export class RandomFromFixedDistancesGenerator extends FixedDistancesGenerator i
         unit: string,
         numberOfRounds: number,
         startGroundType: string,
-        endGroundTypes: any[]) {
-        super(description, distances, unit, numberOfRounds, startGroundType, endGroundTypes);
+        endGroundTypes: any[],
+        averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>
+    ) {
+        super(description, distances, unit, numberOfRounds, startGroundType, endGroundTypes, averageStrokesDataMap);
         this.distancesNotYetReturned = [...distances];
     }
 
@@ -165,7 +191,7 @@ export class RandomFromFixedDistancesGenerator extends FixedDistancesGenerator i
         this.distancesReturnedMap = new Map<number, number>()
     }
 
-    public getNext(index: number): Unit {
+    public getNextDistance(index: number): Unit {
         console.log("getNext, index=", index);
         assert(index >= 0, "index < 0");
 

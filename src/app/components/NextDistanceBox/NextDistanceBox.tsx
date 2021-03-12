@@ -2,37 +2,32 @@ import React from "react";
 import './NextDistanceBox.scss';
 import {assert} from "chai";
 import {Unit} from "mathjs";
-import {AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "../../model/AverageStrokesData";
-import {ITestConfiguration} from "../../model/DistancesGenerator";
+import {ITestConfiguration} from "../../model/TestConfiguration";
 
 export interface INextDistanceBoxProps {
     nextDistance: Unit;
-    selectedDistancesGenerator: ITestConfiguration;
-    averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>;
+    selectedTestConfiguration: ITestConfiguration;
 }
 
 export const NextDistanceBox: React.FC<INextDistanceBoxProps> = (props: INextDistanceBoxProps): JSX.Element => {
     assert(!!props, "!props");
-    assert(!!props.selectedDistancesGenerator, "!props.selectedDistancesGenerator");
+    assert(!!props.selectedTestConfiguration, "!props.selectedDistancesGenerator");
 
     const nextDistanceInDistancesGeneratorUnit: number =
         !!props.nextDistance
-            ? props.nextDistance.toNumber(props.selectedDistancesGenerator.unit)
+            ? props.nextDistance.toNumber(props.selectedTestConfiguration.unit)
             : undefined;
 
-    const averageStrokesFromNextDistance: number =
-        props.averageStrokesDataMap.get(props.selectedDistancesGenerator.averageShotsStartGroundTypeEnum)?.computeAverageStrokesToHole(
-            props.nextDistance,
-        );
+    const averageStrokesFromStartDistance: number = props.selectedTestConfiguration.computeAverageStrokesFromStartDistance(props.nextDistance);
 
     return (
         <div className="next-distance box">
             <p className="next-distance-number">{!!nextDistanceInDistancesGeneratorUnit ? nextDistanceInDistancesGeneratorUnit :
                 <span>&nbsp;</span>}</p>
-            <p className="next-distance-unit"> {!!nextDistanceInDistancesGeneratorUnit ? props.selectedDistancesGenerator.unit : "DONE"}</p>
-            <p className="next-distance-average-strokes">{!!averageStrokesFromNextDistance ? averageStrokesFromNextDistance.toFixed(3) :
+            <p className="next-distance-unit"> {!!nextDistanceInDistancesGeneratorUnit ? props.selectedTestConfiguration.unit : "DONE"}</p>
+            <p className="next-distance-average-strokes">{!!averageStrokesFromStartDistance ? averageStrokesFromStartDistance.toFixed(3) :
                 <span>&nbsp;</span>}</p>
-            <p className="next-distance-average-strokes-label">{!!averageStrokesFromNextDistance ? "Strokes" :
+            <p className="next-distance-average-strokes-label">{!!averageStrokesFromStartDistance ? "Strokes" :
                 <span>&nbsp;</span>}</p>
         </div>);
 }

@@ -3,9 +3,8 @@ import React from "react";
 import './LastShotData.scss';
 import * as math from "mathjs";
 import {Unit} from "mathjs";
-import {AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "../../model/AverageStrokesData";
 import {assert} from "chai";
-import {ITestConfiguration} from "../../model/DistancesGenerator";
+import {ITestConfiguration} from "../../model/TestConfiguration";
 
 const SHOW_ADDITIONAL_DATA_FOR_ALL_SHOTS: boolean = false;
 
@@ -15,20 +14,20 @@ const additionalDataForAllShots = (props: ILastShotData) => {
     const absoluteDeviationSum: Unit = props.shotDatas
         .map((shotData: IShotData) => computeAbsoluteDeviation(shotData))
         .reduce((accumulator: Unit, currentValue: Unit) => math.add(accumulator, currentValue) as Unit,
-            math.unit(0, props.selectedDistancesGenerator.unit));
+            math.unit(0, props.selectedTestConfiguration.unit));
 
     const relativeDeviationSum: number = props.shotDatas
         .map((shotData: IShotData) => computeRelativeDeviation(shotData))
         .reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0) * 100;
 
 
-    const distanceUnit: string = !!props.lastShot ? props.selectedDistancesGenerator.unit : "";
+    const distanceUnit: string = !!props.lastShot ? props.selectedTestConfiguration.unit : "";
 
     return (<div>
         <div className="last-shot__row last-shot__new_shots_data_section_start">
             <div className="last-shot-item__label">Sum Absolute Deviation</div>
             <div className="last-shot-item__data"> {
-                !!props.lastShot ? absoluteDeviationSum.toNumber(props.selectedDistancesGenerator.unit).toFixed(2) : ""
+                !!props.lastShot ? absoluteDeviationSum.toNumber(props.selectedTestConfiguration.unit).toFixed(2) : ""
             } </div>
             <div
                 className="last-shot-item__unit"> {distanceUnit} </div>
@@ -37,7 +36,7 @@ const additionalDataForAllShots = (props: ILastShotData) => {
         <div className="last-shot__row">
             <div className="last-shot-item__label">Average Absolute Deviation</div>
             <div className="last-shot-item__data"> {
-                !!props.lastShot ? (absoluteDeviationSum.toNumber(props.selectedDistancesGenerator.unit) / props.shotDatas.length).toFixed(2) : ""
+                !!props.lastShot ? (absoluteDeviationSum.toNumber(props.selectedTestConfiguration.unit) / props.shotDatas.length).toFixed(2) : ""
             } </div>
             <div
                 className="last-shot-item__unit"> {distanceUnit} </div>
@@ -61,39 +60,33 @@ const additionalDataForAllShots = (props: ILastShotData) => {
     </div>);
 }
 
-const shotsGainedData = (
-    props: ILastShotData,
-    targetDistance: string): JSX.Element[] => {
+const shotsGainedData = (props: ILastShotData, targetDistance: string): JSX.Element[] => {
     if (!props.lastShot) {
         return [];
     }
 
-
-    const averageStrokesFromTargetDistance: number =
-        props.averageStrokesDataMap.get(props.selectedDistancesGenerator.averageShotsStartGroundTypeEnum)?.computeAverageStrokesToHole(props.lastShot.targetDistance);
+    const averageStrokesFromStartDistance: number = props.selectedTestConfiguration.computeAverageStrokesFromStartDistance(props.lastShot.targetDistance);
 
     const absoluteDeviation: Unit = props.shotDatas.length > 0 ? computeAbsoluteDeviation(props.shotDatas[props.shotDatas.length - 1]) : undefined;
-    const averageStrokesFromAbsoluteDeviation: number =
-        props.averageStrokesDataMap.get(AverageStrokesDataGroundTypeEnum.Green)?.computeAverageStrokesToHole(absoluteDeviation);
+    const averageStrokesFromEndDistance: number = props.selectedTestConfiguration.computeAverageStrokesFromEndDistance(absoluteDeviation);
 
-    const strokesGained: number = !!averageStrokesFromTargetDistance && !!averageStrokesFromAbsoluteDeviation ?
-        (averageStrokesFromTargetDistance - averageStrokesFromAbsoluteDeviation - 1) : undefined;
+    const strokesGained: number = !!averageStrokesFromStartDistance && !!averageStrokesFromEndDistance ?
+        (averageStrokesFromStartDistance - averageStrokesFromEndDistance - 1) : undefined;
 
     const strokesGainedSum: number = props.shotDatas
         .map((shotData: IShotData) => {
-                const averageStrokesFromTargetDistance: number = props.averageStrokesDataMap.get(props.selectedDistancesGenerator.averageShotsStartGroundTypeEnum).computeAverageStrokesToHole(shotData.targetDistance);
+                const averageStrokesFromStartDistance: number = props.selectedTestConfiguration.computeAverageStrokesFromStartDistance(shotData.targetDistance);
                 const absoluteDeviation: Unit = computeAbsoluteDeviation(shotData);
-                const averageStrokesFromAbsoluteDeviation: number =
-                    props.averageStrokesDataMap.get(AverageStrokesDataGroundTypeEnum.Green).computeAverageStrokesToHole(absoluteDeviation);
-                const strokesGained: number = averageStrokesFromTargetDistance - averageStrokesFromAbsoluteDeviation - 1;
+                const averageStrokesFromEndDistance: number = props.selectedTestConfiguration.computeAverageStrokesFromEndDistance(absoluteDeviation);
+                const strokesGained: number = averageStrokesFromStartDistance - averageStrokesFromEndDistance - 1;
                 return strokesGained;
             }
         )
         .reduce((accumulator: number, currentValue: number) => accumulator + currentValue,
             0);
 
-    const absoluteDeviationString: string = !!absoluteDeviation ? absoluteDeviation.toNumber(props.selectedDistancesGenerator.unit).toFixed(2) : "";
-    const distanceUnit: string = !!props.lastShot ? props.selectedDistancesGenerator.unit : "";
+    const absoluteDeviationString: string = !!absoluteDeviation ? absoluteDeviation.toNumber(props.selectedTestConfiguration.unit).toFixed(2) : "";
+    const distanceUnit: string = !!props.lastShot ? props.selectedTestConfiguration.unit : "";
 
     return [
         <div
@@ -101,7 +94,7 @@ const shotsGainedData = (
             className="last-shot__row last-shot__new_shots_data_section_start">
             <div className="last-shot-item__label">Starting from {targetDistance} {distanceUnit}</div>
             <div className="last-shot-item__data"> {
-                !!averageStrokesFromTargetDistance ? averageStrokesFromTargetDistance.toFixed(3) : ""
+                !!averageStrokesFromStartDistance ? averageStrokesFromStartDistance.toFixed(3) : ""
             } </div>
             <div
                 className="last-shot-item__unit"> Strokes
@@ -112,7 +105,7 @@ const shotsGainedData = (
             className="last-shot__row">
             <div className="last-shot-item__label">Remaining from {absoluteDeviationString} {distanceUnit}</div>
             <div className="last-shot-item__data"> {
-                !!averageStrokesFromAbsoluteDeviation ? averageStrokesFromAbsoluteDeviation.toFixed(3) : ""
+                !!averageStrokesFromEndDistance ? averageStrokesFromEndDistance.toFixed(3) : ""
             } </div>
             <div className="last-shot-item__unit">Strokes</div>
         </div>,
@@ -144,23 +137,21 @@ const shotsGainedData = (
 export interface ILastShotData {
     lastShot: IShotData,
     shotDatas: IShotData[],
-    selectedDistancesGenerator: ITestConfiguration;
-    averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>;
+    selectedTestConfiguration: ITestConfiguration;
 }
 
 export const LastShotData: React.FC<ILastShotData> = (props: ILastShotData): JSX.Element => {
     assert(!!props, "!props");
     assert(!!props.shotDatas, "!props.shotDatas");
-    assert(!!props.selectedDistancesGenerator, "!props.selectedDistancesGenerator");
-    assert(!!props.averageStrokesDataMap, "!props.averageStrokesDataMap");
+    assert(!!props.selectedTestConfiguration, "!props.selectedDistancesGenerator");
 
     const absoluteDeviation: Unit | undefined = props.shotDatas.length > 0 ? computeAbsoluteDeviation(props.shotDatas[props.shotDatas.length - 1]) : undefined;
     const relativeDeviation: number | undefined = props.shotDatas.length > 0 ? computeRelativeDeviation(props.shotDatas[props.shotDatas.length - 1]) : undefined;
 
-    const targetDistanceString: string = !!props.lastShot ? props.lastShot.targetDistance.toNumber(props.selectedDistancesGenerator.unit).toFixed(2) : "";
-    const absoluteDeviationString: string = !!absoluteDeviation ? absoluteDeviation.toNumber(props.selectedDistancesGenerator.unit).toFixed(2) : "";
+    const targetDistanceString: string = !!props.lastShot ? props.lastShot.targetDistance.toNumber(props.selectedTestConfiguration.unit).toFixed(2) : "";
+    const absoluteDeviationString: string = !!absoluteDeviation ? absoluteDeviation.toNumber(props.selectedTestConfiguration.unit).toFixed(2) : "";
     const relativeDeviationString: string = !!relativeDeviation ? (relativeDeviation * 100).toFixed(1) : "";
-    const distanceUnit: string = !!props.lastShot ? props.selectedDistancesGenerator.unit : "";
+    const distanceUnit: string = !!props.lastShot ? props.selectedTestConfiguration.unit : "";
 
     return (
         <div className="last-shot-table">
@@ -175,21 +166,21 @@ export const LastShotData: React.FC<ILastShotData> = (props: ILastShotData): JSX
             <div className="last-shot__row">
                 <div className="last-shot-item__label">Carry</div>
                 <div
-                    className="last-shot-item__data"> {!!props.lastShot ? props.lastShot.carry.toNumber(props.selectedDistancesGenerator.unit).toFixed(2) : ""} </div>
+                    className="last-shot-item__data"> {!!props.lastShot ? props.lastShot.carry.toNumber(props.selectedTestConfiguration.unit).toFixed(2) : ""} </div>
                 <div
                     className="last-shot-item__unit"> {distanceUnit} </div>
             </div>
             <div className="last-shot__row">
                 <div className="last-shot-item__label">Total</div>
                 <div
-                    className="last-shot-item__data"> {!!props.lastShot ? props.lastShot.totalDistance.toNumber(props.selectedDistancesGenerator.unit).toFixed(2) : ""} </div>
+                    className="last-shot-item__data"> {!!props.lastShot ? props.lastShot.totalDistance.toNumber(props.selectedTestConfiguration.unit).toFixed(2) : ""} </div>
                 <div
                     className="last-shot-item__unit"> {distanceUnit} </div>
             </div>
             <div className="last-shot__row">
                 <div className="last-shot-item__label">Offline</div>
                 <div
-                    className="last-shot-item__data"> {!!props.lastShot ? props.lastShot.offline.toNumber(props.selectedDistancesGenerator.unit).toFixed(2) : ""} </div>
+                    className="last-shot-item__data"> {!!props.lastShot ? props.lastShot.offline.toNumber(props.selectedTestConfiguration.unit).toFixed(2) : ""} </div>
                 <div
                     className="last-shot-item__unit"> {distanceUnit} </div>
             </div>
