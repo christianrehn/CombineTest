@@ -1,8 +1,8 @@
 {
-    "name": "approachshot",
-    "productName": "Approach Shot",
+    "name": "strokesgainedtest",
+    "productName": "Strokes Gained Test",
     "version": "0.2.2",
-    "description": "Practice approach shots with FSX2020 and GCQuad",
+    "description": "Practice tee and approach shots with FSX2020 and GCQuad",
     "main": ".webpack/main",
     "scripts": {
         "start": "electron-forge start",
@@ -14,7 +14,7 @@
     },
     "keywords": [],
     "author": {
-        "name": "CR7",
+        "name": "Christian Rehn",
         "email": "rehn@itestra.de"
     },
     "license": "MIT",
