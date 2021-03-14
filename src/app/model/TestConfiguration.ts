@@ -3,8 +3,6 @@ import * as math from "mathjs";
 import {Unit} from "mathjs";
 import {AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "./AverageStrokesData";
 
-export const BGV_DISTANCES: number[] = [6, 14, 22, 30, 38, 46, 54, 62, 70];
-
 /**
  * Create random integer between [min, max[.
  */
@@ -28,7 +26,7 @@ export interface ITestConfiguration {
 
     computeAverageStrokesFromStartDistance(startDistance: Unit): number;
 
-    computeAverageStrokesFromEndDistance(endDistance: Unit): number;
+    computeAverageStrokesFromEndDistance(endDistance: Unit): number | undefined;
 }
 
 abstract class AbstractTestConfiguration {
@@ -66,15 +64,77 @@ abstract class AbstractTestConfiguration {
         return this._averageStrokesDataMap?.get(this._averageShotsStartGroundTypeEnum)?.computeAverageStrokesToHole(startDistance);
     }
 
-    public computeAverageStrokesFromEndDistance = (endDistance: Unit): number => {
-        // CRTODO: use endGroundTypes
+    public computeAverageStrokesFromEndDistance = (endDistance: Unit): number | undefined => {
+        if (!this._averageStrokesDataMap) {
+            return 0;
+        }
+        const averageStrokesData: IAverageStrokesData | undefined = this._averageStrokesDataMap?.get(this._averageShotsStartGroundTypeEnum);
+        if (!averageStrokesData) {
+            return 0;
+        }
+        const unit: string = averageStrokesData.unit;
+        const endDistanceInUnit: number = endDistance.toNumber(unit);
+        console.log("endDistanceInUnit", endDistanceInUnit)
+
+        const greenIncluded: boolean = !!this._endGroundTypes.map((endGroundType: IEndGroundType) => endGroundType.type).find(type => type === AverageStrokesDataGroundTypeEnum.Green);
+        console.log("greenIncluded", greenIncluded);
+        if (greenIncluded) {
+            let matchingEndGroundType: IEndGroundType = undefined;
+            for (let i: number = 0; i < this._endGroundTypes.length; i++) {
+                const endGroundType: IEndGroundType = this._endGroundTypes[i];
+                console.log("endGroundType.to", endGroundType.to);
+
+                const possibleEndGroundType: IEndGroundType =
+                    !!endGroundType.to
+                        ? endGroundType.to >= endDistanceInUnit
+                        ? endGroundType // valid
+                        : undefined // invalid
+                        : endGroundType; // valid to infinity
+                if (!matchingEndGroundType) {
+                    console.log("set matchingEndGroundType to ", possibleEndGroundType);
+                    matchingEndGroundType = possibleEndGroundType;
+                } else if (!possibleEndGroundType) {
+                    // endGroundType cannot be used for endDistanceInUnit
+                    console.log("possibleEndGroundType cannot be used", possibleEndGroundType);
+                } else {
+                    // check if we have a better match
+                    if (!matchingEndGroundType.to && !possibleEndGroundType.to) {
+                        // both have no to -> impossible, configuration is wrong
+                        throw new Error("wrong test configuration: more than one endGroundType without to");
+                    } else if (!matchingEndGroundType.to && !!possibleEndGroundType.to) {
+                        // we have a better match
+                        console.log("better match", possibleEndGroundType)
+                        matchingEndGroundType = possibleEndGroundType;
+                    } else if (!!matchingEndGroundType.to && !possibleEndGroundType.to) {
+                        // keep current best match
+                        console.log("keep best match", matchingEndGroundType, "and ignore", possibleEndGroundType)
+                    } else {
+                        // use the better match
+                        matchingEndGroundType =
+                            matchingEndGroundType.to < possibleEndGroundType.to
+                                ? matchingEndGroundType : possibleEndGroundType;
+                        console.log("use better match", matchingEndGroundType)
+                    }
+
+                }
+            }
+            if (!matchingEndGroundType) {
+                throw new Error(`wrong test configuration: no endGroundType found for distance ${endDistanceInUnit} ${unit}`);
+            }
+            console.log("final matchingEndGroundType.type", matchingEndGroundType.type)
+            if (matchingEndGroundType.type === AverageStrokesDataGroundTypeEnum.OutOfBounds) {
+                return undefined;
+            }
+            return this._averageStrokesDataMap.get(matchingEndGroundType.type)?.computeAverageStrokesToHole(endDistance);
+        }
+
+        // CRTODO: !greenIncluded
         return this._averageStrokesDataMap?.get(AverageStrokesDataGroundTypeEnum.Green)?.computeAverageStrokesToHole(endDistance);
     }
 }
 
 export interface IEndGroundType {
-    type: "Green" | "Fairway" | "Rough" | "OutOfBounds",
-    from?: number,
+    type: AverageStrokesDataGroundTypeEnum.Green | AverageStrokesDataGroundTypeEnum.Fairway | AverageStrokesDataGroundTypeEnum.Rough | AverageStrokesDataGroundTypeEnum.OutOfBounds,
     to?: number
 }
 

@@ -14,6 +14,7 @@ export enum AverageStrokesDataGroundTypeEnum {
     Fairway = 'Fairway',
     Rough = 'Rough',
     Green = 'Green',
+    OutOfBounds = 'OutOfBounds',
 }
 
 export class AverageStrokesData implements IAverageStrokesData {

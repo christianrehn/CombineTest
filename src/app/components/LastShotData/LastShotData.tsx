@@ -60,30 +60,32 @@ const additionalDataForAllShots = (props: ILastShotData) => {
     </div>);
 }
 
+function computeStrokesGained(averageStrokesFromStartDistance: number, averageStrokesFromEndDistance: number) {
+    return !!averageStrokesFromStartDistance && !!averageStrokesFromEndDistance
+        ? (averageStrokesFromStartDistance - averageStrokesFromEndDistance - 1)
+        : !!averageStrokesFromStartDistance && !averageStrokesFromEndDistance // out of bounds
+            ? averageStrokesFromStartDistance + 1
+            : undefined;
+}
+
 const shotsGainedData = (props: ILastShotData, targetDistance: string): JSX.Element[] => {
     if (!props.lastShot) {
         return [];
     }
 
     const averageStrokesFromStartDistance: number = props.selectedTestConfiguration.computeAverageStrokesFromStartDistance(props.lastShot.targetDistance);
-
     const absoluteDeviation: Unit = props.shotDatas.length > 0 ? computeAbsoluteDeviation(props.shotDatas[props.shotDatas.length - 1]) : undefined;
-    const averageStrokesFromEndDistance: number = props.selectedTestConfiguration.computeAverageStrokesFromEndDistance(absoluteDeviation);
-
-    const strokesGained: number = !!averageStrokesFromStartDistance && !!averageStrokesFromEndDistance ?
-        (averageStrokesFromStartDistance - averageStrokesFromEndDistance - 1) : undefined;
+    const averageStrokesFromEndDistance: number | undefined = props.selectedTestConfiguration.computeAverageStrokesFromEndDistance(absoluteDeviation);
+    const strokesGained: number = computeStrokesGained(averageStrokesFromStartDistance, averageStrokesFromEndDistance);
 
     const strokesGainedSum: number = props.shotDatas
         .map((shotData: IShotData) => {
-                const averageStrokesFromStartDistance: number = props.selectedTestConfiguration.computeAverageStrokesFromStartDistance(shotData.targetDistance);
-                const absoluteDeviation: Unit = computeAbsoluteDeviation(shotData);
-                const averageStrokesFromEndDistance: number = props.selectedTestConfiguration.computeAverageStrokesFromEndDistance(absoluteDeviation);
-                const strokesGained: number = averageStrokesFromStartDistance - averageStrokesFromEndDistance - 1;
-                return strokesGained;
-            }
-        )
-        .reduce((accumulator: number, currentValue: number) => accumulator + currentValue,
-            0);
+            const averageStrokesFromStartDistance: number = props.selectedTestConfiguration.computeAverageStrokesFromStartDistance(shotData.targetDistance);
+            const absoluteDeviation: Unit = computeAbsoluteDeviation(shotData);
+            const averageStrokesFromEndDistance: number = props.selectedTestConfiguration.computeAverageStrokesFromEndDistance(absoluteDeviation);
+            return computeStrokesGained(averageStrokesFromStartDistance, averageStrokesFromEndDistance);
+        })
+        .reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0);
 
     const absoluteDeviationString: string = !!absoluteDeviation ? absoluteDeviation.toNumber(props.selectedTestConfiguration.unit).toFixed(2) : "";
     const distanceUnit: string = !!props.lastShot ? props.selectedTestConfiguration.unit : "";

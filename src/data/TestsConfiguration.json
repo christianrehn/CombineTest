@@ -1,6 +1,6 @@
 [
     {
-        "description": "18 fairway shots to a green with 5 meter radius from fixed distances in random order: 6, 14, 22, 30, 38, 46, 54, 62, 70 meter",
+        "description": "18 fairway shots to a green with 5 meter radius from fixed BGV distances in random order: 6, 14, 22, 30, 38, 46, 54, 62, 70 meter",
         "unit": "meter",
         "distanceGenerator": {
             "type": "RandomFromFixedDistancesGenerator",
@@ -25,7 +25,14 @@
             },
             {
                 "type": "Fairway",
-                "from": 5
+                "to": 6
+            },
+            {
+                "type": "Rough",
+                "to": 7
+            },
+            {
+                "type": "OutOfBounds"
             }
         ]
     },
