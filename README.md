@@ -1,3 +1,5 @@
+<img src="https://github.com/christianrehn/GCQuadCombineTest/blob/master/screenshots/210421_GCQuadCombineTest.png" width="440">
+
 # GCQuad Combine Test
 The idea comes from the Trackman Combine test.
 The quality of your shots is rated using the shots gained approach.
