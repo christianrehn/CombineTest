@@ -11,8 +11,8 @@ This program has been built using Electron and React.
 You can define new Tests (distances, green size, yards or meter, ...) in file src/data/TestsConfiguration.json
 
 After cloning the repo you can:
-* start the program from source execute: yarn start
-* build a new executable version execute: yarn make
+* start the program from source: yarn start
+* build a new executable version (using both maker-squirrel and maker-wix): yarn make
 
 ## TODOs:
 * Shots gained rating for Driver
