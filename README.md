@@ -1,19 +1,19 @@
-TODO:
-* Read-Fehler abfangen -> erneut lesen nach kurzer Wartezeit
-  * Auswahl Total oder Carry
-* Übersicht anzeigen nach Abschluss aller Schüsse
-* Ranking mit den besten Werten -> Username eingeben
-* SVG Grafik mit x/y-Achse und letzten Schuss einzeichnen (ggf. auch die anderen -> mit Nummer)
-* Grid-Layout verwenden
-* Shots Gained verwenden -> Buch lesen
-* Settings Menü
+#GCQuad Combine Test
+The Idea comes from the Trackman Combine test.
+The quality of your shots is rated using the shots gained approach.
 
-Settings:
-* Directory to watch
-* Number of shots per session
-* Distance carry or total
-* Distances: between x and y/only the given values semicolon separated
-* Distances random/aufsteigend/absteigend
-* shots per distance (default 1)
-* Einheit: meter or yards
-* Sound when shot data is available: on/off
+All you need is QCQuad connected to FSX2020 and this programm installed on your computer.
+In FSX2020 the shot data must be exported to folder C:/Program Files (x86)/Foresight Sports Experience/System/LastShot.CSV
+The GCQuad Combine Test App reads the data from this file and displays some shot data togeter with the points you get from the shots gained rating.
+
+##Technical Details
+This program has been built using Electron and React.
+
+After cloning the repo you can:
+* start the program from source execute: yarn start
+* build a new executable version execute: yarn make
+
+##TODOs:
+* Select between Total and Carry (currently only carry is used)
+* Overview after last shot
+* Enter directory to watch for LastShot.CSV

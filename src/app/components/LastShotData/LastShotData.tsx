@@ -64,7 +64,7 @@ function computeStrokesGained(averageStrokesFromStartDistance: number, averageSt
     return !!averageStrokesFromStartDistance && !!averageStrokesFromEndDistance
         ? (averageStrokesFromStartDistance - averageStrokesFromEndDistance - 1)
         : !!averageStrokesFromStartDistance && !averageStrokesFromEndDistance // out of bounds
-            ? averageStrokesFromStartDistance + 1
+            ? -2
             : undefined;
 }
 
