@@ -1,5 +1,5 @@
 # GCQuad Combine Test
-The Idea comes from the Trackman Combine test.
+The idea comes from the Trackman Combine test.
 The quality of your shots is rated using the shots gained approach.
 
 All you need is QCQuad connected to FSX2020 and this programm installed on your computer.
