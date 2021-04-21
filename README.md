@@ -14,6 +14,7 @@ After cloning the repo you can:
 * build a new executable version execute: yarn make
 
 ##TODOs:
+* Shots gained rating for Driver
 * Select between Total and Carry (currently only carry is used)
 * Overview after last shot
 * Enter directory to watch for LastShot.CSV
