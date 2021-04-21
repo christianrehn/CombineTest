@@ -1,4 +1,4 @@
-<img src="https://github.com/christianrehn/GCQuadCombineTest/blob/master/screenshots/210421_GCQuadCombineTest.png" width="800">
+<img src="https://github.com/christianrehn/GCQuadCombineTest/blob/master/screenshots/210421_GCQuadCombineTest.png" width="1024">
 
 # GCQuad Combine Test
 The idea comes from the Trackman Combine test.
