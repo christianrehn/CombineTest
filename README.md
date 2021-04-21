@@ -5,7 +5,7 @@ The idea comes from the Trackman Combine test.
 The quality of your shots is rated using the shots gained approach.
 
 All you need is QCQuad connected to FSX2020 and the "GCQuad Combine Test" program installed on your computer.
-In FSX2020 you have to start the Driving Range. Every last shot data is automatically exported to folder C:/Program Files (x86)/Foresight Sports Experience/System/LastShot.CSV
+In FSX2020 you have to start the Practice Range. Every last shot data is automatically exported to folder C:/Program Files (x86)/Foresight Sports Experience/System/LastShot.CSV
 The "GCQuad Combine Test" program reads this file and displays some shot data togeter with the points you get from the shots gained rating.
 
 ## Technical Details
