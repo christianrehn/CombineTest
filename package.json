@@ -2,7 +2,7 @@
     "name": "GCQuadCombineTest",
     "productName": "GCQuad Combined Test",
     "version": "0.5.0",
-    "description": "Practice tee and approach shots with FSX2020 and GCQuad",
+    "description": "Practice tee and approach shots with GCQuad and FSX2020 similar to the Trackman Combine Test",
     "main": ".webpack/main",
     "scripts": {
         "start": "electron-forge start",
