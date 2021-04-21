@@ -8,6 +8,7 @@ The GCQuad Combine Test App reads the data from this file and displays some shot
 
 ##Technical Details
 This program has been built using Electron and React.
+You can define new Tests (distances, green size, yards or meter, ...) in file src/data/TestsConfiguration.json
 
 After cloning the repo you can:
 * start the program from source execute: yarn start
