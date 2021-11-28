@@ -14,7 +14,7 @@ You can define new Tests (distances, green size, yards or meter, ...) in file sr
 
 After cloning the repo you can:
 * start the program from source: yarn start
-* build a new executable version (using both maker-squirrel and maker-wix): yarn make
+* build a new executable version (using both maker-squirrel (my preferred installer) and maker-wix on a MS Windows system): yarn install && yarn make
 
 ## Ideas for the next version:
 * Shots gained rating for tee shots with the driver
