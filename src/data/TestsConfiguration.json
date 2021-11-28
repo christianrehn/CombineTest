@@ -1,5 +1,34 @@
 [
     {
+        "description": "6 fairway shots to a green with 5 meter radius from Emma's 2022 distance of 50 meters",
+        "unit": "meter",
+        "distanceGenerator": {
+            "type": "RandomFromFixedDistancesGenerator",
+            "distances": [
+                50
+            ],
+            "numberOfRounds": 6
+        },
+        "startGroundType": "Fairway",
+        "endGroundTypes": [
+            {
+                "type": "Green",
+                "to": 5
+            },
+            {
+                "type": "Fairway",
+                "to": 6
+            },
+            {
+                "type": "Rough",
+                "to": 7
+            },
+            {
+                "type": "OutOfBounds"
+            }
+        ]
+    },
+    {
         "description": "18 fairway shots to a green with 5 meter radius from fixed BGV distances in random order: 6, 14, 22, 30, 38, 46, 54, 62, 70 meter",
         "unit": "meter",
         "distanceGenerator": {
