@@ -1,5 +1,5 @@
 import React from "react";
-import './TestConfigurationSelect.scss';
+import './DistancesGeneratorSelect.scss';
 import {ITestConfiguration} from "../../model/TestConfiguration";
 
 export interface ITestConfigurationSelectProps {
@@ -8,12 +8,13 @@ export interface ITestConfigurationSelectProps {
     handleTestConfigurationChanged: (selectedDistancesGenerator: ITestConfiguration) => void
 }
 
-export const TestConfigurationSelect: React.FC<ITestConfigurationSelectProps> = (props: ITestConfigurationSelectProps): JSX.Element => {
+export const DistancesGeneratorSelect: React.FC<ITestConfigurationSelectProps> = (props: ITestConfigurationSelectProps): JSX.Element => {
     return (
         <div className="test-configuration-select-container">
             <label
                 className="test-configuration-select-label"
-                htmlFor="test-configuration-select">Select Distances</label>
+                htmlFor="test-configuration-select">Select Distances
+            </label>
             <select
                 id="test-configuration-select"
                 className="test-configuration-select select-css"

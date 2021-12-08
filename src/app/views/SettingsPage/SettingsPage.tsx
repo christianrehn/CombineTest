@@ -2,7 +2,7 @@ import React from 'react';
 import './SettingsPage.scss';
 import mainIcon from "../../../assets/main.png";
 import {ITestConfiguration} from "../../model/TestConfiguration";
-import {TestConfigurationSelect} from "../../components/DistancesGeneratorSelect/TestConfigurationSelect";
+import {DistancesGeneratorSelect} from "../../components/DistancesGeneratorSelect/DistancesGeneratorSelect";
 
 interface ISettingsPageProps {
     distancesGenerators: ITestConfiguration[];
@@ -20,12 +20,24 @@ export const SettingsPage: React.FC<ISettingsPageProps> = (props: ISettingsPageP
                     <h3>Settings</h3>
                 </div>
                 <div className="DistancesGeneratorSelect">
-                    <TestConfigurationSelect
+                    <DistancesGeneratorSelect
                         testConfigurations={props.distancesGenerators}
                         selectedTestConfiguration={props.selectedDistancesGenerator}
                         handleTestConfigurationChanged={props.handleDistancesGeneratorChanged}
                     />
                 </div>
+                {/*<div>*/}
+                {/*    <label*/}
+                {/*        className="test-configuration-name-input-label"*/}
+                {/*        htmlFor="test-configuration-input">Name*/}
+                {/*    </label>*/}
+                {/*</div>*/}
+                {/*<div>*/}
+                {/*    <input id="test-configuration-name-input"*/}
+                {/*           value={props.selectedDistancesGenerator.description}*/}
+                {/*    >*/}
+                {/*    </input>*/}
+                {/*</div>*/}
             </div>
 
             <div className="page-change-flex-item flex-item">
