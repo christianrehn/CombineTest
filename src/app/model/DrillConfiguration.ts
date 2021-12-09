@@ -16,9 +16,14 @@ const createRandomNumber = (minIncluded: number, maxExcluded: number): number =>
     return Math.floor(Math.random() * Math.floor(maxExcluded - minIncluded)) + minIncluded;
 }
 
-export interface ITestConfiguration {
+/**
+ * A DrillConfiguration describes all the parameters of a Drill,
+ * for example its name, description, number of shots, the distance generator, ...
+ */
+export interface IDrillConfiguration {
     getNextDistance: (index: number) => Unit;
     reset: () => void;
+    name: string;
     description: string;
     numberOfShots: number;
     unit: string;
@@ -29,7 +34,11 @@ export interface ITestConfiguration {
     computeAverageStrokesFromEndDistance(endDistance: Unit): number | undefined;
 }
 
-abstract class AbstractTestConfiguration {
+/**
+ * Base class for DrillConfigurations below
+ */
+abstract class AbstractDrillConfiguration {
+    protected readonly _name: string;
     protected readonly _description: string;
     protected readonly _averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
     protected readonly _endGroundTypes: IEndGroundType[];
@@ -42,18 +51,24 @@ abstract class AbstractTestConfiguration {
     }
 
     constructor(
+        name: string,
         description: string,
         startGroundType: string,
         endGroundTypes: IEndGroundType[],
         averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>
     ) {
+        this._name = name;
         this._description = description;
         this._averageShotsStartGroundTypeEnum =
             AverageStrokesDataGroundTypeEnum[
-                AbstractTestConfiguration.getEnumKeyByEnumValue(AverageStrokesDataGroundTypeEnum, startGroundType)
+                AbstractDrillConfiguration.getEnumKeyByEnumValue(AverageStrokesDataGroundTypeEnum, startGroundType)
                 ];
         this._endGroundTypes = endGroundTypes;
         this._averageStrokesDataMap = averageStrokesDataMap;
+    }
+
+    get name(): string {
+        return this._name;
     }
 
     get description(): string {
@@ -138,13 +153,14 @@ export interface IEndGroundType {
     to?: number
 }
 
-export class TestConfigurationWithRandomDistancesGenerator extends AbstractTestConfiguration implements ITestConfiguration {
+export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDrillConfiguration implements IDrillConfiguration {
     private readonly _minIncludedDistance: number;
     private readonly _maxExcludedDistance: number;
     private readonly _unit: string;
     private readonly _numberOfShots: number;
 
     constructor(
+        name: string,
         description: string,
         minIncludedDistance: number,
         maxExcludedDistance: number,
@@ -154,7 +170,7 @@ export class TestConfigurationWithRandomDistancesGenerator extends AbstractTestC
         endGroundTypes: any[],
         averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>
     ) {
-        super(description, startGroundType, endGroundTypes, averageStrokesDataMap);
+        super(name, description, startGroundType, endGroundTypes, averageStrokesDataMap);
 
         this._minIncludedDistance = minIncludedDistance;
         this._maxExcludedDistance = maxExcludedDistance;
@@ -185,12 +201,13 @@ export class TestConfigurationWithRandomDistancesGenerator extends AbstractTestC
     }
 }
 
-export class TestConfigurationWithFixedDistancesGenerator extends AbstractTestConfiguration implements ITestConfiguration {
+export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrillConfiguration implements IDrillConfiguration {
     protected readonly _distances: number[];
     protected readonly _unit: string;
     protected readonly _numberOfRounds: number;
 
     constructor(
+        name: string,
         description: string,
         distances: number[],
         unit: string,
@@ -199,7 +216,7 @@ export class TestConfigurationWithFixedDistancesGenerator extends AbstractTestCo
         endGroundTypes: any[],
         averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>
     ) {
-        super(description, startGroundType, endGroundTypes, averageStrokesDataMap);
+        super(name, description, startGroundType, endGroundTypes, averageStrokesDataMap);
 
         this._distances = distances;
         this._unit = unit;
@@ -229,11 +246,12 @@ export class TestConfigurationWithFixedDistancesGenerator extends AbstractTestCo
     }
 }
 
-export class TestConfigurationWithRandomFromFixedDistancesGenerator extends TestConfigurationWithFixedDistancesGenerator implements ITestConfiguration {
+export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends DrillConfigurationWithFixedDistancesGenerator implements IDrillConfiguration {
     private distancesNotYetReturned: number[];
     private distancesReturnedMap: Map<number, number> = new Map<number, number>();
 
     constructor(
+        name: string,
         description: string,
         distances: number[],
         unit: string,
@@ -242,7 +260,7 @@ export class TestConfigurationWithRandomFromFixedDistancesGenerator extends Test
         endGroundTypes: any[],
         averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>
     ) {
-        super(description, distances, unit, numberOfRounds, startGroundType, endGroundTypes, averageStrokesDataMap);
+        super(name, description, distances, unit, numberOfRounds, startGroundType, endGroundTypes, averageStrokesDataMap);
         this.distancesNotYetReturned = [...distances];
     }
 

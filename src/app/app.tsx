@@ -1,33 +1,36 @@
 import {hot} from 'react-hot-loader';
 import * as React from 'react';
 import './App.scss';
-import {SettingsPage} from "./views/SettingsPage/SettingsPage";
-import {MainPage} from "./views/MainPage/MainPage";
+import {SettingsPage, SettingsPageName} from "./views/SettingsPage/SettingsPage";
+import {DrillPage, DrillPageName} from "./views/DrillPage/DrillPage";
 import {
-    ITestConfiguration,
-    TestConfigurationWithFixedDistancesGenerator,
-    TestConfigurationWithRandomDistancesGenerator,
-    TestConfigurationWithRandomFromFixedDistancesGenerator
-} from "./model/TestConfiguration";
+    DrillConfigurationWithFixedDistancesGenerator,
+    IDrillConfiguration,
+    DrillConfigurationWithRandomDistancesGenerator,
+    DrillConfigurationWithRandomFromFixedDistancesGenerator
+} from "./model/DrillConfiguration";
 import {parseCsvToArrayOfColumnArrays} from "./util/CsvParser";
 import * as path from "path";
 import {ipcRenderer} from "electron";
-import testsConfigurations from "../data/TestsConfiguration.json";
+import drillConfigurationsFromJson from "../data/DrillConfigurations.json";
 import averageShotsFromTeeCsvPath from "../data/tee.csv";
 import averageShotsFromFairwayCsvPath from "../data/fairway.csv";
 import averageShotsFromRoughCsvPath from "../data/rough.csv";
 import averageShotsFromGreenCsvPath from "../data/green.csv";
 import {AverageStrokesData, AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "./model/AverageStrokesData";
+import {SelectDrillPage, SelectDrillPageName} from "./views/SelectDrillPage/SelectDrillPage";
 
 const App: React.FC<{}> = (): JSX.Element => {
-    const [showSettings, setShowSettings] = React.useState<boolean>(false);
+    // page that is currently visible
+    const [selectedPage, setSelectedPage] = React.useState<string>(SelectDrillPageName);
 
     const lastShotCsvPath: string = process.platform !== 'darwin'
         ? "C:/Program Files (x86)/Foresight Sports Experience/System/LastShot.CSV"
         : "/Users/rehn/WebstormProjects/ApproachShot/test/data/LastShot.CSV";
 
-    const [distancesGenerators, setDistancesGenerators] = React.useState<ITestConfiguration[]>([]);
-    const [selectedDistancesGenerator, setSelectedDistancesGenerator] = React.useState<ITestConfiguration>();
+    const [drillConfigurations, setDrillConfigurations] = React.useState<IDrillConfiguration[]>([]);
+    const [selectedDrillConfiguration, setSelectedDrillConfiguration] = React.useState<IDrillConfiguration>();
+    console.log("selectedDistancesGenerator", selectedDrillConfiguration);
 
     const [averageStrokesDataMap, setAverageStrokesDataMap] =
         React.useState<Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>>(new Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>());
@@ -48,73 +51,81 @@ const App: React.FC<{}> = (): JSX.Element => {
     }, [])
 
     React.useEffect((): void => {
-        const distancesGenerators: ITestConfiguration[] =
-            testsConfigurations
-                .map((testsConfiguration): ITestConfiguration => {
-                    switch (testsConfiguration.distanceGenerator.type) {
+        const drillConfigurationsWithDistanceGenerators: IDrillConfiguration[] =
+            drillConfigurationsFromJson
+                .map((drillConfiguration): IDrillConfiguration => {
+                    switch (drillConfiguration.distanceGenerator.type) {
                         case "RandomDistancesGenerator":
-                            return new TestConfigurationWithRandomDistancesGenerator(
-                                testsConfiguration.description,
-                                testsConfiguration.distanceGenerator.minIncludedDistance,
-                                testsConfiguration.distanceGenerator.maxExcludedDistance,
-                                testsConfiguration.unit,
-                                testsConfiguration.distanceGenerator.numberOfShots,
-                                testsConfiguration.startGroundType,
-                                testsConfiguration.endGroundTypes,
+                            return new DrillConfigurationWithRandomDistancesGenerator(
+                                drillConfiguration.name,
+                                drillConfiguration.description,
+                                drillConfiguration.distanceGenerator.minIncludedDistance,
+                                drillConfiguration.distanceGenerator.maxExcludedDistance,
+                                drillConfiguration.unit,
+                                drillConfiguration.distanceGenerator.numberOfShots,
+                                drillConfiguration.startGroundType,
+                                drillConfiguration.endGroundTypes,
                                 averageStrokesDataMap);
                         case "FixedDistancesGenerator":
-                            return new TestConfigurationWithFixedDistancesGenerator(
-                                testsConfiguration.description,
-                                testsConfiguration.distanceGenerator.distances,
-                                testsConfiguration.unit,
-                                testsConfiguration.distanceGenerator.numberOfRounds,
-                                testsConfiguration.startGroundType,
-                                testsConfiguration.endGroundTypes,
+                            return new DrillConfigurationWithFixedDistancesGenerator(
+                                drillConfiguration.name,
+                                drillConfiguration.description,
+                                drillConfiguration.distanceGenerator.distances,
+                                drillConfiguration.unit,
+                                drillConfiguration.distanceGenerator.numberOfRounds,
+                                drillConfiguration.startGroundType,
+                                drillConfiguration.endGroundTypes,
                                 averageStrokesDataMap);
                         case "RandomFromFixedDistancesGenerator":
-                            return new TestConfigurationWithRandomFromFixedDistancesGenerator(
-                                testsConfiguration.description,
-                                testsConfiguration.distanceGenerator.distances,
-                                testsConfiguration.unit,
-                                testsConfiguration.distanceGenerator.numberOfRounds,
-                                testsConfiguration.startGroundType,
-                                testsConfiguration.endGroundTypes,
+                            return new DrillConfigurationWithRandomFromFixedDistancesGenerator(
+                                drillConfiguration.name,
+                                drillConfiguration.description,
+                                drillConfiguration.distanceGenerator.distances,
+                                drillConfiguration.unit,
+                                drillConfiguration.distanceGenerator.numberOfRounds,
+                                drillConfiguration.startGroundType,
+                                drillConfiguration.endGroundTypes,
                                 averageStrokesDataMap);
                     }
                 })
                 .filter(distancesGenerator => !!distancesGenerator);
-        setDistancesGenerators(distancesGenerators);
-        setSelectedDistancesGenerator(distancesGenerators[0]);
-    }, [testsConfigurations, averageStrokesDataMap]);
-
-
+        setDrillConfigurations(drillConfigurationsWithDistanceGenerators);
+        setSelectedDrillConfiguration(drillConfigurationsWithDistanceGenerators[0]);
+    }, [drillConfigurationsFromJson, averageStrokesDataMap]);
 
     return (
         <div className="app">
-            {showSettings
-                ? <SettingsPage
-                    distancesGenerators={distancesGenerators}
-                    handleDistancesGeneratorsChanged={(distancesGenerators: ITestConfiguration[]): void => {
-                        setDistancesGenerators(distancesGenerators);
-                    }
-                    }
-                    selectedDistancesGenerator={selectedDistancesGenerator}
-                    handleDistancesGeneratorChanged={(selectedDistancesGenerator: ITestConfiguration): void => {
-                        setSelectedDistancesGenerator(selectedDistancesGenerator)
+            {selectedPage === SelectDrillPageName
+                ? <SelectDrillPage
+                    distancesGenerators={drillConfigurations}
+                    handleDistancesGeneratorsChanged={(distancesGenerators: IDrillConfiguration[]): void => {
+                        setDrillConfigurations(distancesGenerators);
                     }}
-                    handleMainClicked={(): void => {
-                        setShowSettings(false);
+                    selectedDistancesGenerator={selectedDrillConfiguration}
+                    handleSelectedDistancesGeneratorChanged={(selectedDistancesGenerator: IDrillConfiguration): void => {
+                        setSelectedDrillConfiguration(selectedDistancesGenerator)
                     }}
-
+                    handleSelectPageClicked={setSelectedPage}
                 />
-                : <MainPage
-                    lastShotCsvPath={lastShotCsvPath}
-                    selectedDistancesGenerator={selectedDistancesGenerator}
-                    handleSettingsClicked={(): void => {
-                        setShowSettings(true);
-                    }
-                    }
-                />
+                : selectedPage === SettingsPageName
+                    ? <SettingsPage
+                        distancesGenerators={drillConfigurations}
+                        handleDistancesGeneratorsChanged={(distancesGenerators: IDrillConfiguration[]): void => {
+                            setDrillConfigurations(distancesGenerators);
+                        }}
+                        selectedDistancesGenerator={selectedDrillConfiguration}
+                        handleSelectedDistancesGeneratorChanged={(selectedDistancesGenerator: IDrillConfiguration): void => {
+                            setSelectedDrillConfiguration(selectedDistancesGenerator)
+                        }}
+                        handleSelectPageClicked={setSelectedPage}
+                    />
+                    : selectedPage === DrillPageName
+                        ? <DrillPage
+                            lastShotCsvPath={lastShotCsvPath}
+                            selectedDistancesGenerator={selectedDrillConfiguration}
+                            handleSelectPageClicked={setSelectedPage}
+                        />
+                        : null
             }
         </div>
     );
