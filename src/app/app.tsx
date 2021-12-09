@@ -109,12 +109,12 @@ const App: React.FC<{}> = (): JSX.Element => {
                 />
                 : selectedPage === SettingsPageName
                     ? <SettingsPage
-                        distancesGenerators={drillConfigurations}
-                        handleDistancesGeneratorsChanged={(distancesGenerators: IDrillConfiguration[]): void => {
+                        drillConfigurations={drillConfigurations}
+                        handleDrillConfigurationsChanged={(distancesGenerators: IDrillConfiguration[]): void => {
                             setDrillConfigurations(distancesGenerators);
                         }}
-                        selectedDistancesGenerator={selectedDrillConfiguration}
-                        handleSelectedDistancesGeneratorChanged={(selectedDistancesGenerator: IDrillConfiguration): void => {
+                        selectedDrillConfiguration={selectedDrillConfiguration}
+                        handleSelectedDrillConfigurationChanged={(selectedDistancesGenerator: IDrillConfiguration): void => {
                             setSelectedDrillConfiguration(selectedDistancesGenerator)
                         }}
                         handleSelectPageClicked={setSelectedPage}
