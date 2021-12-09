@@ -3,8 +3,8 @@ import './SettingsPage.scss';
 import shotsIcon from "../../../assets/golfer.png";
 import {IDrillConfiguration} from "../../model/DrillConfiguration";
 import {
-    DistancesGeneratorSelect
-} from "../../components/DrillConfiguration/DistancesGeneratorSelect/DistancesGeneratorSelect";
+    DrillConfigurationSelect
+} from "../../components/DrillConfiguration/DrillConfigurationSelect/DrillConfigurationSelect";
 import {NumberOfShotsInput} from "../../components/DrillConfiguration/NumberOfShotsInput/NumberOfShotsInput";
 import {DescriptionInput} from "../../components/DrillConfiguration/DescriptionInput/DescriptionInput";
 
@@ -28,7 +28,7 @@ export const SettingsPage: React.FC<ISettingsPageProps> = (props: ISettingsPageP
                     <h3>Settings</h3>
                 </div>
                 <div className="DistancesGeneratorSelect">
-                    <DistancesGeneratorSelect
+                    <DrillConfigurationSelect
                         drillConfigurations={props.drillConfigurations}
                         selectedDrillConfiguration={drillConfiguration}
                         handleSelectedDrillConfigurationChanged={props.handleSelectedDrillConfigurationChanged}
