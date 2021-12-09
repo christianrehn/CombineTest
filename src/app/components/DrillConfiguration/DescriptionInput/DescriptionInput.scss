@@ -1,0 +1,27 @@
+.description-input-container {
+    display: inline-block;
+    padding-right: 15px;
+    padding-top: 10px;
+    width: 100%;
+}
+
+.input-css {
+    margin: .5em 0;
+}
+
+.description-input-container .description-input-box {
+    width: 100%;
+}
+
+.description-input-container .description-input {
+    border: none;
+    border: none;
+    padding: 8px;
+    text-align: left;
+    font-size: 30px;
+    height: 35px;
+    width: 100%;
+    outline: none;
+    display: inline-block;
+    color: var(--background-dark);
+}
