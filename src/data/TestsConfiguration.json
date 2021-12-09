@@ -1,6 +1,7 @@
 [
     {
-        "description": "6 fairway shots to a green with 5 meter radius from Emma's 2022 distance of 50 meters",
+        "name": "50 meter carry",
+        "description": "6 fairway shots to a green with 5 meter radius from Emma's 2022 distance of 50 meter",
         "unit": "meter",
         "distanceGenerator": {
             "type": "RandomFromFixedDistancesGenerator",
@@ -29,6 +30,7 @@
         ]
     },
     {
+        "name": "6 - 7 meter",
         "description": "18 fairway shots to a green with 5 meter radius from fixed BGV distances in random order: 6, 14, 22, 30, 38, 46, 54, 62, 70 meter",
         "unit": "meter",
         "distanceGenerator": {
@@ -66,6 +68,7 @@
         ]
     },
     {
+        "name": "2 - 10 yards",
         "description": "2 fairway shots to a green with 10 yards radius from random distances between 2 and 10 yards",
         "unit": "yards",
         "distanceGenerator": {
@@ -86,6 +89,7 @@
         ]
     },
     {
+        "name": "tee shots 1",
         "description": "10 tee shots par 4, fairway width: 24 meter plus 9 meter rough on each side",
         "unit": "meter",
         "distanceGenerator": {
@@ -111,6 +115,7 @@
         ]
     },
     {
+        "name": "tee shots 2",
         "description": "10 tee shots par 4, fairway 26 yards 10 10 yards rough on each side",
         "unit": "yards",
         "distanceGenerator": {
