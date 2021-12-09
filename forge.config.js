@@ -68,7 +68,9 @@ module.exports = {
                             name: "main_window"
                         }
                     ]
-                }
+                },
+                "port": 3001,
+                "loggerPort": 9001
             }
         ]
     ]
