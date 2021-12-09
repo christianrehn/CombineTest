@@ -1,29 +1,32 @@
 import React from 'react';
 import Chokidar, {FSWatcher} from 'chokidar';
-import './MainPage.scss';
+import './DrillPage.scss';
 import {parseCsvToFirstRowAsObject} from "../../util/CsvParser";
-import {ITestConfiguration} from "../../model/TestConfiguration";
+import {IDrillConfiguration} from "../../model/DrillConfiguration";
 import {ShotsSvg} from "../../components/ShotsSvg/ShotsSvg";
 import {IShotData} from "../../model/ShotData";
 import {LastShotData} from "../../components/LastShotData/LastShotData";
 import {assert} from "chai";
 import {NextDistanceBox} from "../../components/NextDistanceBox/NextDistanceBox";
-import settingsIcon from '../../../assets/settings.png';
+import exitIcon from '../../../assets/exit.png';
 import {RestartButton} from "../../components/RestartButton/RestartButton";
 import * as math from 'mathjs'
 import {Unit} from 'mathjs'
+import {SelectDrillPageName} from "../SelectDrillPage/SelectDrillPage";
 
-interface IMainPageProps {
+export const DrillPageName: string = "DrillPage";
+
+interface IDrillPageProps {
     lastShotCsvPath: string;
-    selectedDistancesGenerator: ITestConfiguration;
-    handleSettingsClicked: () => void;
+    selectedDrillConfiguration: IDrillConfiguration;
+    handleSelectPageClicked: (page: string) => void;
 }
 
-export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.Element => {
+export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JSX.Element => {
     assert(!!props, "!props");
-    assert(!!props.handleSettingsClicked, "!props.handleSettingsClicked");
+    assert(!!props.handleSelectPageClicked, "!props.handleSettingsClicked");
 
-    if (!props.selectedDistancesGenerator) {
+    if (!props.selectedDrillConfiguration) {
         // configurartion has not yet been read
         return null;
     }
@@ -31,7 +34,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
     const [shotData, setShotData] = React.useState<IShotData | undefined>();
     const [shotDatas, setShotDatas] = React.useState<IShotData[]>([]);
 
-    const [nextDistance, setNextDistance] = React.useState<Unit>(props.selectedDistancesGenerator.getNextDistance(shotDatas.length));
+    const [nextDistance, setNextDistance] = React.useState<Unit>(props.selectedDrillConfiguration.getNextDistance(shotDatas.length));
     const nextDistanceRef: React.MutableRefObject<Unit> = React.useRef<Unit>(nextDistance);
 
     const lastShotFileChanged = async (): Promise<void> => {
@@ -93,7 +96,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
         if (!!shotData && (shotDatas.length === 0 || shotData.id !== shotDatas[shotDatas.length - 1].id)) {
             // new shot detected
 
-            if (shotDatas.length >= props.selectedDistancesGenerator.numberOfShots) {
+            if (shotDatas.length >= props.selectedDrillConfiguration.numberOfShots) {
                 // shot executed but number of shots was already reached -> ignore
                 console.log(`shot id=${shotData.id} executed but number of shots was already reached -> ignore`);
             } else {
@@ -103,8 +106,8 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                 setShotDatas(shotDatasClone);
 
                 // pick new distance for next shot
-                if (shotDatasClone.length < props.selectedDistancesGenerator.numberOfShots) {
-                    nextDistanceRef.current = props.selectedDistancesGenerator.getNextDistance(shotDatasClone.length);
+                if (shotDatasClone.length < props.selectedDrillConfiguration.numberOfShots) {
+                    nextDistanceRef.current = props.selectedDrillConfiguration.getNextDistance(shotDatasClone.length);
                 } else {
                     console.log("all shots executed");
                     nextDistanceRef.current = undefined;
@@ -115,9 +118,9 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
     }, [shotData]);
 
     const restart = (): void => {
-        props.selectedDistancesGenerator.reset();
+        props.selectedDrillConfiguration.reset();
         setShotDatas([]);
-        nextDistanceRef.current = (props.selectedDistancesGenerator).getNextDistance(0);
+        nextDistanceRef.current = (props.selectedDrillConfiguration).getNextDistance(0);
         setNextDistance(nextDistanceRef.current);
     }
 
@@ -127,7 +130,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
     console.log("shotDatas", shotDatas)
 
     return (
-        <div className="main-page page">
+        <div className="drill-page page">
             <div className="next-shot-flex-item flex-item">
                 <div className="page-header">
                     <h3>Carry</h3>
@@ -135,7 +138,7 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                 <div className="NextDistanceBox">
                     <NextDistanceBox
                         nextDistance={nextDistance}
-                        selectedTestConfiguration={props.selectedDistancesGenerator}
+                        selectedDrillConfiguration={props.selectedDrillConfiguration}
                     />
                 </div>
                 <div className="RestartButton">
@@ -146,13 +149,13 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
             </div>
             <div className="last-shot-flex-item flex-item">
                 <div className="page-header">
-                    <h3> Shot {shotDatas.length} / {props.selectedDistancesGenerator.numberOfShots} </h3>
+                    <h3> Shot {shotDatas.length} / {props.selectedDrillConfiguration.numberOfShots} </h3>
                 </div>
                 <div className="LastShotData">
                     <LastShotData
                         lastShot={lastShot}
                         shotDatas={shotDatas}
-                        selectedTestConfiguration={props.selectedDistancesGenerator}
+                        selectedDrillConfiguration={props.selectedDrillConfiguration}
                     />
                 </div>
             </div>
@@ -164,19 +167,19 @@ export const MainPage: React.FC<IMainPageProps> = (props: IMainPageProps): JSX.E
                     <ShotsSvg
                         svgNumberOfCircles={svgNumberOfCircles}
                         shotDatas={shotDatas}
-                        selectedDistancesGenerator={props.selectedDistancesGenerator}
+                        selectedDrillConfiguration={props.selectedDrillConfiguration}
                     />
                 </div>
             </div>
             <div className="page-change-flex-item flex-item">
-                            <span className="page-change-span"
-                                  onClick={(): void => {
-                                      console.log(props.handleSettingsClicked())
-                                  }}>
-                <img className="page-change-img"
-                     src={settingsIcon}
-                     alt="Settings"
-                />
+                <span className="page-change-span"
+                      onClick={(): void => {
+                          props.handleSelectPageClicked(SelectDrillPageName)
+                      }}>
+                    <img className="page-change-img"
+                         src={exitIcon}
+                         alt="Exit"
+                    />
             </span>
             </div>
         </div>

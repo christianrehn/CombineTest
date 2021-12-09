@@ -1,0 +1,54 @@
+.select-drill-page {
+    --page-drill-icon-width: 6ex;
+    display: flex;
+    flex-direction: column;
+}
+
+.select-drill-page .select-drill-top {
+    display: flex;
+    flex-direction: row;
+}
+
+.select-drill-page .drill-img {
+    background: var(--font-white);
+    width: var(--page-drill-icon-width);
+    height: var(--page-drill-icon-width);
+    flex: 1;
+    margin-left: 10px;
+    margin-right: var(--page-margin-horizontal);
+}
+
+.select-drill-page .select-drill-flex-item {
+    flex: 1;
+    margin-left: var(--page-margin-horizontal);
+    margin-right: var(--page-margin-horizontal);
+}
+
+.select-drill-page .page-change-flex-item {
+}
+
+.select-drill-page .drill-tiles-flex-item {
+    padding-top: 10px;
+    margin-left: var(--page-margin-horizontal);
+    margin-right: var(--page-margin-horizontal);
+    align-content: flex-start;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 50px 50px;
+    overflow-y: auto;
+}
+
+.select-drill-page .top-button-img-div {
+    background: var(--font-white);
+    width: var(--page-change-icon-width);
+    height: var(--page-change-icon-width);
+    margin-left: 15px;
+    margin-right: 15px;
+}
+.select-drill-page .top-button-img {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 6px;
+}

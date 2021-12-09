@@ -122,7 +122,7 @@ const App: React.FC<{}> = (): JSX.Element => {
                     : selectedPage === DrillPageName
                         ? <DrillPage
                             lastShotCsvPath={lastShotCsvPath}
-                            selectedDistancesGenerator={selectedDrillConfiguration}
+                            selectedDrillConfiguration={selectedDrillConfiguration}
                             handleSelectPageClicked={setSelectedPage}
                         />
                         : null

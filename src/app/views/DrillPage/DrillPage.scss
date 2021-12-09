@@ -1,19 +1,19 @@
-.main-page {
+.drill-page {
 }
 
 // next shot
-.main-page .next-shot-flex-item {
+.drill-page .next-shot-flex-item {
     flex: 1;
     margin-left: var(--page-margin-horizontal);
     margin-right: var(--page-margin-horizontal);
 }
 
-.main-page .RestartButton {
+.drill-page .RestartButton {
     margin-top: 5em;
 }
 
 // last shot
-.main-page .last-shot-flex-item {
+.drill-page .last-shot-flex-item {
     border-color: var(--font-white);
     border-style: solid;
     border-left-width: 5px;
@@ -21,18 +21,18 @@
     flex: 2;
 }
 
-.main-page .LastShotData {
+.drill-page .LastShotData {
 }
 
 // shots
-.main-page .shots-flex-item {
+.drill-page .shots-flex-item {
     flex: 2;
 }
 
-.main-page .ShotsSvg {
+.drill-page .ShotsSvg {
     background: var(--font-white);
     margin-right: var(--page-margin-horizontal);
 }
 
-.main-page .page-change-flex-item {
+.drill-page .page-exit-flex-item {
 }
