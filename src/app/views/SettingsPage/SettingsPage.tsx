@@ -1,18 +1,26 @@
 import React from 'react';
 import './SettingsPage.scss';
-import mainIcon from "../../../assets/main.png";
-import {ITestConfiguration} from "../../model/TestConfiguration";
-import {DistancesGeneratorSelect} from "../../components/DistancesGeneratorSelect/DistancesGeneratorSelect";
+import shotsIcon from "../../../assets/golfer.png";
+import {IDrillConfiguration} from "../../model/DrillConfiguration";
+import {
+    DistancesGeneratorSelect
+} from "../../components/DrillConfiguration/DistancesGeneratorSelect/DistancesGeneratorSelect";
+import {NumberOfShotsInput} from "../../components/DrillConfiguration/NumberOfShotsInput/NumberOfShotsInput";
+import {DescriptionInput} from "../../components/DrillConfiguration/DescriptionInput/DescriptionInput";
+
+export const SettingsPageName: string = "SettingsPage";
 
 interface ISettingsPageProps {
-    distancesGenerators: ITestConfiguration[];
-    handleDistancesGeneratorsChanged: (distancesGenerators: ITestConfiguration[]) => void;
-    selectedDistancesGenerator: ITestConfiguration;
-    handleDistancesGeneratorChanged: (selectedDistancesGenerator: ITestConfiguration) => void;
-    handleMainClicked: () => void;
+    drillConfigurations: IDrillConfiguration[];
+    handleDrillConfigurationsChanged: (drillConfigurations: IDrillConfiguration[]) => void;
+    selectedDrillConfiguration: IDrillConfiguration;
+    handleSelectedDrillConfigurationChanged: (drillConfiguration: IDrillConfiguration) => void;
+    handleSelectPageClicked: (page: string) => void;
 }
 
 export const SettingsPage: React.FC<ISettingsPageProps> = (props: ISettingsPageProps): JSX.Element => {
+    const [drillConfiguration, setDrillConfiguration] = React.useState<IDrillConfiguration>(props.selectedDrillConfiguration);
+
     return (
         <div className="settings-page page">
             <div className="settings-flex-item flex-item">
@@ -21,35 +29,44 @@ export const SettingsPage: React.FC<ISettingsPageProps> = (props: ISettingsPageP
                 </div>
                 <div className="DistancesGeneratorSelect">
                     <DistancesGeneratorSelect
-                        testConfigurations={props.distancesGenerators}
-                        selectedTestConfiguration={props.selectedDistancesGenerator}
-                        handleTestConfigurationChanged={props.handleDistancesGeneratorChanged}
+                        drillConfigurations={props.drillConfigurations}
+                        selectedDrillConfiguration={drillConfiguration}
+                        handleSelectedDrillConfigurationChanged={props.handleSelectedDrillConfigurationChanged}
                     />
                 </div>
-                {/*<div>*/}
-                {/*    <label*/}
-                {/*        className="test-configuration-name-input-label"*/}
-                {/*        htmlFor="test-configuration-input">Name*/}
-                {/*    </label>*/}
-                {/*</div>*/}
-                {/*<div>*/}
-                {/*    <input id="test-configuration-name-input"*/}
-                {/*           value={props.selectedDistancesGenerator.description}*/}
-                {/*    >*/}
-                {/*    </input>*/}
-                {/*</div>*/}
+                <div className="DescriptionInput">
+                    <DescriptionInput
+                        description={drillConfiguration.description}
+                        handleDescriptionChanged={(description: string): void =>{
+                            const drillConfigurationClone: IDrillConfiguration = {...drillConfiguration};
+                            drillConfigurationClone.description = description;
+                            setDrillConfiguration(drillConfigurationClone);
+                        }}
+                    />
+                </div>
+                <div className="NumberOfShotsInput">
+                    <NumberOfShotsInput
+                        numberOfShots={drillConfiguration.numberOfShots}
+                        handleNumberOfShotsChanged={(numberOfShots: number): void =>{
+                            const drillConfigurationClone: IDrillConfiguration = {...drillConfiguration};
+                            drillConfigurationClone.numberOfShots = numberOfShots;
+                            setDrillConfiguration(drillConfigurationClone);
+                        }}
+                    />
+                </div>
             </div>
 
             <div className="page-change-flex-item flex-item">
-                            <span className="page-change-span"
-                                  onClick={(): void => {
-                                      console.log(props.handleMainClicked())
-                                  }}>
-                <img className="page-change-img"
-                     src={mainIcon}
-                     alt="Settings"
-                />
-            </span>
+                <span className="page-change-span"
+                      onClick={(): void => {
+                          console.log(props.handleSelectPageClicked)
+                      }}
+                >
+                    <img className="page-change-img"
+                         src={shotsIcon}
+                         alt="Settings"
+                    />
+                </span>
             </div>
         </div>
     );
