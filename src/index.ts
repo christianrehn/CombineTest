@@ -21,7 +21,7 @@ const createWindow = (): void => {
     }
 
     // Create the browser window.
-    const mainWindow = new BrowserWindow({
+    const mainWindow: BrowserWindow = new BrowserWindow({
         fullscreenable: true,
         maximizable: true,
         // closable: false,
@@ -48,6 +48,10 @@ const createWindow = (): void => {
     })
 };
 
+ipcMain.on('quit', (event: Electron.IpcMainEvent, arg: any): void => {
+    app.quit();
+})
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -68,7 +72,7 @@ app.on('window-all-closed', (): void => {
     }
 });
 
-app.on('activate', () => {
+app.on('activate', (): void => {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) {
