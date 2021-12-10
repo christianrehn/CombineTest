@@ -30,10 +30,9 @@ export const SelectDrillPage: React.FC<ISelectDrillPageProps> = (props: ISelectD
                     </div>
                 </div>
 
-                <div //className="page-buttons-flex-item flex-item"
-                    style={{display: "flex", flexDirection: "row", justifyContent: "flex-end"}}>
+                <div className="top-buttons-flex-item">
                     <div className="edit-flex-item flex-item">
-                        <span className="top-button-span"
+                        <span className="edit-span"
                               onClick={(): void => {
                                   setEditMode(!editMode);
                               }}
@@ -47,8 +46,8 @@ export const SelectDrillPage: React.FC<ISelectDrillPageProps> = (props: ISelectD
                             </div>
                         </span>
                     </div>
-                    <div className="edit-flex-item flex-item">
-                        <span className="page-top-button-span"
+                    <div className="exit-flex-item flex-item">
+                        <span className="exit-span"
                               onClick={(): void => {
                                   ipcRenderer.sendSync('quit', 'undefined');
                               }}

@@ -13,6 +13,8 @@ import {RestartButton} from "../../components/RestartButton/RestartButton";
 import * as math from 'mathjs'
 import {Unit} from 'mathjs'
 import {SelectDrillPageName} from "../SelectDrillPage/SelectDrillPage";
+import editIcon from "../../../assets/edit.png";
+import {ipcRenderer} from "electron";
 
 export const DrillPageName: string = "DrillPage";
 
@@ -171,16 +173,22 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                     />
                 </div>
             </div>
-            <div className="page-change-flex-item flex-item">
-                <span className="page-change-span"
-                      onClick={(): void => {
-                          props.handleSelectPageClicked(SelectDrillPageName)
-                      }}>
-                    <img className="page-change-img"
-                         src={exitIcon}
-                         alt="Exit"
-                    />
-            </span>
+
+            <div className="top-buttons-flex-item">
+                <div className="exit-flex-item flex-item">
+                        <span className="exit-span"
+                              onClick={(): void => {
+                                  props.handleSelectPageClicked(SelectDrillPageName)
+                              }}
+                        >
+                            <div className="top-button-img-div">
+                                <img className="top-button-img"
+                                     src={exitIcon}
+                                     alt="Exit"
+                                />
+                            </div>
+                        </span>
+                </div>
             </div>
         </div>
     );
