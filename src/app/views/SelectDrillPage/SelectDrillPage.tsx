@@ -69,8 +69,9 @@ export const SelectDrillPage: React.FC<ISelectDrillPageProps> = (props: ISelectD
             </div>
 
             <div className="drill-tiles-flex-item">
-                {props.drillConfigurations.map((distancesGenerator: IDrillConfiguration) =>
+                {props.drillConfigurations.map((distancesGenerator: IDrillConfiguration, index: number) =>
                     <DrillTile
+                        key={`DrillTile_${index}`}
                         drillConfiguration={distancesGenerator}
                         editMode={editMode}
                         handleTileClicked={(distancesGenerator: IDrillConfiguration): void => {
@@ -81,16 +82,20 @@ export const SelectDrillPage: React.FC<ISelectDrillPageProps> = (props: ISelectD
                         }}
                     />)
                 }
-                {editMode ?  <DrillTile
-                    drillConfiguration={null}
-                    editMode={editMode}
-                    handleTileClicked={(distancesGenerator: IDrillConfiguration): void => {
-                        // set selected distancesGenerator
-                        props.handleSelectedDrillConfigurationChanged(distancesGenerator);
-                        // switch to other page
-                        props.handleSelectPageClicked(EditDrillConfigurationPageName);
-                    }}
-                /> : null}
+                {editMode ?
+                    <DrillTile
+                        drillConfiguration={null}
+                        editMode={editMode}
+                        handleTileClicked={
+                            (distancesGenerator: IDrillConfiguration): void => {
+                                // set selected distancesGenerator
+                                props.handleSelectedDrillConfigurationChanged(distancesGenerator);
+                                // switch to other page
+                                props.handleSelectPageClicked(EditDrillConfigurationPageName);
+                        }}
+                    />
+                    : null
+                }
             </div>
         </div>
     );
