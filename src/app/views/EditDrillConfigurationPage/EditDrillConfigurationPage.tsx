@@ -5,7 +5,7 @@ import {
     DrillConfigurationSelect
 } from "../../components/DrillConfiguration/DrillConfigurationSelect/DrillConfigurationSelect";
 import {NumberOfShotsInput} from "../../components/DrillConfiguration/NumberOfShotsInput/NumberOfShotsInput";
-import {DescriptionInput} from "../../components/DrillConfiguration/DescriptionInput/DescriptionInput";
+import {DrillConfigurationTextInput} from "../../components/DrillConfiguration/DrillConfigurationTextInput/DrillConfigurationTextInput";
 import editIcon from "../../../assets/edit.png";
 import backIcon from '../../../assets/back.png';
 import {SelectDrillPageName} from "../SelectDrillPage/SelectDrillPage";
@@ -37,7 +37,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                     />
                 </div>
                 <div className="DescriptionInput">
-                    <DescriptionInput
+                    <DrillConfigurationTextInput
                         description={drillConfiguration.description}
                         handleDescriptionChanged={(description: string): void =>{
                             const drillConfigurationClone: IDrillConfiguration = {...drillConfiguration};
