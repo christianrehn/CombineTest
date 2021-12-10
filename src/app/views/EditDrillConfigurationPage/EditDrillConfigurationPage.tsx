@@ -27,14 +27,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
         <div className="edit-drill-configuration-page page">
             <div className="edit-drill-configuration-flex-item flex-item">
                 <div className="page-header">
-                    <h3>Settings</h3>
-                </div>
-                <div className="DistancesGeneratorSelect">
-                    <DrillConfigurationSelect
-                        drillConfigurations={props.drillConfigurations}
-                        selectedDrillConfiguration={drillConfiguration}
-                        handleSelectedDrillConfigurationChanged={props.handleSelectedDrillConfigurationChanged}
-                    />
+                    <h3>Edit Drill Configuration</h3>
                 </div>
                 <div className="DescriptionInput">
                     <DrillConfigurationTextInput

@@ -15,10 +15,10 @@ import {
 export const SelectDrillPageName: string = "SelectDrillPage";
 
 interface ISelectDrillPageProps {
-    distancesGenerators: IDrillConfiguration[];
-    handleDistancesGeneratorsChanged: (distancesGenerators: IDrillConfiguration[]) => void;
+    drillConfigurations: IDrillConfiguration[];
+    handleDrillConfigurationsChanged: (drillConfigurations: IDrillConfiguration[]) => void;
     selectedDistancesGenerator: IDrillConfiguration;
-    handleSelectedDistancesGeneratorChanged: (selectedDistancesGenerator: IDrillConfiguration) => void;
+    handleSelectedDrillConfigurationChanged: (drillConfiguration: IDrillConfiguration) => void;
     handleSelectPageClicked: (page: string) => void;
 }
 
@@ -69,18 +69,28 @@ export const SelectDrillPage: React.FC<ISelectDrillPageProps> = (props: ISelectD
             </div>
 
             <div className="drill-tiles-flex-item">
-                {props.distancesGenerators.map((distancesGenerator: IDrillConfiguration) =>
+                {props.drillConfigurations.map((distancesGenerator: IDrillConfiguration) =>
                     <DrillTile
-                        distancesGenerator={distancesGenerator}
+                        drillConfiguration={distancesGenerator}
                         editMode={editMode}
                         handleTileClicked={(distancesGenerator: IDrillConfiguration): void => {
                             // set selected distancesGenerator
-                            props.handleSelectedDistancesGeneratorChanged(distancesGenerator);
+                            props.handleSelectedDrillConfigurationChanged(distancesGenerator);
                             // switch to other page
                             props.handleSelectPageClicked(editMode ? EditDrillConfigurationPageName : DrillPageName);
                         }}
                     />)
                 }
+                {editMode ?  <DrillTile
+                    drillConfiguration={null}
+                    editMode={editMode}
+                    handleTileClicked={(distancesGenerator: IDrillConfiguration): void => {
+                        // set selected distancesGenerator
+                        props.handleSelectedDrillConfigurationChanged(distancesGenerator);
+                        // switch to other page
+                        props.handleSelectPageClicked(EditDrillConfigurationPageName);
+                    }}
+                /> : null}
             </div>
         </div>
     );

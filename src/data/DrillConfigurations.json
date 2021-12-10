@@ -1,6 +1,6 @@
 [
     {
-        "name": "50 meter carry",
+        "name": "Emma 50 Carry",
         "description": "6 fairway shots to a green with 5 meter radius from Emma's 2022 distance of 50 meter",
         "unit": "meter",
         "distanceGenerator": {
@@ -30,7 +30,7 @@
         ]
     },
     {
-        "name": "6 - 7 meter",
+        "name": "BGV Pitch 2020",
         "description": "18 fairway shots to a green with 5 meter radius from fixed BGV distances in random order: 6, 14, 22, 30, 38, 46, 54, 62, 70 meter",
         "unit": "meter",
         "distanceGenerator": {

@@ -93,30 +93,30 @@ const App: React.FC<{}> = (): JSX.Element => {
         setSelectedDrillConfiguration(drillConfigurationsWithDistanceGenerators[0]);
     }, [drillConfigurationsFromJson, averageStrokesDataMap]);
 
+    const handleDrillConfigurationsChanged = (distancesGenerators: IDrillConfiguration[]): void => {
+        setDrillConfigurations(distancesGenerators);
+    }
+
+    const handleSelectedDrillConfigurationChanged= (selectedDistancesGenerator: IDrillConfiguration): void => {
+        setSelectedDrillConfiguration(selectedDistancesGenerator)
+    }
+
     return (
         <div className="app">
             {selectedPage === SelectDrillPageName
                 ? <SelectDrillPage
-                    distancesGenerators={drillConfigurations}
-                    handleDistancesGeneratorsChanged={(distancesGenerators: IDrillConfiguration[]): void => {
-                        setDrillConfigurations(distancesGenerators);
-                    }}
+                    drillConfigurations={drillConfigurations}
+                    handleDrillConfigurationsChanged={handleDrillConfigurationsChanged}
                     selectedDistancesGenerator={selectedDrillConfiguration}
-                    handleSelectedDistancesGeneratorChanged={(selectedDistancesGenerator: IDrillConfiguration): void => {
-                        setSelectedDrillConfiguration(selectedDistancesGenerator)
-                    }}
+                    handleSelectedDrillConfigurationChanged={handleSelectedDrillConfigurationChanged}
                     handleSelectPageClicked={setSelectedPage}
                 />
                 : selectedPage === EditDrillConfigurationPageName
                     ? <EditDrillConfigurationPage
                         drillConfigurations={drillConfigurations}
-                        handleDrillConfigurationsChanged={(distancesGenerators: IDrillConfiguration[]): void => {
-                            setDrillConfigurations(distancesGenerators);
-                        }}
+                        handleDrillConfigurationsChanged={handleDrillConfigurationsChanged}
                         selectedDrillConfiguration={selectedDrillConfiguration}
-                        handleSelectedDrillConfigurationChanged={(selectedDistancesGenerator: IDrillConfiguration): void => {
-                            setSelectedDrillConfiguration(selectedDistancesGenerator)
-                        }}
+                        handleSelectedDrillConfigurationChanged={handleSelectedDrillConfigurationChanged}
                         handleSelectPageClicked={setSelectedPage}
                     />
                     : selectedPage === DrillPageName
