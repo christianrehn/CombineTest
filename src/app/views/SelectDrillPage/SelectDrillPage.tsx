@@ -2,10 +2,15 @@ import React from 'react';
 import './SelectDrillPage.scss';
 import {IDrillConfiguration} from "../../model/DrillConfiguration";
 import editIcon from '../../../assets/edit.png';
+import glassesIcon from "../../../assets/glasses.png";
 import exitIcon from '../../../assets/exit.png';
 import {DrillPageName} from "../DrillPage/DrillPage";
 import {DrillTile} from "../../components/DrillTile/DrillTile";
 import {ipcRenderer} from "electron";
+import {
+    EditDrillConfigurationPage,
+    EditDrillConfigurationPageName
+} from "../EditDrillConfigurationPage/EditDrillConfigurationPage";
 
 export const SelectDrillPageName: string = "SelectDrillPage";
 
@@ -40,8 +45,8 @@ export const SelectDrillPage: React.FC<ISelectDrillPageProps> = (props: ISelectD
 
                             <div className="top-button-img-div">
                                 <img className="top-button-img"
-                                     src={editIcon}
-                                     alt="Edit"
+                                     src={editMode ? glassesIcon : editIcon}
+                                     alt={editMode ? "Show" : "Edit"}
                                 />
                             </div>
                         </span>
@@ -69,8 +74,10 @@ export const SelectDrillPage: React.FC<ISelectDrillPageProps> = (props: ISelectD
                         distancesGenerator={distancesGenerator}
                         editMode={editMode}
                         handleTileClicked={(distancesGenerator: IDrillConfiguration): void => {
+                            // set selected distancesGenerator
                             props.handleSelectedDistancesGeneratorChanged(distancesGenerator);
-                            props.handleSelectPageClicked(DrillPageName);
+                            // switch to other page
+                            props.handleSelectPageClicked(editMode ? EditDrillConfigurationPageName : DrillPageName);
                         }}
                     />)
                 }

@@ -1,12 +1,14 @@
 import React from 'react';
 import './EditDrillConfigurationPage.scss';
-import shotsIcon from "../../../assets/golfer.png";
 import {IDrillConfiguration} from "../../model/DrillConfiguration";
 import {
     DrillConfigurationSelect
 } from "../../components/DrillConfiguration/DrillConfigurationSelect/DrillConfigurationSelect";
 import {NumberOfShotsInput} from "../../components/DrillConfiguration/NumberOfShotsInput/NumberOfShotsInput";
 import {DescriptionInput} from "../../components/DrillConfiguration/DescriptionInput/DescriptionInput";
+import editIcon from "../../../assets/edit.png";
+import backIcon from '../../../assets/back.png';
+import {SelectDrillPageName} from "../SelectDrillPage/SelectDrillPage";
 
 export const EditDrillConfigurationPageName: string = "EditDrillConfigurationPage";
 
@@ -56,17 +58,36 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 </div>
             </div>
 
-            <div className="page-change-flex-item flex-item">
-                <span className="page-change-span"
-                      onClick={(): void => {
-                          console.log(props.handleSelectPageClicked)
-                      }}
-                >
-                    <img className="page-change-img"
-                         src={shotsIcon}
-                         alt="Settings"
-                    />
-                </span>
+            <div className="top-buttons-flex-item">
+                <div className="edit-flex-item flex-item">
+                        <span className="edit-span"
+                              onClick={(): void => {
+                                  console.log("TODO")
+                              }}
+                        >
+
+                            <div className="top-button-img-div">
+                                <img className="top-button-img"
+                                     src={editIcon}
+                                     alt="Edit"
+                                />
+                            </div>
+                        </span>
+                </div>
+                <div className="back-flex-item flex-item">
+                        <span className="back-span"
+                              onClick={(): void => {
+                                  props.handleSelectPageClicked(SelectDrillPageName)
+                              }}
+                        >
+                            <div className="top-button-img-div">
+                                <img className="top-button-img"
+                                     src={backIcon}
+                                     alt="Back"
+                                />
+                            </div>
+                        </span>
+                </div>
             </div>
         </div>
     );

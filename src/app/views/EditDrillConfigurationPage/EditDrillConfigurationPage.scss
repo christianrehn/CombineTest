@@ -6,14 +6,3 @@
     margin-left: var(--page-margin-horizontal);
     margin-right: var(--page-margin-horizontal);
 }
-
-
-.edit-drill-configuration-page .page-change-flex-item {
-}
-
-.edit-drill-configuration-page .page-change-img {
-    background: var(--font-white);
-    width: var(--page-change-icon-width);
-    height: var(--page-change-icon-width);
-    margin-left: calc(-1 * (var(--page-margin-horizontal) + var(--page-change-icon-width)) + 3ex);
-}

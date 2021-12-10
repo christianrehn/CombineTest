@@ -82,13 +82,6 @@ html, body, #root {
     --page-change-icon-width: 6ex;
 }
 
-.page-change-img {
-    background: var(--font-white);
-    width: var(--page-change-icon-width);
-    height: var(--page-change-icon-width);
-    margin-left: calc(-1 * (var(--page-margin-horizontal) + var(--page-change-icon-width)) + 3ex);
-}
-
 .page .flex-item {
     height: 100%;
     padding-top: 20px;
@@ -112,6 +105,9 @@ html, body, #root {
     box-sizing: border-box;
     width: 100%;
     padding: 6px;
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
 }
 
 .page {
