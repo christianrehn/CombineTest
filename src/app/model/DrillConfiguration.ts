@@ -34,6 +34,17 @@ export interface IDrillConfiguration {
     computeAverageStrokesFromEndDistance(endDistance: Unit): number | undefined;
 }
 
+export const emptyDrillConfiguration : IDrillConfiguration = {
+    getNextDistance: (index: number): Unit => math.unit(0, "yards"),
+    reset: () => {},
+    name: "",
+    description: "",
+    numberOfShots: 0,
+    unit: "yards",
+    averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum.Fairway,
+    computeAverageStrokesFromStartDistance: (startDistance: Unit): 0 => 0,
+    computeAverageStrokesFromEndDistance: (endDistance: Unit): number | undefined => undefined,
+}
 /**
  * Base class for DrillConfigurations below
  */

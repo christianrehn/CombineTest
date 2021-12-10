@@ -29,9 +29,23 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="page-header">
                     <h3>Edit Drill Configuration</h3>
                 </div>
+                <div className="NameInput">
+                    <DrillConfigurationTextInput
+                        label={"Name"}
+                        value={drillConfiguration.name}
+                        maxLength={10}
+                        handleDescriptionChanged={(name: string): void =>{
+                            const drillConfigurationClone: IDrillConfiguration = {...drillConfiguration};
+                            drillConfigurationClone.name = name;
+                            setDrillConfiguration(drillConfigurationClone);
+                        }}
+                    />
+                </div>
                 <div className="DescriptionInput">
                     <DrillConfigurationTextInput
-                        description={drillConfiguration.description}
+                        label={"Description"}
+                        value={drillConfiguration.description}
+                        maxLength={80}
                         handleDescriptionChanged={(description: string): void =>{
                             const drillConfigurationClone: IDrillConfiguration = {...drillConfiguration};
                             drillConfigurationClone.description = description;

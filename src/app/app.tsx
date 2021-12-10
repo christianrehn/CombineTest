@@ -7,7 +7,7 @@ import {
     DrillConfigurationWithFixedDistancesGenerator,
     IDrillConfiguration,
     DrillConfigurationWithRandomDistancesGenerator,
-    DrillConfigurationWithRandomFromFixedDistancesGenerator
+    DrillConfigurationWithRandomFromFixedDistancesGenerator, emptyDrillConfiguration
 } from "./model/DrillConfiguration";
 import {parseCsvToArrayOfColumnArrays} from "./util/CsvParser";
 import * as path from "path";
@@ -93,12 +93,16 @@ const App: React.FC<{}> = (): JSX.Element => {
         setSelectedDrillConfiguration(drillConfigurationsWithDistanceGenerators[0]);
     }, [drillConfigurationsFromJson, averageStrokesDataMap]);
 
-    const handleDrillConfigurationsChanged = (distancesGenerators: IDrillConfiguration[]): void => {
-        setDrillConfigurations(distancesGenerators);
+    const handleDrillConfigurationsChanged = (drillConfigurations: IDrillConfiguration[]): void => {
+        console.log("handleDrillConfigurationsChanged");
+        setDrillConfigurations(drillConfigurations);
     }
 
-    const handleSelectedDrillConfigurationChanged= (selectedDistancesGenerator: IDrillConfiguration): void => {
-        setSelectedDrillConfiguration(selectedDistancesGenerator)
+    const handleSelectedDrillConfigurationChanged = (drillConfiguration: IDrillConfiguration): void => {
+        console.log("handleSelectedDrillConfigurationChanged");
+        !!drillConfiguration
+            ? setSelectedDrillConfiguration(drillConfiguration)
+            : setSelectedDrillConfiguration({...emptyDrillConfiguration});
     }
 
     return (
