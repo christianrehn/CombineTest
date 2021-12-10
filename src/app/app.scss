@@ -94,6 +94,26 @@ html, body, #root {
     padding-top: 20px;
 }
 
+.page .top-buttons-flex-item {
+    display: flex;
+    flexDirection: row;
+    justifyContent: flex-end;
+}
+
+.page .top-button-img-div {
+    background: var(--font-white);
+    width: var(--page-change-icon-width);
+    height: var(--page-change-icon-width);
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.page .top-button-img {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 6px;
+}
+
 .page {
     width: 100%;
     height: 100%;

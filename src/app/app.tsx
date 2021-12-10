@@ -1,7 +1,7 @@
 import {hot} from 'react-hot-loader';
 import * as React from 'react';
 import './App.scss';
-import {SettingsPage, SettingsPageName} from "./views/SettingsPage/SettingsPage";
+import {EditDrillConfigurationPage, EditDrillConfigurationPageName} from "./views/EditDrillConfigurationPage/EditDrillConfigurationPage";
 import {DrillPage, DrillPageName} from "./views/DrillPage/DrillPage";
 import {
     DrillConfigurationWithFixedDistancesGenerator,
@@ -107,8 +107,8 @@ const App: React.FC<{}> = (): JSX.Element => {
                     }}
                     handleSelectPageClicked={setSelectedPage}
                 />
-                : selectedPage === SettingsPageName
-                    ? <SettingsPage
+                : selectedPage === EditDrillConfigurationPageName
+                    ? <EditDrillConfigurationPage
                         drillConfigurations={drillConfigurations}
                         handleDrillConfigurationsChanged={(distancesGenerators: IDrillConfiguration[]): void => {
                             setDrillConfigurations(distancesGenerators);

@@ -1,5 +1,5 @@
 import React from 'react';
-import './SettingsPage.scss';
+import './EditDrillConfigurationPage.scss';
 import shotsIcon from "../../../assets/golfer.png";
 import {IDrillConfiguration} from "../../model/DrillConfiguration";
 import {
@@ -8,9 +8,9 @@ import {
 import {NumberOfShotsInput} from "../../components/DrillConfiguration/NumberOfShotsInput/NumberOfShotsInput";
 import {DescriptionInput} from "../../components/DrillConfiguration/DescriptionInput/DescriptionInput";
 
-export const SettingsPageName: string = "SettingsPage";
+export const EditDrillConfigurationPageName: string = "EditDrillConfigurationPage";
 
-interface ISettingsPageProps {
+interface IEditDrillConfigurationPageProps {
     drillConfigurations: IDrillConfiguration[];
     handleDrillConfigurationsChanged: (drillConfigurations: IDrillConfiguration[]) => void;
     selectedDrillConfiguration: IDrillConfiguration;
@@ -18,12 +18,12 @@ interface ISettingsPageProps {
     handleSelectPageClicked: (page: string) => void;
 }
 
-export const SettingsPage: React.FC<ISettingsPageProps> = (props: ISettingsPageProps): JSX.Element => {
+export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPageProps> = (props: IEditDrillConfigurationPageProps): JSX.Element => {
     const [drillConfiguration, setDrillConfiguration] = React.useState<IDrillConfiguration>(props.selectedDrillConfiguration);
 
     return (
-        <div className="settings-page page">
-            <div className="settings-flex-item flex-item">
+        <div className="edit-drill-configuration-page page">
+            <div className="edit-drill-configuration-flex-item flex-item">
                 <div className="page-header">
                     <h3>Settings</h3>
                 </div>
