@@ -1,24 +1,24 @@
 import {hot} from 'react-hot-loader';
 import * as React from 'react';
 import './App.scss';
-import {EditDrillConfigurationPage, EditDrillConfigurationPageName} from "./views/EditDrillConfigurationPage/EditDrillConfigurationPage";
-import {DrillPage, DrillPageName} from "./views/DrillPage/DrillPage";
 import {
-    DrillConfigurationWithFixedDistancesGenerator,
-    IDrillConfiguration,
-    DrillConfigurationWithRandomDistancesGenerator,
-    DrillConfigurationWithRandomFromFixedDistancesGenerator, emptyDrillConfiguration
-} from "./model/DrillConfiguration";
+    EditDrillConfigurationPage,
+    EditDrillConfigurationPageName
+} from "./views/EditDrillConfigurationPage/EditDrillConfigurationPage";
+import {DrillPage, DrillPageName} from "./views/DrillPage/DrillPage";
+import {EmptyDrillConfiguration, IDrillConfiguration} from "./model/drillconfiguration/DrillConfiguration";
 import {parseCsvToArrayOfColumnArrays} from "./util/CsvParser";
 import * as path from "path";
 import {ipcRenderer} from "electron";
-import drillConfigurationsFromJson from "../data/DrillConfigurations.json";
+import predefinedDrillConfigurationsAsJson from "../data/PredefinedDrillConfigurations.json";
 import averageShotsFromTeeCsvPath from "../data/tee.csv";
 import averageShotsFromFairwayCsvPath from "../data/fairway.csv";
 import averageShotsFromRoughCsvPath from "../data/rough.csv";
 import averageShotsFromGreenCsvPath from "../data/green.csv";
 import {AverageStrokesData, AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "./model/AverageStrokesData";
 import {SelectDrillPage, SelectDrillPageName} from "./views/SelectDrillPage/SelectDrillPage";
+import {drillConfigurationsFromJson, drillConfigurationsToString} from "./model/drillconfiguration/DrillConfigurationConverter";
+import {assert} from "chai";
 
 const App: React.FC<{}> = (): JSX.Element => {
     // page that is currently visible
@@ -30,7 +30,6 @@ const App: React.FC<{}> = (): JSX.Element => {
 
     const [drillConfigurations, setDrillConfigurations] = React.useState<IDrillConfiguration[]>([]);
     const [selectedDrillConfiguration, setSelectedDrillConfiguration] = React.useState<IDrillConfiguration>();
-    console.log("selectedDistancesGenerator", selectedDrillConfiguration);
 
     const [averageStrokesDataMap, setAverageStrokesDataMap] =
         React.useState<Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>>(new Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>());
@@ -43,7 +42,7 @@ const App: React.FC<{}> = (): JSX.Element => {
             setAverageStrokesDataMap(new Map(averageStrokesDataMap));
         }
 
-        const appPath = ipcRenderer.sendSync('appPath', undefined);
+        const appPath: string = ipcRenderer.sendSync('appPath', undefined);
         importCsv(AverageStrokesDataGroundTypeEnum.Tee, path.join(appPath, '.webpack/renderer', averageShotsFromTeeCsvPath), "yard");
         importCsv(AverageStrokesDataGroundTypeEnum.Fairway, path.join(appPath, '.webpack/renderer', averageShotsFromFairwayCsvPath), "yard");
         importCsv(AverageStrokesDataGroundTypeEnum.Rough, path.join(appPath, '.webpack/renderer', averageShotsFromRoughCsvPath), "yard");
@@ -51,58 +50,48 @@ const App: React.FC<{}> = (): JSX.Element => {
     }, [])
 
     React.useEffect((): void => {
-        const drillConfigurationsWithDistanceGenerators: IDrillConfiguration[] =
-            drillConfigurationsFromJson
-                .map((drillConfiguration): IDrillConfiguration => {
-                    switch (drillConfiguration.distanceGenerator.type) {
-                        case "RandomDistancesGenerator":
-                            return new DrillConfigurationWithRandomDistancesGenerator(
-                                drillConfiguration.name,
-                                drillConfiguration.description,
-                                drillConfiguration.distanceGenerator.minIncludedDistance,
-                                drillConfiguration.distanceGenerator.maxExcludedDistance,
-                                drillConfiguration.unit,
-                                drillConfiguration.distanceGenerator.numberOfShots,
-                                drillConfiguration.startGroundType,
-                                drillConfiguration.endGroundTypes,
-                                averageStrokesDataMap);
-                        case "FixedDistancesGenerator":
-                            return new DrillConfigurationWithFixedDistancesGenerator(
-                                drillConfiguration.name,
-                                drillConfiguration.description,
-                                drillConfiguration.distanceGenerator.distances,
-                                drillConfiguration.unit,
-                                drillConfiguration.distanceGenerator.numberOfRounds,
-                                drillConfiguration.startGroundType,
-                                drillConfiguration.endGroundTypes,
-                                averageStrokesDataMap);
-                        case "RandomFromFixedDistancesGenerator":
-                            return new DrillConfigurationWithRandomFromFixedDistancesGenerator(
-                                drillConfiguration.name,
-                                drillConfiguration.description,
-                                drillConfiguration.distanceGenerator.distances,
-                                drillConfiguration.unit,
-                                drillConfiguration.distanceGenerator.numberOfRounds,
-                                drillConfiguration.startGroundType,
-                                drillConfiguration.endGroundTypes,
-                                averageStrokesDataMap);
-                    }
-                })
-                .filter(distancesGenerator => !!distancesGenerator);
-        setDrillConfigurations(drillConfigurationsWithDistanceGenerators);
-        setSelectedDrillConfiguration(drillConfigurationsWithDistanceGenerators[0]);
-    }, [drillConfigurationsFromJson, averageStrokesDataMap]);
+        const userDrillConfigurationsAsJson: any[] = loadUserDrillConfigurationsAsJson();
+        const drillConfigurationsAsJson: any[] = !!userDrillConfigurationsAsJson && userDrillConfigurationsAsJson.length > 0
+            ? userDrillConfigurationsAsJson
+            : predefinedDrillConfigurationsAsJson;
+        const drillConfigurations: IDrillConfiguration[] = drillConfigurationsFromJson(drillConfigurationsAsJson, averageStrokesDataMap);
+        setDrillConfigurations(drillConfigurations);
+    }, [predefinedDrillConfigurationsAsJson, averageStrokesDataMap]);
 
     const handleDrillConfigurationsChanged = (drillConfigurations: IDrillConfiguration[]): void => {
-        console.log("handleDrillConfigurationsChanged");
         setDrillConfigurations(drillConfigurations);
     }
 
     const handleSelectedDrillConfigurationChanged = (drillConfiguration: IDrillConfiguration): void => {
-        console.log("handleSelectedDrillConfigurationChanged");
         !!drillConfiguration
             ? setSelectedDrillConfiguration(drillConfiguration)
-            : setSelectedDrillConfiguration({...emptyDrillConfiguration});
+            : setSelectedDrillConfiguration(new EmptyDrillConfiguration(averageStrokesDataMap));
+    }
+
+    const loadUserDrillConfigurationsAsJson = (): any[] => {
+        const userDrillConfigurationsAsString: string = ipcRenderer.sendSync('loadUserDrillConfigurationsAsString', undefined);
+        if (!userDrillConfigurationsAsString) {
+            console.log("loadUserDrillConfigurationsAsJson - no user configuration file found");
+            return [];
+        }
+        return JSON.parse(userDrillConfigurationsAsString);
+    }
+
+    const handleSaveUserDrillConfigurations = (changedDrillConfiguration: IDrillConfiguration): void => {
+        assert(!!changedDrillConfiguration.uuid, "!changedDrillConfiguration.uuid");
+
+        const drillConfigurationsClone: IDrillConfiguration[] = [...drillConfigurations];
+        const drillConfigurationUuids: string[] = drillConfigurationsClone.map((drillConfiguration: IDrillConfiguration) => drillConfiguration.uuid);
+        const index: number = drillConfigurationUuids.indexOf(changedDrillConfiguration.uuid)
+        if (index >= 0) {
+            drillConfigurationsClone[index] = changedDrillConfiguration; // replace with changed entry
+        } else {
+            drillConfigurationsClone.push(changedDrillConfiguration); // new entry
+        }
+        setDrillConfigurations(drillConfigurationsClone);
+        const drillConfigurationsAsString: string = drillConfigurationsToString(drillConfigurationsClone);
+        const success = ipcRenderer.sendSync('saveUserDrillConfigurations', drillConfigurationsAsString);
+        console.log("handleSaveUserDrillConfigurations - success=",success)
     }
 
     return (
@@ -111,7 +100,7 @@ const App: React.FC<{}> = (): JSX.Element => {
                 ? <SelectDrillPage
                     drillConfigurations={drillConfigurations}
                     handleDrillConfigurationsChanged={handleDrillConfigurationsChanged}
-                    selectedDistancesGenerator={selectedDrillConfiguration}
+                    selectedDrillConfiguration={selectedDrillConfiguration}
                     handleSelectedDrillConfigurationChanged={handleSelectedDrillConfigurationChanged}
                     handleSelectPageClicked={setSelectedPage}
                 />
@@ -122,6 +111,7 @@ const App: React.FC<{}> = (): JSX.Element => {
                         selectedDrillConfiguration={selectedDrillConfiguration}
                         handleSelectedDrillConfigurationChanged={handleSelectedDrillConfigurationChanged}
                         handleSelectPageClicked={setSelectedPage}
+                        handleSaveDrillConfigurations={handleSaveUserDrillConfigurations}
                     />
                     : selectedPage === DrillPageName
                         ? <DrillPage
