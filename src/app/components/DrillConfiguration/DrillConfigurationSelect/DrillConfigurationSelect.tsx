@@ -1,6 +1,6 @@
 import React from "react";
 import './DrillConfigurationSelect.scss';
-import {IDrillConfiguration} from "../../../model/DrillConfiguration";
+import {IDrillConfiguration} from "../../../model/drillconfiguration/DrillConfiguration";
 
 export interface ITestConfigurationSelectProps {
     drillConfigurations: IDrillConfiguration[];
