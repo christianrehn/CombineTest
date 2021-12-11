@@ -1,6 +1,6 @@
 import React from 'react';
 import './EditDrillConfigurationPage.scss';
-import {IDrillConfiguration} from "../../model/DrillConfiguration";
+import {IDrillConfiguration} from "../../model/drillconfiguration/DrillConfiguration";
 import {
     DrillConfigurationSelect
 } from "../../components/DrillConfiguration/DrillConfigurationSelect/DrillConfigurationSelect";
@@ -18,6 +18,7 @@ interface IEditDrillConfigurationPageProps {
     selectedDrillConfiguration: IDrillConfiguration;
     handleSelectedDrillConfigurationChanged: (drillConfiguration: IDrillConfiguration) => void;
     handleSelectPageClicked: (page: string) => void;
+    handleSaveDrillConfigurations: (changedDrillConfiguration: IDrillConfiguration) => void;
 }
 
 export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPageProps> = (props: IEditDrillConfigurationPageProps): JSX.Element => {
@@ -56,7 +57,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="NumberOfShotsInput">
                     <NumberOfShotsInput
                         numberOfShots={drillConfiguration.numberOfShots}
-                        handleNumberOfShotsChanged={(numberOfShots: number): void =>{
+                        handleNumberOfShotsChanged={(numberOfShots: number): void => {
                             const drillConfigurationClone: IDrillConfiguration = {...drillConfiguration};
                             drillConfigurationClone.numberOfShots = numberOfShots;
                             setDrillConfiguration(drillConfigurationClone);
@@ -84,6 +85,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="back-flex-item flex-item">
                         <span className="back-span"
                               onClick={(): void => {
+                                  props.handleSaveDrillConfigurations(drillConfiguration);
                                   props.handleSelectPageClicked(SelectDrillPageName)
                               }}
                         >
