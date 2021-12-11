@@ -1,15 +1,23 @@
 [
     {
-        "uuid": "423565f8-0c9a-4c79-8595-37009de659c9",
-        "name": "Emma 50 Carry",
-        "description": "6 fairway shots to a green with 5 meter radius from Emma's 2022 distance of 50 meter",
+        "uuid": "fedb883f-c575-44b6-99d1-88a364be5091",
+        "name": "BGV Pitch 2020",
+        "description": "18 fairway shots to a green with 5 meter radius from fixed BGV distances in random order: 6, 14, 22, 30, 38, 46, 54, 62, 70 meter",
         "unit": "meter",
         "distanceGenerator": {
             "type": "RandomFromFixedDistancesGenerator",
             "distances": [
-                50
+                6,
+                14,
+                22,
+                30,
+                38,
+                46,
+                54,
+                62,
+                70
             ],
-            "numberOfRounds": 6
+            "numberOfRounds": 2
         },
         "startGroundType": "Fairway",
         "endGroundTypes": [
@@ -31,24 +39,16 @@
         ]
     },
     {
-        "uuid": "fedb883f-c575-44b6-99d1-88a364be5091",
-        "name": "BGV Pitch 2020",
-        "description": "18 fairway shots to a green with 5 meter radius from fixed BGV distances in random order: 6, 14, 22, 30, 38, 46, 54, 62, 70 meter",
+        "uuid": "423565f8-0c9a-4c79-8595-37009de659c9",
+        "name": "Emma 50m Carry",
+        "description": "6 fairway shots to a green with 5 meter radius from Emma's 2022 distance of 50 meter",
         "unit": "meter",
         "distanceGenerator": {
             "type": "RandomFromFixedDistancesGenerator",
             "distances": [
-                6,
-                14,
-                22,
-                30,
-                38,
-                46,
-                54,
-                62,
-                70
+                50
             ],
-            "numberOfRounds": 2
+            "numberOfRounds": 6
         },
         "startGroundType": "Fairway",
         "endGroundTypes": [
