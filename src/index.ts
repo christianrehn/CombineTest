@@ -1,5 +1,7 @@
 import {app, BrowserWindow, ipcMain} from 'electron';
 import electronIsDev from "electron-is-dev";
+import fs from "fs";
+import path from "path";
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 
@@ -46,11 +48,29 @@ const createWindow = (): void => {
         // event.reply('appPath', app.getAppPath())
         event.returnValue = app.getAppPath();
     })
-};
 
-ipcMain.on('quit', (event: Electron.IpcMainEvent, arg: any): void => {
-    app.quit();
-})
+    ipcMain.on('quit', (event: Electron.IpcMainEvent, arg: any): void => {
+        app.quit();
+    })
+
+    const userDrillConfigurationsFilename: string = path.join(app.getPath('userData'), "DrillConfigurations.json");
+
+    ipcMain.on("loadUserDrillConfigurationsAsString", (event: Electron.IpcMainEvent, arg: any): void => {
+        console.log("loadUserDrillConfigurationsAsString - userDrillConfigurationsFilename=", userDrillConfigurationsFilename);
+        if (!fs.existsSync(userDrillConfigurationsFilename)) {
+            console.log("loadUserDrillConfigurationsAsString - no user configuration file found");
+            event.returnValue = '';
+        } else {
+            event.returnValue = fs.readFileSync(userDrillConfigurationsFilename, 'utf8');
+        }
+    });
+
+    ipcMain.on("saveUserDrillConfigurations", (event: Electron.IpcMainEvent, drillConfigurationsAsString: any): void => {
+        console.log("saveUserDrillConfigurations - userDrillConfigurationsFilename=", userDrillConfigurationsFilename);
+        fs.writeFileSync(userDrillConfigurationsFilename, drillConfigurationsAsString, 'utf8');
+        event.returnValue = true;
+    });
+};
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
