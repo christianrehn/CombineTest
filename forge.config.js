@@ -69,8 +69,8 @@ module.exports = {
                         }
                     ]
                 },
-                "port": 3001,
-                "loggerPort": 9001
+                "port": 3011,
+                "loggerPort": 9011
             }
         ]
     ]
