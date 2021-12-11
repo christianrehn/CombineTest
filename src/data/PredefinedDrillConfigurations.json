@@ -1,5 +1,6 @@
 [
     {
+        "uuid": "423565f8-0c9a-4c79-8595-37009de659c9",
         "name": "Emma 50 Carry",
         "description": "6 fairway shots to a green with 5 meter radius from Emma's 2022 distance of 50 meter",
         "unit": "meter",
@@ -30,6 +31,7 @@
         ]
     },
     {
+        "uuid": "fedb883f-c575-44b6-99d1-88a364be5091",
         "name": "BGV Pitch 2020",
         "description": "18 fairway shots to a green with 5 meter radius from fixed BGV distances in random order: 6, 14, 22, 30, 38, 46, 54, 62, 70 meter",
         "unit": "meter",
@@ -68,6 +70,7 @@
         ]
     },
     {
+        "uuid": "46493ad4-24a6-4fdf-b42c-82c5efd192e1",
         "name": "2 - 10 yards",
         "description": "2 fairway shots to a green with 10 yards radius from random distances between 2 and 10 yards",
         "unit": "yards",
@@ -89,6 +92,7 @@
         ]
     },
     {
+        "uuid": "97445e5c-1cbd-4f42-a788-5bdaa6e13492",
         "name": "tee shots 1",
         "description": "10 tee shots par 4, fairway width: 24 meter plus 9 meter rough on each side",
         "unit": "meter",
@@ -115,6 +119,7 @@
         ]
     },
     {
+        "uuid": "ea2bc048-9b3c-4418-95f4-e8d9951073d7",
         "name": "tee shots 2",
         "description": "10 tee shots par 4, fairway 26 yards 10 10 yards rough on each side",
         "unit": "yards",
