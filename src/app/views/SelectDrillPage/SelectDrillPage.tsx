@@ -1,6 +1,6 @@
 import React from 'react';
 import './SelectDrillPage.scss';
-import {IDrillConfiguration} from "../../model/DrillConfiguration";
+import {IDrillConfiguration} from "../../model/drillconfiguration/DrillConfiguration";
 import editIcon from '../../../assets/edit.png';
 import glassesIcon from "../../../assets/glasses.png";
 import exitIcon from '../../../assets/exit.png';
@@ -17,13 +17,13 @@ export const SelectDrillPageName: string = "SelectDrillPage";
 interface ISelectDrillPageProps {
     drillConfigurations: IDrillConfiguration[];
     handleDrillConfigurationsChanged: (drillConfigurations: IDrillConfiguration[]) => void;
-    selectedDistancesGenerator: IDrillConfiguration;
+    selectedDrillConfiguration: IDrillConfiguration;
     handleSelectedDrillConfigurationChanged: (drillConfiguration: IDrillConfiguration) => void;
     handleSelectPageClicked: (page: string) => void;
 }
 
 export const SelectDrillPage: React.FC<ISelectDrillPageProps> = (props: ISelectDrillPageProps): JSX.Element => {
-    const [distancesGenerator, setDistancesGenerator] = React.useState<IDrillConfiguration>(props.selectedDistancesGenerator);
+    const [distancesGenerator, setDistancesGenerator] = React.useState<IDrillConfiguration>(props.selectedDrillConfiguration);
     const [editMode, setEditMode] = React.useState<boolean>(false);
 
     return (
