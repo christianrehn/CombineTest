@@ -2,7 +2,7 @@ import React from "react";
 import './NextDistanceBox.scss';
 import {assert} from "chai";
 import {Unit} from "mathjs";
-import {IDrillConfiguration} from "../../model/DrillConfiguration";
+import {IDrillConfiguration} from "../../model/drillconfiguration/DrillConfiguration";
 
 export interface INextDistanceBoxProps {
     nextDistance: Unit;
