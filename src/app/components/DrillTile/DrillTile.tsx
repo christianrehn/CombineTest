@@ -1,6 +1,6 @@
 import React from "react";
 import './DrillTile.scss';
-import {IDrillConfiguration} from "../../model/DrillConfiguration";
+import {IDrillConfiguration} from "../../model/drillconfiguration/DrillConfiguration";
 
 export interface IDrillTileProps {
     drillConfiguration: IDrillConfiguration;
