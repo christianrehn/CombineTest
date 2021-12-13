@@ -15,7 +15,7 @@ export const DrillTile: React.FC<IDrillTileProps> = (props: IDrillTileProps): JS
                  props.handleTileClicked(props.drillConfiguration)
              }}>
             <div className={!!props.drillConfiguration ? "drill-tile-name" : "drill-tile-new"}>
-                {!!props.drillConfiguration ? props.drillConfiguration.name : "+"}
+                {!!props.drillConfiguration ? props.drillConfiguration.getName() : "+"}
             </div>
             <div className="drill-tile-description">
                 {!!props.drillConfiguration ? props.drillConfiguration.description : "Create new Drill Configuration"}
