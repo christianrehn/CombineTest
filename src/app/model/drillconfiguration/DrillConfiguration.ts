@@ -236,7 +236,7 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
         return {
             uuid: this.getUnit(),
             name: this.getName(),
-            description: this.getDescription,
+            description: this.getDescription(),
             unit: this.getUnit(),
             distanceGenerator: {
                 minIncludedDistance: this._minIncludedDistance,
@@ -308,7 +308,7 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
         return {
             uuid: this.getUnit(),
             name: this.getName(),
-            description: this.getDescription,
+            description: this.getDescription(),
             unit: this.getUnit(),
             distanceGenerator: {
                 type: distanceGeneratorType,
