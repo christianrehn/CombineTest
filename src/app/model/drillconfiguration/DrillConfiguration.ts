@@ -20,10 +20,14 @@ const createRandomNumber = (minIncluded: number, maxExcluded: number): number =>
 /**
  * A DrillConfiguration describes all the parameters of a Drill,
  * for example its name, description, number of shots, the distance generator, ...
+ *
+ * HINT: setter and getter implementations of base class were not called through the interface -> changed to get.../set... methods
  */
 export interface IDrillConfiguration {
-    uuid: string;
-    name: string;
+    getUuid: () => string;
+    setUuid: (uuid: string) => void;
+    getName: () => string;
+    setName: (name: string) => void;
     description: string;
     numberOfShots: number;
     unit: string;
@@ -38,13 +42,12 @@ export interface IDrillConfiguration {
  * Base class for DrillConfigurations below
  */
 abstract class AbstractDrillConfiguration {
-    protected readonly _uuid: string;
-    protected readonly _name: string;
-    protected readonly _description: string;
+    protected _uuid: string;
+    protected _name: string;
+    protected _description: string;
     protected readonly _averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
     protected readonly _endGroundTypes: IEndGroundType[];
     protected readonly _averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>;
-
 
     private static getEnumKeyByEnumValue<T extends { [index: string]: string }>(myEnum: T, enumValue: string): keyof T | null {
         let keys: string[] = Object.keys(myEnum).filter((x: string): boolean => myEnum[x] == enumValue);
@@ -59,8 +62,8 @@ abstract class AbstractDrillConfiguration {
         endGroundTypes: IEndGroundType[],
         averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>
     ) {
-        this._uuid = uuid,
-            this._name = name;
+        this._uuid = uuid;
+        this._name = name;
         this._description = description;
         this._averageShotsStartGroundTypeEnum =
             AverageStrokesDataGroundTypeEnum[
@@ -70,16 +73,28 @@ abstract class AbstractDrillConfiguration {
         this._averageStrokesDataMap = averageStrokesDataMap;
     }
 
-    get uuid(): string {
+    public getUuid = (): string => {
         return this._uuid;
     }
 
-    get name(): string {
+    public setUuid = (uuid: string): void => {
+        this._uuid = uuid;
+    }
+
+    public getName = (): string => {
         return this._name;
+    }
+
+    public setName = (name: string): void => {
+        this._name = name;
     }
 
     get description(): string {
         return this._description;
+    }
+
+    set description(description: string) {
+        this._description = description;
     }
 
     public computeAverageStrokesFromStartDistance = (startDistance: Unit): number => {
@@ -186,7 +201,7 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
         this._numberOfShots = numberOfShots;
     }
 
-    reset(): void {
+    public reset(): void {
         // nothing to do
     }
 
@@ -312,5 +327,4 @@ export class EmptyDrillConfiguration extends DrillConfigurationWithFixedDistance
         console.log("uuidv4()", uuidv4())
         super(uuidv4(), "", "", [], "meter", 1, AverageStrokesDataGroundTypeEnum.Fairway, [], averageStrokesDataMap);
     }
-
 }
