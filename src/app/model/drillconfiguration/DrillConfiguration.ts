@@ -30,9 +30,11 @@ export interface IDrillConfiguration {
     setName: (name: string) => void;
     getDescription: () => string;
     setDescription: (description: string) => void;
-    numberOfShots: number;
     getUnit: () => string;
     setUnit: (unit: string) => void;
+    numberOfShots: number;
+    startGroundType: string;
+    endGroundTypes: IEndGroundType[]
     averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
     getNextDistance: (index: number) => Unit;
     reset: () => void;
@@ -49,8 +51,8 @@ abstract class AbstractDrillConfiguration {
     protected _name: string;
     protected _description: string;
     protected _startGroundType: string;
-    protected readonly _averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
     protected readonly _endGroundTypes: IEndGroundType[];
+    protected readonly _averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
     protected readonly _averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>;
 
     private static getEnumKeyByEnumValue<T extends { [index: string]: string }>(myEnum: T, enumValue: string): keyof T | null {
@@ -70,11 +72,11 @@ abstract class AbstractDrillConfiguration {
         this._name = name;
         this._description = description;
         this._startGroundType = startGroundType;
+        this._endGroundTypes = endGroundTypes;
         this._averageShotsStartGroundTypeEnum =
             AverageStrokesDataGroundTypeEnum[
                 AbstractDrillConfiguration.getEnumKeyByEnumValue(AverageStrokesDataGroundTypeEnum, startGroundType)
                 ];
-        this._endGroundTypes = endGroundTypes;
         this._averageStrokesDataMap = averageStrokesDataMap;
     }
 
@@ -100,6 +102,14 @@ abstract class AbstractDrillConfiguration {
 
     public setDescription = (description: string): void => {
         this._description = description;
+    }
+
+    get startGroundType(): string {
+        return this._startGroundType;
+    }
+
+    get endGroundTypes(): IEndGroundType[] {
+        return this._endGroundTypes;
     }
 
     public computeAverageStrokesFromStartDistance = (startDistance: Unit): number => {

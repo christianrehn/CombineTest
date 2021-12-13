@@ -12,6 +12,11 @@ import {
 } from "../../components/DrillConfiguration/DrillConfigurationSelect/DrillConfigurationSelect";
 import {lengthUnits} from "../../model/unit/Unit";
 import {assert} from "chai";
+import {
+    createNewDrillConfigurationWithDistanceGenerator,
+    distanceGenerators
+} from "../../model/drillconfiguration/DistanceGenerator";
+import {AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "../../model/AverageStrokesData";
 
 export const EditDrillConfigurationPageName: string = "EditDrillConfigurationPage";
 
@@ -22,6 +27,7 @@ interface IEditDrillConfigurationPageProps {
     handleSelectedDrillConfigurationChanged: (drillConfiguration: IDrillConfiguration) => void;
     handleSelectPageClicked: (page: string) => void;
     handleSaveDrillConfigurations: (changedDrillConfiguration: IDrillConfiguration) => void;
+    averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>
 }
 
 export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPageProps> = (props: IEditDrillConfigurationPageProps): JSX.Element => {
@@ -66,13 +72,28 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         values={lengthUnits}
                         handleOnChange={(index: number): void => {
                             if (index >= 0) {
-                                console.log("index", index)
-                                console.log("lengthUnits[index]", lengthUnits[index])
                                 const drillConfigurationClone: IDrillConfiguration = {...props.selectedDrillConfiguration};
-                                console.log("calling set unit")
                                 drillConfigurationClone.setUnit(lengthUnits[index]);
-                                console.log("drillConfigurationClone", drillConfigurationClone)
                                 props.handleSelectedDrillConfigurationChanged(drillConfigurationClone);
+                            }
+                        }}
+                    />
+                </div>
+                <div className="DistanceGeneratorInput">
+                    <DrillConfigurationSelect
+                        label={"Distance Generator"}
+                        index={0}
+                        values={distanceGenerators}
+                        handleOnChange={(index: number): void => {
+                            if (index >= 0) {
+                                console.log("index", index)
+                                console.log("distanceGenerators[index]", distanceGenerators[index])
+                                const newdrillConfiguration: IDrillConfiguration =
+                                    createNewDrillConfigurationWithDistanceGenerator(
+                                        props.selectedDrillConfiguration,
+                                        distanceGenerators[index],
+                                        props.averageStrokesDataMap);
+                                props.handleSelectedDrillConfigurationChanged(newdrillConfiguration);
                             }
                         }}
                     />

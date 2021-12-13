@@ -7,10 +7,7 @@ import exitIcon from '../../../assets/exit.png';
 import {DrillPageName} from "../DrillPage/DrillPage";
 import {DrillTile} from "../../components/DrillTile/DrillTile";
 import {ipcRenderer} from "electron";
-import {
-    EditDrillConfigurationPage,
-    EditDrillConfigurationPageName
-} from "../EditDrillConfigurationPage/EditDrillConfigurationPage";
+import {EditDrillConfigurationPageName} from "../EditDrillConfigurationPage/EditDrillConfigurationPage";
 
 export const SelectDrillPageName: string = "SelectDrillPage";
 
@@ -92,7 +89,7 @@ export const SelectDrillPage: React.FC<ISelectDrillPageProps> = (props: ISelectD
                                 props.handleSelectedDrillConfigurationChanged(distancesGenerator);
                                 // switch to other page
                                 props.handleSelectPageClicked(EditDrillConfigurationPageName);
-                        }}
+                            }}
                     />
                     : null
                 }

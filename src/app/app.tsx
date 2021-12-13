@@ -116,6 +116,7 @@ const App: React.FC<{}> = (): JSX.Element => {
                         handleSelectedDrillConfigurationChanged={handleSelectedDrillConfigurationChanged}
                         handleSelectPageClicked={setSelectedPage}
                         handleSaveDrillConfigurations={handleSaveUserDrillConfigurations}
+                        averageStrokesDataMap={averageStrokesDataMap}
                     />
                     : selectedPage === DrillPageName
                         ? <DrillPage
