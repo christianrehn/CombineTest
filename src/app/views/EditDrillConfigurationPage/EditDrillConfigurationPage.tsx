@@ -17,6 +17,7 @@ import {
     distanceGenerators
 } from "../../model/drillconfiguration/DistanceGenerator";
 import {AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "../../model/AverageStrokesData";
+import {NumberOfShotsInput} from "../../components/DrillConfiguration/NumberOfShotsInput/NumberOfShotsInput";
 
 export const EditDrillConfigurationPageName: string = "EditDrillConfigurationPage";
 
@@ -32,8 +33,16 @@ interface IEditDrillConfigurationPageProps {
 
 export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPageProps> = (props: IEditDrillConfigurationPageProps): JSX.Element => {
     assert(!!props.selectedDrillConfiguration, "!props.selectedDrillConfiguration");
-
     console.log("EditDrillConfigurationPage - props.selectedDrillConfiguration", props.selectedDrillConfiguration);
+
+    const [distanceGeneratorIndex, setDistanceGeneratorIndex] = React.useState<number>(0);
+    const [minIncludedDistance, setMinIncludedDistance] = React.useState<number>(0);
+    const [maxExcludedDistance, setMaxExcludedDistance] = React.useState<number>(0);
+    const [distances, setDistances] = React.useState<number[]>([0, 3, 6]);
+    const [numberOfRounds, setNumberOfRounds] = React.useState<number>(0);
+
+    const groundTypesAsString: string[] = Object.values(AverageStrokesDataGroundTypeEnum);
+    console.log("EditDrillConfigurationPage - groundTypesAsString", groundTypesAsString);
 
     return (
         <div className="edit-drill-configuration-page page">
@@ -44,6 +53,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="NameInput">
                     <DrillConfigurationTextInput
                         label={"Name"}
+                        type={"text"}
                         value={props.selectedDrillConfiguration.getName()}
                         maxLength={10}
                         handleOnChange={(value: string): void => {
@@ -56,6 +66,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="DescriptionInput">
                     <DrillConfigurationTextInput
                         label={"Description"}
+                        type={"text"}
                         value={props.selectedDrillConfiguration.getDescription()}
                         maxLength={80}
                         handleOnChange={(value: string): void => {
@@ -65,7 +76,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         }}
                     />
                 </div>
-                <div className="UnitInput">
+                <div className="UnitSelect">
                     <DrillConfigurationSelect
                         label={"Unit"}
                         index={lengthUnits.indexOf(props.selectedDrillConfiguration.getUnit())}
@@ -79,14 +90,14 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         }}
                     />
                 </div>
-                <div className="DistanceGeneratorInput">
+                <div className="DistanceGeneratorSelect">
                     <DrillConfigurationSelect
                         label={"Distance Generator"}
-                        index={0}
+                        index={distanceGeneratorIndex}
                         values={distanceGenerators}
                         handleOnChange={(index: number): void => {
                             if (index >= 0) {
-                                console.log("index", index)
+                                setDistanceGeneratorIndex(index)
                                 console.log("distanceGenerators[index]", distanceGenerators[index])
                                 const newdrillConfiguration: IDrillConfiguration =
                                     createNewDrillConfigurationWithDistanceGenerator(
@@ -98,16 +109,74 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         }}
                     />
                 </div>
-                {/*<div className="NumberOfShotsInput">*/}
-                {/*    <NumberOfShotsInput*/}
-                {/*        numberOfShots={drillConfiguration.numberOfShots}*/}
-                {/*        handleNumberOfShotsChanged={(numberOfShots: number): void => {*/}
-                {/*            const drillConfigurationClone: IDrillConfiguration = {...drillConfiguration};*/}
-                {/*            drillConfigurationClone.numberOfShots = numberOfShots;*/}
-                {/*            setDrillConfiguration(drillConfigurationClone);*/}
-                {/*        }}*/}
-                {/*    />*/}
-                {/*</div>*/}
+                <div className="MinIncludedDistanceInput">
+                    <DrillConfigurationTextInput
+                        label={"Minimum Included Distance"}
+                        type={"number"}
+                        value={minIncludedDistance}
+                        maxLength={3}
+                        handleOnChange={(value: string): void => {
+                            setMinIncludedDistance(Number(value));
+                        }}
+                    />
+                </div>
+                <div className="MaxExcludedDistanceInput">
+                    <DrillConfigurationTextInput
+                        label={"Maximum Excluded Distance"}
+                        type={"number"}
+                        value={maxExcludedDistance}
+                        maxLength={3}
+                        handleOnChange={(value: string): void => {
+                            setMaxExcludedDistance(Number(value));
+                        }}
+                    />
+                </div>
+                <div className="NumberOfShotsInput">
+                    <NumberOfShotsInput
+                        numberOfShots={props.selectedDrillConfiguration.numberOfShots}
+                        handleNumberOfShotsChanged={(numberOfShots: number): void => {
+                            const drillConfigurationClone: IDrillConfiguration = {...props.selectedDrillConfiguration};
+                            // drillConfigurationClone.setNumberOfShots(numberOfShots);
+                            props.handleSelectedDrillConfigurationChanged(drillConfigurationClone);
+                        }}
+                    />
+                </div>
+                <div className="DistancesInput">
+                    <DrillConfigurationTextInput
+                        label={"Distances"}
+                        type={"text"}
+                        value={distances.join(", ")}
+                        maxLength={80}
+                        handleOnChange={(value: string): void => {
+                            // setDistances(value);
+                        }}
+                    />
+                </div>
+                <div className="NumberOfRoundsInput">
+                    <DrillConfigurationTextInput
+                        label={"Number Of Rounds"}
+                        type={"number"}
+                        value={numberOfRounds}
+                        maxLength={3}
+                        handleOnChange={(value: string): void => {
+                            setNumberOfRounds(Number(value));
+                        }}
+                    />
+                </div>
+                <div className="StartGroundTypeSelect">
+                    <DrillConfigurationSelect
+                        label={"Start Ground Type"}
+                        index={groundTypesAsString.indexOf(props.selectedDrillConfiguration.startGroundType)}
+                        values={groundTypesAsString}
+                        handleOnChange={(index: number): void => {
+                            if (index >= 0) {
+                                const drillConfigurationClone: IDrillConfiguration = {...props.selectedDrillConfiguration};
+                                // drillConfigurationClone.setStartGroundType(lengthUnits[index]);
+                                props.handleSelectedDrillConfigurationChanged(drillConfigurationClone);
+                            }
+                        }}
+                    />
+                </div>
             </div>
 
             <div className="top-buttons-flex-item">

@@ -3,7 +3,8 @@ import './DrillConfigurationTextInput.scss';
 
 export interface IDrillConfigurationTextInputProps {
     label: string;
-    value: string;
+    type: string;
+    value: string | number | undefined;
     maxLength: number;
     handleOnChange: (value: string) => void;
 }
@@ -18,7 +19,7 @@ export const DrillConfigurationTextInput: React.FC<IDrillConfigurationTextInputP
             <div className="drill-configuration-text-input-box">
                 <input
                     className="drill-configuration-text-input input-css"
-                    type="text"
+                    type={props.type}
                     value={props.value}
                     maxLength={props.maxLength}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
