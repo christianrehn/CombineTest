@@ -15,7 +15,7 @@ export const NextDistanceBox: React.FC<INextDistanceBoxProps> = (props: INextDis
 
     const nextDistanceInDistancesGeneratorUnit: number =
         !!props.nextDistance
-            ? props.nextDistance.toNumber(props.selectedDrillConfiguration.unit)
+            ? props.nextDistance.toNumber(props.selectedDrillConfiguration.getUnit())
             : undefined;
 
     const averageStrokesFromStartDistance: number = props.selectedDrillConfiguration.computeAverageStrokesFromStartDistance(props.nextDistance);
@@ -24,7 +24,7 @@ export const NextDistanceBox: React.FC<INextDistanceBoxProps> = (props: INextDis
         <div className="next-distance box">
             <p className="next-distance-number">{!!nextDistanceInDistancesGeneratorUnit ? nextDistanceInDistancesGeneratorUnit :
                 <span>&nbsp;</span>}</p>
-            <p className="next-distance-unit"> {!!nextDistanceInDistancesGeneratorUnit ? props.selectedDrillConfiguration.unit : "DONE"}</p>
+            <p className="next-distance-unit"> {!!nextDistanceInDistancesGeneratorUnit ? props.selectedDrillConfiguration.getUnit() : "DONE"}</p>
             <p className="next-distance-average-strokes">{!!averageStrokesFromStartDistance ? averageStrokesFromStartDistance.toFixed(3) :
                 <span>&nbsp;</span>}</p>
             <p className="next-distance-average-strokes-label">{!!averageStrokesFromStartDistance ? "Strokes" :

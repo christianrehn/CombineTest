@@ -18,7 +18,7 @@ export const DrillTile: React.FC<IDrillTileProps> = (props: IDrillTileProps): JS
                 {!!props.drillConfiguration ? props.drillConfiguration.getName() : "+"}
             </div>
             <div className="drill-tile-description">
-                {!!props.drillConfiguration ? props.drillConfiguration.description : "Create new Drill Configuration"}
+                {!!props.drillConfiguration ? props.drillConfiguration.getDescription() : "Create new Drill Configuration"}
             </div>
         </div>
     );

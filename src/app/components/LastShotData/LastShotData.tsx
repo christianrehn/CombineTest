@@ -14,20 +14,20 @@ const additionalDataForAllShots = (props: ILastShotData) => {
     const absoluteDeviationSum: Unit = props.shotDatas
         .map((shotData: IShotData) => computeAbsoluteDeviation(shotData))
         .reduce((accumulator: Unit, currentValue: Unit) => math.add(accumulator, currentValue) as Unit,
-            math.unit(0, props.selectedDrillConfiguration.unit));
+            math.unit(0, props.selectedDrillConfiguration.getUnit()));
 
     const relativeDeviationSum: number = props.shotDatas
         .map((shotData: IShotData) => computeRelativeDeviation(shotData))
         .reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0) * 100;
 
 
-    const distanceUnit: string = !!props.lastShot ? props.selectedDrillConfiguration.unit : "";
+    const distanceUnit: string = !!props.lastShot ? props.selectedDrillConfiguration.getUnit() : "";
 
     return (<div>
         <div className="last-shot__row last-shot__new_shots_data_section_start">
             <div className="last-shot-item__label">Sum Absolute Deviation</div>
             <div className="last-shot-item__data"> {
-                !!props.lastShot ? absoluteDeviationSum.toNumber(props.selectedDrillConfiguration.unit).toFixed(2) : ""
+                !!props.lastShot ? absoluteDeviationSum.toNumber(props.selectedDrillConfiguration.getUnit()).toFixed(2) : ""
             } </div>
             <div
                 className="last-shot-item__unit"> {distanceUnit} </div>
@@ -36,7 +36,7 @@ const additionalDataForAllShots = (props: ILastShotData) => {
         <div className="last-shot__row">
             <div className="last-shot-item__label">Average Absolute Deviation</div>
             <div className="last-shot-item__data"> {
-                !!props.lastShot ? (absoluteDeviationSum.toNumber(props.selectedDrillConfiguration.unit) / props.shotDatas.length).toFixed(2) : ""
+                !!props.lastShot ? (absoluteDeviationSum.toNumber(props.selectedDrillConfiguration.getUnit()) / props.shotDatas.length).toFixed(2) : ""
             } </div>
             <div
                 className="last-shot-item__unit"> {distanceUnit} </div>
@@ -87,8 +87,8 @@ const shotsGainedData = (props: ILastShotData, targetDistance: string): JSX.Elem
         })
         .reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0);
 
-    const absoluteDeviationString: string = !!absoluteDeviation ? absoluteDeviation.toNumber(props.selectedDrillConfiguration.unit).toFixed(2) : "";
-    const distanceUnit: string = !!props.lastShot ? props.selectedDrillConfiguration.unit : "";
+    const absoluteDeviationString: string = !!absoluteDeviation ? absoluteDeviation.toNumber(props.selectedDrillConfiguration.getUnit()).toFixed(2) : "";
+    const distanceUnit: string = !!props.lastShot ? props.selectedDrillConfiguration.getUnit() : "";
 
     return [
         <div
@@ -150,10 +150,10 @@ export const LastShotData: React.FC<ILastShotData> = (props: ILastShotData): JSX
     const absoluteDeviation: Unit | undefined = props.shotDatas.length > 0 ? computeAbsoluteDeviation(props.shotDatas[props.shotDatas.length - 1]) : undefined;
     const relativeDeviation: number | undefined = props.shotDatas.length > 0 ? computeRelativeDeviation(props.shotDatas[props.shotDatas.length - 1]) : undefined;
 
-    const targetDistanceString: string = !!props.lastShot ? props.lastShot.targetDistance.toNumber(props.selectedDrillConfiguration.unit).toFixed(2) : "";
-    const absoluteDeviationString: string = !!absoluteDeviation ? absoluteDeviation.toNumber(props.selectedDrillConfiguration.unit).toFixed(2) : "";
+    const targetDistanceString: string = !!props.lastShot ? props.lastShot.targetDistance.toNumber(props.selectedDrillConfiguration.getUnit()).toFixed(2) : "";
+    const absoluteDeviationString: string = !!absoluteDeviation ? absoluteDeviation.toNumber(props.selectedDrillConfiguration.getUnit()).toFixed(2) : "";
     const relativeDeviationString: string = !!relativeDeviation ? (relativeDeviation * 100).toFixed(1) : "";
-    const distanceUnit: string = !!props.lastShot ? props.selectedDrillConfiguration.unit : "";
+    const distanceUnit: string = !!props.lastShot ? props.selectedDrillConfiguration.getUnit() : "";
 
     return (
         <div className="last-shot-table">
@@ -168,21 +168,21 @@ export const LastShotData: React.FC<ILastShotData> = (props: ILastShotData): JSX
             <div className="last-shot__row">
                 <div className="last-shot-item__label">Carry</div>
                 <div
-                    className="last-shot-item__data"> {!!props.lastShot ? props.lastShot.carry.toNumber(props.selectedDrillConfiguration.unit).toFixed(2) : ""} </div>
+                    className="last-shot-item__data"> {!!props.lastShot ? props.lastShot.carry.toNumber(props.selectedDrillConfiguration.getUnit()).toFixed(2) : ""} </div>
                 <div
                     className="last-shot-item__unit"> {distanceUnit} </div>
             </div>
             <div className="last-shot__row">
                 <div className="last-shot-item__label">Total</div>
                 <div
-                    className="last-shot-item__data"> {!!props.lastShot ? props.lastShot.totalDistance.toNumber(props.selectedDrillConfiguration.unit).toFixed(2) : ""} </div>
+                    className="last-shot-item__data"> {!!props.lastShot ? props.lastShot.totalDistance.toNumber(props.selectedDrillConfiguration.getUnit()).toFixed(2) : ""} </div>
                 <div
                     className="last-shot-item__unit"> {distanceUnit} </div>
             </div>
             <div className="last-shot__row">
                 <div className="last-shot-item__label">Offline</div>
                 <div
-                    className="last-shot-item__data"> {!!props.lastShot ? props.lastShot.offline.toNumber(props.selectedDrillConfiguration.unit).toFixed(2) : ""} </div>
+                    className="last-shot-item__data"> {!!props.lastShot ? props.lastShot.offline.toNumber(props.selectedDrillConfiguration.getUnit()).toFixed(2) : ""} </div>
                 <div
                     className="last-shot-item__unit"> {distanceUnit} </div>
             </div>

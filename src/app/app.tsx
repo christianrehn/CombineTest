@@ -17,7 +17,10 @@ import averageShotsFromRoughCsvPath from "../data/rough.csv";
 import averageShotsFromGreenCsvPath from "../data/green.csv";
 import {AverageStrokesData, AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "./model/AverageStrokesData";
 import {SelectDrillPage, SelectDrillPageName} from "./views/SelectDrillPage/SelectDrillPage";
-import {drillConfigurationsFromJson, drillConfigurationsToString} from "./model/drillconfiguration/DrillConfigurationConverter";
+import {
+    drillConfigurationsFromJson,
+    drillConfigurationsToString
+} from "./model/drillconfiguration/DrillConfigurationConverter";
 import {assert} from "chai";
 
 const App: React.FC<{}> = (): JSX.Element => {
@@ -90,8 +93,9 @@ const App: React.FC<{}> = (): JSX.Element => {
         }
         setDrillConfigurations(drillConfigurationsClone);
         const drillConfigurationsAsString: string = drillConfigurationsToString(drillConfigurationsClone);
+        console.log("drillConfigurationsAsString", drillConfigurationsAsString)
         const success = ipcRenderer.sendSync('saveUserDrillConfigurations', drillConfigurationsAsString);
-        console.log("handleSaveUserDrillConfigurations - success=",success)
+        console.log("handleSaveUserDrillConfigurations - success=", success)
     }
 
     return (

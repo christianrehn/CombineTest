@@ -1,6 +1,6 @@
 {
     "name": "GCQuadCombineTest",
-    "productName": "GCQuad Combine Test",
+    "productName": "GCQuadCombineTest",
     "version": "0.7.0",
     "description": "Practice tee and approach shots with GCQuad and FSX2020 similar to the Trackman Combine Test",
     "main": ".webpack/main",

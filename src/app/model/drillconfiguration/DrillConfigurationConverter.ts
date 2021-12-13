@@ -12,8 +12,11 @@ export const drillConfigurationsToString = (
 ): string => {
     assert(drillConfigurations !== undefined, "drillConfigurations === undefined");
     assert(drillConfigurations !== null, "drillConfigurations === null");
-
-    return JSON.stringify([]);
+    const drillConfigurationsAsJson: any[] = drillConfigurations.map((drillConfiguration: IDrillConfiguration) => {
+        return drillConfiguration.toJson();
+    });
+    console.log("drillConfigurationsAsJson", drillConfigurationsAsJson)
+    return JSON.stringify(drillConfigurationsAsJson);
 }
 
 export const drillConfigurationsFromJson = (

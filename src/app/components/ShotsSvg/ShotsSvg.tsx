@@ -18,7 +18,7 @@ export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
         props.shotDatas
             .map((shotData: IShotData) => computeAbsoluteDeviation(shotData))
             .reduce((accumulator: number, absoluteDeviation: Unit) => {
-                const absoluteDeviationAsNumber: number = absoluteDeviation.toNumber(props.selectedDrillConfiguration.unit);
+                const absoluteDeviationAsNumber: number = absoluteDeviation.toNumber(props.selectedDrillConfiguration.getUnit());
                 return accumulator > absoluteDeviationAsNumber ? accumulator : absoluteDeviationAsNumber
             }, 0);
     console.log("absoluteDeviationMaxAsNumber", absoluteDeviationMaxAsNumber);
@@ -80,15 +80,15 @@ export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
         {/*circle for current shot*/}
         {
             props.shotDatas.map((shotData: IShotData, index: number) => {
-                const deltaY: number = shotData.targetDistance.toNumber(props.selectedDrillConfiguration.unit) - shotData.carry.toNumber(props.selectedDrillConfiguration.unit);
+                const deltaY: number = shotData.targetDistance.toNumber(props.selectedDrillConfiguration.getUnit()) - shotData.carry.toNumber(props.selectedDrillConfiguration.getUnit());
                 return <g key={`shots_svg_shotcircle_${index}`}>
                     <circle
                         className={props.shotDatas.length === index + 1 ? 'shots_svg_lastshotcircle' : 'shots_svg_shotcircle'}
-                        cx={shotData.offline.toNumber(props.selectedDrillConfiguration.unit) * svgScaleFactor}
+                        cx={shotData.offline.toNumber(props.selectedDrillConfiguration.getUnit()) * svgScaleFactor}
                         cy={deltaY * svgScaleFactor}/>
                     <text
                         className={props.shotDatas.length === index + 1 ? 'shots_svg_lastshotcircletext' : 'shots_svg_shotcircletext'}
-                        x={shotData.offline.toNumber(props.selectedDrillConfiguration.unit) * svgScaleFactor}
+                        x={shotData.offline.toNumber(props.selectedDrillConfiguration.getUnit()) * svgScaleFactor}
                         y={deltaY * svgScaleFactor}
                     > {index + 1}
                     </text>

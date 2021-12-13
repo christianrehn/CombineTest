@@ -10,7 +10,7 @@ export interface IDrillConfigurationTextInputProps {
 }
 
 export const DrillConfigurationTextInput: React.FC<IDrillConfigurationTextInputProps> = (props: IDrillConfigurationTextInputProps): any => {
-    assert(!!props.value, "!props.value");
+    assert(!!props.value, `DrillConfigurationTextInput - !props.value, props.label=${props.label}`);
 
     return (
         <div className="drill-configuration-text-input-container">

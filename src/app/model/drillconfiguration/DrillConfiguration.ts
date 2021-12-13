@@ -28,14 +28,17 @@ export interface IDrillConfiguration {
     setUuid: (uuid: string) => void;
     getName: () => string;
     setName: (name: string) => void;
-    description: string;
+    getDescription: () => string;
+    setDescription: (description: string) => void;
     numberOfShots: number;
-    unit: string;
+    getUnit: () => string;
+    setUnit: (unit: string) => void;
     averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
     getNextDistance: (index: number) => Unit;
     reset: () => void;
     computeAverageStrokesFromStartDistance: (startDistance: Unit) => number;
     computeAverageStrokesFromEndDistance: (endDistance: Unit) => number | undefined;
+    toJson: () => any;
 }
 
 /**
@@ -45,6 +48,7 @@ abstract class AbstractDrillConfiguration {
     protected _uuid: string;
     protected _name: string;
     protected _description: string;
+    protected _startGroundType: string;
     protected readonly _averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
     protected readonly _endGroundTypes: IEndGroundType[];
     protected readonly _averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>;
@@ -60,11 +64,12 @@ abstract class AbstractDrillConfiguration {
         description: string,
         startGroundType: string,
         endGroundTypes: IEndGroundType[],
-        averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>
+        averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>,
     ) {
         this._uuid = uuid;
         this._name = name;
         this._description = description;
+        this._startGroundType = startGroundType;
         this._averageShotsStartGroundTypeEnum =
             AverageStrokesDataGroundTypeEnum[
                 AbstractDrillConfiguration.getEnumKeyByEnumValue(AverageStrokesDataGroundTypeEnum, startGroundType)
@@ -89,11 +94,11 @@ abstract class AbstractDrillConfiguration {
         this._name = name;
     }
 
-    get description(): string {
+    public getDescription = (): string => {
         return this._description;
     }
 
-    set description(description: string) {
+    public setDescription = (description: string): void => {
         this._description = description;
     }
 
@@ -178,7 +183,7 @@ export interface IEndGroundType {
 export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDrillConfiguration implements IDrillConfiguration {
     private readonly _minIncludedDistance: number;
     private readonly _maxExcludedDistance: number;
-    private readonly _unit: string;
+    private _unit: string;
     private readonly _numberOfShots: number;
 
     constructor(
@@ -201,6 +206,22 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
         this._numberOfShots = numberOfShots;
     }
 
+    public toJson = (): any => {
+        return {
+            uuid: this.getUnit(),
+            name: this.getName(),
+            description: this.getDescription,
+            unit: this.getUnit(),
+            distanceGenerator: {
+                minIncludedDistance: this._minIncludedDistance,
+                maxExcludedDistance: this._maxExcludedDistance,
+                numberOfShots: this._numberOfShots
+            },
+            startGroundType: this._startGroundType,
+            endGroundTypes: this._endGroundTypes,
+        }
+    }
+
     public reset(): void {
         // nothing to do
     }
@@ -215,8 +236,12 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
         return this._numberOfShots;
     }
 
-    get unit(): string {
+    public getUnit(): string {
         return this._unit;
+    }
+
+    public setUnit(unit: string): void {
+        this._unit = unit;
     }
 
     get averageShotsStartGroundTypeEnum(): AverageStrokesDataGroundTypeEnum {
@@ -226,10 +251,10 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
 
 export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrillConfiguration implements IDrillConfiguration {
     protected readonly _distances: number[];
-    protected readonly _unit: string;
+    protected _unit: string;
     protected readonly _numberOfRounds: number;
 
-    constructor(
+    public constructor(
         uuid: string,
         name: string,
         description: string,
@@ -238,16 +263,42 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
         numberOfRounds: number,
         startGroundType: string,
         endGroundTypes: IEndGroundType[],
-        averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>
+        averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>,
     ) {
-        super(uuid, name, description, startGroundType, endGroundTypes, averageStrokesDataMap);
+        super(
+            uuid,
+            name,
+            description,
+            startGroundType,
+            endGroundTypes,
+            averageStrokesDataMap);
 
         this._distances = distances;
         this._unit = unit;
         this._numberOfRounds = numberOfRounds;
     }
 
-    reset(): void {
+    protected toJsonHelper(distanceGeneratorType: string): any {
+        return {
+            uuid: this.getUnit(),
+            name: this.getName(),
+            description: this.getDescription,
+            unit: this.getUnit(),
+            distanceGenerator: {
+                type: distanceGeneratorType,
+                distances: this._distances,
+                numberOfRounds: this._numberOfRounds
+            },
+            startGroundType: this._startGroundType,
+            endGroundTypes: this._endGroundTypes,
+        }
+    }
+
+    public toJson = (): any => {
+        return this.toJsonHelper("FixedDistancesGenerator");
+    }
+
+    public reset(): void {
         // nothing to do
     }
 
@@ -261,8 +312,12 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
         return this._distances.length * this._numberOfRounds;
     }
 
-    get unit(): string {
+    public getUnit(): string {
         return this._unit;
+    }
+
+    public setUnit(unit: string): void {
+        this._unit = unit;
     }
 
     get averageShotsStartGroundTypeEnum(): AverageStrokesDataGroundTypeEnum {
@@ -289,7 +344,7 @@ export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends Dri
         this.distancesNotYetReturned = [...distances];
     }
 
-    reset(): void {
+    public reset(): void {
         this.distancesNotYetReturned = [...this._distances];
         this.distancesReturnedMap = new Map<number, number>()
     }
@@ -317,6 +372,10 @@ export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends Dri
         this.distancesReturnedMap.set(index, next[0]);
 
         return math.unit(next[0], this._unit);
+    }
+
+    public toJson = (): any => {
+        return this.toJsonHelper("RandomFromFixedDistancesGenerator");
     }
 }
 

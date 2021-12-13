@@ -23,6 +23,7 @@ interface IEditDrillConfigurationPageProps {
 export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPageProps> = (props: IEditDrillConfigurationPageProps): JSX.Element => {
     const [drillConfiguration, setDrillConfiguration] = React.useState<IDrillConfiguration>(props.selectedDrillConfiguration);
 
+    console.log("drillConfiguration", drillConfiguration)
     return (
         <div className="edit-drill-configuration-page page">
             <div className="edit-drill-configuration-flex-item flex-item">
@@ -46,13 +47,13 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 {/*<div className="DescriptionInput">*/}
                 {/*    <DrillConfigurationTextInput*/}
                 {/*        label={"Description"}*/}
-                {/*        value={drillConfiguration.description}*/}
+                {/*        value={drillConfiguration.getDescription()}*/}
                 {/*        maxLength={80}*/}
                 {/*        handleOnChange={(value: string): void => {*/}
                 {/*            assert(!!value, "!value");*/}
 
                 {/*            const drillConfigurationClone: IDrillConfiguration = {...drillConfiguration};*/}
-                {/*            drillConfigurationClone.description = value;*/}
+                {/*            drillConfigurationClone.setDescription(value);*/}
                 {/*            setDrillConfiguration(drillConfigurationClone);*/}
                 {/*        }}*/}
                 {/*    />*/}
