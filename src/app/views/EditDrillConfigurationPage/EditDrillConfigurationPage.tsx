@@ -22,8 +22,8 @@ interface IEditDrillConfigurationPageProps {
 
 export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPageProps> = (props: IEditDrillConfigurationPageProps): JSX.Element => {
     const [drillConfiguration, setDrillConfiguration] = React.useState<IDrillConfiguration>(props.selectedDrillConfiguration);
+    console.log("EditDrillConfigurationPage - drillConfiguration", drillConfiguration);
 
-    console.log("drillConfiguration", drillConfiguration)
     return (
         <div className="edit-drill-configuration-page page">
             <div className="edit-drill-configuration-flex-item flex-item">
@@ -44,20 +44,20 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         }}
                     />
                 </div>
-                {/*<div className="DescriptionInput">*/}
-                {/*    <DrillConfigurationTextInput*/}
-                {/*        label={"Description"}*/}
-                {/*        value={drillConfiguration.getDescription()}*/}
-                {/*        maxLength={80}*/}
-                {/*        handleOnChange={(value: string): void => {*/}
-                {/*            assert(!!value, "!value");*/}
+                <div className="DescriptionInput">
+                    <DrillConfigurationTextInput
+                        label={"Description"}
+                        value={drillConfiguration.getDescription()}
+                        maxLength={80}
+                        handleOnChange={(value: string): void => {
+                            assert(!!value, "!value");
 
-                {/*            const drillConfigurationClone: IDrillConfiguration = {...drillConfiguration};*/}
-                {/*            drillConfigurationClone.setDescription(value);*/}
-                {/*            setDrillConfiguration(drillConfigurationClone);*/}
-                {/*        }}*/}
-                {/*    />*/}
-                {/*</div>*/}
+                            const drillConfigurationClone: IDrillConfiguration = {...drillConfiguration};
+                            drillConfigurationClone.setDescription(value);
+                            setDrillConfiguration(drillConfigurationClone);
+                        }}
+                    />
+                </div>
                 {/*<div className="NumberOfShotsInput">*/}
                 {/*    <NumberOfShotsInput*/}
                 {/*        numberOfShots={drillConfiguration.numberOfShots}*/}
