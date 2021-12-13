@@ -78,11 +78,11 @@ const App: React.FC<{}> = (): JSX.Element => {
     }
 
     const handleSaveUserDrillConfigurations = (changedDrillConfiguration: IDrillConfiguration): void => {
-        assert(!!changedDrillConfiguration.uuid, "!changedDrillConfiguration.uuid");
+        assert(!!changedDrillConfiguration.getUuid(), "!changedDrillConfiguration.getUuid()");
 
         const drillConfigurationsClone: IDrillConfiguration[] = [...drillConfigurations];
-        const drillConfigurationUuids: string[] = drillConfigurationsClone.map((drillConfiguration: IDrillConfiguration) => drillConfiguration.uuid);
-        const index: number = drillConfigurationUuids.indexOf(changedDrillConfiguration.uuid)
+        const drillConfigurationUuids: string[] = drillConfigurationsClone.map((drillConfiguration: IDrillConfiguration) => drillConfiguration.getUuid());
+        const index: number = drillConfigurationUuids.indexOf(changedDrillConfiguration.getUuid())
         if (index >= 0) {
             drillConfigurationsClone[index] = changedDrillConfiguration; // replace with changed entry
         } else {
