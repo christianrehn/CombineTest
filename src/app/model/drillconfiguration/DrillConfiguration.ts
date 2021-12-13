@@ -206,22 +206,6 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
         this._numberOfShots = numberOfShots;
     }
 
-    public toJson = (): any => {
-        return {
-            uuid: this.getUnit(),
-            name: this.getName(),
-            description: this.getDescription,
-            unit: this.getUnit(),
-            distanceGenerator: {
-                minIncludedDistance: this._minIncludedDistance,
-                maxExcludedDistance: this._maxExcludedDistance,
-                numberOfShots: this._numberOfShots
-            },
-            startGroundType: this._startGroundType,
-            endGroundTypes: this._endGroundTypes,
-        }
-    }
-
     public reset(): void {
         // nothing to do
     }
@@ -246,6 +230,22 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
 
     get averageShotsStartGroundTypeEnum(): AverageStrokesDataGroundTypeEnum {
         return this._averageShotsStartGroundTypeEnum;
+    }
+
+    public toJson = (): any => {
+        return {
+            uuid: this.getUnit(),
+            name: this.getName(),
+            description: this.getDescription,
+            unit: this.getUnit(),
+            distanceGenerator: {
+                minIncludedDistance: this._minIncludedDistance,
+                maxExcludedDistance: this._maxExcludedDistance,
+                numberOfShots: this._numberOfShots
+            },
+            startGroundType: this._startGroundType,
+            endGroundTypes: this._endGroundTypes,
+        }
     }
 }
 
@@ -278,26 +278,6 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
         this._numberOfRounds = numberOfRounds;
     }
 
-    protected toJsonHelper(distanceGeneratorType: string): any {
-        return {
-            uuid: this.getUnit(),
-            name: this.getName(),
-            description: this.getDescription,
-            unit: this.getUnit(),
-            distanceGenerator: {
-                type: distanceGeneratorType,
-                distances: this._distances,
-                numberOfRounds: this._numberOfRounds
-            },
-            startGroundType: this._startGroundType,
-            endGroundTypes: this._endGroundTypes,
-        }
-    }
-
-    public toJson = (): any => {
-        return this.toJsonHelper("FixedDistancesGenerator");
-    }
-
     public reset(): void {
         // nothing to do
     }
@@ -322,6 +302,26 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
 
     get averageShotsStartGroundTypeEnum(): AverageStrokesDataGroundTypeEnum {
         return this._averageShotsStartGroundTypeEnum;
+    }
+
+    protected toJsonHelper(distanceGeneratorType: string): any {
+        return {
+            uuid: this.getUnit(),
+            name: this.getName(),
+            description: this.getDescription,
+            unit: this.getUnit(),
+            distanceGenerator: {
+                type: distanceGeneratorType,
+                distances: this._distances,
+                numberOfRounds: this._numberOfRounds
+            },
+            startGroundType: this._startGroundType,
+            endGroundTypes: this._endGroundTypes,
+        }
+    }
+
+    public toJson = (): any => {
+        return this.toJsonHelper("FixedDistancesGenerator");
     }
 }
 
