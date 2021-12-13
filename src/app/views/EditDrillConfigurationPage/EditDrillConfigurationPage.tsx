@@ -33,11 +33,12 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="NameInput">
                     <DrillConfigurationTextInput
                         label={"Name"}
-                        value={drillConfiguration.name}
+                        value={drillConfiguration.getName()}
                         maxLength={10}
                         handleDescriptionChanged={(name: string): void =>{
                             const drillConfigurationClone: IDrillConfiguration = {...drillConfiguration};
-                            drillConfigurationClone.name = name;
+                            drillConfigurationClone.setName(name);
+                            console.log("drillConfigurationClone",drillConfigurationClone)
                             setDrillConfiguration(drillConfigurationClone);
                         }}
                     />
