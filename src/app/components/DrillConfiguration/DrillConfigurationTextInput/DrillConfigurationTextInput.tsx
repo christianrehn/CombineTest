@@ -1,14 +1,17 @@
 import React from "react";
 import './DrillConfigurationTextInput.scss';
+import {assert} from "chai";
 
 export interface IDrillConfigurationTextInputProps {
     label: string;
     value: string;
     maxLength: number;
-    handleDescriptionChanged: (description: string) => void;
+    handleOnChange: (value: string) => void;
 }
 
 export const DrillConfigurationTextInput: React.FC<IDrillConfigurationTextInputProps> = (props: IDrillConfigurationTextInputProps): any => {
+    assert(!!props.value, "!props.value");
+
     return (
         <div className="drill-configuration-text-input-container">
             <label
@@ -22,7 +25,7 @@ export const DrillConfigurationTextInput: React.FC<IDrillConfigurationTextInputP
                     value={props.value}
                     maxLength={props.maxLength}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
-                        props.handleDescriptionChanged(String(event.target.value));
+                        props.handleOnChange(event.target.value);
                     }}
                 />
             </div>

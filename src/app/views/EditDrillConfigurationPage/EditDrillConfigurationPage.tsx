@@ -2,13 +2,12 @@ import React from 'react';
 import './EditDrillConfigurationPage.scss';
 import {IDrillConfiguration} from "../../model/drillconfiguration/DrillConfiguration";
 import {
-    DrillConfigurationSelect
-} from "../../components/DrillConfiguration/DrillConfigurationSelect/DrillConfigurationSelect";
-import {NumberOfShotsInput} from "../../components/DrillConfiguration/NumberOfShotsInput/NumberOfShotsInput";
-import {DrillConfigurationTextInput} from "../../components/DrillConfiguration/DrillConfigurationTextInput/DrillConfigurationTextInput";
+    DrillConfigurationTextInput
+} from "../../components/DrillConfiguration/DrillConfigurationTextInput/DrillConfigurationTextInput";
 import editIcon from "../../../assets/edit.png";
 import backIcon from '../../../assets/back.png';
 import {SelectDrillPageName} from "../SelectDrillPage/SelectDrillPage";
+import {assert} from "chai";
 
 export const EditDrillConfigurationPageName: string = "EditDrillConfigurationPage";
 
@@ -35,36 +34,39 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         label={"Name"}
                         value={drillConfiguration.getName()}
                         maxLength={10}
-                        handleDescriptionChanged={(name: string): void =>{
+                        handleOnChange={(value: string): void => {
+                            assert(!!value, "!value");
+
                             const drillConfigurationClone: IDrillConfiguration = {...drillConfiguration};
-                            drillConfigurationClone.setName(name);
-                            console.log("drillConfigurationClone",drillConfigurationClone)
+                            drillConfigurationClone.setName(value);
                             setDrillConfiguration(drillConfigurationClone);
                         }}
                     />
                 </div>
-                <div className="DescriptionInput">
-                    <DrillConfigurationTextInput
-                        label={"Description"}
-                        value={drillConfiguration.description}
-                        maxLength={80}
-                        handleDescriptionChanged={(description: string): void =>{
-                            const drillConfigurationClone: IDrillConfiguration = {...drillConfiguration};
-                            drillConfigurationClone.description = description;
-                            setDrillConfiguration(drillConfigurationClone);
-                        }}
-                    />
-                </div>
-                <div className="NumberOfShotsInput">
-                    <NumberOfShotsInput
-                        numberOfShots={drillConfiguration.numberOfShots}
-                        handleNumberOfShotsChanged={(numberOfShots: number): void => {
-                            const drillConfigurationClone: IDrillConfiguration = {...drillConfiguration};
-                            drillConfigurationClone.numberOfShots = numberOfShots;
-                            setDrillConfiguration(drillConfigurationClone);
-                        }}
-                    />
-                </div>
+                {/*<div className="DescriptionInput">*/}
+                {/*    <DrillConfigurationTextInput*/}
+                {/*        label={"Description"}*/}
+                {/*        value={drillConfiguration.description}*/}
+                {/*        maxLength={80}*/}
+                {/*        handleOnChange={(value: string): void => {*/}
+                {/*            assert(!!value, "!value");*/}
+
+                {/*            const drillConfigurationClone: IDrillConfiguration = {...drillConfiguration};*/}
+                {/*            drillConfigurationClone.description = value;*/}
+                {/*            setDrillConfiguration(drillConfigurationClone);*/}
+                {/*        }}*/}
+                {/*    />*/}
+                {/*</div>*/}
+                {/*<div className="NumberOfShotsInput">*/}
+                {/*    <NumberOfShotsInput*/}
+                {/*        numberOfShots={drillConfiguration.numberOfShots}*/}
+                {/*        handleNumberOfShotsChanged={(numberOfShots: number): void => {*/}
+                {/*            const drillConfigurationClone: IDrillConfiguration = {...drillConfiguration};*/}
+                {/*            drillConfigurationClone.numberOfShots = numberOfShots;*/}
+                {/*            setDrillConfiguration(drillConfigurationClone);*/}
+                {/*        }}*/}
+                {/*    />*/}
+                {/*</div>*/}
             </div>
 
             <div className="top-buttons-flex-item">
