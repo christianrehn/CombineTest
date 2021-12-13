@@ -26,7 +26,7 @@ const App: React.FC<{}> = (): JSX.Element => {
 
     const lastShotCsvPath: string = process.platform !== 'darwin'
         ? "C:/Program Files (x86)/Foresight Sports Experience/System/LastShot.CSV"
-        : "/Users/rehn/WebstormProjects/ApproachShot/test/data/LastShot.CSV";
+        : "/Users/rehn/IdeaProjects/GCQuadCombineTest/test/data/LastShot.CSV";
 
     const [drillConfigurations, setDrillConfigurations] = React.useState<IDrillConfiguration[]>([]);
     const [selectedDrillConfiguration, setSelectedDrillConfiguration] = React.useState<IDrillConfiguration>();
