@@ -220,11 +220,11 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
         return this._numberOfShots;
     }
 
-    public getUnit(): string {
+    public getUnit = (): string => {
         return this._unit;
     }
 
-    public setUnit(unit: string): void {
+    public setUnit = (unit: string): void => {
         this._unit = unit;
     }
 
@@ -292,11 +292,11 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
         return this._distances.length * this._numberOfRounds;
     }
 
-    public getUnit(): string {
+    public getUnit = (): string => {
         return this._unit;
     }
 
-    public setUnit(unit: string): void {
+    public setUnit = (unit: string): void => {
         this._unit = unit;
     }
 

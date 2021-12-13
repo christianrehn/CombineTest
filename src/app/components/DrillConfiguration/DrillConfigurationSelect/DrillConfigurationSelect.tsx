@@ -1,11 +1,11 @@
 import React from "react";
 import './DrillConfigurationSelect.scss';
-import {IDrillConfiguration} from "../../../model/drillconfiguration/DrillConfiguration";
 
 export interface ITestConfigurationSelectProps {
-    drillConfigurations: IDrillConfiguration[];
-    selectedDrillConfiguration: IDrillConfiguration;
-    handleSelectedDrillConfigurationChanged: (selectedDistancesGenerator: IDrillConfiguration) => void
+    label: string;
+    index: number;
+    values: string[];
+    handleOnChange: (index: number) => void;
 }
 
 export const DrillConfigurationSelect: React.FC<ITestConfigurationSelectProps> = (props: ITestConfigurationSelectProps): JSX.Element => {
@@ -13,25 +13,24 @@ export const DrillConfigurationSelect: React.FC<ITestConfigurationSelectProps> =
         <div className="drill-configuration-select-container">
             <label
                 className="drill-configuration-select-label"
-                htmlFor="drill-configuration-select">Select Distances
+                htmlFor="drill-configuration-select">{props.label}
             </label>
             <select
                 id="drill-configuration-select"
                 className="drill-configuration-select select-css"
-                title="Select a distances generator. Changing this value will lead to a restart"
-                value={props.drillConfigurations.indexOf(props.selectedDrillConfiguration)}
+                defaultValue={props.index}
                 onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                    props.handleSelectedDrillConfigurationChanged(props.drillConfigurations[Number(event.target.value)]);
+                    props.handleOnChange(Number(event.target.value));
                 }}
             >
                 {
-                    props.drillConfigurations.map((drillConfiguration: IDrillConfiguration, index: number) => {
+                    props.values.map((value: string, index: number) => {
                         return (
                             <option
-                                key={`drillConfigurationOption_${index}`}
+                                key={`value_${index}`}
                                 value={index}
                             >
-                                {drillConfiguration.description}
+                                {value}
                             </option>
                         );
                     })

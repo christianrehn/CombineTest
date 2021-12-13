@@ -7,6 +7,10 @@ import {
 import editIcon from "../../../assets/edit.png";
 import backIcon from '../../../assets/back.png';
 import {SelectDrillPageName} from "../SelectDrillPage/SelectDrillPage";
+import {
+    DrillConfigurationSelect
+} from "../../components/DrillConfiguration/DrillConfigurationSelect/DrillConfigurationSelect";
+import {lengthUnits} from "../../model/unit/Unit";
 import {assert} from "chai";
 
 export const EditDrillConfigurationPageName: string = "EditDrillConfigurationPage";
@@ -21,8 +25,9 @@ interface IEditDrillConfigurationPageProps {
 }
 
 export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPageProps> = (props: IEditDrillConfigurationPageProps): JSX.Element => {
-    const [drillConfiguration, setDrillConfiguration] = React.useState<IDrillConfiguration>(props.selectedDrillConfiguration);
-    console.log("EditDrillConfigurationPage - drillConfiguration", drillConfiguration);
+    assert(!!props.selectedDrillConfiguration, "!props.selectedDrillConfiguration");
+
+    console.log("EditDrillConfigurationPage - props.selectedDrillConfiguration", props.selectedDrillConfiguration);
 
     return (
         <div className="edit-drill-configuration-page page">
@@ -33,28 +38,42 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="NameInput">
                     <DrillConfigurationTextInput
                         label={"Name"}
-                        value={drillConfiguration.getName()}
+                        value={props.selectedDrillConfiguration.getName()}
                         maxLength={10}
                         handleOnChange={(value: string): void => {
-                            assert(!!value, "!value");
-
-                            const drillConfigurationClone: IDrillConfiguration = {...drillConfiguration};
+                            const drillConfigurationClone: IDrillConfiguration = {...props.selectedDrillConfiguration};
                             drillConfigurationClone.setName(value);
-                            setDrillConfiguration(drillConfigurationClone);
+                            props.handleSelectedDrillConfigurationChanged(drillConfigurationClone);
                         }}
                     />
                 </div>
                 <div className="DescriptionInput">
                     <DrillConfigurationTextInput
                         label={"Description"}
-                        value={drillConfiguration.getDescription()}
+                        value={props.selectedDrillConfiguration.getDescription()}
                         maxLength={80}
                         handleOnChange={(value: string): void => {
-                            assert(!!value, "!value");
-
-                            const drillConfigurationClone: IDrillConfiguration = {...drillConfiguration};
+                            const drillConfigurationClone: IDrillConfiguration = {...props.selectedDrillConfiguration};
                             drillConfigurationClone.setDescription(value);
-                            setDrillConfiguration(drillConfigurationClone);
+                            props.handleSelectedDrillConfigurationChanged(drillConfigurationClone);
+                        }}
+                    />
+                </div>
+                <div className="UnitInput">
+                    <DrillConfigurationSelect
+                        label={"Unit"}
+                        index={lengthUnits.indexOf(props.selectedDrillConfiguration.getUnit())}
+                        values={lengthUnits}
+                        handleOnChange={(index: number): void => {
+                            if (index >= 0) {
+                                console.log("index", index)
+                                console.log("lengthUnits[index]", lengthUnits[index])
+                                const drillConfigurationClone: IDrillConfiguration = {...props.selectedDrillConfiguration};
+                                console.log("calling set unit")
+                                drillConfigurationClone.setUnit(lengthUnits[index]);
+                                console.log("drillConfigurationClone", drillConfigurationClone)
+                                props.handleSelectedDrillConfigurationChanged(drillConfigurationClone);
+                            }
                         }}
                     />
                 </div>
@@ -89,7 +108,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="back-flex-item flex-item">
                         <span className="back-span"
                               onClick={(): void => {
-                                  props.handleSaveDrillConfigurations(drillConfiguration);
+                                  props.handleSaveDrillConfigurations(props.selectedDrillConfiguration);
                                   props.handleSelectPageClicked(SelectDrillPageName)
                               }}
                         >
