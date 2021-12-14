@@ -6,6 +6,11 @@ import {
 } from "./DrillConfiguration";
 import {AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "../AverageStrokesData";
 import {assert} from "chai";
+import {
+    FIXED_DISTANCES_GENERATOR,
+    RANDOM_DISTANCES_GENERATOR,
+    RANDOM_FROM_FIXED_DISTANCES_GENERATOR
+} from "./DistanceGenerator";
 
 export const drillConfigurationsToString = (
     drillConfigurations: IDrillConfiguration[],
@@ -29,7 +34,7 @@ export const drillConfigurationsFromJson = (
     return drillConfigurationsAsJson
         .map((drillConfigurationAsJson: any): IDrillConfiguration => {
             switch (drillConfigurationAsJson.distanceGenerator.type) {
-                case "RandomDistancesGenerator":
+                case RANDOM_DISTANCES_GENERATOR:
                     return new DrillConfigurationWithRandomDistancesGenerator(
                         drillConfigurationAsJson.uuid,
                         drillConfigurationAsJson.name,
@@ -41,7 +46,7 @@ export const drillConfigurationsFromJson = (
                         drillConfigurationAsJson.startGroundType,
                         drillConfigurationAsJson.endGroundTypes,
                         averageStrokesDataMap);
-                case "FixedDistancesGenerator":
+                case FIXED_DISTANCES_GENERATOR:
                     return new DrillConfigurationWithFixedDistancesGenerator(
                         drillConfigurationAsJson.uuid,
                         drillConfigurationAsJson.name,
@@ -52,7 +57,7 @@ export const drillConfigurationsFromJson = (
                         drillConfigurationAsJson.startGroundType,
                         drillConfigurationAsJson.endGroundTypes,
                         averageStrokesDataMap);
-                case "RandomFromFixedDistancesGenerator":
+                case RANDOM_FROM_FIXED_DISTANCES_GENERATOR:
                     return new DrillConfigurationWithRandomFromFixedDistancesGenerator(
                         drillConfigurationAsJson.uuid,
                         drillConfigurationAsJson.name,

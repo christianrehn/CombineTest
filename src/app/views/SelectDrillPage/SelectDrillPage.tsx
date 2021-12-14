@@ -20,7 +20,6 @@ interface ISelectDrillPageProps {
 }
 
 export const SelectDrillPage: React.FC<ISelectDrillPageProps> = (props: ISelectDrillPageProps): JSX.Element => {
-    const [distancesGenerator, setDistancesGenerator] = React.useState<IDrillConfiguration>(props.selectedDrillConfiguration);
     const [editMode, setEditMode] = React.useState<boolean>(false);
 
     return (

@@ -6,14 +6,19 @@ import {
 } from "./DrillConfiguration";
 import {AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "../AverageStrokesData";
 
-export const distanceGenerators: string[] = ["RandomDistancesGenerator", "FixedDistancesGenerator", "RandomFromFixedDistancesGenerator"];
+export const RANDOM_DISTANCES_GENERATOR: string = "RandomDistancesGenerator";
+export const FIXED_DISTANCES_GENERATOR: string = "FixedDistancesGenerator";
+export const RANDOM_FROM_FIXED_DISTANCES_GENERATOR: string = "RandomFromFixedDistancesGenerator";
+
+export const distanceGenerators: string[] = [RANDOM_DISTANCES_GENERATOR, FIXED_DISTANCES_GENERATOR, RANDOM_FROM_FIXED_DISTANCES_GENERATOR];
+
 export const createNewDrillConfigurationWithDistanceGenerator = (
     drillConfiguration: IDrillConfiguration,
     distanceGenerator: string,
     averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>
 ): IDrillConfiguration => {
     switch (distanceGenerator) {
-        case "RandomDistancesGenerator":
+        case RANDOM_DISTANCES_GENERATOR:
             return new DrillConfigurationWithRandomDistancesGenerator(
                 drillConfiguration.getUuid(),
                 drillConfiguration.getName(),
@@ -25,7 +30,7 @@ export const createNewDrillConfigurationWithDistanceGenerator = (
                 drillConfiguration.startGroundType,
                 drillConfiguration.endGroundTypes,
                 averageStrokesDataMap);
-        case "FixedDistancesGenerator":
+        case FIXED_DISTANCES_GENERATOR:
             return new DrillConfigurationWithFixedDistancesGenerator(
                 drillConfiguration.getUuid(),
                 drillConfiguration.getName(),
@@ -36,7 +41,7 @@ export const createNewDrillConfigurationWithDistanceGenerator = (
                 drillConfiguration.startGroundType,
                 drillConfiguration.endGroundTypes,
                 averageStrokesDataMap);
-        case "RandomFromFixedDistancesGenerator":
+        case RANDOM_FROM_FIXED_DISTANCES_GENERATOR:
             return new DrillConfigurationWithRandomFromFixedDistancesGenerator(
                 drillConfiguration.getUuid(),
                 drillConfiguration.getName(),
