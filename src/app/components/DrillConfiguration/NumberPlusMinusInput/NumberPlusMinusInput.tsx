@@ -2,8 +2,9 @@ import React from "react";
 import './NumberOfShotsInput.scss';
 
 export interface INumberOfShotsInputProps {
-    numberOfShots: number;
-    handleNumberOfShotsChanged: (numberOfShots: number) => void;
+    label: string;
+    value: number;
+    handleOnClick: (numberOfShots: number) => void;
 }
 
 export const NumberPlusMinusInput: React.FC<INumberOfShotsInputProps> = (props: INumberOfShotsInputProps): any => {
@@ -11,24 +12,24 @@ export const NumberPlusMinusInput: React.FC<INumberOfShotsInputProps> = (props: 
         <div className="number-of-shots-input-container">
             <label
                 className="number-of-shots-input-label"
-                htmlFor="number-of-shots-input">Number of Shots</label>
+                htmlFor="number-of-shots-input">{props.label}</label>
             <div className="btn-change-box">
                 <span className="btn-change minus icon icon-minus"
                       onClick={(): void => {
-                          props.handleNumberOfShotsChanged(props.numberOfShots - 1);
+                          props.handleOnClick(props.value - 1);
                       }}>
                     -
                 </span>
                 <input
                     className="number-of-shots-input input-css"
                     type="text"
-                    value={props.numberOfShots}
+                    value={props.value}
                     min="1"
                     readOnly={true}
                 />
                 <span className="btn-change plus icon icon-plus"
                       onClick={(): void => {
-                          props.handleNumberOfShotsChanged(props.numberOfShots + 1);
+                          props.handleOnClick(props.value + 1);
                       }}>
                     +
                 </span>

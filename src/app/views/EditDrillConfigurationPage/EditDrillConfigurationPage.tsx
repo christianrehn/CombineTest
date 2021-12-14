@@ -166,8 +166,9 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         </div>
                         <div className="NumberOfShotsInput">
                             <NumberPlusMinusInput
-                                numberOfShots={props.selectedDrillConfiguration.numberOfShots}
-                                handleNumberOfShotsChanged={(numberOfShots: number): void => {
+                                label="Number of Shots"
+                                value={props.selectedDrillConfiguration.numberOfShots}
+                                handleOnClick={(numberOfShots: number): void => {
                                     const drillConfigurationClone: IDrillConfiguration = {...props.selectedDrillConfiguration};
                                     // drillConfigurationClone.setNumberOfShots(numberOfShots);
                                     props.handleSelectedDrillConfigurationChanged(drillConfigurationClone);
@@ -190,20 +191,10 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                             </div>
                             <div className="NumberOfRoundsInput">
                                 <NumberPlusMinusInput
-                                    numberOfShots={numberOfRounds}
-                                    handleNumberOfShotsChanged={(value: number): void => {
-                                        setNumberOfRounds(value);
-                                    }}
-                                />
-                            </div>
-                            <div className="NumberOfRoundsInput">
-                                <DrillConfigurationTextInput
-                                    label={"Number Of Rounds"}
-                                    type={"number"}
+                                    label="Number of Rounds"
                                     value={numberOfRounds}
-                                    maxLength={3}
-                                    handleOnChange={(value: string): void => {
-                                        setNumberOfRounds(Number(value));
+                                    handleOnClick={(value: number): void => {
+                                        setNumberOfRounds(value);
                                     }}
                                 />
                             </div>
