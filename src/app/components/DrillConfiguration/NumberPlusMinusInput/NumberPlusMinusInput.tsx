@@ -6,7 +6,7 @@ export interface INumberOfShotsInputProps {
     handleNumberOfShotsChanged: (numberOfShots: number) => void;
 }
 
-export const NumberOfShotsInput: React.FC<INumberOfShotsInputProps> = (props: INumberOfShotsInputProps): any => {
+export const NumberPlusMinusInput: React.FC<INumberOfShotsInputProps> = (props: INumberOfShotsInputProps): any => {
     return (
         <div className="number-of-shots-input-container">
             <label

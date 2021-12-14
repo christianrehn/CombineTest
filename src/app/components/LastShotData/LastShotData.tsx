@@ -4,7 +4,7 @@ import './LastShotData.scss';
 import * as math from "mathjs";
 import {Unit} from "mathjs";
 import {assert} from "chai";
-import {IDrillConfiguration} from "../../model/drillconfiguration/DrillConfiguration";
+import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
 
 const SHOW_ADDITIONAL_DATA_FOR_ALL_SHOTS: boolean = false;
 

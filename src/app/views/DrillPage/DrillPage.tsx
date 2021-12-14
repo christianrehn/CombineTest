@@ -2,7 +2,7 @@ import React from 'react';
 import Chokidar, {FSWatcher} from 'chokidar';
 import './DrillPage.scss';
 import {parseCsvToFirstRowAsObject} from "../../util/CsvParser";
-import {IDrillConfiguration} from "../../model/drillconfiguration/DrillConfiguration";
+import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
 import {ShotsSvg} from "../../components/ShotsSvg/ShotsSvg";
 import {IShotData} from "../../model/ShotData";
 import {LastShotData} from "../../components/LastShotData/LastShotData";

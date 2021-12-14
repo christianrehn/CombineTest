@@ -1,6 +1,6 @@
 import React from 'react';
 import './SelectDrillPage.scss';
-import {IDrillConfiguration} from "../../model/drillconfiguration/DrillConfiguration";
+import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
 import editIcon from '../../../assets/edit.png';
 import glassesIcon from "../../../assets/glasses.png";
 import exitIcon from '../../../assets/exit.png';

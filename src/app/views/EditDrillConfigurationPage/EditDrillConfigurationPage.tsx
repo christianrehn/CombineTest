@@ -1,6 +1,6 @@
 import React from 'react';
 import './EditDrillConfigurationPage.scss';
-import {IDrillConfiguration} from "../../model/drillconfiguration/DrillConfiguration";
+import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
 import {
     DrillConfigurationTextInput
 } from "../../components/DrillConfiguration/DrillConfigurationTextInput/DrillConfigurationTextInput";
@@ -10,15 +10,17 @@ import {SelectDrillPageName} from "../SelectDrillPage/SelectDrillPage";
 import {
     DrillConfigurationSelect
 } from "../../components/DrillConfiguration/DrillConfigurationSelect/DrillConfigurationSelect";
-import {lengthUnits} from "../../model/unit/Unit";
+import {lengthUnits} from "../../model/Unit/Unit";
 import {assert} from "chai";
 import {
     createNewDrillConfigurationWithDistanceGenerator,
     distanceGenerators,
-    RANDOM_DISTANCES_GENERATOR
-} from "../../model/drillconfiguration/DistanceGenerator";
+    FIXED_DISTANCES_GENERATOR,
+    RANDOM_DISTANCES_GENERATOR,
+    RANDOM_FROM_FIXED_DISTANCES_GENERATOR
+} from "../../model/DrillConfiguration/DistanceGenerator";
 import {AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "../../model/AverageStrokesData";
-import {NumberOfShotsInput} from "../../components/DrillConfiguration/NumberOfShotsInput/NumberOfShotsInput";
+import {NumberPlusMinusInput} from "../../components/DrillConfiguration/NumberPlusMinusInput/NumberPlusMinusInput";
 
 export const EditDrillConfigurationPageName: string = "EditDrillConfigurationPage";
 
@@ -139,62 +141,75 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                     />
                 </div>
                 {distanceGenerators[distanceGeneratorIndex] === RANDOM_DISTANCES_GENERATOR
-                    ? <div className="MinIncludedDistanceInput">
-                        <DrillConfigurationTextInput
-                            label={"Minimum Included Distance"}
-                            type={"number"}
-                            value={minIncludedDistance}
-                            maxLength={3}
-                            handleOnChange={(value: string): void => {
-                                setMinIncludedDistance(Number(value));
-                            }}
-                        />
-                    </div>
-                    : null
+                    ? <>
+                        <div className="MinIncludedDistanceInput">
+                            <DrillConfigurationTextInput
+                                label={"Minimum Included Distance"}
+                                type={"number"}
+                                value={minIncludedDistance}
+                                maxLength={3}
+                                handleOnChange={(value: string): void => {
+                                    setMinIncludedDistance(Number(value));
+                                }}
+                            />
+                        </div>
+                        <div className="MaxExcludedDistanceInput">
+                            <DrillConfigurationTextInput
+                                label={"Maximum Excluded Distance"}
+                                type={"number"}
+                                value={maxExcludedDistance}
+                                maxLength={3}
+                                handleOnChange={(value: string): void => {
+                                    setMaxExcludedDistance(Number(value));
+                                }}
+                            />
+                        </div>
+                        <div className="NumberOfShotsInput">
+                            <NumberPlusMinusInput
+                                numberOfShots={props.selectedDrillConfiguration.numberOfShots}
+                                handleNumberOfShotsChanged={(numberOfShots: number): void => {
+                                    const drillConfigurationClone: IDrillConfiguration = {...props.selectedDrillConfiguration};
+                                    // drillConfigurationClone.setNumberOfShots(numberOfShots);
+                                    props.handleSelectedDrillConfigurationChanged(drillConfigurationClone);
+                                }}
+                            />
+                        </div>
+                    </>
+                    : [FIXED_DISTANCES_GENERATOR, RANDOM_FROM_FIXED_DISTANCES_GENERATOR].includes(distanceGenerators[distanceGeneratorIndex])
+                        ? <>
+                            <div className="DistancesInput">
+                                <DrillConfigurationTextInput
+                                    label={"Distances"}
+                                    type={"text"}
+                                    value={distances.join(", ")}
+                                    maxLength={80}
+                                    handleOnChange={(value: string): void => {
+                                        // setDistances(value);
+                                    }}
+                                />
+                            </div>
+                            <div className="NumberOfRoundsInput">
+                                <NumberPlusMinusInput
+                                    numberOfShots={numberOfRounds}
+                                    handleNumberOfShotsChanged={(value: number): void => {
+                                        setNumberOfRounds(value);
+                                    }}
+                                />
+                            </div>
+                            <div className="NumberOfRoundsInput">
+                                <DrillConfigurationTextInput
+                                    label={"Number Of Rounds"}
+                                    type={"number"}
+                                    value={numberOfRounds}
+                                    maxLength={3}
+                                    handleOnChange={(value: string): void => {
+                                        setNumberOfRounds(Number(value));
+                                    }}
+                                />
+                            </div>
+                        </>
+                        : null
                 }
-                <div className="MaxExcludedDistanceInput">
-                    <DrillConfigurationTextInput
-                        label={"Maximum Excluded Distance"}
-                        type={"number"}
-                        value={maxExcludedDistance}
-                        maxLength={3}
-                        handleOnChange={(value: string): void => {
-                            setMaxExcludedDistance(Number(value));
-                        }}
-                    />
-                </div>
-                <div className="NumberOfShotsInput">
-                    <NumberOfShotsInput
-                        numberOfShots={props.selectedDrillConfiguration.numberOfShots}
-                        handleNumberOfShotsChanged={(numberOfShots: number): void => {
-                            const drillConfigurationClone: IDrillConfiguration = {...props.selectedDrillConfiguration};
-                            // drillConfigurationClone.setNumberOfShots(numberOfShots);
-                            props.handleSelectedDrillConfigurationChanged(drillConfigurationClone);
-                        }}
-                    />
-                </div>
-                <div className="DistancesInput">
-                    <DrillConfigurationTextInput
-                        label={"Distances"}
-                        type={"text"}
-                        value={distances.join(", ")}
-                        maxLength={80}
-                        handleOnChange={(value: string): void => {
-                            // setDistances(value);
-                        }}
-                    />
-                </div>
-                <div className="NumberOfRoundsInput">
-                    <DrillConfigurationTextInput
-                        label={"Number Of Rounds"}
-                        type={"number"}
-                        value={numberOfRounds}
-                        maxLength={3}
-                        handleOnChange={(value: string): void => {
-                            setNumberOfRounds(Number(value));
-                        }}
-                    />
-                </div>
             </div>
 
             <div className="top-buttons-flex-item">

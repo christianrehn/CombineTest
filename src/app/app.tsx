@@ -6,7 +6,7 @@ import {
     EditDrillConfigurationPageName
 } from "./views/EditDrillConfigurationPage/EditDrillConfigurationPage";
 import {DrillPage, DrillPageName} from "./views/DrillPage/DrillPage";
-import {EmptyDrillConfiguration, IDrillConfiguration} from "./model/drillconfiguration/DrillConfiguration";
+import {EmptyDrillConfiguration, IDrillConfiguration} from "./model/DrillConfiguration/DrillConfiguration";
 import {parseCsvToArrayOfColumnArrays} from "./util/CsvParser";
 import * as path from "path";
 import {ipcRenderer} from "electron";
@@ -20,7 +20,7 @@ import {SelectDrillPage, SelectDrillPageName} from "./views/SelectDrillPage/Sele
 import {
     drillConfigurationsFromJson,
     drillConfigurationsToString
-} from "./model/drillconfiguration/DrillConfigurationConverter";
+} from "./model/DrillConfiguration/DrillConfigurationConverter";
 import {assert} from "chai";
 
 const App: React.FC<{}> = (): JSX.Element => {
