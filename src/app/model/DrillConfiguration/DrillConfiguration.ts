@@ -33,7 +33,8 @@ export interface IDrillConfiguration {
     getUnit: () => string;
     setUnit: (unit: string) => void;
     numberOfShots: number;
-    startGroundType: string;
+    getStartGroundType: () => string;
+    setStartGroundType: (startGroundType: string) => void;
     endGroundTypes: IEndGroundType[]
     averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
     getNextDistance: (index: number) => Unit;
@@ -104,8 +105,12 @@ abstract class AbstractDrillConfiguration {
         this._description = description;
     }
 
-    get startGroundType(): string {
+    public getStartGroundType = (): string => {
         return this._startGroundType;
+    }
+
+    public setStartGroundType = (startGroundType: string): void => {
+        this._startGroundType = startGroundType;
     }
 
     get endGroundTypes(): IEndGroundType[] {

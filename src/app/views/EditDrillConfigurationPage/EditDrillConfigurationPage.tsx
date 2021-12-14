@@ -96,12 +96,12 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="StartGroundTypeSelect">
                     <DrillConfigurationSelect
                         label={"Start Ground Type"}
-                        index={groundTypesAsString.indexOf(props.selectedDrillConfiguration.startGroundType)}
+                        index={groundTypesAsString.indexOf(props.selectedDrillConfiguration.getStartGroundType())}
                         values={groundTypesAsString}
                         handleOnChange={(index: number): void => {
                             if (index >= 0) {
                                 const drillConfigurationClone: IDrillConfiguration = {...props.selectedDrillConfiguration};
-                                // drillConfigurationClone.setStartGroundType(lengthUnits[index]);
+                                drillConfigurationClone.setStartGroundType(groundTypesAsString[index]);
                                 props.handleSelectedDrillConfigurationChanged(drillConfigurationClone);
                             }
                         }}
