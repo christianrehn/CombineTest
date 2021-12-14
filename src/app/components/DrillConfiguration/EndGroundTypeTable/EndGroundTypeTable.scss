@@ -19,6 +19,7 @@
 .end-ground-types-table-row {
     display: flex;
     flexDirection: row;
+    flex: 1;
     //justifyContent: flex-end;
     //padding-right: 15px;
     //padding-top: 10px;
@@ -26,7 +27,12 @@
 }
 
 .end-ground-types-table-cell {
+    flex: 1;
     //padding-right: 15px;
     //padding-top: 10px;
-    //width: 100%;
+    width: 100%;
+}
+
+.end-ground-types-select {
+    width: 100%;
 }

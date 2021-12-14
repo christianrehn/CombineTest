@@ -139,7 +139,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         <div className="MinIncludedDistanceInput">
                             <DrillConfigurationTextInput
                                 label={"Minimum Included Distance"}
-                                type={"number"}
+                                type="number"
                                 value={minIncludedDistance}
                                 maxLength={3}
                                 handleOnChange={(value: string): void => {
