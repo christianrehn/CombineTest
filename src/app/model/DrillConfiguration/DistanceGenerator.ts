@@ -28,7 +28,7 @@ export const createNewDrillConfigurationWithDistanceGenerator = (
                 drillConfiguration.getUnit(),
                 3,// drillConfiguration.distanceGenerator.numberOfShots,
                 drillConfiguration.getStartGroundType(),
-                drillConfiguration.endGroundTypes,
+                drillConfiguration.getEndGroundTypes(),
                 averageStrokesDataMap);
         case FIXED_DISTANCES_GENERATOR:
             return new DrillConfigurationWithFixedDistancesGenerator(
@@ -39,7 +39,7 @@ export const createNewDrillConfigurationWithDistanceGenerator = (
                 drillConfiguration.getUnit(),
                 3,// drillConfiguration.distanceGenerator.numberOfRounds,
                 drillConfiguration.getStartGroundType(),
-                drillConfiguration.endGroundTypes,
+                drillConfiguration.getEndGroundTypes(),
                 averageStrokesDataMap);
         case RANDOM_FROM_FIXED_DISTANCES_GENERATOR:
             return new DrillConfigurationWithRandomFromFixedDistancesGenerator(
@@ -50,7 +50,7 @@ export const createNewDrillConfigurationWithDistanceGenerator = (
                 drillConfiguration.getUnit(),
                 3,// drillConfiguration.distanceGenerator.numberOfRounds,
                 drillConfiguration.getStartGroundType(),
-                drillConfiguration.endGroundTypes,
+                drillConfiguration.getEndGroundTypes(),
                 averageStrokesDataMap);
     }
 }

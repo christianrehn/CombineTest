@@ -21,6 +21,7 @@ import {
 } from "../../model/DrillConfiguration/DistanceGenerator";
 import {AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "../../model/AverageStrokesData";
 import {NumberPlusMinusInput} from "../../components/DrillConfiguration/NumberPlusMinusInput/NumberPlusMinusInput";
+import {EndGroundTypeTable} from "../../components/DrillConfiguration/EndGroundTypeTable/EndGroundTypeTable";
 
 export const EditDrillConfigurationPageName: string = "EditDrillConfigurationPage";
 
@@ -107,18 +108,11 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         }}
                     />
                 </div>
-                <div className="EndGroundTypeSelect">
-                    <DrillConfigurationSelect
-                        label={"End Ground Type"}
-                        index={-1}
-                        values={groundTypesAsString}
-                        handleOnChange={(index: number): void => {
-                            if (index >= 0) {
-                                const drillConfigurationClone: IDrillConfiguration = {...props.selectedDrillConfiguration};
-                                // drillConfigurationClone.setStartGroundType(lengthUnits[index]);
-                                props.handleSelectedDrillConfigurationChanged(drillConfigurationClone);
-                            }
-                        }}
+                <div className="EndGroundTypeTable">
+                    <EndGroundTypeTable
+                        label="End Ground Types"
+                        endGroundTypes={props.selectedDrillConfiguration.getEndGroundTypes()}
+                        groundTypesAsString={groundTypesAsString}
                     />
                 </div>
                 <div className="DistanceGeneratorSelect">

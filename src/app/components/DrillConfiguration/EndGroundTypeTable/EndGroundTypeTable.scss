@@ -1,0 +1,32 @@
+.end-ground-types-table-container {
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+    width: 100%;
+}
+
+.end-ground-types-table {
+    display: flex;
+    flex-direction: column;
+    //flex: 1;
+    //justifyContent: flex-end;
+    //padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 100%;
+}
+
+.end-ground-types-table-row {
+    display: flex;
+    flexDirection: row;
+    //justifyContent: flex-end;
+    //padding-right: 15px;
+    //padding-top: 10px;
+    width: 100%;
+}
+
+.end-ground-types-table-cell {
+    //padding-right: 15px;
+    //padding-top: 10px;
+    //width: 100%;
+}

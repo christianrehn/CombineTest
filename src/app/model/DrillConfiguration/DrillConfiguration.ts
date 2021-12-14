@@ -35,7 +35,8 @@ export interface IDrillConfiguration {
     numberOfShots: number;
     getStartGroundType: () => string;
     setStartGroundType: (startGroundType: string) => void;
-    endGroundTypes: IEndGroundType[]
+    getEndGroundTypes: () => IEndGroundType[]
+    setEndGroundTypes: (endGroundTypes: IEndGroundType[]) => void;
     averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
     getNextDistance: (index: number) => Unit;
     reset: () => void;
@@ -52,7 +53,7 @@ abstract class AbstractDrillConfiguration {
     protected _name: string;
     protected _description: string;
     protected _startGroundType: string;
-    protected readonly _endGroundTypes: IEndGroundType[];
+    protected _endGroundTypes: IEndGroundType[];
     protected readonly _averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
     protected readonly _averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>;
 
@@ -112,9 +113,12 @@ abstract class AbstractDrillConfiguration {
     public setStartGroundType = (startGroundType: string): void => {
         this._startGroundType = startGroundType;
     }
-
-    get endGroundTypes(): IEndGroundType[] {
+    public getEndGroundTypes = (): IEndGroundType[] => {
         return this._endGroundTypes;
+    }
+
+    public setEndGroundTypes = (endGroundTypes: IEndGroundType[]): void => {
+        this._endGroundTypes = endGroundTypes;
     }
 
     public computeAverageStrokesFromStartDistance = (startDistance: Unit): number => {
