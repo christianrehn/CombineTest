@@ -4,7 +4,8 @@ import {
     DrillConfigurationWithRandomFromFixedDistancesGenerator,
     IDrillConfiguration
 } from "./DrillConfiguration";
-import {AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "../AverageStrokesData";
+import {IAverageStrokesData} from "../AverageStrokesData/AverageStrokesData";
+import {GroundTypeEnum} from "../AverageStrokesData/GroundTypeEnum";
 
 export const RANDOM_DISTANCES_GENERATOR: string = "RandomDistancesGenerator";
 export const FIXED_DISTANCES_GENERATOR: string = "FixedDistancesGenerator";
@@ -15,7 +16,7 @@ export const distanceGenerators: string[] = [RANDOM_DISTANCES_GENERATOR, FIXED_D
 export const createNewDrillConfigurationWithDistanceGenerator = (
     drillConfiguration: IDrillConfiguration,
     distanceGenerator: string,
-    averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>
+    averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>
 ): IDrillConfiguration => {
     switch (distanceGenerator) {
         case RANDOM_DISTANCES_GENERATOR:

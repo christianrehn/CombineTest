@@ -1,8 +1,9 @@
 import {assert} from "chai";
 import * as math from "mathjs";
 import {Unit} from "mathjs";
-import {AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "../AverageStrokesData";
+import {IAverageStrokesData} from "../AverageStrokesData/AverageStrokesData";
 import {v4 as uuidv4} from 'uuid';
+import {EndGroundTypeEnumsType, GroundTypeEnum, StartGroundTypeEnumsType} from "../AverageStrokesData/GroundTypeEnum";
 
 /**
  * Create random integer between [min, max[.
@@ -33,11 +34,11 @@ export interface IDrillConfiguration {
     getUnit: () => string;
     setUnit: (unit: string) => void;
     numberOfShots: number;
-    getStartGroundType: () => string;
-    setStartGroundType: (startGroundType: string) => void;
+    getStartGroundType: () => StartGroundTypeEnumsType;
+    setStartGroundType: (startGroundType: StartGroundTypeEnumsType) => void;
     getEndGroundTypes: () => IEndGroundType[]
     setEndGroundTypes: (endGroundTypes: IEndGroundType[]) => void;
-    averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
+    averageShotsStartGroundTypeEnum: GroundTypeEnum;
     getNextDistance: (index: number) => Unit;
     reset: () => void;
     computeAverageStrokesFromStartDistance: (startDistance: Unit) => number;
@@ -52,33 +53,25 @@ abstract class AbstractDrillConfiguration {
     protected _uuid: string;
     protected _name: string;
     protected _description: string;
-    protected _startGroundType: string;
+    protected _startGroundType: StartGroundTypeEnumsType;
     protected _endGroundTypes: IEndGroundType[];
-    protected readonly _averageShotsStartGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
-    protected readonly _averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>;
-
-    private static getEnumKeyByEnumValue<T extends { [index: string]: string }>(myEnum: T, enumValue: string): keyof T | null {
-        let keys: string[] = Object.keys(myEnum).filter((x: string): boolean => myEnum[x] == enumValue);
-        return keys.length > 0 ? keys[0] : null;
-    }
+    protected readonly _averageShotsStartGroundTypeEnum: GroundTypeEnum;
+    protected readonly _averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>;
 
     constructor(
         uuid: string,
         name: string,
         description: string,
-        startGroundType: string,
+        startGroundType: StartGroundTypeEnumsType,
         endGroundTypes: IEndGroundType[],
-        averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>,
+        averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>,
     ) {
         this._uuid = uuid;
         this._name = name;
         this._description = description;
         this._startGroundType = startGroundType;
         this._endGroundTypes = endGroundTypes;
-        this._averageShotsStartGroundTypeEnum =
-            AverageStrokesDataGroundTypeEnum[
-                AbstractDrillConfiguration.getEnumKeyByEnumValue(AverageStrokesDataGroundTypeEnum, startGroundType)
-                ];
+        this._averageShotsStartGroundTypeEnum = startGroundType;
         this._averageStrokesDataMap = averageStrokesDataMap;
     }
 
@@ -106,11 +99,11 @@ abstract class AbstractDrillConfiguration {
         this._description = description;
     }
 
-    public getStartGroundType = (): string => {
+    public getStartGroundType = (): StartGroundTypeEnumsType => {
         return this._startGroundType;
     }
 
-    public setStartGroundType = (startGroundType: string): void => {
+    public setStartGroundType = (startGroundType: StartGroundTypeEnumsType): void => {
         this._startGroundType = startGroundType;
     }
     public getEndGroundTypes = (): IEndGroundType[] => {
@@ -137,7 +130,7 @@ abstract class AbstractDrillConfiguration {
         const endDistanceInUnit: number = endDistance.toNumber(unit);
         console.log("endDistanceInUnit", endDistanceInUnit)
 
-        const greenIncluded: boolean = !!this._endGroundTypes.map((endGroundType: IEndGroundType) => endGroundType.type).find(type => type === AverageStrokesDataGroundTypeEnum.Green);
+        const greenIncluded: boolean = !!this._endGroundTypes.map((endGroundType: IEndGroundType) => endGroundType.type).find(type => type === GroundTypeEnum.Green);
         console.log("greenIncluded", greenIncluded);
         if (greenIncluded) {
             let matchingEndGroundType: IEndGroundType = undefined;
@@ -183,19 +176,19 @@ abstract class AbstractDrillConfiguration {
                 throw new Error(`wrong test configuration: no endGroundType found for distance ${endDistanceInUnit} ${unit}`);
             }
             console.log("final matchingEndGroundType.type", matchingEndGroundType.type)
-            if (matchingEndGroundType.type === AverageStrokesDataGroundTypeEnum.OutOfBounds) {
+            if (matchingEndGroundType.type === GroundTypeEnum.OutOfBounds) {
                 return undefined;
             }
             return this._averageStrokesDataMap.get(matchingEndGroundType.type)?.computeAverageStrokesToHole(endDistance);
         }
 
         // CRTODO: !greenIncluded
-        return this._averageStrokesDataMap?.get(AverageStrokesDataGroundTypeEnum.Green)?.computeAverageStrokesToHole(endDistance);
+        return this._averageStrokesDataMap?.get(GroundTypeEnum.Green)?.computeAverageStrokesToHole(endDistance);
     }
 }
 
 export interface IEndGroundType {
-    type: AverageStrokesDataGroundTypeEnum.Green | AverageStrokesDataGroundTypeEnum.Fairway | AverageStrokesDataGroundTypeEnum.Rough | AverageStrokesDataGroundTypeEnum.OutOfBounds,
+    type: EndGroundTypeEnumsType,
     to?: number
 }
 
@@ -213,9 +206,9 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
         maxExcludedDistance: number,
         unit: string,
         numberOfShots: number,
-        startGroundType: string,
+        startGroundType: StartGroundTypeEnumsType,
         endGroundTypes: any[],
-        averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>
+        averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>
     ) {
         super(uuid, name, description, startGroundType, endGroundTypes, averageStrokesDataMap);
 
@@ -247,7 +240,7 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
         this._unit = unit;
     }
 
-    get averageShotsStartGroundTypeEnum(): AverageStrokesDataGroundTypeEnum {
+    get averageShotsStartGroundTypeEnum(): GroundTypeEnum {
         return this._averageShotsStartGroundTypeEnum;
     }
 
@@ -280,9 +273,9 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
         distances: number[],
         unit: string,
         numberOfRounds: number,
-        startGroundType: string,
+        startGroundType: StartGroundTypeEnumsType,
         endGroundTypes: IEndGroundType[],
-        averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>,
+        averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>,
     ) {
         super(
             uuid,
@@ -319,7 +312,7 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
         this._unit = unit;
     }
 
-    get averageShotsStartGroundTypeEnum(): AverageStrokesDataGroundTypeEnum {
+    get averageShotsStartGroundTypeEnum(): GroundTypeEnum {
         return this._averageShotsStartGroundTypeEnum;
     }
 
@@ -355,9 +348,9 @@ export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends Dri
         distances: number[],
         unit: string,
         numberOfRounds: number,
-        startGroundType: string,
+        startGroundType: StartGroundTypeEnumsType,
         endGroundTypes: IEndGroundType[],
-        averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>
+        averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>
     ) {
         super(uuid, name, description, distances, unit, numberOfRounds, startGroundType, endGroundTypes, averageStrokesDataMap);
         this.distancesNotYetReturned = [...distances];
@@ -400,9 +393,9 @@ export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends Dri
 
 export class EmptyDrillConfiguration extends DrillConfigurationWithFixedDistancesGenerator implements IDrillConfiguration {
     constructor(
-        averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>
+        averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>
     ) {
         console.log("uuidv4()", uuidv4())
-        super(uuidv4(), "", "", [], "meter", 1, AverageStrokesDataGroundTypeEnum.Fairway, [], averageStrokesDataMap);
+        super(uuidv4(), "", "", [], "meter", 1, GroundTypeEnum.Fairway, [], averageStrokesDataMap);
     }
 }

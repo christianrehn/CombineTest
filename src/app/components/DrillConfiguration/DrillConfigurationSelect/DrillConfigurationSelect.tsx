@@ -1,14 +1,20 @@
 import React from "react";
 import './DrillConfigurationSelect.scss';
+import {GroundTypeEnum, StartGroundTypeEnumsType} from "../../../model/AverageStrokesData/GroundTypeEnum";
+import {assert} from "chai";
+import {enumKeys} from "../../../helpers/enumHelper";
 
-export interface ITestConfigurationSelectProps {
+export interface IDrillConfigurationSelectProps {
     label: string;
     index: number;
-    values: string[];
-    handleOnChange: (index: number) => void;
+    stringValues?: string[];
+    startGroundTypeEnums?: StartGroundTypeEnumsType[];
+    handleOnChange: (indexOrStartGroundTypeEnumNumberKey: number) => void;
 }
 
-export const DrillConfigurationSelect: React.FC<ITestConfigurationSelectProps> = (props: ITestConfigurationSelectProps): JSX.Element => {
+export const DrillConfigurationSelect: React.FC<IDrillConfigurationSelectProps> = (props: IDrillConfigurationSelectProps): JSX.Element => {
+    assert((!!props.stringValues && !props.startGroundTypeEnums) || (!props.stringValues && !!props.startGroundTypeEnums));
+
     return (
         <div className="drill-configuration-select-container">
             <label
@@ -23,14 +29,25 @@ export const DrillConfigurationSelect: React.FC<ITestConfigurationSelectProps> =
                     props.handleOnChange(Number(event.target.value));
                 }}
             >
-                {
-                    props.values.map((value: string, index: number) => {
+                {!!props.stringValues
+                    ? props.stringValues.map((value: string, index: number) => {
                         return (
                             <option
                                 key={`value_${index}`}
                                 value={index}
                             >
                                 {value}
+                            </option>
+                        );
+                    })
+                    : enumKeys(GroundTypeEnum).map((startGroundTypeEnumKey) => {
+                        const groundTypeEnumNumberKey: number = GroundTypeEnum[startGroundTypeEnumKey];
+                        return (
+                            <option
+                                key={`value_${groundTypeEnumNumberKey}`}
+                                value={groundTypeEnumNumberKey}
+                            >
+                                {startGroundTypeEnumKey}
                             </option>
                         );
                     })

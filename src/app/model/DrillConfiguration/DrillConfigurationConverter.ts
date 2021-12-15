@@ -4,13 +4,14 @@ import {
     DrillConfigurationWithRandomFromFixedDistancesGenerator,
     IDrillConfiguration
 } from "./DrillConfiguration";
-import {AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "../AverageStrokesData";
+import {IAverageStrokesData} from "../AverageStrokesData/AverageStrokesData";
 import {assert} from "chai";
 import {
     FIXED_DISTANCES_GENERATOR,
     RANDOM_DISTANCES_GENERATOR,
     RANDOM_FROM_FIXED_DISTANCES_GENERATOR
 } from "./DistanceGenerator";
+import {GroundTypeEnum} from "../AverageStrokesData/GroundTypeEnum";
 
 export const drillConfigurationsToString = (
     drillConfigurations: IDrillConfiguration[],
@@ -26,7 +27,7 @@ export const drillConfigurationsToString = (
 
 export const drillConfigurationsFromJson = (
     drillConfigurationsAsJson: any[],
-    averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>
+    averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>
 ): IDrillConfiguration[] => {
     assert(drillConfigurationsAsJson !== undefined, "drillConfigurationsAsJson === undefined");
     assert(drillConfigurationsAsJson !== null, "drillConfigurationsAsJson === null");

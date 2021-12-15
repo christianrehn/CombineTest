@@ -1,6 +1,6 @@
 import React from 'react';
 import './EditDrillConfigurationPage.scss';
-import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
+import {IDrillConfiguration, IEndGroundType} from "../../model/DrillConfiguration/DrillConfiguration";
 import {
     DrillConfigurationTextInput
 } from "../../components/DrillConfiguration/DrillConfigurationTextInput/DrillConfigurationTextInput";
@@ -19,9 +19,14 @@ import {
     RANDOM_DISTANCES_GENERATOR,
     RANDOM_FROM_FIXED_DISTANCES_GENERATOR
 } from "../../model/DrillConfiguration/DistanceGenerator";
-import {AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "../../model/AverageStrokesData";
+import {IAverageStrokesData} from "../../model/AverageStrokesData/AverageStrokesData";
 import {NumberPlusMinusInput} from "../../components/DrillConfiguration/NumberPlusMinusInput/NumberPlusMinusInput";
 import {EndGroundTypeTable} from "../../components/DrillConfiguration/EndGroundTypeTable/EndGroundTypeTable";
+import {
+    GroundTypeEnum,
+    startGroundTypeEnums,
+    StartGroundTypeEnumsType
+} from "../../model/AverageStrokesData/GroundTypeEnum";
 
 export const EditDrillConfigurationPageName: string = "EditDrillConfigurationPage";
 
@@ -29,24 +34,26 @@ interface IEditDrillConfigurationPageProps {
     drillConfigurations: IDrillConfiguration[];
     handleDrillConfigurationsChanged: (drillConfigurations: IDrillConfiguration[]) => void;
     selectedDrillConfiguration: IDrillConfiguration;
-    handleSelectedDrillConfigurationChanged: (drillConfiguration: IDrillConfiguration) => void;
     handleSelectPageClicked: (page: string) => void;
     handleSaveDrillConfigurations: (changedDrillConfiguration: IDrillConfiguration) => void;
-    averageStrokesDataMap: Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>
+    averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>
 }
 
 export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPageProps> = (props: IEditDrillConfigurationPageProps): JSX.Element => {
     assert(!!props.selectedDrillConfiguration, "!props.selectedDrillConfiguration");
     console.log("EditDrillConfigurationPage - props.selectedDrillConfiguration", props.selectedDrillConfiguration);
 
+    const [name, setName] = React.useState<string>(props.selectedDrillConfiguration.getName());
+    const [description, setDescription] = React.useState<string>(props.selectedDrillConfiguration.getDescription());
+    const [unit, setUnit] = React.useState<string>(props.selectedDrillConfiguration.getUnit());
+    const [startGroundType, setStartGroundType] = React.useState<StartGroundTypeEnumsType>(props.selectedDrillConfiguration.getStartGroundType());
+    const [endGroundTypes, setEndGroundTypes] = React.useState<IEndGroundType[]>(props.selectedDrillConfiguration.getEndGroundTypes());
+
     const [distanceGeneratorIndex, setDistanceGeneratorIndex] = React.useState<number>(0);
     const [minIncludedDistance, setMinIncludedDistance] = React.useState<number>(0);
     const [maxExcludedDistance, setMaxExcludedDistance] = React.useState<number>(0);
     const [distances, setDistances] = React.useState<number[]>([0, 3, 6]);
     const [numberOfRounds, setNumberOfRounds] = React.useState<number>(0);
-
-    const groundTypesAsString: string[] = Object.values(AverageStrokesDataGroundTypeEnum);
-    console.log("EditDrillConfigurationPage - groundTypesAsString", groundTypesAsString);
 
     return (
         <div className="edit-drill-configuration-page page">
@@ -58,12 +65,10 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                     <DrillConfigurationTextInput
                         label={"Name"}
                         type={"text"}
-                        value={props.selectedDrillConfiguration.getName()}
+                        value={name}
                         maxLength={10}
                         handleOnChange={(value: string): void => {
-                            const drillConfigurationClone: IDrillConfiguration = {...props.selectedDrillConfiguration};
-                            drillConfigurationClone.setName(value);
-                            props.handleSelectedDrillConfigurationChanged(drillConfigurationClone);
+                            setName(value);
                         }}
                     />
                 </div>
@@ -71,25 +76,21 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                     <DrillConfigurationTextInput
                         label={"Description"}
                         type={"text"}
-                        value={props.selectedDrillConfiguration.getDescription()}
+                        value={description}
                         maxLength={80}
                         handleOnChange={(value: string): void => {
-                            const drillConfigurationClone: IDrillConfiguration = {...props.selectedDrillConfiguration};
-                            drillConfigurationClone.setDescription(value);
-                            props.handleSelectedDrillConfigurationChanged(drillConfigurationClone);
+                            setDescription(value);
                         }}
                     />
                 </div>
                 <div className="UnitSelect">
                     <DrillConfigurationSelect
                         label={"Unit"}
-                        index={lengthUnits.indexOf(props.selectedDrillConfiguration.getUnit())}
-                        values={lengthUnits}
+                        index={lengthUnits.indexOf(unit)}
+                        stringValues={lengthUnits}
                         handleOnChange={(index: number): void => {
                             if (index >= 0) {
-                                const drillConfigurationClone: IDrillConfiguration = {...props.selectedDrillConfiguration};
-                                drillConfigurationClone.setUnit(lengthUnits[index]);
-                                props.handleSelectedDrillConfigurationChanged(drillConfigurationClone);
+                                setUnit(lengthUnits[index]);
                             }
                         }}
                     />
@@ -97,13 +98,12 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="StartGroundTypeSelect">
                     <DrillConfigurationSelect
                         label={"Start Ground Type"}
-                        index={groundTypesAsString.indexOf(props.selectedDrillConfiguration.getStartGroundType())}
-                        values={groundTypesAsString}
-                        handleOnChange={(index: number): void => {
-                            if (index >= 0) {
-                                const drillConfigurationClone: IDrillConfiguration = {...props.selectedDrillConfiguration};
-                                drillConfigurationClone.setStartGroundType(groundTypesAsString[index]);
-                                props.handleSelectedDrillConfigurationChanged(drillConfigurationClone);
+                        index={startGroundTypeEnums.indexOf(startGroundType)}
+                        startGroundTypeEnums={startGroundTypeEnums}
+                        handleOnChange={(startGroundTypeEnumNumberKey: number): void => {
+                            if (startGroundTypeEnumNumberKey >= 0) {
+                                const startGroundTypeEnum: any = GroundTypeEnum[startGroundTypeEnumNumberKey]; // convert key to enum
+                                setStartGroundType(startGroundTypeEnum);
                             }
                         }}
                     />
@@ -111,15 +111,24 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="EndGroundTypeTable">
                     <EndGroundTypeTable
                         label="End Ground Types"
-                        endGroundTypes={props.selectedDrillConfiguration.getEndGroundTypes()}
-                        groundTypesAsString={groundTypesAsString}
+                        endGroundTypes={endGroundTypes}
+                        handleEndGroundTypeChanged={(endGroundType: IEndGroundType, endGroundTypesIndex: number, newNotCHanged: boolean): void => {
+                            const endGroundTypesClone: IEndGroundType[] = [...endGroundTypes];
+                            if (newNotCHanged) {
+                                endGroundTypesClone.splice(endGroundTypesIndex, 0, endGroundType); // new
+                            } else {
+                                assert(endGroundTypesIndex < endGroundTypesClone.length, "endGroundTypesIndex >= endGroundTypesClone.length");
+                                endGroundTypesClone[endGroundTypesIndex] = endGroundType; // changed
+                            }
+                            setEndGroundTypes(endGroundTypesClone)
+                        }}
                     />
                 </div>
                 <div className="DistanceGeneratorSelect">
                     <DrillConfigurationSelect
                         label={"Distance Generator"}
                         index={distanceGeneratorIndex}
-                        values={distanceGenerators}
+                        stringValues={distanceGenerators}
                         handleOnChange={(index: number): void => {
                             if (index >= 0) {
                                 setDistanceGeneratorIndex(index)
@@ -129,7 +138,6 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                         props.selectedDrillConfiguration,
                                         distanceGenerators[index],
                                         props.averageStrokesDataMap);
-                                props.handleSelectedDrillConfigurationChanged(newdrillConfiguration);
                             }
                         }}
                     />
@@ -165,7 +173,6 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                 handleOnClick={(numberOfShots: number): void => {
                                     const drillConfigurationClone: IDrillConfiguration = {...props.selectedDrillConfiguration};
                                     // drillConfigurationClone.setNumberOfShots(numberOfShots);
-                                    props.handleSelectedDrillConfigurationChanged(drillConfigurationClone);
                                 }}
                             />
                         </div>

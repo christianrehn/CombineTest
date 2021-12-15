@@ -1,29 +1,22 @@
 import {Unit} from "mathjs";
 import {linear} from "everpolate";
+import {GroundTypeEnum} from "./GroundTypeEnum";
 
 export interface IAverageStrokesData {
-    averageStrokesDataGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
+    averageStrokesDataGroundTypeEnum: GroundTypeEnum;
     unit: string;
     distances: number[];
     strokes: number[];
     computeAverageStrokesToHole: (distance: Unit) => number;
 }
 
-export enum AverageStrokesDataGroundTypeEnum {
-    Tee = 'Tee',
-    Fairway = 'Fairway',
-    Rough = 'Rough',
-    Green = 'Green',
-    OutOfBounds = 'OutOfBounds',
-}
-
 export class AverageStrokesData implements IAverageStrokesData {
-    private readonly _averageStrokesDataGroundTypeEnum: AverageStrokesDataGroundTypeEnum;
+    private readonly _averageStrokesDataGroundTypeEnum: GroundTypeEnum;
     private readonly _unit: string;
     private readonly _distances: number[];
     private readonly _strokes: number[];
 
-    constructor(averageStrokesDataGroundTypeEnum: AverageStrokesDataGroundTypeEnum, distances: number[], unit: string, strokes: number[]) {
+    constructor(averageStrokesDataGroundTypeEnum: GroundTypeEnum, distances: number[], unit: string, strokes: number[]) {
         this._unit = unit;
         this._distances = distances;
         this._strokes = strokes;
@@ -31,7 +24,7 @@ export class AverageStrokesData implements IAverageStrokesData {
     }
 
 
-    get averageStrokesDataGroundTypeEnum(): AverageStrokesDataGroundTypeEnum {
+    get averageStrokesDataGroundTypeEnum(): GroundTypeEnum {
         return this._averageStrokesDataGroundTypeEnum;
     }
 
@@ -60,5 +53,3 @@ export class AverageStrokesData implements IAverageStrokesData {
         return averageStrokesFromDistance;
     }
 }
-
-

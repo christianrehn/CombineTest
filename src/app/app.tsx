@@ -15,13 +15,14 @@ import averageShotsFromTeeCsvPath from "../data/tee.csv";
 import averageShotsFromFairwayCsvPath from "../data/fairway.csv";
 import averageShotsFromRoughCsvPath from "../data/rough.csv";
 import averageShotsFromGreenCsvPath from "../data/green.csv";
-import {AverageStrokesData, AverageStrokesDataGroundTypeEnum, IAverageStrokesData} from "./model/AverageStrokesData";
+import {AverageStrokesData, IAverageStrokesData} from "./model/AverageStrokesData/AverageStrokesData";
 import {SelectDrillPage, SelectDrillPageName} from "./views/SelectDrillPage/SelectDrillPage";
 import {
     drillConfigurationsFromJson,
     drillConfigurationsToString
 } from "./model/DrillConfiguration/DrillConfigurationConverter";
 import {assert} from "chai";
+import {GroundTypeEnum} from "./model/AverageStrokesData/GroundTypeEnum";
 
 const App: React.FC<{}> = (): JSX.Element => {
     // page that is currently visible
@@ -35,10 +36,10 @@ const App: React.FC<{}> = (): JSX.Element => {
     const [selectedDrillConfiguration, setSelectedDrillConfiguration] = React.useState<IDrillConfiguration>();
 
     const [averageStrokesDataMap, setAverageStrokesDataMap] =
-        React.useState<Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>>(new Map<AverageStrokesDataGroundTypeEnum, IAverageStrokesData>());
+        React.useState<Map<GroundTypeEnum, IAverageStrokesData>>(new Map<GroundTypeEnum, IAverageStrokesData>());
 
     React.useEffect((): void => {
-        const importCsv = async (averageShotsGroundTypeEnum: AverageStrokesDataGroundTypeEnum, filePath: string, unit: string): Promise<void> => {
+        const importCsv = async (averageShotsGroundTypeEnum: GroundTypeEnum, filePath: string, unit: string): Promise<void> => {
             const distancesAndStrokes: [number[], number[]] = await parseCsvToArrayOfColumnArrays(filePath);
             const averageStrokesData: IAverageStrokesData = new AverageStrokesData(averageShotsGroundTypeEnum, distancesAndStrokes[0], unit, distancesAndStrokes[1]);
             averageStrokesDataMap.set(averageShotsGroundTypeEnum, averageStrokesData);
@@ -46,10 +47,10 @@ const App: React.FC<{}> = (): JSX.Element => {
         }
 
         const appPath: string = ipcRenderer.sendSync('appPath', undefined);
-        importCsv(AverageStrokesDataGroundTypeEnum.Tee, path.join(appPath, '.webpack/renderer', averageShotsFromTeeCsvPath), "yard");
-        importCsv(AverageStrokesDataGroundTypeEnum.Fairway, path.join(appPath, '.webpack/renderer', averageShotsFromFairwayCsvPath), "yard");
-        importCsv(AverageStrokesDataGroundTypeEnum.Rough, path.join(appPath, '.webpack/renderer', averageShotsFromRoughCsvPath), "yard");
-        importCsv(AverageStrokesDataGroundTypeEnum.Green, path.join(appPath, '.webpack/renderer', averageShotsFromGreenCsvPath), "feet");
+        importCsv(GroundTypeEnum.Tee, path.join(appPath, '.webpack/renderer', averageShotsFromTeeCsvPath), "yard");
+        importCsv(GroundTypeEnum.Fairway, path.join(appPath, '.webpack/renderer', averageShotsFromFairwayCsvPath), "yard");
+        importCsv(GroundTypeEnum.Rough, path.join(appPath, '.webpack/renderer', averageShotsFromRoughCsvPath), "yard");
+        importCsv(GroundTypeEnum.Green, path.join(appPath, '.webpack/renderer', averageShotsFromGreenCsvPath), "feet");
     }, [])
 
     React.useEffect((): void => {
@@ -91,6 +92,7 @@ const App: React.FC<{}> = (): JSX.Element => {
         } else {
             drillConfigurationsClone.push(changedDrillConfiguration); // new entry
         }
+        setSelectedDrillConfiguration(changedDrillConfiguration);
         setDrillConfigurations(drillConfigurationsClone);
         const drillConfigurationsAsString: string = drillConfigurationsToString(drillConfigurationsClone);
         console.log("drillConfigurationsAsString", drillConfigurationsAsString)
@@ -113,7 +115,6 @@ const App: React.FC<{}> = (): JSX.Element => {
                         drillConfigurations={drillConfigurations}
                         handleDrillConfigurationsChanged={handleDrillConfigurationsChanged}
                         selectedDrillConfiguration={selectedDrillConfiguration}
-                        handleSelectedDrillConfigurationChanged={handleSelectedDrillConfigurationChanged}
                         handleSelectPageClicked={setSelectedPage}
                         handleSaveDrillConfigurations={handleSaveUserDrillConfigurations}
                         averageStrokesDataMap={averageStrokesDataMap}
