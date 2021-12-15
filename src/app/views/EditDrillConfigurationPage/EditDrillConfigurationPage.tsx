@@ -48,8 +48,8 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     const [unit, setUnit] = React.useState<string>(props.selectedDrillConfiguration.getUnit());
     const [startGroundType, setStartGroundType] = React.useState<StartGroundTypeEnumsType>(props.selectedDrillConfiguration.getStartGroundType());
     const [endGroundTypes, setEndGroundTypes] = React.useState<IEndGroundType[]>(props.selectedDrillConfiguration.getEndGroundTypes());
-
     const [distanceGeneratorIndex, setDistanceGeneratorIndex] = React.useState<number>(0);
+
     const [minIncludedDistance, setMinIncludedDistance] = React.useState<number>(0);
     const [maxExcludedDistance, setMaxExcludedDistance] = React.useState<number>(0);
     const [distances, setDistances] = React.useState<number[]>([0, 3, 6]);
@@ -137,15 +137,8 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         index={distanceGeneratorIndex}
                         stringValues={distanceGenerators}
                         handleOnChange={(index: number): void => {
-                            if (index >= 0) {
-                                setDistanceGeneratorIndex(index)
-                                console.log("distanceGenerators[index]", distanceGenerators[index])
-                                const newdrillConfiguration: IDrillConfiguration =
-                                    createNewDrillConfigurationWithDistanceGenerator(
-                                        props.selectedDrillConfiguration,
-                                        distanceGenerators[index],
-                                        props.averageStrokesDataMap);
-                            }
+                            assert(index >= 0, "index < 0");
+                            setDistanceGeneratorIndex(index)
                         }}
                     />
                 </div>
@@ -229,7 +222,19 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="back-flex-item flex-item">
                         <span className="back-span"
                               onClick={(): void => {
-                                  props.handleSaveDrillConfigurations(props.selectedDrillConfiguration);
+                                  // save changes
+                                  const newDrillConfiguration: IDrillConfiguration =
+                                      createNewDrillConfigurationWithDistanceGenerator(
+                                          props.selectedDrillConfiguration.getUuid(),
+                                          name,
+                                          description,
+                                          unit,
+                                          props.selectedDrillConfiguration,
+                                          distanceGenerators[distanceGeneratorIndex],
+                                          props.averageStrokesDataMap);
+                                  props.handleSaveDrillConfigurations(newDrillConfiguration);
+
+                                  // back to drill selection page
                                   props.handleSelectPageClicked(SelectDrillPageName)
                               }}
                         >

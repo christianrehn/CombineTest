@@ -14,6 +14,10 @@ export const RANDOM_FROM_FIXED_DISTANCES_GENERATOR: string = "RandomFromFixedDis
 export const distanceGenerators: string[] = [RANDOM_DISTANCES_GENERATOR, FIXED_DISTANCES_GENERATOR, RANDOM_FROM_FIXED_DISTANCES_GENERATOR];
 
 export const createNewDrillConfigurationWithDistanceGenerator = (
+    uuid: string,
+    name: string,
+    description: string,
+    unit: string,
     drillConfiguration: IDrillConfiguration,
     distanceGenerator: string,
     averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>
@@ -21,12 +25,12 @@ export const createNewDrillConfigurationWithDistanceGenerator = (
     switch (distanceGenerator) {
         case RANDOM_DISTANCES_GENERATOR:
             return new DrillConfigurationWithRandomDistancesGenerator(
-                drillConfiguration.getUuid(),
-                drillConfiguration.getName(),
-                drillConfiguration.getDescription(),
+                uuid,
+                name,
+                description,
                 0,// drillConfiguration.distanceGenerator.minIncludedDistance,
                 10,// drillConfiguration.distanceGenerator.maxExcludedDistance,
-                drillConfiguration.getUnit(),
+                unit,
                 3,// drillConfiguration.distanceGenerator.numberOfShots,
                 drillConfiguration.getStartGroundType(),
                 drillConfiguration.getEndGroundTypes(),
