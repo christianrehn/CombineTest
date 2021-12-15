@@ -1,8 +1,8 @@
 import React from "react";
 import './EndGroundTypeTable.scss';
 import {IEndGroundType} from "../../../model/DrillConfiguration/DrillConfiguration";
-import addRowIcon from "../../../../assets/edit.png";
-import deleteRowIcon from "../../../../assets/back.png";
+import addRowIcon from "../../../../assets/addRow.png";
+import deleteRowIcon from "../../../../assets/deleteRow.png";
 
 export interface IEndGroundTypeTableProps {
     label: string;
@@ -64,10 +64,10 @@ export const EndGroundTypeTable: React.FC<IEndGroundTypeTableProps> = (props: IE
                         </div>
                         <div className="end-ground-types-table-icon-cell"
                              style={{backgroundColor: "green"}}>
-                            <div className="add-flex-item icon-flex-item">
-                                <span className="add-span"
+                            <div className="add-row-flex-item icon-flex-item">
+                                <span className="add-row-span"
                                       onClick={(): void => {
-                                          console.log("TODO add row")
+                                          console.log("TODO add row after current row")
                                       }}
                                 >
                                     <div className="table-button-img-div">
@@ -81,10 +81,10 @@ export const EndGroundTypeTable: React.FC<IEndGroundTypeTableProps> = (props: IE
                         </div>
                         <div className="end-ground-types-table-icon-cell"
                              style={{backgroundColor: "blue"}}>
-                            <div className="delete-flex-item icon-flex-item">
-                                <span className="delete-span"
+                            <div className="delete-row-flex-item icon-flex-item">
+                                <span className="delete-row-span"
                                       onClick={(): void => {
-                                          console.log("TODO delete row")
+                                          console.log("TODO delete current row")
                                       }}
                                 >
                                     <div className="table-button-img-div">

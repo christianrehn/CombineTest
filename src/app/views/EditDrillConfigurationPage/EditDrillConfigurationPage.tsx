@@ -4,7 +4,7 @@ import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfigura
 import {
     DrillConfigurationTextInput
 } from "../../components/DrillConfiguration/DrillConfigurationTextInput/DrillConfigurationTextInput";
-import editIcon from "../../../assets/edit.png";
+import deleteIcon from "../../../assets/delete.png";
 import backIcon from '../../../assets/back.png';
 import {SelectDrillPageName} from "../SelectDrillPage/SelectDrillPage";
 import {
@@ -204,11 +204,10 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                   console.log("TODO")
                               }}
                         >
-
                             <div className="top-button-img-div">
                                 <img className="top-button-img"
-                                     src={editIcon}
-                                     alt="Edit"
+                                     src={deleteIcon}
+                                     alt="Delete Configuration"
                                 />
                             </div>
                         </span>
