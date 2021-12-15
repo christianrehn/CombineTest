@@ -10,7 +10,7 @@ import {enumKeys} from "../../../helpers/enumHelper";
 export interface IEndGroundTypeTableProps {
     label: string;
     endGroundTypes: IEndGroundType[];
-    handleEndGroundTypeChanged: (endGroundType: IEndGroundType, endGroundTypesIndex: number, newNotCHanged: boolean) => void;
+    handleEndGroundTypeChanged: (endGroundType: IEndGroundType, endGroundTypesIndex: number, newNotChanged: boolean) => void;
 }
 
 export const EndGroundTypeTable: React.FC<IEndGroundTypeTableProps> = (props: IEndGroundTypeTableProps): any => {
@@ -78,7 +78,7 @@ export const EndGroundTypeTable: React.FC<IEndGroundTypeTableProps> = (props: IE
                             <div className="delete-row-flex-item icon-flex-item">
                                 <span className="delete-row-span"
                                       onClick={(): void => {
-                                          console.log("TODO delete current row")
+                                          props.handleEndGroundTypeChanged(null, endGroundTypesIndex, false);
                                       }}
                                 >
                                     <div className="table-button-img-div">

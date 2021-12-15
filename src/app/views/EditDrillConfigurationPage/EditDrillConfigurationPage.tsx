@@ -113,12 +113,19 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         label="End Ground Types"
                         endGroundTypes={endGroundTypes}
                         handleEndGroundTypeChanged={(endGroundType: IEndGroundType, endGroundTypesIndex: number, newNotCHanged: boolean): void => {
+                            assert(endGroundTypesIndex >= 0, `endGroundTypesIndex < 0: ${endGroundTypesIndex}`);
+
                             const endGroundTypesClone: IEndGroundType[] = [...endGroundTypes];
                             if (newNotCHanged) {
+                                assert(!!endGroundType, "!endGroundType");
                                 endGroundTypesClone.splice(endGroundTypesIndex, 0, endGroundType); // new
                             } else {
                                 assert(endGroundTypesIndex < endGroundTypesClone.length, "endGroundTypesIndex >= endGroundTypesClone.length");
-                                endGroundTypesClone[endGroundTypesIndex] = endGroundType; // changed
+                                if (!!endGroundType) {
+                                    endGroundTypesClone[endGroundTypesIndex] = endGroundType; // changed
+                                } else {
+                                    endGroundTypesClone.splice(endGroundTypesIndex, 1); // deleted
+                                }
                             }
                             setEndGroundTypes(endGroundTypesClone)
                         }}
