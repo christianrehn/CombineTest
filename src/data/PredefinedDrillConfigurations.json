@@ -70,8 +70,39 @@
         ]
     },
     {
+        "uuid": "423565f8-0c9a-4c79-8595-37009de659c0",
+        "name": "Ben 48m Carry",
+        "description": "6 fairway shots to a green with 5 meter radius from Ben's 2022 distance of 48 meter",
+        "unit": "meter",
+        "distanceGenerator": {
+            "type": "RandomFromFixedDistancesGenerator",
+            "distances": [
+                48
+            ],
+            "numberOfRounds": 6
+        },
+        "startGroundType": "Fairway",
+        "endGroundTypes": [
+            {
+                "type": "Green",
+                "to": 5
+            },
+            {
+                "type": "Fairway",
+                "to": 6
+            },
+            {
+                "type": "Rough",
+                "to": 7
+            },
+            {
+                "type": "OutOfBounds"
+            }
+        ]
+    },
+    {
         "uuid": "46493ad4-24a6-4fdf-b42c-82c5efd192e1",
-        "name": "2 - 10 yards",
+        "name": "2 - 10y Random",
         "description": "2 fairway shots to a green with 10 yards radius from random distances between 2 and 10 yards",
         "unit": "yards",
         "distanceGenerator": {
@@ -93,7 +124,7 @@
     },
     {
         "uuid": "97445e5c-1cbd-4f42-a788-5bdaa6e13492",
-        "name": "tee shots 1",
+        "name": "Tee Shots Meter",
         "description": "10 tee shots par 4, fairway width: 24 meter plus 9 meter rough on each side",
         "unit": "meter",
         "distanceGenerator": {
@@ -120,7 +151,7 @@
     },
     {
         "uuid": "ea2bc048-9b3c-4418-95f4-e8d9951073d7",
-        "name": "tee shots 2",
+        "name": "Tee Shots Yards",
         "description": "10 tee shots par 4, fairway 26 yards 10 10 yards rough on each side",
         "unit": "yards",
         "distanceGenerator": {
