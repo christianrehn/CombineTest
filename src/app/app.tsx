@@ -54,7 +54,7 @@ const App: React.FC<{}> = (): JSX.Element => {
     }, [])
 
     React.useEffect((): void => {
-        const userDrillConfigurationsAsJson: any[] = loadUserDrillConfigurationsAsJson();
+        const userDrillConfigurationsAsJson: any[] = undefined; // CRTODO loadUserDrillConfigurationsAsJson();
         const drillConfigurationsAsJson: any[] = !!userDrillConfigurationsAsJson && userDrillConfigurationsAsJson.length > 0
             ? userDrillConfigurationsAsJson
             : predefinedDrillConfigurationsAsJson;
@@ -83,6 +83,7 @@ const App: React.FC<{}> = (): JSX.Element => {
 
     const handleSaveUserDrillConfigurations = (changedDrillConfiguration: IDrillConfiguration): void => {
         assert(!!changedDrillConfiguration.getUuid(), "!changedDrillConfiguration.getUuid()");
+        console.log("handleSaveUserDrillConfigurations - changedDrillConfiguration", changedDrillConfiguration)
 
         const drillConfigurationsClone: IDrillConfiguration[] = [...drillConfigurations];
         const drillConfigurationUuids: string[] = drillConfigurationsClone.map((drillConfiguration: IDrillConfiguration) => drillConfiguration.getUuid());

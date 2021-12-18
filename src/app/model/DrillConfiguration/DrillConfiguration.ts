@@ -202,12 +202,12 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
         uuid: string,
         name: string,
         description: string,
+        unit: string,
+        startGroundType: StartGroundTypeEnumsType,
+        endGroundTypes: IEndGroundType[],
         minIncludedDistance: number,
         maxExcludedDistance: number,
-        unit: string,
         numberOfShots: number,
-        startGroundType: StartGroundTypeEnumsType,
-        endGroundTypes: any[],
         averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>
     ) {
         super(uuid, name, description, startGroundType, endGroundTypes, averageStrokesDataMap);
@@ -270,11 +270,11 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
         uuid: string,
         name: string,
         description: string,
-        distances: number[],
         unit: string,
-        numberOfRounds: number,
         startGroundType: StartGroundTypeEnumsType,
         endGroundTypes: IEndGroundType[],
+        distances: number[],
+        numberOfRounds: number,
         averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>,
     ) {
         super(
@@ -345,14 +345,14 @@ export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends Dri
         uuid: string,
         name: string,
         description: string,
-        distances: number[],
         unit: string,
-        numberOfRounds: number,
         startGroundType: StartGroundTypeEnumsType,
         endGroundTypes: IEndGroundType[],
+        distances: number[],
+        numberOfRounds: number,
         averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>
     ) {
-        super(uuid, name, description, distances, unit, numberOfRounds, startGroundType, endGroundTypes, averageStrokesDataMap);
+        super(uuid, name, description, unit, startGroundType, endGroundTypes, distances, numberOfRounds, averageStrokesDataMap);
         this.distancesNotYetReturned = [...distances];
     }
 
@@ -396,6 +396,6 @@ export class EmptyDrillConfiguration extends DrillConfigurationWithFixedDistance
         averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>
     ) {
         console.log("uuidv4()", uuidv4())
-        super(uuidv4(), "", "", [], "meter", 1, GroundTypeEnum.Fairway, [], averageStrokesDataMap);
+        super(uuidv4(), "", "", "meter", GroundTypeEnum.Fairway, [], [], 1, averageStrokesDataMap);
     }
 }

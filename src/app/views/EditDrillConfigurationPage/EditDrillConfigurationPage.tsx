@@ -50,8 +50,9 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     const [endGroundTypes, setEndGroundTypes] = React.useState<IEndGroundType[]>(props.selectedDrillConfiguration.getEndGroundTypes());
     const [distanceGeneratorIndex, setDistanceGeneratorIndex] = React.useState<number>(0);
 
-    const [minIncludedDistance, setMinIncludedDistance] = React.useState<number>(0);
-    const [maxExcludedDistance, setMaxExcludedDistance] = React.useState<number>(0);
+    const [minIncludedDistance, setMinIncludedDistance] = React.useState<number>((props.selectedDrillConfiguration as any).getMinIncludedDistance?.() || 0);
+    const [maxExcludedDistance, setMaxExcludedDistance] = React.useState<number>((props.selectedDrillConfiguration as any).getMaxExcludedDistance?.() || 100);
+    const [numberOfShots, setNumberOfShots] = React.useState<number>(props.selectedDrillConfiguration.numberOfShots);
     const [distances, setDistances] = React.useState<number[]>([0, 3, 6]);
     const [numberOfRounds, setNumberOfRounds] = React.useState<number>(0);
 
@@ -123,7 +124,6 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                 // row changed or deleted
                                 assert(endGroundTypesIndex < endGroundTypesClone.length, "endGroundTypesIndex >= endGroundTypesClone.length");
                                 if (!!endGroundType) {
-                                    console.log("endGroundType", endGroundType)
                                     endGroundTypesClone[endGroundTypesIndex] = endGroundType; // changed
                                 } else {
                                     endGroundTypesClone.splice(endGroundTypesIndex, 1); // deleted
@@ -171,7 +171,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         <div className="NumberOfShotsInput">
                             <NumberPlusMinusInput
                                 label="Number of Shots"
-                                value={props.selectedDrillConfiguration.numberOfShots}
+                                value={numberOfShots}
                                 handleOnClick={(numberOfShots: number): void => {
                                     const drillConfigurationClone: IDrillConfiguration = {...props.selectedDrillConfiguration};
                                     // drillConfigurationClone.setNumberOfShots(numberOfShots);
@@ -231,9 +231,17 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                           name,
                                           description,
                                           unit,
-                                          props.selectedDrillConfiguration,
                                           distanceGenerators[distanceGeneratorIndex],
-                                          props.averageStrokesDataMap);
+                                          startGroundType,
+                                          endGroundTypes,
+                                          minIncludedDistance,
+                                          maxExcludedDistance,
+                                          numberOfShots,
+                                          distances,
+                                          numberOfRounds,
+                                          props.averageStrokesDataMap
+                                      )
+                                  ;
                                   props.handleSaveDrillConfigurations(newDrillConfiguration);
 
                                   // back to drill selection page

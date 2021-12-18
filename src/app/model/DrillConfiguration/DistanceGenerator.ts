@@ -2,10 +2,11 @@ import {
     DrillConfigurationWithFixedDistancesGenerator,
     DrillConfigurationWithRandomDistancesGenerator,
     DrillConfigurationWithRandomFromFixedDistancesGenerator,
-    IDrillConfiguration
+    IDrillConfiguration,
+    IEndGroundType
 } from "./DrillConfiguration";
 import {IAverageStrokesData} from "../AverageStrokesData/AverageStrokesData";
-import {GroundTypeEnum} from "../AverageStrokesData/GroundTypeEnum";
+import {GroundTypeEnum, StartGroundTypeEnumsType} from "../AverageStrokesData/GroundTypeEnum";
 
 export const RANDOM_DISTANCES_GENERATOR: string = "RandomDistancesGenerator";
 export const FIXED_DISTANCES_GENERATOR: string = "FixedDistancesGenerator";
@@ -18,44 +19,22 @@ export const createNewDrillConfigurationWithDistanceGenerator = (
     name: string,
     description: string,
     unit: string,
-    drillConfiguration: IDrillConfiguration,
     distanceGenerator: string,
+    startGroundType: StartGroundTypeEnumsType,
+    endGroundTypes: IEndGroundType[],
+    minIncludedDistance: number,
+    maxExcludedDistance: number,
+    numberOfShots: number,
+    distances: number[],
+    numberOfRounds: number,
     averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>
 ): IDrillConfiguration => {
     switch (distanceGenerator) {
         case RANDOM_DISTANCES_GENERATOR:
-            return new DrillConfigurationWithRandomDistancesGenerator(
-                uuid,
-                name,
-                description,
-                0,// drillConfiguration.distanceGenerator.minIncludedDistance,
-                10,// drillConfiguration.distanceGenerator.maxExcludedDistance,
-                unit,
-                3,// drillConfiguration.distanceGenerator.numberOfShots,
-                drillConfiguration.getStartGroundType(),
-                drillConfiguration.getEndGroundTypes(),
-                averageStrokesDataMap);
+            return new DrillConfigurationWithRandomDistancesGenerator(uuid, name, description, unit, startGroundType, endGroundTypes, minIncludedDistance, maxExcludedDistance, numberOfShots, averageStrokesDataMap);
         case FIXED_DISTANCES_GENERATOR:
-            return new DrillConfigurationWithFixedDistancesGenerator(
-                drillConfiguration.getUuid(),
-                drillConfiguration.getName(),
-                drillConfiguration.getDescription(),
-                [1, 2],// drillConfiguration.distanceGenerator.distances,
-                drillConfiguration.getUnit(),
-                3,// drillConfiguration.distanceGenerator.numberOfRounds,
-                drillConfiguration.getStartGroundType(),
-                drillConfiguration.getEndGroundTypes(),
-                averageStrokesDataMap);
+            return new DrillConfigurationWithFixedDistancesGenerator(uuid, name, description, unit, startGroundType, endGroundTypes, distances, numberOfRounds, averageStrokesDataMap);
         case RANDOM_FROM_FIXED_DISTANCES_GENERATOR:
-            return new DrillConfigurationWithRandomFromFixedDistancesGenerator(
-                drillConfiguration.getUuid(),
-                drillConfiguration.getName(),
-                drillConfiguration.getDescription(),
-                [1, 2],// drillConfiguration.distanceGenerator.distances,
-                drillConfiguration.getUnit(),
-                3,// drillConfiguration.distanceGenerator.numberOfRounds,
-                drillConfiguration.getStartGroundType(),
-                drillConfiguration.getEndGroundTypes(),
-                averageStrokesDataMap);
+            return new DrillConfigurationWithRandomFromFixedDistancesGenerator(uuid, name, description, unit, startGroundType, endGroundTypes, distances, numberOfRounds, averageStrokesDataMap);
     }
 }
