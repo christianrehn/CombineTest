@@ -59,7 +59,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     const [maxExcludedDistance, setMaxExcludedDistance] = React.useState<number>(((props.selectedDrillConfiguration as any) as IRandomDistancesGenerator).getMaxExcludedDistance?.() || 100);
     const [numberOfShots, setNumberOfShots] = React.useState<number>(props.selectedDrillConfiguration.getNumberOfShots());
 
-    const [distances, setDistances] = React.useState<number[]>(((props.selectedDrillConfiguration as any) as IFixedDistancesGenerator).getDistances?.() || []);
+    const [distances, setDistances] = React.useState<string>(((props.selectedDrillConfiguration as any) as IFixedDistancesGenerator).getDistances?.().join(" ") || "");
     const [numberOfRounds, setNumberOfRounds] = React.useState<number>(((props.selectedDrillConfiguration as any) as IFixedDistancesGenerator).getNumberOfRounds?.() || 1);
 
     return (
@@ -190,10 +190,10 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                 <DrillConfigurationTextInput
                                     label={"Distances"}
                                     type={"text"}
-                                    value={distances.join(" ")}
+                                    value={distances}
                                     maxLength={80}
                                     handleOnChange={(value: string): void => {
-                                        setDistances(value.split(" ").map(Number));
+                                        setDistances(value);
                                     }}
                                 />
                             </div>
@@ -242,7 +242,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                           minIncludedDistance,
                                           maxExcludedDistance,
                                           numberOfShots,
-                                          distances,
+                                          distances.split(" ").map(Number).filter((n: number): boolean => n > 0),
                                           numberOfRounds,
                                           props.averageStrokesDataMap
                                       )
