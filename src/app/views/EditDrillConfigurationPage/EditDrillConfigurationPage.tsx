@@ -1,6 +1,11 @@
 import React from 'react';
 import './EditDrillConfigurationPage.scss';
-import {IDrillConfiguration, IEndGroundType} from "../../model/DrillConfiguration/DrillConfiguration";
+import {
+    IDrillConfiguration,
+    IEndGroundType,
+    IFixedDistancesGenerator,
+    IRandomDistancesGenerator
+} from "../../model/DrillConfiguration/DrillConfiguration";
 import {
     DrillConfigurationTextInput
 } from "../../components/DrillConfiguration/DrillConfigurationTextInput/DrillConfigurationTextInput";
@@ -48,13 +53,14 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     const [unit, setUnit] = React.useState<string>(props.selectedDrillConfiguration.getUnit());
     const [startGroundType, setStartGroundType] = React.useState<StartGroundTypeEnumsType>(props.selectedDrillConfiguration.getStartGroundType());
     const [endGroundTypes, setEndGroundTypes] = React.useState<IEndGroundType[]>(props.selectedDrillConfiguration.getEndGroundTypes());
-    const [distanceGeneratorIndex, setDistanceGeneratorIndex] = React.useState<number>(0);
+    const [distanceGenerator, setDistanceGenerator] = React.useState<string>(props.selectedDrillConfiguration.getDistanceGenerator());
 
-    const [minIncludedDistance, setMinIncludedDistance] = React.useState<number>((props.selectedDrillConfiguration as any).getMinIncludedDistance?.() || 0);
-    const [maxExcludedDistance, setMaxExcludedDistance] = React.useState<number>((props.selectedDrillConfiguration as any).getMaxExcludedDistance?.() || 100);
-    const [numberOfShots, setNumberOfShots] = React.useState<number>(props.selectedDrillConfiguration.numberOfShots);
-    const [distances, setDistances] = React.useState<number[]>([0, 3, 6]);
-    const [numberOfRounds, setNumberOfRounds] = React.useState<number>(0);
+    const [minIncludedDistance, setMinIncludedDistance] = React.useState<number>(((props.selectedDrillConfiguration as any) as IRandomDistancesGenerator).getMinIncludedDistance?.() || 0);
+    const [maxExcludedDistance, setMaxExcludedDistance] = React.useState<number>(((props.selectedDrillConfiguration as any) as IRandomDistancesGenerator).getMaxExcludedDistance?.() || 100);
+    const [numberOfShots, setNumberOfShots] = React.useState<number>(props.selectedDrillConfiguration.getNumberOfShots());
+
+    const [distances, setDistances] = React.useState<number[]>(((props.selectedDrillConfiguration as any) as IFixedDistancesGenerator).getDistances?.() || []);
+    const [numberOfRounds, setNumberOfRounds] = React.useState<number>(((props.selectedDrillConfiguration as any) as IFixedDistancesGenerator).getNumberOfRounds?.() || 1);
 
     return (
         <div className="edit-drill-configuration-page page">
@@ -136,15 +142,15 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="DistanceGeneratorSelect">
                     <DrillConfigurationSelect
                         label={"Distance Generator"}
-                        index={distanceGeneratorIndex}
+                        index={distanceGenerators.indexOf(distanceGenerator)}
                         stringValues={distanceGenerators}
                         handleOnChange={(index: number): void => {
                             assert(index >= 0, "index < 0");
-                            setDistanceGeneratorIndex(index)
+                            setDistanceGenerator(distanceGenerators[index])
                         }}
                     />
                 </div>
-                {distanceGenerators[distanceGeneratorIndex] === RANDOM_DISTANCES_GENERATOR
+                {distanceGenerator === RANDOM_DISTANCES_GENERATOR
                     ? <>
                         <div className="MinIncludedDistanceInput">
                             <DrillConfigurationTextInput
@@ -173,22 +179,21 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                 label="Number of Shots"
                                 value={numberOfShots}
                                 handleOnClick={(numberOfShots: number): void => {
-                                    const drillConfigurationClone: IDrillConfiguration = {...props.selectedDrillConfiguration};
-                                    // drillConfigurationClone.setNumberOfShots(numberOfShots);
+                                    setNumberOfShots(numberOfShots);
                                 }}
                             />
                         </div>
                     </>
-                    : [FIXED_DISTANCES_GENERATOR, RANDOM_FROM_FIXED_DISTANCES_GENERATOR].includes(distanceGenerators[distanceGeneratorIndex])
+                    : [FIXED_DISTANCES_GENERATOR, RANDOM_FROM_FIXED_DISTANCES_GENERATOR].includes(distanceGenerator)
                         ? <>
                             <div className="DistancesInput">
                                 <DrillConfigurationTextInput
                                     label={"Distances"}
                                     type={"text"}
-                                    value={distances.join(", ")}
+                                    value={distances.join(" ")}
                                     maxLength={80}
                                     handleOnChange={(value: string): void => {
-                                        // setDistances(value);
+                                        setDistances(value.split(" ").map(Number));
                                     }}
                                 />
                             </div>
@@ -231,7 +236,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                           name,
                                           description,
                                           unit,
-                                          distanceGenerators[distanceGeneratorIndex],
+                                          distanceGenerator,
                                           startGroundType,
                                           endGroundTypes,
                                           minIncludedDistance,
