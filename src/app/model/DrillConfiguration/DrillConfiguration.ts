@@ -4,6 +4,11 @@ import {Unit} from "mathjs";
 import {IAverageStrokesData} from "../AverageStrokesData/AverageStrokesData";
 import {v4 as uuidv4} from 'uuid';
 import {EndGroundTypeEnumsType, GroundTypeEnum, StartGroundTypeEnumsType} from "../AverageStrokesData/GroundTypeEnum";
+import {
+    FIXED_DISTANCES_GENERATOR,
+    RANDOM_DISTANCES_GENERATOR,
+    RANDOM_FROM_FIXED_DISTANCES_GENERATOR
+} from "./DistanceGenerator";
 
 /**
  * Create random integer between [min, max[.
@@ -26,24 +31,29 @@ const createRandomNumber = (minIncluded: number, maxExcluded: number): number =>
  */
 export interface IDrillConfiguration {
     getUuid: () => string;
-    setUuid: (uuid: string) => void;
     getName: () => string;
-    setName: (name: string) => void;
     getDescription: () => string;
-    setDescription: (description: string) => void;
     getUnit: () => string;
-    setUnit: (unit: string) => void;
-    numberOfShots: number;
     getStartGroundType: () => StartGroundTypeEnumsType;
-    setStartGroundType: (startGroundType: StartGroundTypeEnumsType) => void;
     getEndGroundTypes: () => IEndGroundType[]
-    setEndGroundTypes: (endGroundTypes: IEndGroundType[]) => void;
-    averageShotsStartGroundTypeEnum: GroundTypeEnum;
+    getDistanceGenerator: () => string;
+    getNumberOfShots: () => number;
     getNextDistance: (index: number) => Unit;
     reset: () => void;
     computeAverageStrokesFromStartDistance: (startDistance: Unit) => number;
     computeAverageStrokesFromEndDistance: (endDistance: Unit) => number | undefined;
     toJson: () => any;
+}
+
+export interface IRandomDistancesGenerator {
+    getMinIncludedDistance: () => number
+    getMaxExcludedDistance: () => number
+    getNumberOfShots: () => number;
+}
+
+export interface IFixedDistancesGenerator {
+    getDistances: () => number[]
+    getNumberOfRounds: () => number
 }
 
 /**
@@ -79,39 +89,20 @@ abstract class AbstractDrillConfiguration {
         return this._uuid;
     }
 
-    public setUuid = (uuid: string): void => {
-        this._uuid = uuid;
-    }
-
     public getName = (): string => {
         return this._name;
-    }
-
-    public setName = (name: string): void => {
-        this._name = name;
     }
 
     public getDescription = (): string => {
         return this._description;
     }
 
-    public setDescription = (description: string): void => {
-        this._description = description;
-    }
-
     public getStartGroundType = (): StartGroundTypeEnumsType => {
         return this._startGroundType;
     }
 
-    public setStartGroundType = (startGroundType: StartGroundTypeEnumsType): void => {
-        this._startGroundType = startGroundType;
-    }
     public getEndGroundTypes = (): IEndGroundType[] => {
         return this._endGroundTypes;
-    }
-
-    public setEndGroundTypes = (endGroundTypes: IEndGroundType[]): void => {
-        this._endGroundTypes = endGroundTypes;
     }
 
     public computeAverageStrokesFromStartDistance = (startDistance: Unit): number => {
@@ -192,7 +183,7 @@ export interface IEndGroundType {
     to?: number
 }
 
-export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDrillConfiguration implements IDrillConfiguration {
+export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDrillConfiguration implements IDrillConfiguration, IRandomDistancesGenerator {
     private readonly _minIncludedDistance: number;
     private readonly _maxExcludedDistance: number;
     private _unit: string;
@@ -222,26 +213,30 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
         // nothing to do
     }
 
+    public getDistanceGenerator(): string {
+        return RANDOM_DISTANCES_GENERATOR;
+    }
+
+    public getMinIncludedDistance(): number {
+        return this._minIncludedDistance;
+    }
+
+    public getMaxExcludedDistance(): number {
+        return this._maxExcludedDistance;
+    }
+
     public getNextDistance(index: number): Unit {
         assert(index >= 0, "index < 0");
 
         return math.unit(createRandomNumber(this._minIncludedDistance, this._maxExcludedDistance), this._unit);
     }
 
-    get numberOfShots(): number {
+    public getNumberOfShots = (): number => {
         return this._numberOfShots;
     }
 
     public getUnit = (): string => {
         return this._unit;
-    }
-
-    public setUnit = (unit: string): void => {
-        this._unit = unit;
-    }
-
-    get averageShotsStartGroundTypeEnum(): GroundTypeEnum {
-        return this._averageShotsStartGroundTypeEnum;
     }
 
     public toJson = (): any => {
@@ -261,9 +256,9 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
     }
 }
 
-export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrillConfiguration implements IDrillConfiguration {
+export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrillConfiguration implements IDrillConfiguration, IFixedDistancesGenerator {
     protected readonly _distances: number[];
-    protected _unit: string;
+    protected readonly _unit: string;
     protected readonly _numberOfRounds: number;
 
     public constructor(
@@ -290,6 +285,18 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
         this._numberOfRounds = numberOfRounds;
     }
 
+    public getDistanceGenerator(): string {
+        return FIXED_DISTANCES_GENERATOR;
+    }
+
+    public getDistances(): number[] {
+        return this._distances;
+    }
+
+    public getNumberOfRounds(): number {
+        return this._numberOfRounds;
+    }
+
     public reset(): void {
         // nothing to do
     }
@@ -300,20 +307,12 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
         return math.unit(this._distances[index % this._distances.length], this._unit);
     }
 
-    get numberOfShots(): number {
+    public getNumberOfShots = (): number => {
         return this._distances.length * this._numberOfRounds;
     }
 
     public getUnit = (): string => {
         return this._unit;
-    }
-
-    public setUnit = (unit: string): void => {
-        this._unit = unit;
-    }
-
-    get averageShotsStartGroundTypeEnum(): GroundTypeEnum {
-        return this._averageShotsStartGroundTypeEnum;
     }
 
     protected toJsonHelper(distanceGeneratorType: string): any {
@@ -337,7 +336,7 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
     }
 }
 
-export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends DrillConfigurationWithFixedDistancesGenerator implements IDrillConfiguration {
+export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends DrillConfigurationWithFixedDistancesGenerator implements IDrillConfiguration, IFixedDistancesGenerator {
     private distancesNotYetReturned: number[];
     private distancesReturnedMap: Map<number, number> = new Map<number, number>();
 
@@ -354,6 +353,10 @@ export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends Dri
     ) {
         super(uuid, name, description, unit, startGroundType, endGroundTypes, distances, numberOfRounds, averageStrokesDataMap);
         this.distancesNotYetReturned = [...distances];
+    }
+
+    public getDistanceGenerator(): string {
+        return RANDOM_FROM_FIXED_DISTANCES_GENERATOR;
     }
 
     public reset(): void {
@@ -391,7 +394,7 @@ export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends Dri
     }
 }
 
-export class EmptyDrillConfiguration extends DrillConfigurationWithFixedDistancesGenerator implements IDrillConfiguration {
+export class EmptyDrillConfiguration extends DrillConfigurationWithFixedDistancesGenerator implements IDrillConfiguration, IFixedDistancesGenerator {
     constructor(
         averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>
     ) {
