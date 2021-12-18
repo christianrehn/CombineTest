@@ -96,7 +96,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
         if (!!shotData && (shotDatas.length === 0 || shotData.id !== shotDatas[shotDatas.length - 1].id)) {
             // new shot detected
 
-            if (shotDatas.length >= props.selectedDrillConfiguration.numberOfShots) {
+            if (shotDatas.length >= props.selectedDrillConfiguration.getNumberOfShots()) {
                 // shot executed but number of shots was already reached -> ignore
                 console.log(`shot id=${shotData.id} executed but number of shots was already reached -> ignore`);
             } else {
@@ -106,7 +106,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                 setShotDatas(shotDatasClone);
 
                 // pick new distance for next shot
-                if (shotDatasClone.length < props.selectedDrillConfiguration.numberOfShots) {
+                if (shotDatasClone.length < props.selectedDrillConfiguration.getNumberOfShots()) {
                     nextDistanceRef.current = props.selectedDrillConfiguration.getNextDistance(shotDatasClone.length);
                 } else {
                     console.log("all shots executed");
@@ -149,7 +149,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
             </div>
             <div className="last-shot-flex-item flex-item">
                 <div className="page-header">
-                    <h3> Shot {shotDatas.length} / {props.selectedDrillConfiguration.numberOfShots} </h3>
+                    <h3> Shot {shotDatas.length} / {props.selectedDrillConfiguration.getNumberOfShots()} </h3>
                 </div>
                 <div className="LastShotData">
                     <LastShotData
