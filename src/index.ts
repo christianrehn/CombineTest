@@ -29,15 +29,35 @@ const createWindow = (): void => {
         // closable: false,
         height: 600,
         width: 800,
-        show: true,
+        show: false,
         webPreferences: {
             nodeIntegration: true,
-            contextIsolation: false
+            contextIsolation: false,
         }
     });
 
+    // create splash window
+    var splashWindow: BrowserWindow = new BrowserWindow({
+        height: 600,
+        width: 1000,
+        transparent: true,
+        frame: false,
+        alwaysOnTop: true
+    });
+    splashWindow.setResizable(false);
+    splashWindow.loadFile('splash.html');
+    splashWindow.center();
+    splashWindow.on('closed', (): null => (splashWindow = null));
+
+
     // and load the index.html of the app.
     mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+
+    // if main window is ready to show, then destroy the splash window and show up the main window
+    mainWindow.once('ready-to-show', (): void => {
+        splashWindow.close();
+        mainWindow.show();
+    });
 
     // Open the DevTools.
     if (electronIsDev) {
@@ -45,7 +65,6 @@ const createWindow = (): void => {
     }
 
     ipcMain.on('appPath', (event: Electron.IpcMainEvent, arg: any): void => {
-        // event.reply('appPath', app.getAppPath())
         event.returnValue = app.getAppPath();
     })
 
