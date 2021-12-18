@@ -89,9 +89,8 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         index={lengthUnits.indexOf(unit)}
                         stringValues={lengthUnits}
                         handleOnChange={(index: number): void => {
-                            if (index >= 0) {
-                                setUnit(lengthUnits[index]);
-                            }
+                            assert(index >= 0, "index < 0");
+                            setUnit(lengthUnits[index]);
                         }}
                     />
                 </div>
@@ -117,11 +116,14 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
 
                             const endGroundTypesClone: IEndGroundType[] = [...endGroundTypes];
                             if (newNotCHanged) {
+                                // new row added
                                 assert(!!endGroundType, "!endGroundType");
-                                endGroundTypesClone.splice(endGroundTypesIndex, 0, endGroundType); // new
+                                endGroundTypesClone.splice(endGroundTypesIndex, 0, endGroundType);
                             } else {
+                                // row changed or deleted
                                 assert(endGroundTypesIndex < endGroundTypesClone.length, "endGroundTypesIndex >= endGroundTypesClone.length");
                                 if (!!endGroundType) {
+                                    console.log("endGroundType", endGroundType)
                                     endGroundTypesClone[endGroundTypesIndex] = endGroundType; // changed
                                 } else {
                                     endGroundTypesClone.splice(endGroundTypesIndex, 1); // deleted

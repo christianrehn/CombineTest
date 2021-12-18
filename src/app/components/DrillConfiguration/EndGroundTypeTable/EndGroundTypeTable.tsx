@@ -4,7 +4,7 @@ import {IEndGroundType} from "../../../model/DrillConfiguration/DrillConfigurati
 import addRowIcon from "../../../../assets/addRow.png";
 import deleteRowIcon from "../../../../assets/deleteRow.png";
 import {assert} from "chai";
-import {GroundTypeEnum} from "../../../model/AverageStrokesData/GroundTypeEnum";
+import {GroundTypeEnum, GroundTypeEnumStringsType} from "../../../model/AverageStrokesData/GroundTypeEnum";
 import {enumKeys} from "../../../helpers/enumHelper";
 
 export interface IEndGroundTypeTableProps {
@@ -45,7 +45,7 @@ export const EndGroundTypeTable: React.FC<IEndGroundTypeTableProps> = (props: IE
                                 }}
                             >
                                 {
-                                    enumKeys(GroundTypeEnum).map((groundTypeEnumKey) => {
+                                    enumKeys(GroundTypeEnum).map((groundTypeEnumKey: GroundTypeEnumStringsType) => {
                                         const groundTypeEnumNumberKey: number = GroundTypeEnum[groundTypeEnumKey];
                                         return (
                                             <option
@@ -64,11 +64,13 @@ export const EndGroundTypeTable: React.FC<IEndGroundTypeTableProps> = (props: IE
                             <input
                                 className="drill-configuration-text-input input-css"
                                 type="number"
+                                required={false}
+                                placeholder="infinite"
                                 value={endGroundType.to}
                                 maxLength={3}
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
                                     const endGroundTypeClone: IEndGroundType = {...props.endGroundTypes[endGroundTypesIndex]};
-                                    endGroundTypeClone.to = Number(event.target.value);
+                                    endGroundTypeClone.to = !!event.target.value ? Number(event.target.value) : undefined;
                                     props.handleEndGroundTypeChanged(endGroundTypeClone, endGroundTypesIndex, false);
                                 }}
                             />
