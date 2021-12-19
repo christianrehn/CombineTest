@@ -29,8 +29,8 @@
 
 .select-drill-page .drill-tiles-flex-item {
     padding-top: 10px;
-    margin-left: var(--page-margin-horizontal);
-    margin-right: var(--page-margin-horizontal);
+    padding-left: var(--page-margin-horizontal);
+    padding-right: var(--page-margin-horizontal);
     align-content: flex-start;
     height: 100%;
     display: flex;

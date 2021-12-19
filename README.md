@@ -19,6 +19,7 @@ shot data togeter with the points you get from the shots gained rating.
 ## Ideas for the next version:
 
 * Add rating that is similar to Trackman Combine Test for pitches.
+* Improve splash screen.
 * Show overview/report like Trackman "Test Center report" after last shot
 * Save shot history and create links to share them
 * Should start full screen
