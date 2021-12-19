@@ -12,8 +12,6 @@ shot data togeter with the points you get from the shots gained rating.
 ## To Fix
 
 * Edit configuration takes very long
-* Edit Configuration must be scrollable
-* Style Edit Configuration
 * New Configuarions are not complete -> error when opening the Drill
 
 ## Ideas for the next version:

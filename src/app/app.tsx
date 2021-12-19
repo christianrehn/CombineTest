@@ -96,8 +96,6 @@ const App: React.FC<{}> = (): JSX.Element => {
         } else {
             // selectedDrillConfiguration has been updated or is new
             assert(!!changedDrillConfiguration.getUuid(), "!changedDrillConfiguration.getUuid()");
-            console.log("handleSaveUserDrillConfigurations - changedDrillConfiguration", changedDrillConfiguration)
-
             const index: number = drillConfigurationUuids.indexOf(changedDrillConfiguration.getUuid())
             if (index >= 0) {
                 drillConfigurationsClone[index] = changedDrillConfiguration; // replace with changed entry
@@ -109,7 +107,6 @@ const App: React.FC<{}> = (): JSX.Element => {
 
         setDrillConfigurations(drillConfigurationsClone);
         const drillConfigurationsAsString: string = drillConfigurationsToString(drillConfigurationsClone);
-        console.log("drillConfigurationsAsString", drillConfigurationsAsString)
         const success = ipcRenderer.sendSync('saveUserDrillConfigurations', drillConfigurationsAsString);
         console.log("handleSaveUserDrillConfigurations - success=", success)
     }

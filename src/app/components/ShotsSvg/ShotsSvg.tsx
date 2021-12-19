@@ -21,11 +21,7 @@ export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
                 const absoluteDeviationAsNumber: number = absoluteDeviation.toNumber(props.selectedDrillConfiguration.getUnit());
                 return accumulator > absoluteDeviationAsNumber ? accumulator : absoluteDeviationAsNumber
             }, 0);
-    console.log("absoluteDeviationMaxAsNumber", absoluteDeviationMaxAsNumber);
-    console.log("props.svgNumberOfCircles", props.svgNumberOfCircles)
-
     const scaleFactor: number = (Math.floor(absoluteDeviationMaxAsNumber / props.svgNumberOfCircles) + 1) * props.svgNumberOfCircles;
-    console.log("scaleFactor", scaleFactor);
     const svgScaleFactor: number = 100 / scaleFactor;
     const circleLabelPosition: number = scaleFactor / props.svgNumberOfCircles;
 

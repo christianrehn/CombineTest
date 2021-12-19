@@ -119,10 +119,8 @@ abstract class AbstractDrillConfiguration {
         }
         const unit: string = averageStrokesData.unit;
         const endDistanceInUnit: number = endDistance.toNumber(unit);
-        console.log("endDistanceInUnit", endDistanceInUnit)
 
         const greenIncluded: boolean = !!this._endGroundTypes.map((endGroundType: IEndGroundType) => endGroundType.type).find(type => type === GroundTypeEnum.Green);
-        console.log("greenIncluded", greenIncluded);
         if (greenIncluded) {
             let matchingEndGroundType: IEndGroundType = undefined;
             for (let i: number = 0; i < this._endGroundTypes.length; i++) {
@@ -398,7 +396,6 @@ export class EmptyDrillConfiguration extends DrillConfigurationWithFixedDistance
     constructor(
         averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>
     ) {
-        console.log("uuidv4()", uuidv4())
         super(uuidv4(), "", "", "meter", GroundTypeEnum.Fairway, [], [], 1, averageStrokesDataMap);
     }
 }

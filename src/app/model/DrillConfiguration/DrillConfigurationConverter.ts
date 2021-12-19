@@ -21,7 +21,6 @@ export const drillConfigurationsToString = (
     const drillConfigurationsAsJson: any[] = drillConfigurations.map((drillConfiguration: IDrillConfiguration) => {
         return drillConfiguration.toJson();
     });
-    console.log("drillConfigurationsAsJson", drillConfigurationsAsJson)
     return JSON.stringify(drillConfigurationsAsJson);
 }
 
