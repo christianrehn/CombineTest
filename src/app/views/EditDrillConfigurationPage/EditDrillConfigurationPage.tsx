@@ -26,7 +26,7 @@ import {
 } from "../../model/DrillConfiguration/DistanceGenerator";
 import {IAverageStrokesData} from "../../model/AverageStrokesData/AverageStrokesData";
 import {NumberPlusMinusInput} from "../../components/DrillConfiguration/NumberPlusMinusInput/NumberPlusMinusInput";
-import {EndGroundTypeTable} from "../../components/DrillConfiguration/EndGroundTypeTable/EndGroundTypeTable";
+import {EndGroundTypesTable} from "../../components/DrillConfiguration/EndGroundTypeTable/EndGroundTypesTable";
 import {
     GroundTypeEnum,
     startGroundTypeEnums,
@@ -64,33 +64,90 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
 
     return (
         <div className="edit-drill-configuration-page page">
-            <div className="edit-drill-configuration-flex-item flex-item">
-                <div className="page-header">
-                    <h3>Edit Drill Configuration</h3>
+            <div className="edit-drill-configuration-top">
+                <div className="edit-drill-configuration-flex-item flex-item">
+                    <div className="page-header">
+                        <h3>Edit Drill Configuration</h3>
+                    </div>
                 </div>
-                <div className="NameInput">
+
+                <div className="top-buttons-flex-item">
+                    <div className="delete-flex-item flex-item">
+                        <span className="delete-span"
+                              onClick={(): void => {
+                                  console.log("TODO")
+                              }}
+                        >
+                            <div className="top-button-img-div">
+                                <img className="top-button-img"
+                                     src={deleteIcon}
+                                     alt="Delete Configuration"
+                                />
+                            </div>
+                        </span>
+                    </div>
+                    <div className="back-flex-item flex-item">
+                        <span className="back-span"
+                              onClick={(): void => {
+                                  // save changes
+                                  const newDrillConfiguration: IDrillConfiguration =
+                                      createNewDrillConfigurationWithDistanceGenerator(
+                                          props.selectedDrillConfiguration.getUuid(),
+                                          name,
+                                          description,
+                                          unit,
+                                          distanceGenerator,
+                                          startGroundType,
+                                          endGroundTypes,
+                                          minIncludedDistance,
+                                          maxExcludedDistance,
+                                          numberOfShots,
+                                          distances.split(" ").map(Number).filter((n: number): boolean => n > 0),
+                                          numberOfRounds,
+                                          props.averageStrokesDataMap
+                                      )
+                                  ;
+                                  props.handleSaveDrillConfigurations(newDrillConfiguration);
+
+                                  // back to drill selection page
+                                  props.handleSelectPageClicked(SelectDrillPageName)
+                              }}
+                        >
+                            <div className="top-button-img-div">
+                                <img className="top-button-img"
+                                     src={backIcon}
+                                     alt="Back"
+                                />
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div className="edit-drill-configuration-input">
+                <div className="name-input">
                     <DrillConfigurationTextInput
                         label={"Name"}
                         type={"text"}
                         value={name}
-                        maxLength={10}
+                        maxLength={15}
                         handleOnChange={(value: string): void => {
                             setName(value);
                         }}
                     />
                 </div>
-                <div className="DescriptionInput">
+                <div className="description-input">
                     <DrillConfigurationTextInput
                         label={"Description"}
                         type={"text"}
                         value={description}
-                        maxLength={80}
+                        maxLength={110}
                         handleOnChange={(value: string): void => {
                             setDescription(value);
                         }}
                     />
                 </div>
-                <div className="UnitSelect">
+                <div className="unit-select">
                     <DrillConfigurationSelect
                         label={"Unit"}
                         index={lengthUnits.indexOf(unit)}
@@ -101,7 +158,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         }}
                     />
                 </div>
-                <div className="StartGroundTypeSelect">
+                <div className="start-ground-type-select">
                     <DrillConfigurationSelect
                         label={"Start Ground Type"}
                         index={startGroundTypeEnums.indexOf(startGroundType)}
@@ -114,8 +171,8 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         }}
                     />
                 </div>
-                <div className="EndGroundTypeTable">
-                    <EndGroundTypeTable
+                <div className="end-ground-types-table">
+                    <EndGroundTypesTable
                         label="End Ground Types"
                         endGroundTypes={endGroundTypes}
                         handleEndGroundTypeChanged={(endGroundType: IEndGroundType, endGroundTypesIndex: number, newNotCHanged: boolean): void => {
@@ -139,7 +196,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         }}
                     />
                 </div>
-                <div className="DistanceGeneratorSelect">
+                <div className="distance-generator-select">
                     <DrillConfigurationSelect
                         label={"Distance Generator"}
                         index={distanceGenerators.indexOf(distanceGenerator)}
@@ -186,12 +243,12 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                     </>
                     : [FIXED_DISTANCES_GENERATOR, RANDOM_FROM_FIXED_DISTANCES_GENERATOR].includes(distanceGenerator)
                         ? <>
-                            <div className="DistancesInput">
+                            <div className="distances-input">
                                 <DrillConfigurationTextInput
                                     label={"Distances"}
                                     type={"text"}
                                     value={distances}
-                                    maxLength={80}
+                                    maxLength={110}
                                     handleOnChange={(value: string): void => {
                                         setDistances(value);
                                     }}
@@ -209,58 +266,6 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         </>
                         : null
                 }
-            </div>
-
-            <div className="top-buttons-flex-item">
-                <div className="edit-flex-item flex-item">
-                        <span className="edit-span"
-                              onClick={(): void => {
-                                  console.log("TODO")
-                              }}
-                        >
-                            <div className="top-button-img-div">
-                                <img className="top-button-img"
-                                     src={deleteIcon}
-                                     alt="Delete Configuration"
-                                />
-                            </div>
-                        </span>
-                </div>
-                <div className="back-flex-item flex-item">
-                        <span className="back-span"
-                              onClick={(): void => {
-                                  // save changes
-                                  const newDrillConfiguration: IDrillConfiguration =
-                                      createNewDrillConfigurationWithDistanceGenerator(
-                                          props.selectedDrillConfiguration.getUuid(),
-                                          name,
-                                          description,
-                                          unit,
-                                          distanceGenerator,
-                                          startGroundType,
-                                          endGroundTypes,
-                                          minIncludedDistance,
-                                          maxExcludedDistance,
-                                          numberOfShots,
-                                          distances.split(" ").map(Number).filter((n: number): boolean => n > 0),
-                                          numberOfRounds,
-                                          props.averageStrokesDataMap
-                                      )
-                                  ;
-                                  props.handleSaveDrillConfigurations(newDrillConfiguration);
-
-                                  // back to drill selection page
-                                  props.handleSelectPageClicked(SelectDrillPageName)
-                              }}
-                        >
-                            <div className="top-button-img-div">
-                                <img className="top-button-img"
-                                     src={backIcon}
-                                     alt="Back"
-                                />
-                            </div>
-                        </span>
-                </div>
             </div>
         </div>
     );

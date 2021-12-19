@@ -79,7 +79,7 @@ html, body, #root {
     --font-site-header: 40px;
     --background-dark: #234050;
     --page-margin-horizontal: 5ex;
-    --page-change-icon-width: 6ex;
+    --page-icon-width: 6ex;
 }
 
 .page .flex-item {
@@ -95,8 +95,8 @@ html, body, #root {
 
 .page .top-button-img-div {
     background: var(--font-white);
-    width: var(--page-change-icon-width);
-    height: var(--page-change-icon-width);
+    width: var(--page-icon-width);
+    height: var(--page-icon-width);
     margin-left: 15px;
     margin-right: 15px;
 }

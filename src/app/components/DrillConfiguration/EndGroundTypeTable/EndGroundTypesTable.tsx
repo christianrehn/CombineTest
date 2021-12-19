@@ -13,21 +13,19 @@ export interface IEndGroundTypeTableProps {
     handleEndGroundTypeChanged: (endGroundType: IEndGroundType, endGroundTypesIndex: number, newNotChanged: boolean) => void;
 }
 
-export const EndGroundTypeTable: React.FC<IEndGroundTypeTableProps> = (props: IEndGroundTypeTableProps): any => {
+export const EndGroundTypesTable: React.FC<IEndGroundTypeTableProps> = (props: IEndGroundTypeTableProps): any => {
     return <div className="end-ground-types-table-container">
         <label
             className="end-ground-types-table-label"
             htmlFor="end-ground-types-table">{props.label}
         </label>
-        <div className="end-ground-types-table">
+        <div id="end-ground-types-table" className="end-ground-types-table">
             {props.endGroundTypes.map((endGroundType: IEndGroundType, endGroundTypesIndex: number) =>
                 <div key={`endGroundType_${endGroundTypesIndex}`}>
                     <div className="end-ground-types-table-row">
                         <div className="end-ground-types-table-cell">
                             <select
-                                id="end-ground-types-select"
-                                className="end-ground-types-select"
-                                // className="end-ground-types-select select-css"
+                                className="end-ground-types-select select-css"
                                 value={GroundTypeEnum[endGroundType.type]}
                                 onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
                                     assert(!!props.endGroundTypes, "!props.endGroundTypes");

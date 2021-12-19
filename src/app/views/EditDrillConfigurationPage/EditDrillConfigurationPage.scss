@@ -1,8 +1,50 @@
 .edit-drill-configuration-page {
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-drill-configuration-page .edit-drill-configuration-top {
+    display: flex;
+    flex-direction: row;
 }
 
 .edit-drill-configuration-page .edit-drill-configuration-flex-item {
     flex: 1;
-    margin-left: var(--page-margin-horizontal);
-    margin-right: var(--page-margin-horizontal);
+}
+
+.edit-drill-configuration-page .edit-drill-configuration-input {
+    padding-left: var(--page-margin-horizontal);
+    padding-right: var(--page-margin-horizontal);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.edit-drill-configuration-page .name-input {
+    width: 15em;
+}
+
+.edit-drill-configuration-page .description-input {
+    width: 110em;
+}
+
+.edit-drill-configuration-page .unit-select {
+    width: 15em;
+}
+
+.edit-drill-configuration-page .start-ground-type-select {
+    width: 15em;
+}
+
+.edit-drill-configuration-page .end-ground-types-table {
+    width: 50em;
+}
+
+.edit-drill-configuration-page .distance-generator-select {
+    width: 23em;
+}
+
+.edit-drill-configuration-page .distances-input {
+    width: 50em;
 }

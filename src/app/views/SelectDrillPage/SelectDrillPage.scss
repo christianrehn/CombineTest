@@ -1,5 +1,4 @@
 .select-drill-page {
-    --page-drill-icon-width: 6ex;
     display: flex;
     flex-direction: column;
 }
@@ -9,22 +8,8 @@
     flex-direction: row;
 }
 
-.select-drill-page .drill-img {
-    background: var(--font-white);
-    width: var(--page-drill-icon-width);
-    height: var(--page-drill-icon-width);
-    flex: 1;
-    margin-left: 10px;
-    margin-right: var(--page-margin-horizontal);
-}
-
 .select-drill-page .select-drill-flex-item {
     flex: 1;
-    margin-left: var(--page-margin-horizontal);
-    margin-right: var(--page-margin-horizontal);
-}
-
-.select-drill-page .page-change-flex-item {
 }
 
 .select-drill-page .drill-tiles-flex-item {
