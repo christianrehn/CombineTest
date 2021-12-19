@@ -9,11 +9,22 @@ you have to start the Practice Range. Every last shot data is automatically expo
 /Foresight Sports Experience/System/LastShot.CSV The "GCQuad Combine Test" program reads this file and displays some
 shot data togeter with the points you get from the shots gained rating.
 
+## To Fix
+
+* Edit configuration takes very long
+* Edit Configuration must be scrollable
+* Style Edit Configuration
+* New Configuarions are not complete -> error when opening the Drill
+
 ## Ideas for the next version:
 
 * Add rating that is similar to Trackman Combine Test for pitches.
 * Show overview/report like Trackman "Test Center report" after last shot
 * Save shot history and create links to share them
+* Should start full screen
+* Start page scroll bar should be right without margin
+* Delete Config does not work
+* Installer looks ugly -> change
 
 * Shots gained rating for tee shots with the driver
 * Select between Total and Carry (currently only carry is used)
