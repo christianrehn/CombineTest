@@ -145,7 +145,7 @@ export interface ILastShotData {
 export const LastShotData: React.FC<ILastShotData> = (props: ILastShotData): JSX.Element => {
     assert(!!props, "!props");
     assert(!!props.shotDatas, "!props.shotDatas");
-    assert(!!props.selectedDrillConfiguration, "!props.selectedDrillConfiguration");
+    assert(!!props.selectedDrillConfiguration, "LastShotData - !props.selectedDrillConfiguration");
 
     const absoluteDeviation: Unit | undefined = props.shotDatas.length > 0 ? computeAbsoluteDeviation(props.shotDatas[props.shotDatas.length - 1]) : undefined;
     const relativeDeviation: number | undefined = props.shotDatas.length > 0 ? computeRelativeDeviation(props.shotDatas[props.shotDatas.length - 1]) : undefined;

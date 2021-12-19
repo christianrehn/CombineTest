@@ -54,7 +54,7 @@ const App: React.FC<{}> = (): JSX.Element => {
     }, [])
 
     React.useEffect((): void => {
-        const userDrillConfigurationsAsJson: any[] = undefined; // CRTODO loadUserDrillConfigurationsAsJson();
+        const userDrillConfigurationsAsJson: any[] = loadUserDrillConfigurationsAsJson();
         const drillConfigurationsAsJson: any[] = !!userDrillConfigurationsAsJson && userDrillConfigurationsAsJson.length > 0
             ? userDrillConfigurationsAsJson
             : predefinedDrillConfigurationsAsJson;
@@ -82,18 +82,31 @@ const App: React.FC<{}> = (): JSX.Element => {
     }
 
     const handleSaveUserDrillConfigurations = (changedDrillConfiguration: IDrillConfiguration): void => {
-        assert(!!changedDrillConfiguration.getUuid(), "!changedDrillConfiguration.getUuid()");
-        console.log("handleSaveUserDrillConfigurations - changedDrillConfiguration", changedDrillConfiguration)
-
         const drillConfigurationsClone: IDrillConfiguration[] = [...drillConfigurations];
         const drillConfigurationUuids: string[] = drillConfigurationsClone.map((drillConfiguration: IDrillConfiguration) => drillConfiguration.getUuid());
-        const index: number = drillConfigurationUuids.indexOf(changedDrillConfiguration.getUuid())
-        if (index >= 0) {
-            drillConfigurationsClone[index] = changedDrillConfiguration; // replace with changed entry
+
+        if (!changedDrillConfiguration) {
+            // selectedDrillConfiguration has been deleted
+            const deletedDrillConfigurationIndex: number = drillConfigurationUuids.indexOf(selectedDrillConfiguration.getUuid())
+            assert(deletedDrillConfigurationIndex >= 0, "deletedDrillConfigurationIndex < 0");
+            drillConfigurationsClone.splice(deletedDrillConfigurationIndex, 1);
+            setSelectedDrillConfiguration(undefined);
+
+
         } else {
-            drillConfigurationsClone.push(changedDrillConfiguration); // new entry
+            // selectedDrillConfiguration has been updated or is new
+            assert(!!changedDrillConfiguration.getUuid(), "!changedDrillConfiguration.getUuid()");
+            console.log("handleSaveUserDrillConfigurations - changedDrillConfiguration", changedDrillConfiguration)
+
+            const index: number = drillConfigurationUuids.indexOf(changedDrillConfiguration.getUuid())
+            if (index >= 0) {
+                drillConfigurationsClone[index] = changedDrillConfiguration; // replace with changed entry
+            } else {
+                drillConfigurationsClone.push(changedDrillConfiguration); // new entry
+            }
+            setSelectedDrillConfiguration(changedDrillConfiguration);
         }
-        setSelectedDrillConfiguration(changedDrillConfiguration);
+
         setDrillConfigurations(drillConfigurationsClone);
         const drillConfigurationsAsString: string = drillConfigurationsToString(drillConfigurationsClone);
         console.log("drillConfigurationsAsString", drillConfigurationsAsString)
@@ -114,7 +127,6 @@ const App: React.FC<{}> = (): JSX.Element => {
                 : selectedPage === EditDrillConfigurationPageName
                     ? <EditDrillConfigurationPage
                         drillConfigurations={drillConfigurations}
-                        handleDrillConfigurationsChanged={handleDrillConfigurationsChanged}
                         selectedDrillConfiguration={selectedDrillConfiguration}
                         handleSelectPageClicked={setSelectedPage}
                         handleSaveDrillConfigurations={handleSaveUserDrillConfigurations}

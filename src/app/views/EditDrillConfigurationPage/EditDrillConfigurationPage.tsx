@@ -37,7 +37,6 @@ export const EditDrillConfigurationPageName: string = "EditDrillConfigurationPag
 
 interface IEditDrillConfigurationPageProps {
     drillConfigurations: IDrillConfiguration[];
-    handleDrillConfigurationsChanged: (drillConfigurations: IDrillConfiguration[]) => void;
     selectedDrillConfiguration: IDrillConfiguration;
     handleSelectPageClicked: (page: string) => void;
     handleSaveDrillConfigurations: (changedDrillConfiguration: IDrillConfiguration) => void;
@@ -45,7 +44,7 @@ interface IEditDrillConfigurationPageProps {
 }
 
 export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPageProps> = (props: IEditDrillConfigurationPageProps): JSX.Element => {
-    assert(!!props.selectedDrillConfiguration, "!props.selectedDrillConfiguration");
+    assert(!!props.selectedDrillConfiguration, "EditDrillConfigurationPage - !props.selectedDrillConfiguration");
     console.log("EditDrillConfigurationPage - props.selectedDrillConfiguration", props.selectedDrillConfiguration);
 
     const [name, setName] = React.useState<string>(props.selectedDrillConfiguration.getName());
@@ -75,7 +74,11 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                     <div className="delete-flex-item flex-item">
                         <span className="delete-span"
                               onClick={(): void => {
-                                  console.log("TODO")
+                                  // save changes
+                                  props.handleSaveDrillConfigurations(undefined);
+
+                                  // back to drill selection page
+                                  props.handleSelectPageClicked(SelectDrillPageName)
                               }}
                         >
                             <div className="top-button-img-div">

@@ -11,7 +11,7 @@ export interface INextDistanceBoxProps {
 
 export const NextDistanceBox: React.FC<INextDistanceBoxProps> = (props: INextDistanceBoxProps): JSX.Element => {
     assert(!!props, "!props");
-    assert(!!props.selectedDrillConfiguration, "!props.selectedDistancesGenerator");
+    assert(!!props.selectedDrillConfiguration, "NextDistanceBox - !props.selectedDistancesGenerator");
 
     const nextDistanceInDistancesGeneratorUnit: number =
         !!props.nextDistance
