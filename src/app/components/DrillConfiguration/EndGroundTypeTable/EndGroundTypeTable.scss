@@ -8,9 +8,6 @@
 .end-ground-types-table {
     display: flex;
     flex-direction: column;
-    //flex: 1;
-    //justifyContent: flex-end;
-    //padding-right: 15px;
     padding-top: 10px;
     padding-bottom: 10px;
     width: 100%;
@@ -20,22 +17,14 @@
     display: flex;
     flexDirection: row;
     flex: 1;
-    //justifyContent: flex-end;
-    //padding-right: 15px;
-    //padding-top: 10px;
     width: 100%;
 }
 
 .end-ground-types-table-cell {
-    //flex: 1;
-    //padding-right: 15px;
-    //padding-top: 10px;
-    width: 100%;
+    margin-right: 1em;
 }
 
 .end-ground-types-table-icon-cell {
-    //padding-right: 15px;
-    //padding-top: 10px;
 }
 
 .icon-flex-item {
@@ -43,15 +32,25 @@
 }
 
 .end-ground-types-select {
-    width: 100%;
+    width: calc(15em + 16px);
+}
+
+.end-ground-types-text-input {
+    border: none;
+    border: none;
+    padding-left: 8px;
+    text-align: left;
+    font-size: 20px;
+    height: 35px;
+    width: 8em;
 }
 
 .table-button-img-div {
     background: var(--font-white);
     width: 40px;
     height: 40px;
-    margin-left: 15px;
-    margin-right: 15px;
+    //margin-left: 15px;
+    //margin-right: 15px;
 }
 
 .table-button-img {

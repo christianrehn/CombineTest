@@ -209,23 +209,27 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 </div>
                 {distanceGenerator === RANDOM_DISTANCES_GENERATOR
                     ? <>
-                        <div className="MinIncludedDistanceInput">
+                        <div className="min-included-distance-input">
                             <DrillConfigurationTextInput
                                 label={"Minimum Included Distance"}
                                 type="number"
                                 value={minIncludedDistance}
                                 maxLength={3}
+                                min={1}
+                                max={999}
                                 handleOnChange={(value: string): void => {
                                     setMinIncludedDistance(Number(value));
                                 }}
                             />
                         </div>
-                        <div className="MaxExcludedDistanceInput">
+                        <div className="max-excluded-distance-input">
                             <DrillConfigurationTextInput
                                 label={"Maximum Excluded Distance"}
-                                type={"number"}
+                                type="number"
                                 value={maxExcludedDistance}
                                 maxLength={3}
+                                min={1}
+                                max={999}
                                 handleOnChange={(value: string): void => {
                                     setMaxExcludedDistance(Number(value));
                                 }}

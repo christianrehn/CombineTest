@@ -5,7 +5,9 @@ export interface IDrillConfigurationTextInputProps {
     label: string;
     type: string;
     value: string | number | undefined;
-    maxLength: number;
+    maxLength?: number;
+    min?: number;
+    max?: number;
     handleOnChange: (value: string) => void;
 }
 
@@ -22,8 +24,16 @@ export const DrillConfigurationTextInput: React.FC<IDrillConfigurationTextInputP
                     type={props.type}
                     value={props.value}
                     maxLength={props.maxLength}
+                    min={props.min}
+                    max={props.max}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
-                        props.handleOnChange(String(event.target.value));
+                        const value: string = String(event.target.value);
+                        if (!!props.maxLength && value.length > props.maxLength) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        } else {
+                            props.handleOnChange(String(event.target.value));
+                        }
                     }}
                 />
             </div>
