@@ -65,6 +65,9 @@ const createWindow = (): void => {
     // Open the DevTools.
     if (electronIsDev) {
         mainWindow.webContents.openDevTools();
+    } else {
+        // for performance analysis on Windows
+        mainWindow.webContents.openDevTools();
     }
 
     ipcMain.on('appPath', (event: Electron.IpcMainEvent, arg: any): void => {
