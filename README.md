@@ -12,7 +12,7 @@ shot data togeter with the points you get from the shots gained rating.
 ## To Fix
 
 * Edit configuration takes very long
-* New Configuarions are not complete -> error when opening the Drill
+* New Configuarions are not complete -> error when opening the Drill -> add Validations to edit config page
 
 ## Ideas for the next version:
 
