@@ -56,6 +56,9 @@ const createWindow = (): void => {
     // if main window is ready to show, then destroy the splash window and show up the main window
     mainWindow.once('ready-to-show', (): void => {
         splashWindow.close();
+        if (!electronIsDev) {
+            mainWindow.maximize(); // not full screen
+        }
         mainWindow.show();
     });
 
