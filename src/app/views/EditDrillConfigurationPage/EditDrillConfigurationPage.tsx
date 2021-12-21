@@ -43,23 +43,66 @@ interface IEditDrillConfigurationPageProps {
     averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>
 }
 
+const MIN_NAME: number = 1;
+const MAX_NAME: number = 15;
+
+const MIN_DISTANCE: number = 1;
+const MAX_DISTANCE: number = 999;
+
+const MIN_ROUNDS: number = 1;
+const MAX_ROUNDS: number = 99;
+
+const MIN_SHOTS: number = 1;
+
 export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPageProps> = (props: IEditDrillConfigurationPageProps): JSX.Element => {
     assert(!!props.selectedDrillConfiguration, "EditDrillConfigurationPage - !props.selectedDrillConfiguration");
     console.log("EditDrillConfigurationPage - props.selectedDrillConfiguration", props.selectedDrillConfiguration);
 
     const [name, setName] = React.useState<string>(props.selectedDrillConfiguration.getName());
+    const [nameError, setNameError] = React.useState<boolean>(true);
     const [description, setDescription] = React.useState<string>(props.selectedDrillConfiguration.getDescription());
     const [unit, setUnit] = React.useState<string>(props.selectedDrillConfiguration.getUnit());
     const [startGroundType, setStartGroundType] = React.useState<StartGroundTypeEnumsType>(props.selectedDrillConfiguration.getStartGroundType());
     const [endGroundTypes, setEndGroundTypes] = React.useState<IEndGroundType[]>(props.selectedDrillConfiguration.getEndGroundTypes());
     const [distanceGenerator, setDistanceGenerator] = React.useState<string>(props.selectedDrillConfiguration.getDistanceGenerator());
 
-    const [minIncludedDistance, setMinIncludedDistance] = React.useState<number>(((props.selectedDrillConfiguration as any) as IRandomDistancesGenerator).getMinIncludedDistance?.() || 0);
-    const [maxExcludedDistance, setMaxExcludedDistance] = React.useState<number>(((props.selectedDrillConfiguration as any) as IRandomDistancesGenerator).getMaxExcludedDistance?.() || 100);
-    const [numberOfShots, setNumberOfShots] = React.useState<number>(props.selectedDrillConfiguration.getNumberOfShots());
+    const [minIncludedDistance, setMinIncludedDistance] = React.useState<number>(((props.selectedDrillConfiguration as any) as IRandomDistancesGenerator).getMinIncludedDistance?.() || MIN_DISTANCE);
+    const [minIncludedDistanceError, setMinIncludedDistanceError] = React.useState<boolean>(true);
+    const [maxExcludedDistance, setMaxExcludedDistance] = React.useState<number>(((props.selectedDrillConfiguration as any) as IRandomDistancesGenerator).getMaxExcludedDistance?.() || MAX_DISTANCE);
+    const [maxExcludedDistanceError, setMaxExcludedDistanceError] = React.useState<boolean>(true);
+    const [numberOfShots, setNumberOfShots] = React.useState<number>(props.selectedDrillConfiguration.getNumberOfShots() || MIN_SHOTS);
 
     const [distances, setDistances] = React.useState<string>(((props.selectedDrillConfiguration as any) as IFixedDistancesGenerator).getDistances?.().join(" ") || "");
-    const [numberOfRounds, setNumberOfRounds] = React.useState<number>(((props.selectedDrillConfiguration as any) as IFixedDistancesGenerator).getNumberOfRounds?.() || 1);
+    const [distancesError, setDistancesError] = React.useState<boolean>(true);
+    const [numberOfRounds, setNumberOfRounds] = React.useState<number>(((props.selectedDrillConfiguration as any) as IFixedDistancesGenerator).getNumberOfRounds?.() || MIN_ROUNDS);
+
+    React.useEffect((): void => {
+        // validate name
+        setNameError(name.length < MIN_NAME || name.length > MAX_NAME);
+    }, [name])
+
+    React.useEffect((): void => {
+        // validate distances
+        setDistancesError(distances.length <= 0);
+    }, [distances])
+
+    React.useEffect((): void => {
+        // validate minIncludedDistance
+        setMinIncludedDistanceError(minIncludedDistance < MIN_DISTANCE || minIncludedDistance > MAX_DISTANCE);
+    }, [minIncludedDistance])
+
+    React.useEffect((): void => {
+        // validate maxExcludedDistance
+        setMaxExcludedDistanceError(maxExcludedDistance < MIN_DISTANCE || maxExcludedDistance > MAX_DISTANCE);
+    }, [maxExcludedDistanceError])
+
+    const error = (): boolean => {
+        return nameError || (distanceGenerator === RANDOM_DISTANCES_GENERATOR
+            ? minIncludedDistanceError || maxExcludedDistanceError
+            : [FIXED_DISTANCES_GENERATOR, RANDOM_FROM_FIXED_DISTANCES_GENERATOR].includes(distanceGenerator)
+                ? distancesError
+                : false);
+    }
 
     return (
         <div className="edit-drill-configuration-page page">
@@ -89,7 +132,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                             </div>
                         </span>
                     </div>
-                    <div className="back-flex-item flex-item">
+                    <div className={error() ? "disabled back-flex-item flex-item" : "back-flex-item flex-item"}>
                         <span className="back-span"
                               onClick={(): void => {
                                   // save changes
@@ -131,9 +174,11 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="name-input">
                     <DrillConfigurationTextInput
                         label={"Name"}
+                        error={nameError}
                         type={"text"}
                         value={name}
-                        maxLength={15}
+                        minLength={MIN_NAME}
+                        maxLength={MAX_NAME}
                         handleOnChange={(value: string): void => {
                             setName(value);
                         }}
@@ -215,11 +260,12 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         <div className="min-included-distance-input">
                             <DrillConfigurationTextInput
                                 label={"Minimum Included Distance"}
+                                error={minIncludedDistanceError}
                                 type="number"
                                 value={minIncludedDistance}
                                 maxLength={3}
-                                min={1}
-                                max={999}
+                                min={MIN_DISTANCE}
+                                max={MAX_DISTANCE}
                                 handleOnChange={(value: string): void => {
                                     setMinIncludedDistance(Number(value));
                                 }}
@@ -228,11 +274,12 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         <div className="max-excluded-distance-input">
                             <DrillConfigurationTextInput
                                 label={"Maximum Excluded Distance"}
+                                error={maxExcludedDistanceError}
                                 type="number"
                                 value={maxExcludedDistance}
                                 maxLength={3}
-                                min={1}
-                                max={999}
+                                min={MIN_DISTANCE}
+                                max={MAX_DISTANCE}
                                 handleOnChange={(value: string): void => {
                                     setMaxExcludedDistance(Number(value));
                                 }}
@@ -241,6 +288,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         <div className="NumberOfShotsInput">
                             <NumberPlusMinusInput
                                 label="Number of Shots"
+                                min={MIN_SHOTS}
                                 value={numberOfShots}
                                 handleOnClick={(numberOfShots: number): void => {
                                     setNumberOfShots(numberOfShots);
@@ -253,6 +301,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                             <div className="distances-input">
                                 <DrillConfigurationTextInput
                                     label={"Distances"}
+                                    error={distancesError}
                                     type={"text"}
                                     value={distances}
                                     maxLength={110}
@@ -264,6 +313,8 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                             <div className="NumberOfRoundsInput">
                                 <NumberPlusMinusInput
                                     label="Number of Rounds"
+                                    min={MIN_ROUNDS}
+                                    max={MAX_ROUNDS}
                                     value={numberOfRounds}
                                     handleOnClick={(value: number): void => {
                                         setNumberOfRounds(value);

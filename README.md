@@ -12,19 +12,15 @@ shot data togeter with the points you get from the shots gained rating.
 ## To Fix
 
 * Edit configuration takes very long
-* New Configuarions are not complete -> error when opening the Drill -> add Validations to edit config page
 
 ## Ideas for the next version:
 
 * Add rating that is similar to Trackman Combine Test for pitches.
-* Improve splash screen.
 * Show overview/report like Trackman "Test Center report" after last shot
 * Save shot history and create links to share them
-* Should start full screen
-* Start page scroll bar should be right without margin
-* Delete Config does not work
-* Installer looks ugly -> change
+* Improve splash screen.
 
+* Installer looks ugly -> change
 * Shots gained rating for tee shots with the driver
 * Select between Total and Carry (currently only carry is used)
 * Enter directory to watch for LastShot.CSV

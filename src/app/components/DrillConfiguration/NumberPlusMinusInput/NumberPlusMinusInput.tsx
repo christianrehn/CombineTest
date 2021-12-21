@@ -4,6 +4,8 @@ import './NumberOfShotsInput.scss';
 export interface INumberOfShotsInputProps {
     label: string;
     value: number;
+    min?: number;
+    max?: number;
     handleOnClick: (numberOfShots: number) => void;
 }
 
@@ -16,7 +18,9 @@ export const NumberPlusMinusInput: React.FC<INumberOfShotsInputProps> = (props: 
             <div className="btn-change-box">
                 <span className="btn-change minus icon icon-minus"
                       onClick={(): void => {
-                          props.handleOnClick(props.value - 1);
+                          if (!props.min || props.value > props.min) {
+                              props.handleOnClick(props.value - 1);
+                          }
                       }}>
                     -
                 </span>
@@ -29,7 +33,9 @@ export const NumberPlusMinusInput: React.FC<INumberOfShotsInputProps> = (props: 
                 />
                 <span className="btn-change plus icon icon-plus"
                       onClick={(): void => {
-                          props.handleOnClick(props.value + 1);
+                          if (!props.max || props.value < props.max) {
+                              props.handleOnClick(props.value + 1);
+                          }
                       }}>
                     +
                 </span>
