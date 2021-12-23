@@ -2,7 +2,7 @@ import React from "react";
 import './DrillConfigurationSelect.scss';
 import {GroundTypeEnum, StartGroundTypeEnumsType} from "../../../model/AverageStrokesData/GroundTypeEnum";
 import {assert} from "chai";
-import {enumKeys} from "../../../helpers/enumHelper";
+import {enumKeys} from "../../../util/EnumUtil";
 
 export interface IDrillConfigurationSelectProps {
     label: string;

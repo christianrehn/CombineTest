@@ -5,7 +5,7 @@ import addRowIcon from "../../../../assets/addRow.png";
 import deleteRowIcon from "../../../../assets/deleteRow.png";
 import {assert} from "chai";
 import {GroundTypeEnum, GroundTypeEnumStringsType} from "../../../model/AverageStrokesData/GroundTypeEnum";
-import {enumKeys} from "../../../helpers/enumHelper";
+import {enumKeys} from "../../../util/EnumUtil";
 
 export interface IEndGroundTypeTableProps {
     label: string;
