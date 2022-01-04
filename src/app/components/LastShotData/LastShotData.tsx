@@ -144,7 +144,13 @@ const trackmanScoreData = (props: ILastShotData): JSX.Element[] => {
 
     const absoluteDeviation: Unit = computeAbsoluteDeviation(props.lastShot);
     const trackmanScore: number = computeTrackmanScore(props.lastShot.targetDistance, absoluteDeviation);
-    const trackmanScoreAverage: number = 42;
+
+    const trackmanScoreSum: number = props.shotDatas
+        .map((shotData: IShotData) => {
+            const absoluteDeviation: Unit = computeAbsoluteDeviation(shotData);
+            return computeTrackmanScore(shotData.targetDistance, absoluteDeviation);
+        })
+        .reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0);
 
     return [
         <div
@@ -160,7 +166,7 @@ const trackmanScoreData = (props: ILastShotData): JSX.Element[] => {
             className="last-shot__row last-shot__trackmanscore-row last-shot__avg-trackmanscore-row">
             <div className="last-shot-item__label">Score Average</div>
             <div className="last-shot-item__data"> {
-                !!props.lastShot ? trackmanScoreAverage.toFixed(1) : ""
+                !!props.lastShot ? (trackmanScoreSum / props.shotDatas.length).toFixed(1) : ""
             } </div>
         </div>,
         <div
