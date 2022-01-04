@@ -84,21 +84,22 @@ const App: React.FC<{}> = (): JSX.Element => {
     const handleSaveUserDrillConfigurations = (changedDrillConfiguration: IDrillConfiguration): void => {
         const drillConfigurationsClone: IDrillConfiguration[] = [...drillConfigurations];
         const drillConfigurationUuids: string[] = drillConfigurationsClone.map((drillConfiguration: IDrillConfiguration) => drillConfiguration.getUuid());
+        console.log("handleSaveUserDrillConfigurations - drillConfigurationUuids=", drillConfigurationUuids);
 
         if (!changedDrillConfiguration) {
             // selectedDrillConfiguration has been deleted
             const deletedDrillConfigurationIndex: number = drillConfigurationUuids.indexOf(selectedDrillConfiguration.getUuid())
+            console.log("handleSaveUserDrillConfigurations - deletedDrillConfigurationIndex=", deletedDrillConfigurationIndex);
             assert(deletedDrillConfigurationIndex >= 0, "deletedDrillConfigurationIndex < 0");
             drillConfigurationsClone.splice(deletedDrillConfigurationIndex, 1);
             setSelectedDrillConfiguration(undefined);
-
-
         } else {
             // selectedDrillConfiguration has been updated or is new
             assert(!!changedDrillConfiguration.getUuid(), "!changedDrillConfiguration.getUuid()");
-            const index: number = drillConfigurationUuids.indexOf(changedDrillConfiguration.getUuid())
-            if (index >= 0) {
-                drillConfigurationsClone[index] = changedDrillConfiguration; // replace with changed entry
+            const changedDrillConfigurationIndex: number = drillConfigurationUuids.indexOf(changedDrillConfiguration.getUuid())
+            console.log("handleSaveUserDrillConfigurations - changedDrillConfigurationIndex=", changedDrillConfigurationIndex);
+            if (changedDrillConfigurationIndex >= 0) {
+                drillConfigurationsClone[changedDrillConfigurationIndex] = changedDrillConfiguration; // replace with changed entry
             } else {
                 drillConfigurationsClone.push(changedDrillConfiguration); // new entry
             }
@@ -106,6 +107,7 @@ const App: React.FC<{}> = (): JSX.Element => {
         }
 
         setDrillConfigurations(drillConfigurationsClone);
+        console.log("handleSaveUserDrillConfigurations - drillConfigurationsClone=", drillConfigurationsClone);
         const drillConfigurationsAsString: string = drillConfigurationsToString(drillConfigurationsClone);
         const success = ipcRenderer.sendSync('saveUserDrillConfigurations', drillConfigurationsAsString);
         console.log("handleSaveUserDrillConfigurations - success=", success)
@@ -123,9 +125,8 @@ const App: React.FC<{}> = (): JSX.Element => {
                 />
                 : selectedPage === EditDrillConfigurationPageName
                     ? <EditDrillConfigurationPage
-                        drillConfigurations={drillConfigurations}
                         selectedDrillConfiguration={selectedDrillConfiguration}
-                        handleSelectPageClicked={setSelectedPage}
+                        handleBackClicked={() => setSelectedPage(SelectDrillPageName)}
                         handleSaveDrillConfigurations={handleSaveUserDrillConfigurations}
                         averageStrokesDataMap={averageStrokesDataMap}
                     />
