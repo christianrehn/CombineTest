@@ -5,6 +5,7 @@ import * as math from "mathjs";
 import {Unit} from "mathjs";
 import {assert} from "chai";
 import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
+import {computeTrackmanScore} from "../../model/TrackmanScore";
 
 const SHOW_ADDITIONAL_DATA_FOR_ALL_SHOTS: boolean = false;
 
@@ -136,16 +137,13 @@ const shotsGainedData = (props: ILastShotData, targetDistance: string): JSX.Elem
     ];
 }
 
-const computeTrackmanScore = (targetDistance: Unit): number => {
-    return 48;
-}
-
 const trackmanScoreData = (props: ILastShotData): JSX.Element[] => {
     if (!props.lastShot) {
         return [];
     }
 
-    const trackmanScore: number = computeTrackmanScore(props.lastShot.targetDistance);
+    const absoluteDeviation: Unit = computeAbsoluteDeviation(props.lastShot);
+    const trackmanScore: number = computeTrackmanScore(props.lastShot.targetDistance, absoluteDeviation);
     const trackmanScoreAverage: number = 42;
 
     return [
