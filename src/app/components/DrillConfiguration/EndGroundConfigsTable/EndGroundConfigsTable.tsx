@@ -4,6 +4,7 @@ import {IEndGroundConfig} from "../../../model/DrillConfiguration/DrillConfigura
 import addRowIcon from "../../../../assets/addRow.png";
 import deleteRowIcon from "../../../../assets/deleteRow.png";
 import {assert} from "chai";
+import {endGroundTypes} from "../../../model/AverageStrokesData/GroundType";
 
 export interface IEndGroundConfigsTableProps {
     label: string;
@@ -12,8 +13,6 @@ export interface IEndGroundConfigsTableProps {
 }
 
 export const EndGroundConfigsTable: React.FC<IEndGroundConfigsTableProps> = (props: IEndGroundConfigsTableProps): any => {
-    const endGroundTypes: string[] = props.endGroundConfigs.map((endGroundType: IEndGroundConfig) => endGroundType.type);
-
     return (
         <div className="end-ground-configs-table-container">
             <label
