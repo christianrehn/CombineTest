@@ -3,10 +3,9 @@ import {
     DrillConfigurationWithRandomDistancesGenerator,
     DrillConfigurationWithRandomFromFixedDistancesGenerator,
     IDrillConfiguration,
-    IEndGroundType
+    IEndGroundConfig
 } from "./DrillConfiguration";
 import {IAverageStrokesData} from "../AverageStrokesData/AverageStrokesData";
-import {GroundTypeEnum, StartGroundTypeEnumsType} from "../AverageStrokesData/GroundTypeEnum";
 
 export const RANDOM_DISTANCES_GENERATOR: string = "RandomDistancesGenerator";
 export const FIXED_DISTANCES_GENERATOR: string = "FixedDistancesGenerator";
@@ -20,21 +19,21 @@ export const createNewDrillConfigurationWithDistanceGenerator = (
     description: string,
     unit: string,
     distanceGenerator: string,
-    startGroundType: StartGroundTypeEnumsType,
-    endGroundTypes: IEndGroundType[],
+    startGroundType: string,
+    endGroundConfigs: IEndGroundConfig[],
     minIncludedDistance: number,
     maxExcludedDistance: number,
     numberOfShots: number,
     distances: number[],
     numberOfRounds: number,
-    averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>
+    averageStrokesDataMap: Map<string, IAverageStrokesData>
 ): IDrillConfiguration => {
     switch (distanceGenerator) {
         case RANDOM_DISTANCES_GENERATOR:
-            return new DrillConfigurationWithRandomDistancesGenerator(uuid, name, description, unit, startGroundType, endGroundTypes, minIncludedDistance, maxExcludedDistance, numberOfShots, averageStrokesDataMap);
+            return new DrillConfigurationWithRandomDistancesGenerator(uuid, name, description, unit, startGroundType, endGroundConfigs, minIncludedDistance, maxExcludedDistance, numberOfShots, averageStrokesDataMap);
         case FIXED_DISTANCES_GENERATOR:
-            return new DrillConfigurationWithFixedDistancesGenerator(uuid, name, description, unit, startGroundType, endGroundTypes, distances, numberOfRounds, averageStrokesDataMap);
+            return new DrillConfigurationWithFixedDistancesGenerator(uuid, name, description, unit, startGroundType, endGroundConfigs, distances, numberOfRounds, averageStrokesDataMap);
         case RANDOM_FROM_FIXED_DISTANCES_GENERATOR:
-            return new DrillConfigurationWithRandomFromFixedDistancesGenerator(uuid, name, description, unit, startGroundType, endGroundTypes, distances, numberOfRounds, averageStrokesDataMap);
+            return new DrillConfigurationWithRandomFromFixedDistancesGenerator(uuid, name, description, unit, startGroundType, endGroundConfigs, distances, numberOfRounds, averageStrokesDataMap);
     }
 }

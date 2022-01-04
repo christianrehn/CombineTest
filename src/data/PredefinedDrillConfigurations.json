@@ -20,7 +20,7 @@
             "numberOfRounds": 2
         },
         "startGroundType": "Fairway",
-        "endGroundTypes": [
+        "endGroundConfigs": [
             {
                 "type": "Green",
                 "to": 5
@@ -51,7 +51,7 @@
             "numberOfRounds": 6
         },
         "startGroundType": "Fairway",
-        "endGroundTypes": [
+        "endGroundConfigs": [
             {
                 "type": "Green",
                 "to": 5
@@ -82,7 +82,7 @@
             "numberOfRounds": 6
         },
         "startGroundType": "Fairway",
-        "endGroundTypes": [
+        "endGroundConfigs": [
             {
                 "type": "Green",
                 "to": 5
@@ -112,7 +112,7 @@
             "numberOfShots": 2
         },
         "startGroundType": "Fairway",
-        "endGroundTypes": [
+        "endGroundConfigs": [
             {
                 "type": "Green",
                 "to": 10
@@ -135,7 +135,7 @@
             "numberOfRounds": 10
         },
         "startGroundType": "Tee",
-        "endGroundTypes": [
+        "endGroundConfigs": [
             {
                 "type": "Fairway",
                 "to": 12
@@ -162,7 +162,7 @@
             "numberOfRounds": 10
         },
         "startGroundType": "Tee",
-        "endGroundTypes": [
+        "endGroundConfigs": [
             {
                 "type": "Fairway",
                 "to": 13

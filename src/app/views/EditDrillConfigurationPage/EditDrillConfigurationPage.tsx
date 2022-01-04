@@ -2,7 +2,7 @@ import React from 'react';
 import './EditDrillConfigurationPage.scss';
 import {
     IDrillConfiguration,
-    IEndGroundType,
+    IEndGroundConfig,
     IFixedDistancesGenerator,
     IRandomDistancesGenerator
 } from "../../model/DrillConfiguration/DrillConfiguration";
@@ -26,12 +26,8 @@ import {
 } from "../../model/DrillConfiguration/DistanceGenerator";
 import {IAverageStrokesData} from "../../model/AverageStrokesData/AverageStrokesData";
 import {NumberPlusMinusInput} from "../../components/DrillConfiguration/NumberPlusMinusInput/NumberPlusMinusInput";
-import {EndGroundTypesTable} from "../../components/DrillConfiguration/EndGroundTypeTable/EndGroundTypesTable";
-import {
-    GroundTypeEnum,
-    startGroundTypeEnums,
-    StartGroundTypeEnumsType
-} from "../../model/AverageStrokesData/GroundTypeEnum";
+import {EndGroundConfigsTable} from "../../components/DrillConfiguration/EndGroundConfigsTable/EndGroundConfigsTable";
+import {startGroundTypes,} from "../../model/AverageStrokesData/GroundType";
 
 export const EditDrillConfigurationPageName: string = "EditDrillConfigurationPage";
 
@@ -40,7 +36,7 @@ interface IEditDrillConfigurationPageProps {
     selectedDrillConfiguration: IDrillConfiguration;
     handleSelectPageClicked: (page: string) => void;
     handleSaveDrillConfigurations: (changedDrillConfiguration: IDrillConfiguration) => void;
-    averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>
+    averageStrokesDataMap: Map<string, IAverageStrokesData>
 }
 
 const MIN_NAME: number = 1;
@@ -62,8 +58,8 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     const [nameError, setNameError] = React.useState<boolean>(true);
     const [description, setDescription] = React.useState<string>(props.selectedDrillConfiguration.getDescription());
     const [unit, setUnit] = React.useState<string>(props.selectedDrillConfiguration.getUnit());
-    const [startGroundType, setStartGroundType] = React.useState<StartGroundTypeEnumsType>(props.selectedDrillConfiguration.getStartGroundType());
-    const [endGroundTypes, setEndGroundTypes] = React.useState<IEndGroundType[]>(props.selectedDrillConfiguration.getEndGroundTypes());
+    const [startGroundType, setStartGroundType] = React.useState<string>(props.selectedDrillConfiguration.getStartGroundType());
+    const [endGroundConfigs, setEndGroundConfigs] = React.useState<IEndGroundConfig[]>(props.selectedDrillConfiguration.getEndGroundConfigs());
     const [distanceGenerator, setDistanceGenerator] = React.useState<string>(props.selectedDrillConfiguration.getDistanceGenerator());
 
     const [minIncludedDistance, setMinIncludedDistance] = React.useState<number>(((props.selectedDrillConfiguration as any) as IRandomDistancesGenerator).getMinIncludedDistance?.() || MIN_DISTANCE);
@@ -144,7 +140,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                           unit,
                                           distanceGenerator,
                                           startGroundType,
-                                          endGroundTypes,
+                                          endGroundConfigs,
                                           minIncludedDistance,
                                           maxExcludedDistance,
                                           numberOfShots,
@@ -209,38 +205,38 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="start-ground-type-select">
                     <DrillConfigurationSelect
                         label={"Start Ground Type"}
-                        index={startGroundTypeEnums.indexOf(startGroundType)}
-                        startGroundTypeEnums={startGroundTypeEnums}
-                        handleOnChange={(startGroundTypeEnumNumberKey: number): void => {
-                            if (startGroundTypeEnumNumberKey >= 0) {
-                                const startGroundTypeEnum: any = GroundTypeEnum[startGroundTypeEnumNumberKey]; // convert key to enum
-                                setStartGroundType(startGroundTypeEnum);
+                        index={startGroundTypes.indexOf(startGroundType)}
+                        stringValues={startGroundTypes}
+                        handleOnChange={(index: number): void => {
+                            if (index >= 0) {
+                                const startGroundType: string = startGroundTypes[index];
+                                setStartGroundType(startGroundType);
                             }
                         }}
                     />
                 </div>
                 <div className="end-ground-types-table">
-                    <EndGroundTypesTable
+                    <EndGroundConfigsTable
                         label="End Ground Types"
-                        endGroundTypes={endGroundTypes}
-                        handleEndGroundTypeChanged={(endGroundType: IEndGroundType, endGroundTypesIndex: number, newNotCHanged: boolean): void => {
-                            assert(endGroundTypesIndex >= 0, `endGroundTypesIndex < 0: ${endGroundTypesIndex}`);
+                        endGroundConfigs={endGroundConfigs}
+                        handleEndGroundConfigChanged={(endGroundConfig: IEndGroundConfig, endGroundConfigsIndex: number, newNotCHanged: boolean): void => {
+                            assert(endGroundConfigsIndex >= 0, `endGroundConfigsIndex < 0: ${endGroundConfigsIndex}`);
 
-                            const endGroundTypesClone: IEndGroundType[] = [...endGroundTypes];
+                            const endGroundConfigsClone: IEndGroundConfig[] = [...endGroundConfigs];
                             if (newNotCHanged) {
                                 // new row added
-                                assert(!!endGroundType, "!endGroundType");
-                                endGroundTypesClone.splice(endGroundTypesIndex, 0, endGroundType);
+                                assert(!!endGroundConfig, "!endGroundConfig");
+                                endGroundConfigsClone.splice(endGroundConfigsIndex, 0, endGroundConfig);
                             } else {
                                 // row changed or deleted
-                                assert(endGroundTypesIndex < endGroundTypesClone.length, "endGroundTypesIndex >= endGroundTypesClone.length");
-                                if (!!endGroundType) {
-                                    endGroundTypesClone[endGroundTypesIndex] = endGroundType; // changed
+                                assert(endGroundConfigsIndex < endGroundConfigsClone.length, "endGroundConfigsIndex >= endGroundConfigsClone.length");
+                                if (!!endGroundConfig) {
+                                    endGroundConfigsClone[endGroundConfigsIndex] = endGroundConfig; // changed
                                 } else {
-                                    endGroundTypesClone.splice(endGroundTypesIndex, 1); // deleted
+                                    endGroundConfigsClone.splice(endGroundConfigsIndex, 1); // deleted
                                 }
                             }
-                            setEndGroundTypes(endGroundTypesClone)
+                            setEndGroundConfigs(endGroundConfigsClone)
                         }}
                     />
                 </div>

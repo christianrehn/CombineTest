@@ -42,7 +42,16 @@
     color: orange;
     font-size: 30px;
 }
+
 .last-shot__sum-gained-row {
     font-weight: bolder;
 }
 
+.last-shot__trackmanscore-row {
+    color: lightgreen;
+    font-size: 30px;
+}
+
+.last-shot__avg-trackmanscore-row {
+    font-weight: bolder;
+}

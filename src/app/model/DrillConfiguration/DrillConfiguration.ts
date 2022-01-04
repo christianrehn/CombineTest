@@ -3,7 +3,7 @@ import * as math from "mathjs";
 import {Unit} from "mathjs";
 import {IAverageStrokesData} from "../AverageStrokesData/AverageStrokesData";
 import {v4 as uuidv4} from 'uuid';
-import {EndGroundTypeEnumsType, GroundTypeEnum, StartGroundTypeEnumsType} from "../AverageStrokesData/GroundTypeEnum";
+import {Fairway, Green, OutOfBounds,} from "../AverageStrokesData/GroundType";
 import {
     FIXED_DISTANCES_GENERATOR,
     RANDOM_DISTANCES_GENERATOR,
@@ -34,8 +34,8 @@ export interface IDrillConfiguration {
     getName: () => string;
     getDescription: () => string;
     getUnit: () => string;
-    getStartGroundType: () => StartGroundTypeEnumsType;
-    getEndGroundTypes: () => IEndGroundType[]
+    getStartGroundType: () => string;
+    getEndGroundConfigs: () => IEndGroundConfig[]
     getDistanceGenerator: () => string;
     getNumberOfShots: () => number;
     getNextDistance: (index: number) => Unit;
@@ -63,25 +63,25 @@ abstract class AbstractDrillConfiguration {
     protected _uuid: string;
     protected _name: string;
     protected _description: string;
-    protected _startGroundType: StartGroundTypeEnumsType;
-    protected _endGroundTypes: IEndGroundType[];
-    protected readonly _averageShotsStartGroundTypeEnum: GroundTypeEnum;
-    protected readonly _averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>;
+    protected _startGroundType: string;
+    protected _endGroundConfigs: IEndGroundConfig[];
+    protected readonly _averageShotsStartGroundType: string;
+    protected readonly _averageStrokesDataMap: Map<string, IAverageStrokesData>;
 
     constructor(
         uuid: string,
         name: string,
         description: string,
-        startGroundType: StartGroundTypeEnumsType,
-        endGroundTypes: IEndGroundType[],
-        averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>,
+        startGroundType: string,
+        endGroundConfigs: IEndGroundConfig[],
+        averageStrokesDataMap: Map<string, IAverageStrokesData>,
     ) {
         this._uuid = uuid;
         this._name = name;
         this._description = description;
         this._startGroundType = startGroundType;
-        this._endGroundTypes = endGroundTypes;
-        this._averageShotsStartGroundTypeEnum = startGroundType;
+        this._endGroundConfigs = endGroundConfigs;
+        this._averageShotsStartGroundType = startGroundType;
         this._averageStrokesDataMap = averageStrokesDataMap;
     }
 
@@ -97,87 +97,98 @@ abstract class AbstractDrillConfiguration {
         return this._description;
     }
 
-    public getStartGroundType = (): StartGroundTypeEnumsType => {
+    public getStartGroundType = (): string => {
         return this._startGroundType;
     }
 
-    public getEndGroundTypes = (): IEndGroundType[] => {
-        return this._endGroundTypes;
+    public getEndGroundConfigs = (): IEndGroundConfig[] => {
+        return this._endGroundConfigs;
     }
 
     public computeAverageStrokesFromStartDistance = (startDistance: Unit): number => {
-        return this._averageStrokesDataMap?.get(this._averageShotsStartGroundTypeEnum)?.computeAverageStrokesToHole(startDistance);
+        const averageStrokesFromStartDistance: number = this._averageStrokesDataMap?.get(this._averageShotsStartGroundType)?.computeAverageStrokesToHole(startDistance);
+        console.log("computeAverageStrokesFromStartDistance - this._averageShotsStartGroundType=", this._averageShotsStartGroundType);
+        console.log("computeAverageStrokesFromStartDistance - averageStrokesFromStartDistance=", averageStrokesFromStartDistance);
+        return averageStrokesFromStartDistance;
     }
 
     public computeAverageStrokesFromEndDistance = (endDistance: Unit): number | undefined => {
         if (!this._averageStrokesDataMap) {
             return 0;
         }
-        const averageStrokesData: IAverageStrokesData | undefined = this._averageStrokesDataMap?.get(this._averageShotsStartGroundTypeEnum);
+
+        const averageStrokesData: IAverageStrokesData | undefined = this._averageStrokesDataMap?.get(this._averageShotsStartGroundType);
+        console.log("computeAverageStrokesFromEndDistance - averageStrokesData=", averageStrokesData);
         if (!averageStrokesData) {
             return 0;
         }
         const unit: string = averageStrokesData.unit;
         const endDistanceInUnit: number = endDistance.toNumber(unit);
 
-        const greenIncluded: boolean = !!this._endGroundTypes.map((endGroundType: IEndGroundType) => endGroundType.type).find(type => type === GroundTypeEnum.Green);
+        // check if one of the endGroundConfigs in the configuration is Green
+        const endGroundConfigs: string[] = this._endGroundConfigs.map((endGroundConfig: IEndGroundConfig) => endGroundConfig.type);
+        const greenIncluded: boolean = !!endGroundConfigs.find((type: string): boolean => type.toString() === Green);
+        console.log("computeAverageStrokesFromEndDistance - greenIncluded=", greenIncluded);
         if (greenIncluded) {
-            let matchingEndGroundType: IEndGroundType = undefined;
-            for (let i: number = 0; i < this._endGroundTypes.length; i++) {
-                const endGroundType: IEndGroundType = this._endGroundTypes[i];
-                console.log("endGroundType.to", endGroundType.to);
+            console.log("computeAverageStrokesFromEndDistance - endDistanceInUnit=", endDistanceInUnit);
+            // there might be also other endGroundConfigs but Green is one of the endGroundConfigs in the configuration
+            // -> find the endGroundConfig that matches the current distance to the hole
+            let matchingEndGroundConfig: IEndGroundConfig = undefined;
+            for (let i: number = 0; i < this._endGroundConfigs.length; i++) {
+                const endGroundConfig: IEndGroundConfig = this._endGroundConfigs[i];
+                console.log("endGroundConfig.to", endGroundConfig.to);
 
-                const possibleEndGroundType: IEndGroundType =
-                    !!endGroundType.to
-                        ? endGroundType.to >= endDistanceInUnit
-                            ? endGroundType // valid
+                const possibleEndGroundConfig: IEndGroundConfig =
+                    !!endGroundConfig.to
+                        ? endGroundConfig.to >= endDistanceInUnit
+                            ? endGroundConfig // valid
                             : undefined // invalid
-                        : endGroundType; // valid to infinity
-                if (!matchingEndGroundType) {
-                    console.log("set matchingEndGroundType to ", possibleEndGroundType);
-                    matchingEndGroundType = possibleEndGroundType;
-                } else if (!possibleEndGroundType) {
-                    // endGroundType cannot be used for endDistanceInUnit
-                    console.log("possibleEndGroundType cannot be used", possibleEndGroundType);
+                        : endGroundConfig; // valid to infinity
+                if (!matchingEndGroundConfig) {
+                    console.log("set possibleEndGroundConfig to ", possibleEndGroundConfig);
+                    matchingEndGroundConfig = possibleEndGroundConfig;
+                } else if (!possibleEndGroundConfig) {
+                    // endGroundConfig cannot be used for endDistanceInUnit
+                    console.log("possibleEndGroundConfig cannot be used", possibleEndGroundConfig);
                 } else {
                     // check if we have a better match
-                    if (!matchingEndGroundType.to && !possibleEndGroundType.to) {
+                    if (!matchingEndGroundConfig.to && !possibleEndGroundConfig.to) {
                         // both have no to -> impossible, configuration is wrong
-                        throw new Error("wrong test configuration: more than one endGroundType without to");
-                    } else if (!matchingEndGroundType.to && !!possibleEndGroundType.to) {
+                        throw new Error("wrong test configuration: more than one endGroundConfig without to");
+                    } else if (!matchingEndGroundConfig.to && !!possibleEndGroundConfig.to) {
                         // we have a better match
-                        console.log("better match", possibleEndGroundType)
-                        matchingEndGroundType = possibleEndGroundType;
-                    } else if (!!matchingEndGroundType.to && !possibleEndGroundType.to) {
+                        console.log("better match", possibleEndGroundConfig)
+                        matchingEndGroundConfig = possibleEndGroundConfig;
+                    } else if (!!matchingEndGroundConfig.to && !possibleEndGroundConfig.to) {
                         // keep current best match
-                        console.log("keep best match", matchingEndGroundType, "and ignore", possibleEndGroundType)
+                        console.log("keep best match", matchingEndGroundConfig, "and ignore", possibleEndGroundConfig)
                     } else {
                         // use the better match
-                        matchingEndGroundType =
-                            matchingEndGroundType.to < possibleEndGroundType.to
-                                ? matchingEndGroundType : possibleEndGroundType;
-                        console.log("use better match", matchingEndGroundType)
+                        matchingEndGroundConfig =
+                            matchingEndGroundConfig.to < possibleEndGroundConfig.to
+                                ? matchingEndGroundConfig : possibleEndGroundConfig;
+                        console.log("use better match", matchingEndGroundConfig)
                     }
 
                 }
             }
-            if (!matchingEndGroundType) {
-                throw new Error(`wrong test configuration: no endGroundType found for distance ${endDistanceInUnit} ${unit}`);
+            if (!matchingEndGroundConfig) {
+                throw new Error(`wrong test configuration: no endGroundConfig found for distance ${endDistanceInUnit} ${unit}`);
             }
-            console.log("final matchingEndGroundType.type", matchingEndGroundType.type)
-            if (matchingEndGroundType.type === GroundTypeEnum.OutOfBounds) {
+            console.log("final matchingEndGroundConfig.type", matchingEndGroundConfig.type)
+            if (matchingEndGroundConfig.type === OutOfBounds) {
                 return undefined;
             }
-            return this._averageStrokesDataMap.get(matchingEndGroundType.type)?.computeAverageStrokesToHole(endDistance);
+            return this._averageStrokesDataMap.get(matchingEndGroundConfig.type)?.computeAverageStrokesToHole(endDistance);
         }
 
-        // CRTODO: !greenIncluded
-        return this._averageStrokesDataMap?.get(GroundTypeEnum.Green)?.computeAverageStrokesToHole(endDistance);
+        // CRTODO: case !greenIncluded is not implementes -> use green as end ground type
+        return this._averageStrokesDataMap?.get(Green)?.computeAverageStrokesToHole(endDistance);
     }
 }
 
-export interface IEndGroundType {
-    type: EndGroundTypeEnumsType,
+export interface IEndGroundConfig {
+    type: string,
     to?: number
 }
 
@@ -192,14 +203,14 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
         name: string,
         description: string,
         unit: string,
-        startGroundType: StartGroundTypeEnumsType,
-        endGroundTypes: IEndGroundType[],
+        startGroundType: string,
+        endGroundConfigs: IEndGroundConfig[],
         minIncludedDistance: number,
         maxExcludedDistance: number,
         numberOfShots: number,
-        averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>
+        averageStrokesDataMap: Map<string, IAverageStrokesData>
     ) {
-        super(uuid, name, description, startGroundType, endGroundTypes, averageStrokesDataMap);
+        super(uuid, name, description, startGroundType, endGroundConfigs, averageStrokesDataMap);
 
         this._minIncludedDistance = minIncludedDistance;
         this._maxExcludedDistance = maxExcludedDistance;
@@ -249,7 +260,7 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
                 numberOfShots: this._numberOfShots
             },
             startGroundType: this._startGroundType,
-            endGroundTypes: this._endGroundTypes,
+            endGroundConfigs: this._endGroundConfigs,
         }
     }
 }
@@ -264,18 +275,18 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
         name: string,
         description: string,
         unit: string,
-        startGroundType: StartGroundTypeEnumsType,
-        endGroundTypes: IEndGroundType[],
+        startGroundType: string,
+        endGroundConfigs: IEndGroundConfig[],
         distances: number[],
         numberOfRounds: number,
-        averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>,
+        averageStrokesDataMap: Map<string, IAverageStrokesData>,
     ) {
         super(
             uuid,
             name,
             description,
             startGroundType,
-            endGroundTypes,
+            endGroundConfigs,
             averageStrokesDataMap);
 
         this._distances = distances;
@@ -325,7 +336,7 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
                 numberOfRounds: this._numberOfRounds
             },
             startGroundType: this._startGroundType,
-            endGroundTypes: this._endGroundTypes,
+            endGroundConfigs: this._endGroundConfigs,
         }
     }
 
@@ -343,13 +354,13 @@ export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends Dri
         name: string,
         description: string,
         unit: string,
-        startGroundType: StartGroundTypeEnumsType,
-        endGroundTypes: IEndGroundType[],
+        startGroundType: string,
+        endGroundConfigs: IEndGroundConfig[],
         distances: number[],
         numberOfRounds: number,
-        averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>
+        averageStrokesDataMap: Map<string, IAverageStrokesData>
     ) {
-        super(uuid, name, description, unit, startGroundType, endGroundTypes, distances, numberOfRounds, averageStrokesDataMap);
+        super(uuid, name, description, unit, startGroundType, endGroundConfigs, distances, numberOfRounds, averageStrokesDataMap);
         this.distancesNotYetReturned = [...distances];
     }
 
@@ -394,8 +405,8 @@ export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends Dri
 
 export class EmptyDrillConfiguration extends DrillConfigurationWithFixedDistancesGenerator implements IDrillConfiguration, IFixedDistancesGenerator {
     constructor(
-        averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>
+        averageStrokesDataMap: Map<string, IAverageStrokesData>
     ) {
-        super(uuidv4(), "", "", "meter", GroundTypeEnum.Fairway, [], [], 1, averageStrokesDataMap);
+        super(uuidv4(), "", "", "meter", Fairway, [], [], 1, averageStrokesDataMap);
     }
 }

@@ -11,7 +11,6 @@ import {
     RANDOM_DISTANCES_GENERATOR,
     RANDOM_FROM_FIXED_DISTANCES_GENERATOR
 } from "./DistanceGenerator";
-import {GroundTypeEnum} from "../AverageStrokesData/GroundTypeEnum";
 
 export const drillConfigurationsToString = (
     drillConfigurations: IDrillConfiguration[],
@@ -26,7 +25,7 @@ export const drillConfigurationsToString = (
 
 export const drillConfigurationsFromJson = (
     drillConfigurationsAsJson: any[],
-    averageStrokesDataMap: Map<GroundTypeEnum, IAverageStrokesData>
+    averageStrokesDataMap: Map<string, IAverageStrokesData>
 ): IDrillConfiguration[] => {
     assert(drillConfigurationsAsJson !== undefined, "drillConfigurationsAsJson === undefined");
     assert(drillConfigurationsAsJson !== null, "drillConfigurationsAsJson === null");
@@ -35,11 +34,11 @@ export const drillConfigurationsFromJson = (
         .map((drillConfigurationAsJson: any): IDrillConfiguration => {
             switch (drillConfigurationAsJson.distanceGenerator.type) {
                 case RANDOM_DISTANCES_GENERATOR:
-                    return new DrillConfigurationWithRandomDistancesGenerator(drillConfigurationAsJson.uuid, drillConfigurationAsJson.name, drillConfigurationAsJson.description, drillConfigurationAsJson.unit, drillConfigurationAsJson.startGroundType, drillConfigurationAsJson.endGroundTypes, drillConfigurationAsJson.distanceGenerator.minIncludedDistance, drillConfigurationAsJson.distanceGenerator.maxExcludedDistance, drillConfigurationAsJson.distanceGenerator.numberOfShots, averageStrokesDataMap);
+                    return new DrillConfigurationWithRandomDistancesGenerator(drillConfigurationAsJson.uuid, drillConfigurationAsJson.name, drillConfigurationAsJson.description, drillConfigurationAsJson.unit, drillConfigurationAsJson.startGroundType, drillConfigurationAsJson.endGroundConfigs, drillConfigurationAsJson.distanceGenerator.minIncludedDistance, drillConfigurationAsJson.distanceGenerator.maxExcludedDistance, drillConfigurationAsJson.distanceGenerator.numberOfShots, averageStrokesDataMap);
                 case FIXED_DISTANCES_GENERATOR:
-                    return new DrillConfigurationWithFixedDistancesGenerator(drillConfigurationAsJson.uuid, drillConfigurationAsJson.name, drillConfigurationAsJson.description, drillConfigurationAsJson.unit, drillConfigurationAsJson.startGroundType, drillConfigurationAsJson.endGroundTypes, drillConfigurationAsJson.distanceGenerator.distances, drillConfigurationAsJson.distanceGenerator.numberOfRounds, averageStrokesDataMap);
+                    return new DrillConfigurationWithFixedDistancesGenerator(drillConfigurationAsJson.uuid, drillConfigurationAsJson.name, drillConfigurationAsJson.description, drillConfigurationAsJson.unit, drillConfigurationAsJson.startGroundType, drillConfigurationAsJson.endGroundConfigs, drillConfigurationAsJson.distanceGenerator.distances, drillConfigurationAsJson.distanceGenerator.numberOfRounds, averageStrokesDataMap);
                 case RANDOM_FROM_FIXED_DISTANCES_GENERATOR:
-                    return new DrillConfigurationWithRandomFromFixedDistancesGenerator(drillConfigurationAsJson.uuid, drillConfigurationAsJson.name, drillConfigurationAsJson.description, drillConfigurationAsJson.unit, drillConfigurationAsJson.startGroundType, drillConfigurationAsJson.endGroundTypes, drillConfigurationAsJson.distanceGenerator.distances, drillConfigurationAsJson.distanceGenerator.numberOfRounds, averageStrokesDataMap);
+                    return new DrillConfigurationWithRandomFromFixedDistancesGenerator(drillConfigurationAsJson.uuid, drillConfigurationAsJson.name, drillConfigurationAsJson.description, drillConfigurationAsJson.unit, drillConfigurationAsJson.startGroundType, drillConfigurationAsJson.endGroundConfigs, drillConfigurationAsJson.distanceGenerator.distances, drillConfigurationAsJson.distanceGenerator.numberOfRounds, averageStrokesDataMap);
             }
         })
         .filter((drillConfiguration: IDrillConfiguration) => !!drillConfiguration);

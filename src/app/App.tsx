@@ -22,7 +22,7 @@ import {
     drillConfigurationsToString
 } from "./model/DrillConfiguration/DrillConfigurationConverter";
 import {assert} from "chai";
-import {GroundTypeEnum} from "./model/AverageStrokesData/GroundTypeEnum";
+import {Fairway, Green, Rough, Tee} from "./model/AverageStrokesData/GroundType";
 
 const App: React.FC<{}> = (): JSX.Element => {
     // page that is currently visible
@@ -36,22 +36,22 @@ const App: React.FC<{}> = (): JSX.Element => {
     const [selectedDrillConfiguration, setSelectedDrillConfiguration] = React.useState<IDrillConfiguration>();
 
     const [averageStrokesDataMap, setAverageStrokesDataMap] =
-        React.useState<Map<GroundTypeEnum, IAverageStrokesData>>(new Map<GroundTypeEnum, IAverageStrokesData>());
+        React.useState<Map<string, IAverageStrokesData>>(new Map<string, IAverageStrokesData>());
 
     React.useEffect((): void => {
-        const importCsv = async (averageShotsGroundTypeEnum: GroundTypeEnum, filePath: string, unit: string): Promise<void> => {
+        const importCsv = async (averageShotsGroundType: string, filePath: string, unit: string): Promise<void> => {
             const distancesAndStrokes: [number[], number[]] = await parseCsvToArrayOfColumnArrays(filePath);
-            const averageStrokesData: IAverageStrokesData = new AverageStrokesData(averageShotsGroundTypeEnum, distancesAndStrokes[0], unit, distancesAndStrokes[1]);
-            averageStrokesDataMap.set(averageShotsGroundTypeEnum, averageStrokesData);
+            const averageStrokesData: IAverageStrokesData = new AverageStrokesData(averageShotsGroundType, distancesAndStrokes[0], unit, distancesAndStrokes[1]);
+            averageStrokesDataMap.set(averageShotsGroundType, averageStrokesData);
             setAverageStrokesDataMap(new Map(averageStrokesDataMap));
         }
 
         const appPath: string = ipcRenderer.sendSync('appPath', undefined);
-        importCsv(GroundTypeEnum.Tee, path.join(appPath, '.webpack/renderer', averageShotsFromTeeCsvPath), "yard");
-        importCsv(GroundTypeEnum.Fairway, path.join(appPath, '.webpack/renderer', averageShotsFromFairwayCsvPath), "yard");
-        importCsv(GroundTypeEnum.Rough, path.join(appPath, '.webpack/renderer', averageShotsFromRoughCsvPath), "yard");
-        importCsv(GroundTypeEnum.Green, path.join(appPath, '.webpack/renderer', averageShotsFromGreenCsvPath), "feet");
-    }, [])
+        importCsv(Tee, path.join(appPath, '.webpack/renderer', averageShotsFromTeeCsvPath), "yard");
+        importCsv(Fairway, path.join(appPath, '.webpack/renderer', averageShotsFromFairwayCsvPath), "yard");
+        importCsv(Rough, path.join(appPath, '.webpack/renderer', averageShotsFromRoughCsvPath), "yard");
+        importCsv(Green, path.join(appPath, '.webpack/renderer', averageShotsFromGreenCsvPath), "feet");
+    }, [averageShotsFromTeeCsvPath, averageShotsFromFairwayCsvPath, averageShotsFromRoughCsvPath, averageShotsFromGreenCsvPath])
 
     React.useEffect((): void => {
         const userDrillConfigurationsAsJson: any[] = loadUserDrillConfigurationsAsJson();

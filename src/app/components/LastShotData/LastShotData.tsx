@@ -60,7 +60,7 @@ const additionalDataForAllShots = (props: ILastShotData) => {
     </div>);
 }
 
-function computeStrokesGained(averageStrokesFromStartDistance: number, averageStrokesFromEndDistance: number) {
+const computeStrokesGained = (averageStrokesFromStartDistance: number, averageStrokesFromEndDistance: number): number => {
     return !!averageStrokesFromStartDistance && !!averageStrokesFromEndDistance
         ? (averageStrokesFromStartDistance - averageStrokesFromEndDistance - 1)
         : !!averageStrokesFromStartDistance && !averageStrokesFromEndDistance // out of bounds
@@ -136,6 +136,46 @@ const shotsGainedData = (props: ILastShotData, targetDistance: string): JSX.Elem
     ];
 }
 
+const computeTrackmanScore = (targetDistance: Unit): number => {
+    return 48;
+}
+
+const trackmanScoreData = (props: ILastShotData): JSX.Element[] => {
+    if (!props.lastShot) {
+        return [];
+    }
+
+    const trackmanScore: number = computeTrackmanScore(props.lastShot.targetDistance);
+    const trackmanScoreAverage: number = 42;
+
+    return [
+        <div
+            key="trackmanScore"
+            className="last-shot__row last-shot__trackmanscore-row">
+            <div className="last-shot-item__label">Score</div>
+            <div className="last-shot-item__data"> {
+                !!trackmanScore ? trackmanScore.toFixed(1) : ""
+            } </div>
+        </div>,
+        <div
+            key="trackmanScoreAverage"
+            className="last-shot__row last-shot__trackmanscore-row last-shot__avg-trackmanscore-row">
+            <div className="last-shot-item__label">Score Average</div>
+            <div className="last-shot-item__data"> {
+                !!props.lastShot ? trackmanScoreAverage.toFixed(1) : ""
+            } </div>
+        </div>,
+        <div
+            key="trackmanConsistency"
+            className="last-shot__row last-shot__trackmanscore-row last-shot__trackmanconsistency-row">
+            <div className="last-shot-item__label">Consistency</div>
+            <div className="last-shot-item__data"> {
+                !!props.lastShot ? "TODO" : ""
+            } </div>
+        </div>
+    ];
+}
+
 export interface ILastShotData {
     lastShot: IShotData,
     shotDatas: IShotData[],
@@ -198,6 +238,7 @@ export const LastShotData: React.FC<ILastShotData> = (props: ILastShotData): JSX
                 <div className="last-shot-item__unit"> {!!props.lastShot ? `%` : ""} </div>
             </div>
             {shotsGainedData(props, targetDistanceString)}
+            {trackmanScoreData(props)}
 
             {/* data for all shots */}
             {SHOW_ADDITIONAL_DATA_FOR_ALL_SHOTS ? additionalDataForAllShots(props) : null}
