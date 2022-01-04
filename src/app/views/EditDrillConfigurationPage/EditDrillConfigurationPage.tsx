@@ -11,7 +11,6 @@ import {
 } from "../../components/DrillConfiguration/DrillConfigurationTextInput/DrillConfigurationTextInput";
 import deleteIcon from "../../../assets/delete.png";
 import backIcon from '../../../assets/back.png';
-import {SelectDrillPageName} from "../SelectDrillPage/SelectDrillPage";
 import {
     DrillConfigurationSelect
 } from "../../components/DrillConfiguration/DrillConfigurationSelect/DrillConfigurationSelect";
@@ -32,9 +31,8 @@ import {startGroundTypes,} from "../../model/AverageStrokesData/GroundType";
 export const EditDrillConfigurationPageName: string = "EditDrillConfigurationPage";
 
 interface IEditDrillConfigurationPageProps {
-    drillConfigurations: IDrillConfiguration[];
     selectedDrillConfiguration: IDrillConfiguration;
-    handleSelectPageClicked: (page: string) => void;
+    handleBackClicked: () => void;
     handleSaveDrillConfigurations: (changedDrillConfiguration: IDrillConfiguration) => void;
     averageStrokesDataMap: Map<string, IAverageStrokesData>
 }
@@ -117,7 +115,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                   props.handleSaveDrillConfigurations(undefined);
 
                                   // back to drill selection page
-                                  props.handleSelectPageClicked(SelectDrillPageName)
+                                  props.handleBackClicked()
                               }}
                         >
                             <div className="top-button-img-div">
@@ -152,7 +150,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                   props.handleSaveDrillConfigurations(newDrillConfiguration);
 
                                   // back to drill selection page
-                                  props.handleSelectPageClicked(SelectDrillPageName)
+                                  props.handleBackClicked()
                               }}
                         >
                             <div className="top-button-img-div">

@@ -250,7 +250,7 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
 
     public toJson = (): any => {
         return {
-            uuid: this.getUnit(),
+            uuid: this.getUuid(),
             name: this.getName(),
             description: this.getDescription(),
             unit: this.getUnit(),
@@ -326,7 +326,7 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
 
     protected toJsonHelper(distanceGeneratorType: string): any {
         return {
-            uuid: this.getUnit(),
+            uuid: this.getUuid(),
             name: this.getName(),
             description: this.getDescription(),
             unit: this.getUnit(),

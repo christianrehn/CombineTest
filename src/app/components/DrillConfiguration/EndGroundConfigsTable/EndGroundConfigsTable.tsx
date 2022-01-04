@@ -31,22 +31,20 @@ export const EndGroundConfigsTable: React.FC<IEndGroundConfigsTableProps> = (pro
                                     onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
                                         assert(!!props.endGroundConfigs, "!props.endGroundConfigs");
 
-                                        const index: number = Number(event.target.value);
-
                                         // create endGroundConfig clone
                                         const endGroundConfigClone: IEndGroundConfig = {...props.endGroundConfigs[index]};
-                                        endGroundConfigClone.type = endGroundTypes[index];
+                                        endGroundConfigClone.type = String(event.target.value);
 
                                         // trigger handler
                                         props.handleEndGroundConfigChanged(endGroundConfigClone, index, false);
                                     }}
                                 >
                                     {
-                                        endGroundTypes.map((endGroundType: string, index: number) => {
+                                        endGroundTypes.map((endGroundType: string, idx: number) => {
                                             return (
                                                 <option
-                                                    key={`value_${endGroundType}_${index}`}
-                                                    value={index}
+                                                    key={`endGroundType_${idx}`}
+                                                    value={endGroundType}
                                                 >
                                                     {endGroundType}
                                                 </option>
