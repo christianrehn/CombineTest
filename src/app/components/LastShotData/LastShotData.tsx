@@ -169,14 +169,14 @@ const trackmanScoreData = (props: ILastShotData): JSX.Element[] => {
                 !!props.lastShot ? (trackmanScoreSum / props.shotDatas.length).toFixed(1) : ""
             } </div>
         </div>,
-        <div
-            key="trackmanConsistency"
-            className="last-shot__row last-shot__trackmanscore-row last-shot__trackmanconsistency-row">
-            <div className="last-shot-item__label">Consistency</div>
-            <div className="last-shot-item__data"> {
-                !!props.lastShot ? "TODO" : ""
-            } </div>
-        </div>
+        // <div
+        //     key="trackmanConsistency"
+        //     className="last-shot__row last-shot__trackmanscore-row last-shot__trackmanconsistency-row">
+        //     <div className="last-shot-item__label">Consistency</div>
+        //     <div className="last-shot-item__data"> {
+        //         !!props.lastShot ? "next version ;)" : ""
+        //     } </div>
+        // </div>
     ];
 }
 
