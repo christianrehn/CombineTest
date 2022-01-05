@@ -21,10 +21,9 @@ shot data together with the points you get from the shots gained rating and the 
 
 ## Ideas for the next versions:
 
-* Add tab in drill page that shows a table with data for all shots in this session.
+* Save shot history.
 * Add rating that is similar to Trackman Combine Test for Drives.
-* Show overview/report like Trackman "Test Center or Combine report". Save shot history and create links to share
-  reports.
+* Show overview/report like Trackman "Test Center or Combine report". Create links to share reports.
 * Improve splash screen.
 
 * Installer looks ugly -> change
