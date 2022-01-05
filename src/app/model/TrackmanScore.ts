@@ -33,6 +33,23 @@ const distanceToSlopeYInterceptAscMap: Map<number, SlopeYInterceptType> =
         .sort((a, b) => a[0] - b[0])
     );
 
+const interpolation = (x1: number, y1: number, x2: number, y2: number, x: number): number => {
+    return y1 + (y2 - y1) * (x - x1) / (x2 - x1);
+}
+
+const computeXfromYandSlopeYIntercept = (y: number, slopeYIntercept: SlopeYInterceptType): number => {
+    // x = (y-t) / m
+    const trackmanPenaltyScore: number = Math.round((y - slopeYIntercept.t) / slopeYIntercept.m);
+    // valid score range is [0,100]
+    if (trackmanPenaltyScore > 100) {
+        return 0;
+    }
+    if (trackmanPenaltyScore < 0) {
+        return 100;
+    }
+    return 100 - trackmanPenaltyScore;
+}
+
 export const computeTrackmanScore = (targetDistance: Unit, fromPin: Unit): number => {
     assert(!!targetDistance, "!targetDistance");
     assert(!!fromPin, "!fromPin");
@@ -41,6 +58,7 @@ export const computeTrackmanScore = (targetDistance: Unit, fromPin: Unit): numbe
     const targetDistanceMeter = targetDistance.toNumber(meter);
     const fromPinMeter = fromPin.toNumber(meter);
 
+    // get best matching values for m and t from map
     let nextSmallerDistance: number = Number.MAX_VALUE;
     let nextLargerDistance: number = Number.MIN_VALUE;
     let exactMatch: boolean = false;
@@ -65,16 +83,19 @@ export const computeTrackmanScore = (targetDistance: Unit, fromPin: Unit): numbe
         assert(!!nextLargerDistance, "!nextLargerDistance");
         assert(nextSmallerDistance === nextLargerDistance, "nextSmallerDistance != nextLargerDistance");
         const slopeYIntercept: SlopeYInterceptType = distanceToSlopeYInterceptAscMap.get(nextSmallerDistance);
-        // x = (y-t) / m
-        const trackmanPenaltyScore: number = Math.round((fromPinMeter - slopeYIntercept.t) / slopeYIntercept.m);
-        // valid score range is [0,100]
-        if (trackmanPenaltyScore > 100) {
-            return 0;
-        }
-        if (trackmanPenaltyScore < 0) {
-            return 100;
-        }
-        return 100 - trackmanPenaltyScore;
+
+        return computeXfromYandSlopeYIntercept(fromPinMeter, slopeYIntercept);
+    }
+
+    if (nextSmallerDistance != Number.MAX_VALUE && nextLargerDistance != Number.MIN_VALUE) {
+        // we have values on both sides
+        const slopeYInterceptNextSmallerDistance: SlopeYInterceptType = distanceToSlopeYInterceptAscMap.get(nextSmallerDistance);
+        const slopeYInterceptNextLargerDistance: SlopeYInterceptType = distanceToSlopeYInterceptAscMap.get(nextLargerDistance);
+        const m: number = interpolation(nextSmallerDistance, slopeYInterceptNextSmallerDistance.m, nextLargerDistance, slopeYInterceptNextLargerDistance.m, targetDistanceMeter)
+        const t: number = interpolation(nextSmallerDistance, slopeYInterceptNextSmallerDistance.t, nextLargerDistance, slopeYInterceptNextLargerDistance.t, targetDistanceMeter)
+        console.log(`score for slopeYInterceptNextSmallerDistance (${nextSmallerDistance}): `, computeXfromYandSlopeYIntercept(fromPinMeter, slopeYInterceptNextSmallerDistance));
+        console.log(`score for slopeYInterceptNextLargerDistance: (${nextLargerDistance})`, computeXfromYandSlopeYIntercept(fromPinMeter, slopeYInterceptNextLargerDistance));
+        return computeXfromYandSlopeYIntercept(fromPinMeter, {m, t});
     }
     return 48;
 }
