@@ -158,7 +158,7 @@ const trackmanScoreData = (props: ILastShotData): JSX.Element[] => {
             className="last-shot__row last-shot__trackmanscore-row">
             <div className="last-shot-item__label">Score</div>
             <div className="last-shot-item__data"> {
-                !!trackmanScore ? trackmanScore.toFixed(1) : ""
+                !!props.lastShot ? trackmanScore.toFixed(1) : ""
             } </div>
         </div>,
         <div

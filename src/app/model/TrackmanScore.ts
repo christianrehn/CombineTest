@@ -32,14 +32,15 @@ const distanceToSlopeYInterceptAscMap: Map<number, SlopeYInterceptType> =
     new Map([...distanceToSlopeYInterceptMap.entries()]
         .sort((a, b) => a[0] - b[0])
     );
+const distanceToSlopeYInterceptAscArray: [number, SlopeYInterceptType][] = Array.from(distanceToSlopeYInterceptAscMap.entries());
 
-const interpolation = (x1: number, y1: number, x2: number, y2: number, x: number): number => {
+const interAndExtraPolation = (x1: number, y1: number, x2: number, y2: number, x: number): number => {
     return y1 + (y2 - y1) * (x - x1) / (x2 - x1);
 }
 
-const computeXfromYandSlopeYIntercept = (y: number, slopeYIntercept: SlopeYInterceptType): number => {
+const computeTrackmanScoreUsingYFromPinAndSlopeYIntercept = (yFromPinMeter: number, slopeYIntercept: SlopeYInterceptType): number => {
     // x = (y-t) / m
-    const trackmanPenaltyScore: number = Math.round((y - slopeYIntercept.t) / slopeYIntercept.m);
+    const trackmanPenaltyScore: number = Math.round((yFromPinMeter - slopeYIntercept.t) / slopeYIntercept.m);
     // valid score range is [0,100]
     if (trackmanPenaltyScore > 100) {
         return 0;
@@ -56,7 +57,9 @@ export const computeTrackmanScore = (targetDistance: Unit, fromPin: Unit): numbe
 
     // convert all input values to meters because the interpolation of trackman scores is in meters
     const targetDistanceMeter = targetDistance.toNumber(meter);
+    console.log("computeTrackmanScore - targetDistanceMeter=", targetDistanceMeter);
     const fromPinMeter = fromPin.toNumber(meter);
+    console.log("computeTrackmanScore - fromPinMeter=", fromPinMeter);
 
     // get best matching values for m and t from map
     let nextSmallerDistance: number = Number.MAX_VALUE;
@@ -74,8 +77,6 @@ export const computeTrackmanScore = (targetDistance: Unit, fromPin: Unit): numbe
             break;
         }
     }
-    console.log("computeTrackmanScore - nextSmallerDistance=", nextSmallerDistance);
-    console.log("computeTrackmanScore - nextLargerDistance=", nextLargerDistance);
     console.log("computeTrackmanScore - exactMatch=", exactMatch);
 
     if (exactMatch) {
@@ -84,18 +85,42 @@ export const computeTrackmanScore = (targetDistance: Unit, fromPin: Unit): numbe
         assert(nextSmallerDistance === nextLargerDistance, "nextSmallerDistance != nextLargerDistance");
         const slopeYIntercept: SlopeYInterceptType = distanceToSlopeYInterceptAscMap.get(nextSmallerDistance);
 
-        return computeXfromYandSlopeYIntercept(fromPinMeter, slopeYIntercept);
+        return computeTrackmanScoreUsingYFromPinAndSlopeYIntercept(fromPinMeter, slopeYIntercept);
     }
 
-    if (nextSmallerDistance != Number.MAX_VALUE && nextLargerDistance != Number.MIN_VALUE) {
-        // we have values on both sides
-        const slopeYInterceptNextSmallerDistance: SlopeYInterceptType = distanceToSlopeYInterceptAscMap.get(nextSmallerDistance);
-        const slopeYInterceptNextLargerDistance: SlopeYInterceptType = distanceToSlopeYInterceptAscMap.get(nextLargerDistance);
-        const m: number = interpolation(nextSmallerDistance, slopeYInterceptNextSmallerDistance.m, nextLargerDistance, slopeYInterceptNextLargerDistance.m, targetDistanceMeter)
-        const t: number = interpolation(nextSmallerDistance, slopeYInterceptNextSmallerDistance.t, nextLargerDistance, slopeYInterceptNextLargerDistance.t, targetDistanceMeter)
-        console.log(`score for slopeYInterceptNextSmallerDistance (${nextSmallerDistance}): `, computeXfromYandSlopeYIntercept(fromPinMeter, slopeYInterceptNextSmallerDistance));
-        console.log(`score for slopeYInterceptNextLargerDistance: (${nextLargerDistance})`, computeXfromYandSlopeYIntercept(fromPinMeter, slopeYInterceptNextLargerDistance));
-        return computeXfromYandSlopeYIntercept(fromPinMeter, {m, t});
+    // we have values on both sides for interpolation or 2 values on one side for extrapolation
+    const slopeYInterceptNextSmallerDistance: SlopeYInterceptType =
+        nextSmallerDistance === Number.MAX_VALUE // no smaller distance found -> use smallest available distance -> extrapolation
+            ? distanceToSlopeYInterceptAscArray[0][1]
+            : nextLargerDistance === Number.MIN_VALUE // no larger distance found -> use 2nd largest available distance -> extrapolation
+                ? distanceToSlopeYInterceptAscArray[distanceToSlopeYInterceptAscArray.length - 2][1]
+                : distanceToSlopeYInterceptAscMap.get(nextSmallerDistance);
+    const slopeYInterceptNextLargerDistance: SlopeYInterceptType =
+        nextSmallerDistance === Number.MAX_VALUE // no smaller distance found -> use 2nd smallest available distance -> extrapolation
+            ? distanceToSlopeYInterceptAscArray[1][1]
+            : nextLargerDistance === Number.MIN_VALUE // no larger distance found -> use  largest available distance -> extrapolation
+                ? distanceToSlopeYInterceptAscArray[distanceToSlopeYInterceptAscArray.length - 1][1]
+                : distanceToSlopeYInterceptAscMap.get(nextLargerDistance);
+    if (nextSmallerDistance === Number.MAX_VALUE) {
+        // no smaller distance found -> use smallest available distance -> extrapolation
+        assert(nextLargerDistance === distanceToSlopeYInterceptAscArray[0][0], `nextLargerDistance (${nextLargerDistance}) != distanceToSlopeYInterceptAscArray[0][0]`);
+        nextSmallerDistance = nextLargerDistance;
+        nextLargerDistance = distanceToSlopeYInterceptAscArray[1][0];
+    } else if (nextLargerDistance === Number.MIN_VALUE) {
+        // no larger distance found -> use  largest available distance) -> extrapolation
+        assert(nextSmallerDistance === distanceToSlopeYInterceptAscArray[distanceToSlopeYInterceptAscArray.length - 1][0], `nextSmallerDistance (${nextSmallerDistance}) != distanceToSlopeYInterceptAscArray[distanceToSlopeYInterceptAscArray.length - 1][0]`);
+        nextLargerDistance = nextSmallerDistance;
+        nextSmallerDistance = distanceToSlopeYInterceptAscArray[distanceToSlopeYInterceptAscArray.length - 2][0];
     }
-    return 48;
+    console.log("computeTrackmanScore - nextSmallerDistance=", nextSmallerDistance);
+    console.log(`score for slopeYInterceptNextSmallerDistance (${nextSmallerDistance}): `, computeTrackmanScoreUsingYFromPinAndSlopeYIntercept(fromPinMeter, slopeYInterceptNextSmallerDistance));
+    console.log("computeTrackmanScore - nextLargerDistance=", nextLargerDistance);
+    console.log(`score for slopeYInterceptNextLargerDistance: (${nextLargerDistance})`, computeTrackmanScoreUsingYFromPinAndSlopeYIntercept(fromPinMeter, slopeYInterceptNextLargerDistance));
+
+    // do inter-/ertrapolation for m and t
+    const m: number = interAndExtraPolation(nextSmallerDistance, slopeYInterceptNextSmallerDistance.m, nextLargerDistance, slopeYInterceptNextLargerDistance.m, targetDistanceMeter)
+    const t: number = interAndExtraPolation(nextSmallerDistance, slopeYInterceptNextSmallerDistance.t, nextLargerDistance, slopeYInterceptNextLargerDistance.t, targetDistanceMeter)
+
+    // compute trackman score with inter-/extrapolated m and t
+    return computeTrackmanScoreUsingYFromPinAndSlopeYIntercept(fromPinMeter, {m, t});
 }
