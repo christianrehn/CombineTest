@@ -1,8 +1,8 @@
 {
     "name": "GCQuadCombineTest",
     "productName": "GCQuadCombineTest",
-    "version": "0.7.0",
-    "description": "Practice tee and approach shots with GCQuad and FSX2020 similar to the Trackman Combine Test",
+    "version": "1.0.0",
+    "description": "Practice tee and approach shots with GCQuad, GC3 or GC2 and FSX2020 similar to the Trackman Pitch or Combine Test",
     "main": ".webpack/main",
     "scripts": {
         "start": "electron-forge start",
