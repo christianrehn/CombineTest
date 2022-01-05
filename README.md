@@ -45,7 +45,7 @@ After cloning the repo you can:
 * build a new executable version (using both maker-squirrel (my preferred installer) and maker-wix on a MS Windows
   system):
     * update version number in package.json
-    * yarn install && yarn make
+    * yarn clean && yarn install && yarn make
 * check for outdated packages: yarn outdated
 * upgrade packages: yarn upgrade
 
