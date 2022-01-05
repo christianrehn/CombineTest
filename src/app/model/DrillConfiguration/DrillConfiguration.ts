@@ -407,6 +407,16 @@ export class EmptyDrillConfiguration extends DrillConfigurationWithFixedDistance
     constructor(
         averageStrokesDataMap: Map<string, IAverageStrokesData>
     ) {
-        super(uuidv4(), "", "", "meter", Fairway, [], [], 1, averageStrokesDataMap);
+        super(
+            uuidv4(),
+            "",
+            "",
+            "meter",
+            Fairway,
+            [{type: Green, to: 5}, {type: Fairway}],
+            [],
+            1,
+            averageStrokesDataMap
+        );
     }
 }

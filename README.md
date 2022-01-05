@@ -19,16 +19,12 @@ shot data together with the points you get from the shots gained rating and the 
 * I think the offline value in LastShot.CSV is the total offline, not the carry offline that I would need to calculate
   shots gained rating and the Trackman score. But it is the best approximation I currently have.
 
-## To Fix
-
-* Edit new configuration -> no End Ground Types table
-* Change to edit configuration takes very long under Windows (not under mac os)
-
 ## Ideas for the next versions:
 
-* Show overview/report like Trackman "Test Center or Combine report" after last shot
+* Add tab in drill page that shows a table with data for all shots in this session.
 * Add rating that is similar to Trackman Combine Test for Drives.
-* Save shot history and create links to share them
+* Show overview/report like Trackman "Test Center or Combine report". Save shot history and create links to share
+  reports.
 * Improve splash screen.
 
 * Installer looks ugly -> change
@@ -50,3 +46,9 @@ After cloning the repo you can:
   system): yarn install && yarn make
 * check for outdated packages: yarn outdated
 * upgrade packages: yarn upgrade
+
+## To Fix
+
+* "Warning: A component is changing an uncontrolled input to be controlled." when entering a number for radius in end
+  ground types table.
+* Change to edit configuration takes very long under Windows (not under mac os)
