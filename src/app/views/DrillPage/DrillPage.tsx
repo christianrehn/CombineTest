@@ -13,6 +13,7 @@ import {RestartButton} from "../../components/RestartButton/RestartButton";
 import * as math from 'mathjs'
 import {Unit} from 'mathjs'
 import {SelectDrillPageName} from "../SelectDrillPage/SelectDrillPage";
+import {AllShotsTable} from "../../components/AllShotsTable/AllShotsTable";
 
 export const DrillPageName: string = "DrillPage";
 
@@ -129,8 +130,8 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
 
     console.log("shotDatas", shotDatas)
 
-    return (
-        <div className="drill-page page">
+    const nextDistanceBox = (): JSX.Element => {
+        return (
             <div className="next-shot-flex-item flex-item">
                 <div className="page-header">
                     <h3>Carry</h3>
@@ -147,30 +148,96 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                     />
                 </div>
             </div>
-            <div className="last-shot-flex-item flex-item">
-                <div className="page-header">
-                    <h3> Shot {shotDatas.length} / {props.selectedDrillConfiguration.getNumberOfShots()} </h3>
+        );
+    }
+
+    const oneShotTabName: string = "oneShotTab";
+    const allShotsTabName: string = "allShotsTab";
+    const [activeTab, setActiveTab] = React.useState(oneShotTabName);
+
+    const oneShotTab = (): JSX.Element => {
+        return (
+            activeTab === oneShotTabName
+                ? <div className="one-shot-tab">
+                    <div className="last-shot flex-item">
+                        <div className="page-header">
+                            <h3> Shot {shotDatas.length} / {props.selectedDrillConfiguration.getNumberOfShots()} </h3>
+                        </div>
+                        <div className="LastShotData">
+                            <LastShotData
+                                lastShot={lastShot}
+                                shotDatas={shotDatas}
+                                selectedDrillConfiguration={props.selectedDrillConfiguration}
+                            />
+                        </div>
+                    </div>
+                    <div className="shots-svg flex-item">
+                        <div className="page-header">
+                            <h3>Dispersion</h3>
+                        </div>
+                        <div className="ShotsSvg">
+                            <ShotsSvg
+                                svgNumberOfCircles={svgNumberOfCircles}
+                                shotDatas={shotDatas}
+                                selectedDrillConfiguration={props.selectedDrillConfiguration}
+                            />
+                        </div>
+                    </div>
                 </div>
-                <div className="LastShotData">
-                    <LastShotData
-                        lastShot={lastShot}
-                        shotDatas={shotDatas}
-                        selectedDrillConfiguration={props.selectedDrillConfiguration}
-                    />
+                : null
+        );
+    }
+
+    const allShotsTab = (): JSX.Element => {
+        return (
+            activeTab === allShotsTabName
+                ? <div className="all-shots-tab">
+                    <div className="all-shots-table-flex-item flex-item">
+                        <div className="page-header">
+                            <h3>All Shots in Session</h3>
+                        </div>
+                        <div className="all-shots-table">
+                            <AllShotsTable
+                                lastShot={lastShot}
+                                shotDatas={shotDatas}
+                                selectedDrillConfiguration={props.selectedDrillConfiguration}
+                            />
+                        </div>
+                    </div>
+                </div>
+                : null
+        );
+    }
+
+    const shotTabs = (): JSX.Element => {
+        return (
+            <div className="shot-tabs">
+                {/* Tab content */}
+                {oneShotTab()}
+                {allShotsTab()}
+
+                {/* Tab links */}
+                <div className="tab-links">
+                    <button
+                        className={`tab-link-button ${activeTab === oneShotTabName ? "tab-link-button-active" : ""}`}
+                        onClick={() => setActiveTab(oneShotTabName)}
+                    >
+                        Last Shot and Dispersion
+                    </button>
+                    <button
+                        className={`tab-link-button ${activeTab === allShotsTabName ? "tab-link-button-active" : ""}`}
+                        onClick={() => setActiveTab(allShotsTabName)}
+                    >
+                        All Shots in Session
+                    </button>
                 </div>
             </div>
-            <div className="shots-flex-item flex-item">
-                <div className="page-header">
-                    <h3>All Shots</h3>
-                </div>
-                <div className="ShotsSvg">
-                    <ShotsSvg
-                        svgNumberOfCircles={svgNumberOfCircles}
-                        shotDatas={shotDatas}
-                        selectedDrillConfiguration={props.selectedDrillConfiguration}
-                    />
-                </div>
-            </div>
+        );
+    }
+    return (
+        <div className="drill-page page">
+            {nextDistanceBox()}
+            {shotTabs()}
 
             <div className="top-buttons-flex-item">
                 <div className="back-flex-item flex-item">

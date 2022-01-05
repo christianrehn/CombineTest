@@ -12,24 +12,65 @@
     margin-top: 5em;
 }
 
-// last shot
-.drill-page .last-shot-flex-item {
+// shot tabs
+.drill-page .shot-tabs {
     border-color: var(--font-white);
     border-style: solid;
     border-left-width: 5px;
+    flex: 5;
+    display: flex;
+    flex-direction: column;
+}
+
+.drill-page .tab-links {
+    display: flex;
+    flex-direction: row;
+}
+
+.drill-page .tab-link-button {
+    font-size: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin: 10px;
+}
+
+.drill-page .tab-link-button-active {
+    background-color: var(--background-dark);
     border-color: var(--font-white);
-    flex: 2;
+    border-style: solid;
+    color: var(--font-white);
 }
 
-.drill-page .LastShotData {
+// one shot tab
+.drill-page .one-shot-tab {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
 }
 
-// shots
-.drill-page .shots-flex-item {
-    flex: 2;
+// last shot
+.drill-page .last-shot {
+    flex: 1;
+}
+
+// shots svg
+.drill-page .shots-svg {
+    flex: 1;
 }
 
 .drill-page .ShotsSvg {
     background: var(--font-white);
     margin-right: var(--page-margin-horizontal);
+}
+
+// all shots tab
+.drill-page .all-shots-tab {
+    flex: 1;
+    display: flex;
+    flexDirection: row;
+}
+
+// all shots table
+.drill-page .all-shots-table-flex-item {
+    flex: 1;
 }
