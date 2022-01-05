@@ -1,32 +1,98 @@
-.all-shots-table {
+.all-shots-component {
     height: 100%;
     padding-left: 1rem;
-    padding-right: 3rem;
+    font-size: 20px;
 }
 
-.shot-data-columns {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
+.table-with-shots {
+    text-align: center;
+    display: table;
+    table-layout: fixed;
+    padding: 50px;
+    margin-bottom: 15px;
+    width: 100%;
+    max-width: 100%;
+    background-color: transparent;
+    text-indent: initial;
+    border-collapse: collapse;
+    border-spacing: 0px;
+    border-color: var(--font-white);
 }
 
-.shot-data-column {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.shot-data-value {
-    padding: 5pt;
-}
-
-.shot-data-header-0 {
+.parameter-names-row {
+    display: table-row;
+    border-top-width: 2px;
+    border-top-style: solid;
     font-weight: bold;
 }
 
-.shot-data-header-1 {
+.parameter-names-row > td {
+    padding-top: 7px;
+    padding-bottom: 5px;
+}
+
+.parameter-names-row > td:first-child {
+    text-align: left;
+}
+
+.parameter-units-row {
+    display: table-row;
+    line-height: 1;
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
     font-weight: lighter;
-    border-style: solid;
-    border-bottom: var(--font-white);
-    border-width: 1px;
+}
+
+.parameter-units-row > td {
+    padding-bottom: 7px;
+}
+
+.parameter-units-row > td:first-child {
+    text-align: left;
+}
+
+.row-with-shot-details > td {
+    padding-top: 7px;
+    padding-bottom: 7px;
+    border-bottom-width: 0.5px;
+    border-bottom-style: solid;
+    border-color: var(--font-white);
+}
+
+.row-with-shot-details > td:first-child {
+    text-align: left;
+}
+
+.row-with-shot-details > td:nth-child(2) {
+    color: lightgreen;
+}
+
+.row-with-shot-details > td:nth-child(3) {
+    color: orange;
+}
+
+.bottom-values-row {
+    display: table-row;
+    border-top-width: 2px;
+    border-top-style: solid;
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    font-weight: bold;
+}
+
+.bottom-values-row > td {
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+
+.bottom-values-row > td:first-child {
+    text-align: left;
+}
+
+.bottom-values-row > td:nth-child(2) {
+    color: lightgreen;
+}
+
+.bottom-values-row > td:nth-child(3) {
+    color: orange;
 }
