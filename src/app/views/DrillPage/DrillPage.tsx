@@ -161,7 +161,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                 ? <div className="one-shot-tab">
                     <div className="last-shot flex-item">
                         <div className="page-header">
-                            <h3> Shot {shotDatas.length} / {props.selectedDrillConfiguration.getNumberOfShots()} </h3>
+                            <h3>Shot {shotDatas.length} / {props.selectedDrillConfiguration.getNumberOfShots()} </h3>
                         </div>
                         <div className="LastShotData">
                             <LastShotData
@@ -194,7 +194,8 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                 ? <div className="all-shots-tab">
                     <div className="all-shots-table-flex-item flex-item">
                         <div className="page-header">
-                            <h3>All Shots in Session</h3>
+                            <h3>{shotDatas.length} / {props.selectedDrillConfiguration.getNumberOfShots()} Shots in
+                                Session</h3>
                         </div>
                         <div className="all-shots-table">
                             <AllShotsTable
