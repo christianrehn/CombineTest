@@ -6,10 +6,11 @@ import {Unit} from "mathjs";
 import {assert} from "chai";
 import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
 import {computeTrackmanScore} from "../../model/TrackmanScore";
+import {computeStrokesGained} from "../../model/StrokesGained";
 
 const SHOW_ADDITIONAL_DATA_FOR_ALL_SHOTS: boolean = false;
 
-const additionalDataForAllShots = (props: ILastShotData) => {
+const additionalDataForAllShots = (props: ILastShotDataProps) => {
     assert(!!props, "!props");
 
     const absoluteDeviationSum: Unit = props.shotDatas
@@ -61,15 +62,7 @@ const additionalDataForAllShots = (props: ILastShotData) => {
     </div>);
 }
 
-const computeStrokesGained = (averageStrokesFromStartDistance: number, averageStrokesFromEndDistance: number): number => {
-    return !!averageStrokesFromStartDistance && !!averageStrokesFromEndDistance
-        ? (averageStrokesFromStartDistance - averageStrokesFromEndDistance - 1)
-        : !!averageStrokesFromStartDistance && !averageStrokesFromEndDistance // out of bounds
-            ? -2
-            : undefined;
-}
-
-const shotsGainedData = (props: ILastShotData, targetDistance: string): JSX.Element[] => {
+const shotsGainedData = (props: ILastShotDataProps, targetDistance: string): JSX.Element[] => {
     if (!props.lastShot) {
         return [];
     }
@@ -137,7 +130,7 @@ const shotsGainedData = (props: ILastShotData, targetDistance: string): JSX.Elem
     ];
 }
 
-const trackmanScoreData = (props: ILastShotData): JSX.Element[] => {
+const trackmanScoreData = (props: ILastShotDataProps): JSX.Element[] => {
     if (!props.lastShot) {
         return [];
     }
@@ -180,13 +173,13 @@ const trackmanScoreData = (props: ILastShotData): JSX.Element[] => {
     ];
 }
 
-export interface ILastShotData {
+export interface ILastShotDataProps {
     lastShot: IShotData,
     shotDatas: IShotData[],
     selectedDrillConfiguration: IDrillConfiguration;
 }
 
-export const LastShotData: React.FC<ILastShotData> = (props: ILastShotData): JSX.Element => {
+export const LastShotData: React.FC<ILastShotDataProps> = (props: ILastShotDataProps): JSX.Element => {
     assert(!!props, "!props");
     assert(!!props.shotDatas, "!props.shotDatas");
     assert(!!props.selectedDrillConfiguration, "LastShotData - !props.selectedDrillConfiguration");

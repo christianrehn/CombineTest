@@ -1,57 +1,32 @@
-.last-shot-table {
-    display: flex;
-    flex-direction: column;
+.all-shots-table {
     height: 100%;
     padding-left: 1rem;
     padding-right: 3rem;
 }
 
-.last-shot__row {
-    font-size: var(--font-site-normal);
+.shot-data-columns {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
 }
 
-.last-shot-item__label, .last-shot-item__data, .last-shot-item__unit {
-    border: 0px;
-    padding-bottom: 1.5rem;
+.shot-data-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.last-shot-item__label {
-    width: 25rem;
-    text-align: right;
-    padding-right: 1rem;
+.shot-data-value {
+    padding: 5pt;
 }
 
-.last-shot-item__data {
-    width: 7rem;
-    text-align: right;
-    padding-right: 1rem;
+.shot-data-header-0 {
+    font-weight: bold;
 }
 
-.last-shot-item__unit {
-    text-align: left;
-}
-
-.last-shot__new_shots_data_section_start {
-    margin-top: 2rem;
-}
-
-.last-shot__gained-row {
-    color: lightgreen;
-    font-size: 30px;
-}
-
-.last-shot__sum-gained-row {
-    font-weight: bolder;
-}
-
-.last-shot__trackmanscore-row {
-    color: orange;
-    font-size: 30px;
-}
-
-.last-shot__avg-trackmanscore-row {
-    font-weight: bolder;
+.shot-data-header-1 {
+    font-weight: lighter;
+    border-style: solid;
+    border-bottom: var(--font-white);
+    border-width: 1px;
 }
