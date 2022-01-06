@@ -10,6 +10,14 @@ computer. In FSX2020 you have to start the Practice Range. Every last shot data 
 /Foresight Sports Experience/System/LastShot.CSV The "GCQuad Combine Test" program reads this file and displays some
 shot data together with the points you get from the shots gained rating and the Trackman score.
 
+## Usage
+
+Select one of the Predefined Drills:
+<img src="https://github.com/christianrehn/GCQuadCombineTest/blob/master/screenshots/220106_GCQuadCombineTest_SelectDrill.png" width="1024">
+
+You can also create your own drill or edit existing drills:
+<img src="https://github.com/christianrehn/GCQuadCombineTest/blob/master/screenshots/220106_GCQuadCombineTest_EditDrillConfiguration.png" width="1024">
+
 ## Inaccuracies
 
 * I do not have shots gained values for carry distances so the shots gained for total distances are used to compute
