@@ -12,6 +12,7 @@ type SlopeYInterceptType = {
 
 // map of linear functions f_d(x) = m*x + t for fixed target distances d in meter.
 const distanceToSlopeYInterceptMap: Map<number, SlopeYInterceptType> = new Map<number, SlopeYInterceptType>();
+distanceToSlopeYInterceptMap.set(13, {m: 0.062, t: 0.29});
 distanceToSlopeYInterceptMap.set(29, {m: 0.103, t: 0.51});
 distanceToSlopeYInterceptMap.set(35, {m: 0.108, t: 0.58});
 distanceToSlopeYInterceptMap.set(38, {m: 0.116, t: 0.50});
