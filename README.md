@@ -18,10 +18,10 @@ Select one of the predefined drills:
 You can also add new drill configurations or edit existing drill ones:
 <img src="https://github.com/christianrehn/GCQuadCombineTest/blob/master/screenshots/220106_GCQuadCombineTest_EditDrillConfiguration.png" width="1024">
 
-Execute the shots ans see the Shots Gained and Trackman Scores for the last stroke only:
+Execute the shots and see the dispersion and Shots Gained and Trackman Scores for the last stroke:
 <img src="https://github.com/christianrehn/GCQuadCombineTest/blob/master/screenshots/220106_GCQuadCombineTest_OneShotDone.png" width="1024">
 
-Or for all shots in current session:
+Or for all shots in current session (without dispersion):
 <img src="https://github.com/christianrehn/GCQuadCombineTest/blob/master/screenshots/220106_GCQuadCombineTest_AllShots.png" width="1024">
 
 ## Inaccuracies
@@ -30,8 +30,8 @@ Or for all shots in current session:
   shots gained for carry distances.
 * I do not have the formulas to calculate the Trackman scores but approximations so there might be a small delta
   compared to the original Trackman score calculation.
-* I think the offline value in LastShot.CSV is the total offline, not the carry offline that I would need to calculate
-  shots gained rating and the Trackman score. But it is the best approximation I currently have.
+* I think (I am not sure) the offline value in LastShot.CSV is the total offline, not the carry offline that I would
+  need to calculate shots gained rating and the Trackman score. But it is the best approximation I currently have.
 
 ## Ideas for the next versions:
 
