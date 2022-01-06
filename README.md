@@ -12,11 +12,17 @@ shot data together with the points you get from the shots gained rating and the 
 
 ## Usage
 
-Select one of the Predefined Drills:
+Select one of the predefined drills:
 <img src="https://github.com/christianrehn/GCQuadCombineTest/blob/master/screenshots/220106_GCQuadCombineTest_SelectDrill.png" width="1024">
 
-You can also create your own drill or edit existing drills:
+You can also add new drill configurations or edit existing drill ones:
 <img src="https://github.com/christianrehn/GCQuadCombineTest/blob/master/screenshots/220106_GCQuadCombineTest_EditDrillConfiguration.png" width="1024">
+
+Execute the shots ans see the Shots Gained and Trackman Scores for the last stroke only:
+<img src="https://github.com/christianrehn/GCQuadCombineTest/blob/master/screenshots/220106_GCQuadCombineTest_OneShotDone.png" width="1024">
+
+Or for all shots in current session:
+<img src="https://github.com/christianrehn/GCQuadCombineTest/blob/master/screenshots/220106_GCQuadCombineTest_AllShots.png" width="1024">
 
 ## Inaccuracies
 
