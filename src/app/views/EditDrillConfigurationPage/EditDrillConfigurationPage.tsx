@@ -38,7 +38,7 @@ interface IEditDrillConfigurationPageProps {
 }
 
 const MIN_NAME: number = 1;
-const MAX_NAME: number = 15;
+const MAX_NAME: number = 30;
 
 const MIN_DISTANCE: number = 1;
 const MAX_DISTANCE: number = 999;
