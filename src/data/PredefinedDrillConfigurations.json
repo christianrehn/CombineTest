@@ -178,7 +178,7 @@
     {
         "uuid": "97445e5c-1cbd-4f42-a788-5bdaa6e13492",
         "name": "Tee Shots in Meter",
-        "description": "10 tee shots par 4, fairway width: 24 meter plus 9 meter rough on each side",
+        "description": "10 tee shots par 4, fairway width: 24 meter plus 9 meter rough on each side (from the fairway middle: 0-12m fairway, 12-21m rough)",
         "unit": "meter",
         "distanceGenerator": {
             "type": "FixedDistancesGenerator",
@@ -205,7 +205,7 @@
     {
         "uuid": "ea2bc048-9b3c-4418-95f4-e8d9951073d7",
         "name": "Tee Shots in Yards",
-        "description": "10 tee shots par 4, fairway 26 yards 10 10 yards rough on each side",
+        "description": "10 tee shots par 4, fairway 26 yards 10 yards rough on each side (from the fairway middle: 0-13y fairway, 13-23y rough)",
         "unit": "yards",
         "distanceGenerator": {
             "type": "FixedDistancesGenerator",
