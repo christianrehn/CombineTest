@@ -13,7 +13,7 @@ shot data together with the points you get from the shots gained rating and the 
 ## Usage
 
 Select one of the predefined drills:
-![Predefined drills](/docs/assets/images/220106_GCQuadCombineTest_SelectDrill.png =1024x)
+![Predefined drills](screenshots/220106_GCQuadCombineTest_SelectDrill.png=1024x)
 
 You can also add new drill configurations or edit existing drill ones:
 <img src="https://github.com/christianrehn/GCQuadCombineTest/blob/master/docs/assets/images/220106_GCQuadCombineTest_EditDrillConfiguration.png" width="1024">
