@@ -43,8 +43,11 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
         const shotIdFromLastShotFile: number = lastShotData["shot_id"];
         if (!!shotIdFromLastShotFile) {
             console.log(`shot id=${shotIdFromLastShotFile} has been executed`);
+            console.log(`shot lastShotData`, lastShotData);
             setShotData({
                 id: shotIdFromLastShotFile,
+                club: lastShotData["club"],
+                clubHeadSpeed: math.unit(lastShotData["club_head_speed_ms"], "m"),
                 carry: math.unit(lastShotData["carry_m"], "m"),
                 totalDistance: math.unit(lastShotData["total_distance_m"], "m"),
                 offline: math.unit(lastShotData["offline_m"], "m"),
