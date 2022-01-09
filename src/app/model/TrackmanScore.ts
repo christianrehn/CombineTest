@@ -12,23 +12,24 @@ type SlopeYInterceptType = {
 
 // map of linear functions f_d(x) = m*x + t for fixed target distances d in meter.
 const distanceToSlopeYInterceptMap: Map<number, SlopeYInterceptType> = new Map<number, SlopeYInterceptType>();
-distanceToSlopeYInterceptMap.set(13, {m: 0.062, t: 0.29});
-distanceToSlopeYInterceptMap.set(29, {m: 0.103, t: 0.51});
-distanceToSlopeYInterceptMap.set(35, {m: 0.108, t: 0.58});
-distanceToSlopeYInterceptMap.set(38, {m: 0.116, t: 0.50});
-distanceToSlopeYInterceptMap.set(43, {m: 0.1186, t: 0.61});
-distanceToSlopeYInterceptMap.set(50, {m: 0.125, t: 0.63});
-distanceToSlopeYInterceptMap.set(55, {m: 0.132, t: 0.66});
-distanceToSlopeYInterceptMap.set(58, {m: 0.140, t: 0.70});
-distanceToSlopeYInterceptMap.set(65, {m: 0.156, t: 0.73});
-distanceToSlopeYInterceptMap.set(68, {m: 0.166, t: 0.85});
-distanceToSlopeYInterceptMap.set(75, {m: 0.182, t: 0.85});
-distanceToSlopeYInterceptMap.set(85, {m: 0.206, t: 0.98});
-distanceToSlopeYInterceptMap.set(95, {m: 0.235, t: 0.99});
-distanceToSlopeYInterceptMap.set(105, {m: 0.255, t: 1.22});
-distanceToSlopeYInterceptMap.set(125, {m: 0.300, t: 1.52});
-distanceToSlopeYInterceptMap.set(145, {m: 0.346, t: 1.75});
-distanceToSlopeYInterceptMap.set(165, {m: 0.400, t: 1.95});
+distanceToSlopeYInterceptMap.set(13, {m: 0.061996853, t: 0.287931858});
+distanceToSlopeYInterceptMap.set(25, {m: 0.094478866, t: 0.50075836});
+distanceToSlopeYInterceptMap.set(29, {m: 0.103981107, t: 0.496302294});
+distanceToSlopeYInterceptMap.set(35, {m: 0.108945687, t: 0.57028754});
+distanceToSlopeYInterceptMap.set(38, {m: 0.115756098, t: 0.497414634});
+distanceToSlopeYInterceptMap.set(43, {m: 0.118584777, t: 0.606412426});
+distanceToSlopeYInterceptMap.set(50, {m: 0.124439577, t: 0.642746715});
+distanceToSlopeYInterceptMap.set(55, {m: 0.132136678, t: 0.672822953});
+distanceToSlopeYInterceptMap.set(58, {m: 0.138921258, t: 0.711125806});
+distanceToSlopeYInterceptMap.set(65, {m: 0.156090958, t: 0.729399025});
+distanceToSlopeYInterceptMap.set(68, {m: 0.164227086, t: 0.850683995});
+distanceToSlopeYInterceptMap.set(75, {m: 0.181360424, t: 0.852473498});
+distanceToSlopeYInterceptMap.set(85, {m: 0.204903758, t: 0.981989001});
+distanceToSlopeYInterceptMap.set(95, {m: 0.235931174, t: 0.982388664});
+distanceToSlopeYInterceptMap.set(105, {m: 0.25752809, t: 1.226816479});
+distanceToSlopeYInterceptMap.set(125, {m: 0.297707006, t: 1.527898089});
+distanceToSlopeYInterceptMap.set(145, {m: 0.34488189, t: 1.761889764});
+distanceToSlopeYInterceptMap.set(165, {m: 0.397177914, t: 1.954294479});
 
 const distanceToSlopeYInterceptAscMap: Map<number, SlopeYInterceptType> =
     new Map([...distanceToSlopeYInterceptMap.entries()]
