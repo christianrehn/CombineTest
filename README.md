@@ -1,4 +1,4 @@
-<img src="https://github.com/christianrehn/GCQuadCombineTest/blob/master/screenshots/220106_GCQuadCombineTest_OneShot.png" width="1024">
+![One shot](screenshots/220106_GCQuadCombineTest_OneShot.png)
 
 # GCQuad Combine Test
 
