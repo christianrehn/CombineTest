@@ -16,6 +16,10 @@ Experience/System/LastShot.CSV
 The "GCQuad Combine Test" program reads this file and displays some shot data together with the points you get from the
 shots gained rating and the Trackman score.
 
+If you have a 2 or more monitor setup (beamer + monitor or beamer + laptop display) you can run FSX2020 on the beamer to
+see the range and the ball flights and run the QCQuadCombineTest on the other monitor to see the ball/club data, shots
+gained and Trackman score.
+
 ## Install
 
 Create from source (see below) or just download and install
