@@ -5,10 +5,16 @@
 The idea comes from the Trackman Combine test. The quality of your shots is rated using the shots gained approach.
 
 All you need is QCQuad, GC3 or QC2 connected to FSX2020 and the "GCQuad Combine Test" program installed on your
-computer. In FSX2020 you have to start the Practice Range. Every last shot data is automatically exported to folder C:
-/Program Files (x86)
-/Foresight Sports Experience/System/LastShot.CSV The "GCQuad Combine Test" program reads this file and displays some
-shot data together with the points you get from the shots gained rating and the Trackman score.
+computer.
+
+In FSX2020 you have to start the Practice Range and enable "Write Shots CSV" in the Settings:
+https://www.foresightsports.com/fsx-2020-user-manual#:~:text=Write%20Shots%20CSV%3A%20When%20enabled,game%20to%20assist%20with%20aim
+
+Every last shot data is now automatically exported to folder C:/Program Files (x86)/Foresight Sports
+Experience/System/LastShot.CSV
+
+The "GCQuad Combine Test" program reads this file and displays some shot data together with the points you get from the
+shots gained rating and the Trackman score.
 
 ## Usage
 
@@ -16,13 +22,13 @@ Select one of the predefined drills:
 ![Predefined drills](screenshots/220106_GCQuadCombineTest_SelectDrill.png)
 
 You can also add new drill configurations or edit existing drill ones:
-<img src="https://github.com/christianrehn/GCQuadCombineTest/blob/master/docs/assets/images/220106_GCQuadCombineTest_EditDrillConfiguration.png" width="1024">
+![Edit drill configuration](screenshots/220106_GCQuadCombineTest_EditDrillConfiguration.png)
 
 Execute the shots and see the dispersion and Shots Gained and Trackman Scores for the last stroke:
-<img src="https://github.com/christianrehn/GCQuadCombineTest/blob/master/docs/assets/images/220106_GCQuadCombineTest_OneShotDone.png" width="1024">
+![One shot done](screenshots/220106_GCQuadCombineTest_OneShotDone.png)
 
 Or for all shots in current session (without dispersion):
-<img src="https://github.com/christianrehn/GCQuadCombineTest/blob/master/docs/assets/images/220106_GCQuadCombineTest_AllShots.png" width="1024">
+![All shots](screenshots/220106_GCQuadCombineTest_AllShots.png)
 
 ## Inaccuracies
 
