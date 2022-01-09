@@ -18,10 +18,10 @@ shots gained rating and the Trackman score.
 
 ## Usage
 
-Select one of the predefined drills:
+Select one of the predefined drill configurations:
 ![Predefined drills](screenshots/220106_GCQuadCombineTest_SelectDrill.png)
 
-You can also add new drill configurations or edit existing drill ones:
+Or add a new drill configurations or edit existing ones:
 ![Edit drill configuration](screenshots/220106_GCQuadCombineTest_EditDrillConfiguration.png)
 
 Execute the shots and see the dispersion and Shots Gained and Trackman Scores for the last stroke:
