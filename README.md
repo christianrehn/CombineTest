@@ -16,6 +16,11 @@ Experience/System/LastShot.CSV
 The "GCQuad Combine Test" program reads this file and displays some shot data together with the points you get from the
 shots gained rating and the Trackman score.
 
+## Install
+
+Create from source (see below) or just download and install
+the [Latest Release](https://github.com/christianrehn/GCQuadCombineTest/releases/latest/download/GCQuadCombineTest-1.2.2.Setup.exe)
+
 ## Usage
 
 Select one of the predefined drill configurations:
