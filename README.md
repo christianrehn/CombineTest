@@ -48,6 +48,8 @@ Or for all shots in current session (without dispersion):
 
 ## Ideas for the next versions:
 
+* Show additional club/ball data so you do not have to switch to FSX2020 to see them.
+* Calculate consistency for different values like score, dynamic loft, ... (Gaussian standard deviation).
 * Save shot history.
 * Add rating that is similar to Trackman Combine Test for Drives.
 * Show overview/report like Trackman "Test Center or Combine report". Create links to share reports.
