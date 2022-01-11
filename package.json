@@ -1,7 +1,7 @@
 {
     "name": "GCQuadCombineTest",
     "productName": "GCQuadCombineTest",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "description": "Practice tee and approach shots with GCQuad, GC3 or GC2 and FSX2020 similar to the Trackman Pitch or Combine Test",
     "main": ".webpack/main",
     "scripts": {
