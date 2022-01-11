@@ -20,6 +20,7 @@ distanceToSlopeYInterceptMap.set(38, {m: 0.115756097560976, t: 0.497414634146342
 distanceToSlopeYInterceptMap.set(43, {m: 0.118524395188642, t: 0.606739334726558});
 distanceToSlopeYInterceptMap.set(48, {m: 0.117781043350478, t: 0.685892725936812});
 distanceToSlopeYInterceptMap.set(50, {m: 0.124439577428498, t: 0.642746714764235});
+distanceToSlopeYInterceptMap.set(52, {m: 0.125615444923559, t: 0.697279498235985});
 distanceToSlopeYInterceptMap.set(55, {m: 0.132136678200692, t: 0.672822952710497});
 distanceToSlopeYInterceptMap.set(58, {m: 0.138921258177733, t: 0.711125805691636});
 distanceToSlopeYInterceptMap.set(65, {m: 0.155092517508293, t: 0.784546111315886});
