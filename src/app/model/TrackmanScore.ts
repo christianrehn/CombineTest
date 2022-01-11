@@ -15,7 +15,7 @@ const distanceToSlopeYInterceptMap: Map<number, SlopeYInterceptType> = new Map<n
 distanceToSlopeYInterceptMap.set(13, {m: 0.0619968526629126, t: 0.287931858256072});
 distanceToSlopeYInterceptMap.set(25, {m: 0.0944788660668817, t: 0.500758360210491});
 distanceToSlopeYInterceptMap.set(29, {m: 0.103981106612686, t: 0.496302294197031});
-distanceToSlopeYInterceptMap.set(35, {m: 0.110784148194602, t: 0.546491714706095});
+distanceToSlopeYInterceptMap.set(35, {m: 0.110847203889121, t: 0.55299893757445});
 distanceToSlopeYInterceptMap.set(38, {m: 0.115756097560976, t: 0.497414634146342});
 distanceToSlopeYInterceptMap.set(43, {m: 0.118524395188642, t: 0.606739334726558});
 distanceToSlopeYInterceptMap.set(50, {m: 0.124439577428498, t: 0.642746714764235});
