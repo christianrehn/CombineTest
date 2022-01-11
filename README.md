@@ -68,6 +68,7 @@ Check out my 100% free iOS App: [Golf Logbook](https://christianrehn.github.io/g
 
 ## Ideas for the next versions:
 
+* Self-update functionality.
 * Show additional club/ball data so you do not have to switch to FSX2020 to see them.
 * Calculate consistency for different values like score, dynamic loft, ... (Gaussian standard deviation).
 * Save shot history.
