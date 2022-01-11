@@ -18,6 +18,7 @@ module.exports = {
     makers: [
         {
             name: "@electron-forge/maker-squirrel",
+            platforms: ["win32", "win64"],
             config: {
                 setupIcon: __dirname + "/src/assets/icons/win/icon.ico",
                 skipUpdateIcon: true
@@ -25,6 +26,7 @@ module.exports = {
         },
         {
             name: "@electron-forge/maker-wix",
+            platforms: ["win32", "win64"],
             config: {
                 icon: __dirname + "/src/assets/icons/win/icon.ico",
                 ui: {
@@ -38,9 +40,7 @@ module.exports = {
         },
         {
             name: "@electron-forge/maker-zip",
-            platforms: [
-                "darwin"
-            ],
+            platforms: ["darwin", "win32", "win64"],
             config: {
                 icon: "src/assets/icons/mac/icon.icns"
             }
@@ -52,6 +52,20 @@ module.exports = {
         {
             name: "@electron-forge/maker-rpm",
             config: {}
+        }
+    ],
+    publishers: [
+        {
+            name: '@electron-forge/publisher-github',
+            config: {
+                repository: {
+                    owner: 'christianrehn',
+                    name: 'GCQuadCombineTest'
+                },
+                authToken: process.env.GITHUB_TOKEN,
+                draft: false,
+                prerelease: false
+            }
         }
     ],
     plugins: [

@@ -95,6 +95,8 @@ After cloning the repo you can:
   system):
     * update version number in package.json
     * yarn clean && yarn install && yarn make
+    * in order to yarn publish to the github repo the environment variable GITHUB_TOKEN has to be set because it is used
+      in forge.config.js
 * check for outdated packages: yarn outdated
 * upgrade packages: yarn upgrade
 
