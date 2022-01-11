@@ -58,9 +58,9 @@ Please support me by sharing your Trackman scores with me (if possible in Excel 
 my score calcualtion gets. To share it create a branch in this GitHub repo or mail it to golf.logbook@gmail.com.
 
 If you have a good ball flight model implementation and you are willing to share it with me I would like to directly
-connect my QCQuad with this App. I have already analyzed the QCQuad network traffic to get all the data QCQuad provides.
-But values like carry/total distance or offline have to be calculated by a ball flight model (that is currently the task
-of the FSX2020 software).
+connect my QCQuad/GC3/GC2 with this App. I have already analyzed the QCQuad network traffic to get all the data QCQuad
+provides. But values like carry/total distances or offline have to be calculated by a ball flight model (which is
+currently the task of the FSX2020 software).
 
 ## Maybe you want to track your training data
 
