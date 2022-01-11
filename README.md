@@ -52,7 +52,7 @@ Or for all shots in current session (without dispersion):
   need to calculate shots gained rating and the Trackman score. But currently it is the best approximation I currently
   have.
 
-## Please Support me
+## Please support me
 
 Please support me by sharing your Trackman scores with me (if possible in Excel format). The more data I have the better
 my score calcualtion gets. To share it create a branch in GitHub or mail it to golf.logbook@gmail.com.
