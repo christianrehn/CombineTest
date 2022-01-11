@@ -3,6 +3,7 @@
     "productName": "GCQuadCombineTest",
     "version": "1.2.3",
     "description": "Practice tee and approach shots with GCQuad, GC3 or GC2 and FSX2020 similar to the Trackman Pitch or Combine Test",
+    "homepage": "https://christianrehn.github.io/GCQuadCombineTest",
     "main": ".webpack/main",
     "scripts": {
         "start": "electron-forge start",
@@ -13,12 +14,25 @@
         "lint": "eslint --ext .ts .",
         "clean": "rimraf out .webpack"
     },
-    "keywords": [],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/christianrehn/GCQuadCombineTest.git"
+    },
+    "keywords": [
+        "Golf",
+        "Foresight",
+        "GCQuad",
+        "GC3",
+        "GC2",
+        "Trackman",
+        "Combine Test",
+        "Pitch Test"
+    ],
     "author": {
         "name": "Christian Rehn",
-        "email": "rehn@itestra.de"
+        "email": "golf.logbook@gmail.com"
     },
-    "license": "MIT",
+    "license": "UNLICENSED",
     "config": {
         "forge": "./forge.config.js"
     },
@@ -30,6 +44,7 @@
         "@electron-forge/maker-wix": "^6.0.0-beta.54",
         "@electron-forge/maker-zip": "^6.0.0-beta.54",
         "@electron-forge/plugin-webpack": "6.0.0-beta.54",
+        "@electron-forge/publisher-github": "^6.0.0-beta.63",
         "@hot-loader/react-dom": "^17.0.1",
         "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
         "@types/lodash": "^4.14.178",
