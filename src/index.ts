@@ -1,7 +1,9 @@
 import {app, BrowserWindow, ipcMain} from 'electron';
 import electronIsDev from "electron-is-dev";
+import updateElectronApp from "update-electron-app";
 import fs from "fs";
 import path from "path";
+
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 
@@ -105,6 +107,9 @@ const createWindow = (): void => {
 //     appManager.setWindow('MainWindow', createWindow);
 // });
 app.on('ready', (): void => {
+    console.log("checkForUpdates using updateElectronApp");
+    updateElectronApp();
+
     return createWindow();
 });
 
