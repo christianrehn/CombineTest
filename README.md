@@ -46,9 +46,25 @@ Or for all shots in current session (without dispersion):
 * I do not have shots gained values for carry distances so the shots gained for total distances are used to compute
   shots gained for carry distances.
 * I do not have the formulas to calculate the Trackman scores but approximations so there might be a small delta
-  compared to the original Trackman score calculation.
+  compared to the original Trackman score calculation. But all Trackman scores that I have to develop and test my
+  calculation (more than 300 shots)  are identical.
 * I think (I am not sure) the offline value in LastShot.CSV is the total offline, not the carry offline that I would
-  need to calculate shots gained rating and the Trackman score. But it is the best approximation I currently have.
+  need to calculate shots gained rating and the Trackman score. But currently it is the best approximation I currently
+  have.
+
+## Please Support me
+
+Please support me by sharing your Trackman scores with me (if possible in Excel format). The more data I have the better
+my score calcualtion gets. To share it create a branch in GitHub or mail it to golf.logbook@gmail.com.
+
+If you have a good ball flight model implementation and you are willing to share it with me I would like to directly
+connect my QCQuad with this App. I have already analyzed the QCQuad network traffic to get all the data QCQuad provides.
+But values like carry/total distance or offline have to be calculated by a ball flight model (that is currently the task
+of the FSX2020 software).
+
+## Maybe you want to track your training data
+
+Check out my 100% free iOS App: [Golf Logbook](https://christianrehn.github.io/golf-logbook/)
 
 ## Ideas for the next versions:
 
