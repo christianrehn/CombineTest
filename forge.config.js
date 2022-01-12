@@ -1,24 +1,35 @@
 module.exports = {
     packagerConfig: {
         icon: "src/assets/icons/win/icon.ico",
+        asar: true
         // ignore: [
-        //     "data",
-        //     "out",
-        //     "build",
-        //     ".+.test.js",
-        //     ".*.env",
-        //     ".eslintrc",
+        //     ".idea",
+        //     "screenshots",
+        //     "test",
+        //     "TrackmanData",
+        //     ".babelrc",
+        //     ".editorconfig",
+        //     ".eslintrc.json",
         //     ".gitignore",
+        //     ".prettierrc.json",
+        //     ".stylelintrc.json",
+        //     "_config.yml",
+        //     "BingSiteAuth.xml",
+        //     "google5aed1ca278ecb5f4.html",
         //     "README.md",
+        //     "robots.txt",
+        //     "sitemap.txt",
+        //     "sitemap.xml",
+        //     "tsconfig.json",
         //     "yarn.lock",
-        //     ".jshintrc",
-        //     ".babelrc"
+        //     //     ".+.test.js",
+        //     //     ".*.env",
         // ]
     },
     makers: [
         {
             name: "@electron-forge/maker-squirrel",
-            platforms: ["win32", "win64"],
+            platforms: ["win32"],
             config: {
                 iconUrl: __dirname + "/src/assets/icons/win/icon.ico",
                 loadingGif: __dirname + "/src/assets/icon-green.gif",
@@ -29,7 +40,7 @@ module.exports = {
         },
         {
             name: "@electron-forge/maker-wix",
-            platforms: ["win32", "win64"],
+            platforms: ["win32"],
             config: {
                 icon: __dirname + "/src/assets/icons/win/icon.ico",
                 ui: {
@@ -43,7 +54,7 @@ module.exports = {
         },
         {
             name: "@electron-forge/maker-zip",
-            platforms: ["darwin", "win32", "win64"],
+            platforms: ["darwin", "win32"],
             config: {
                 icon: "src/assets/icons/mac/icon.icns"
             }
