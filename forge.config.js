@@ -39,34 +39,12 @@ module.exports = {
             }
         },
         {
-            name: "@electron-forge/maker-wix",
-            platforms: ["win32"],
-            config: {
-                icon: __dirname + "/src/assets/icons/win/icon.ico",
-                ui: {
-                    chooseDirectory: true,
-                    images: {
-                        background: __dirname + "/src/assets/wix/background.bmp",
-                        banner: __dirname + "/src/assets/wix/banner.bmp"
-                    }
-                },
-            }
-        },
-        {
             name: "@electron-forge/maker-zip",
             platforms: ["darwin", "win32"],
             config: {
                 icon: "src/assets/icons/mac/icon.icns"
             }
         },
-        {
-            name: "@electron-forge/maker-deb",
-            config: {}
-        },
-        {
-            name: "@electron-forge/maker-rpm",
-            config: {}
-        }
     ],
     publishers: [
         {
