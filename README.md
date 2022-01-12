@@ -85,8 +85,8 @@ Check out my 100% free iOS App: [Golf Logbook](https://christianrehn.github.io/g
 
 ## Technical Details
 
-This program has been built using Electron, React and Typescript. You can define new Tests (distances, green size, yards
-or meter, ...) in file src/data/TestsConfiguration.json
+This program has been built using Node v14, Electron v6, React v17 and Typescript v4. You can define new Tests (
+distances, green size, yards or meter, ...) in file src/data/TestsConfiguration.json
 
 After cloning the repo you can:
 
