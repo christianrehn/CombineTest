@@ -1,7 +1,8 @@
 module.exports = {
     packagerConfig: {
         icon: "src/assets/icons/win/icon.ico",
-        asar: true
+        asar: true,
+        ignore: undefined
         // ignore: [
         //     ".idea",
         //     "screenshots",
