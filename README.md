@@ -91,8 +91,7 @@ distances, green size, yards or meter, ...) in file src/data/TestsConfiguration.
 After cloning the repo you can:
 
 * start the program from source: yarn start
-* build a new executable version (using both maker-squirrel (my preferred installer) and maker-wix on a MS Windows
-  system):
+* build a new executable version using maker-squirrel on a MS Windows system:
     * update version number in package.json
     * yarn clean && yarn install && yarn make
     * in order to yarn publish to the github repo the environment variable GITHUB_TOKEN has to be set because it is used
