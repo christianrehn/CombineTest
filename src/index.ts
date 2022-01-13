@@ -1,9 +1,8 @@
-import {app, autoUpdater, BrowserWindow, ipcMain} from 'electron';
+import {app, BrowserWindow, ipcMain} from 'electron';
 import electronIsDev from "electron-is-dev";
 import electronSimpleUpdater from "electron-simple-updater";
 import fs from "fs";
 import path from "path";
-import {assert} from "chai";
 
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
@@ -108,30 +107,9 @@ const createWindow = (): void => {
 // });
 app.on('ready', (): void => {
     console.log("checkForUpdates using updateElectronApp");
-    autoUpdater.setFeedURL({url: "https://github.com/christianrehn/GCQuadCombineTest/releases/download/v1.2.5"});
-    autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
-        console.log("update-downloaded")
+    electronSimpleUpdater.init({
+        url: 'https://raw.githubusercontent.com/christianrehn/GCQuadCombineTest/master/updates.json'
     });
-    autoUpdater.on('error', message => {
-        console.error('There was a problem updating the application')
-        console.error(message)
-    })
-    autoUpdater.on('checking-for-update', () => {
-        console.log('checking-for-update')
-    })
-
-    autoUpdater.on('update-available', () => {
-        console.log('update-available')
-    })
-
-    autoUpdater.on('update-not-available', () => {
-        console.log('update-not-available')
-    })
-    autoUpdater.checkForUpdates();
-    assert(!!electronSimpleUpdater);
-    // electronSimpleUpdater.init({
-    //     url: 'https://raw.githubusercontent.com/christianrehn/GCQuadCombineTest/master/updates.json'
-    // });
 
     return createWindow();
 });
