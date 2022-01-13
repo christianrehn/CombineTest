@@ -10,7 +10,6 @@ module.exports = {
             config: {
                 iconUrl: __dirname + "/src/assets/icons/win/icon.ico",
                 loadingGif: __dirname + "/src/assets/icon-green.gif",
-                noMsi: false,
                 setupIcon: __dirname + "/src/assets/icons/win/icon.ico",
                 skipUpdateIcon: true
             }
