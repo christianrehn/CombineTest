@@ -1,31 +1,7 @@
 module.exports = {
     packagerConfig: {
         icon: "src/assets/icons/win/icon.ico",
-        asar: true,
-        ignore: undefined
-        // ignore: [
-        //     ".idea",
-        //     "screenshots",
-        //     "test",
-        //     "TrackmanData",
-        //     ".babelrc",
-        //     ".editorconfig",
-        //     ".eslintrc.json",
-        //     ".gitignore",
-        //     ".prettierrc.json",
-        //     ".stylelintrc.json",
-        //     "_config.yml",
-        //     "BingSiteAuth.xml",
-        //     "google5aed1ca278ecb5f4.html",
-        //     "README.md",
-        //     "robots.txt",
-        //     "sitemap.txt",
-        //     "sitemap.xml",
-        //     "tsconfig.json",
-        //     "yarn.lock",
-        //     //     ".+.test.js",
-        //     //     ".*.env",
-        // ]
+        asar: false
     },
     makers: [
         {
