@@ -23,9 +23,9 @@ gained and Trackman score.
 ## Install
 
 Create from source (see below) or just download and install
-the [Latest Release](https://github.com/christianrehn/GCQuadCombineTest/releases/latest/download/GCQuadCombineTest-1.2.2.Setup.exe)
-. When you see the "Windows protected your PC" message click on "More info" and "Run anyway" because I did not pay
-Microsoft for a code validation certificate.
+the [Latest Release](https://github.com/christianrehn/GCQuadCombineTest/releases) named
+GCQuadCombineTest-X.Y.Z.Setup.exe where X.Y.Z is the release number. When you see the "Windows protected your PC"
+message click on "More info" and "Run anyway" because I did not pay Microsoft for a code validation certificate.
 
 ## Usage
 
