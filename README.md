@@ -98,6 +98,7 @@ After cloning the repo you can:
       it is used in forge.config.js
 * check for outdated packages: yarn outdated
 * upgrade packages: yarn upgrade
+* to see console logs of main in production add --enable-logging command line option
 
 ## To Fix
 
