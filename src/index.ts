@@ -108,9 +108,10 @@ const createWindow = (): void => {
 // });
 app.on('ready', (): void => {
     console.log("checkForUpdates using updateElectronApp");
-    const simpleUpdater: electronSimpleUpdater.SimpleUpdater = electronSimpleUpdater.init({url: 'https://raw.githubusercontent.com/christianrehn/GCQuadCombineTest/master/updates.json'});
-    console.log("simpleUpdater=", simpleUpdater);
-    
+    electronSimpleUpdater.init({
+        url: 'https://raw.githubusercontent.com/christianrehn/GCQuadCombineTest/master/updates.json'
+    });
+
     return createWindow();
 });
 
