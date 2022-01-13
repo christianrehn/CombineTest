@@ -1,7 +1,7 @@
 {
     "name": "GCQuadCombineTest",
     "productName": "GCQuadCombineTest",
-    "version": "1.2.3",
+    "version": "1.2.4",
     "description": "Practice tee and approach shots with GCQuad, GC3 or GC2 and FSX2020 similar to the Trackman Pitch or Combine Test",
     "homepage": "https://christianrehn.github.io/GCQuadCombineTest",
     "main": ".webpack/main",
@@ -80,6 +80,7 @@
         "chokidar": "^3.5.2",
         "csv-parser": "^3.0.0",
         "electron-is-dev": "^1.2.0",
+        "electron-simple-updater": "^2.0.11",
         "electron-squirrel-startup": "^1.0.0",
         "everpolate": "^0.0.3",
         "fg-select-css": "^3.2.0",
@@ -88,7 +89,6 @@
         "react": "^17.0.1",
         "react-dom": "^17.0.1",
         "react-hot-loader": "^4.13.0",
-        "update-electron-app": "^2.0.1",
         "uuid": "^8.3.2"
     }
 }

@@ -1,6 +1,6 @@
 import {app, BrowserWindow, ipcMain} from 'electron';
 import electronIsDev from "electron-is-dev";
-import updateElectronApp from "update-electron-app";
+import electronSimpleUpdater from "electron-simple-updater";
 import fs from "fs";
 import path from "path";
 
@@ -108,8 +108,9 @@ const createWindow = (): void => {
 // });
 app.on('ready', (): void => {
     console.log("checkForUpdates using updateElectronApp");
-    updateElectronApp();
-
+    const simpleUpdater: electronSimpleUpdater.SimpleUpdater = electronSimpleUpdater.init({url: 'https://raw.githubusercontent.com/christianrehn/GCQuadCombineTest/master/updates.json'});
+    console.log("simpleUpdater=", simpleUpdater);
+    
     return createWindow();
 });
 
