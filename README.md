@@ -24,8 +24,11 @@ gained and Trackman score.
 
 Create from source (see below) or just download and install
 the [Latest Release](https://github.com/christianrehn/GCQuadCombineTest/releases) named
-GCQuadCombineTest-X.Y.Z.Setup.exe where X.Y.Z is the release number. When you see the "Windows protected your PC"
-message click on "More info" and "Run anyway" because I did not pay Microsoft for a code validation certificate.
+GCQuadCombineTest-X.Y.Z.Setup.exe where X.Y.Z is the release number. As of version 1.2.6 sel-update functionallity has
+been implemented. Updates are automatically downloaded and installed on the next start of the application.
+
+When you see the "Windows protected your PC" message click on "More info" and "Run anyway" because I did not pay
+Microsoft for a code validation certificate.
 
 ## Usage
 
@@ -68,7 +71,7 @@ Check out my 100% free iOS App: [Golf Logbook](https://christianrehn.github.io/g
 
 ## Ideas for the next versions:
 
-* Self-update functionality.
+* Show version number in app.
 * Show additional club/ball data so you do not have to switch to FSX2020 to see them.
 * Calculate consistency for different values like score, dynamic loft, ... (Gaussian standard deviation).
 * Save shot history.
