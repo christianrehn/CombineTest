@@ -40,25 +40,24 @@ const createWindow = (): void => {
     });
 
     // create splash window
-    var splashWindow: BrowserWindow = new BrowserWindow({
-        height: 600,
-        width: 1000,
-        transparent: true,
-        frame: false,
-        alwaysOnTop: true
-    });
-    splashWindow.setResizable(false);
-    splashWindow.loadFile('splash.html');
-    splashWindow.center();
-    splashWindow.on('closed', (): null => (splashWindow = null));
-
+    // var splashWindow: BrowserWindow = new BrowserWindow({
+    //     height: 600,
+    //     width: 1000,
+    //     transparent: true,
+    //     frame: false,
+    //     alwaysOnTop: true
+    // });
+    // splashWindow.setResizable(false);
+    // splashWindow.loadFile('splash.html');
+    // splashWindow.center();
+    // splashWindow.on('closed', (): null => (splashWindow = null));
 
     // and load the index.html of the app.
     mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
     // if main window is ready to show, then destroy the splash window and show up the main window
     mainWindow.once('ready-to-show', (): void => {
-        splashWindow.close();
+        // splashWindow.close();
         if (!electronIsDev) {
             mainWindow.maximize(); // not full screen
         }
@@ -109,7 +108,7 @@ const createWindow = (): void => {
 // });
 app.on('ready', (): void => {
     console.log("checkForUpdates using updateElectronApp");
-    autoUpdater.setFeedURL({url: "https://github.com/christianrehn/GCQuadCombineTest/releases/download/v1.2.5/GCQuadCombineTest-1.2.5.Setup.exe"});
+    autoUpdater.setFeedURL({url: "https://github.com/christianrehn/GCQuadCombineTest/releases/download/v1.2.5"});
     autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
         console.log("update-downloaded")
     });
