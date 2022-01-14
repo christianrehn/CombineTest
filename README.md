@@ -1,6 +1,6 @@
 ![One shot](screenshots/220106_GCQuadCombineTest_OneShot.png)
 
-# GCQuad Combine Test
+## GCQuad Combine Test
 
 The idea comes from the Trackman Combine test. The quality of your shots is rated using the shots gained approach.
 
@@ -20,7 +20,7 @@ If you have a 2 or more monitor setup (beamer + monitor or beamer + laptop displ
 see the range and the ball flights and run the QCQuadCombineTest on the other monitor to see the ball/club data, shots
 gained and Trackman score.
 
-## Install
+### Install
 
 Create from source (see below) or just download and install
 the [Latest Release](https://github.com/christianrehn/GCQuadCombineTest/releases) named
@@ -30,7 +30,7 @@ been implemented. Updates are automatically downloaded and installed on the next
 When you see the "Windows protected your PC" message click on "More info" and "Run anyway" because I did not pay
 Microsoft for a code validation certificate.
 
-## Usage
+### Usage
 
 Select one of the predefined drill configurations:
 ![Predefined drills](screenshots/220106_GCQuadCombineTest_SelectDrill.png)
@@ -44,7 +44,7 @@ Execute the shots and see the dispersion and Shots Gained and Trackman Scores fo
 Or for all shots in current session (without dispersion):
 ![All shots](screenshots/220106_GCQuadCombineTest_AllShots.png)
 
-## Inaccuracies
+### Inaccuracies
 
 * I do not have shots gained values for carry distances so the shots gained for total distances are used to compute
   shots gained for carry distances.
@@ -55,7 +55,7 @@ Or for all shots in current session (without dispersion):
   need to calculate shots gained rating and the Trackman score. But currently it is the best approximation I currently
   have.
 
-## Please support me
+### Please support me
 
 Please support me by sharing your Trackman scores with me (if possible in Excel format). The more data I have the better
 my score calcualtion gets. To share it create a branch in this GitHub repo or mail it to golf.logbook@gmail.com.
@@ -65,11 +65,11 @@ connect my QCQuad/GC3/GC2 with this App. I have already analyzed the QCQuad netw
 provides. But values like carry/total distances or offline have to be calculated by a ball flight model (which is
 currently the task of the FSX2020 software).
 
-## Maybe you want to track your training data
+### Maybe you want to track your training data
 
 Check out my 100% free iOS App: [Golf Logbook](https://christianrehn.github.io/golf-logbook/)
 
-## Ideas for the next versions:
+### Ideas for the next versions:
 
 * Show version number in app.
 * Show additional club/ball data so you do not have to switch to FSX2020 to see them.
@@ -84,9 +84,9 @@ Check out my 100% free iOS App: [Golf Logbook](https://christianrehn.github.io/g
 * Select between Total and Carry (currently only carry is used)
 * Enter directory to watch for LastShot.CSV
 
-# For Developers
+## For Developers
 
-## Technical Details
+### Technical Details
 
 This program has been built using Node v14, Electron v6, React v17 and Typescript v4. You can define new Tests (
 distances, green size, yards or meter, ...) in file src/data/TestsConfiguration.json
@@ -103,7 +103,7 @@ After cloning the repo you can:
 * upgrade packages: yarn upgrade
 * to see console logs of main in production add --enable-logging command line option
 
-## To Fix
+### To Fix
 
 * "Warning: A component is changing an uncontrolled input to be controlled." when entering a number for radius in end
   ground types table.
