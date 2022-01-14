@@ -96,7 +96,7 @@ After cloning the repo you can:
 * start the program from source: yarn start
 * build a new executable version using maker-squirrel on a MS Windows system:
     * update version number in package.json
-    * yarn clean && yarn install && yarn make
+    * yarn clean && yarn ci && yarn make
     * in order to electron-forge publish to the github repo the environment variable GITHUB_TOKEN has to be set because
       it is used in forge.config.js
 * check for outdated packages: yarn outdated

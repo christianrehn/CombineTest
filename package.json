@@ -6,6 +6,7 @@
     "homepage": "https://christianrehn.github.io/GCQuadCombineTest",
     "main": ".webpack/main",
     "scripts": {
+        "ci": "yarn install --immutable",
         "start": "electron-forge start",
         "debug": "electron-forge start --inspect-electron",
         "package": "electron-forge package",
