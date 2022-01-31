@@ -1,11 +1,12 @@
-![One shot](screenshots/220106_GCQuadCombineTest_OneShot.png)
+![One shot](screenshots/220106_CombineTest_OneShot.png)
 
-## GCQuad Combine Test
+## Combine Test
 
 The idea comes from the Trackman Combine test. The quality of your shots is rated using the shots gained approach.
 
-All you need is QCQuad, GC3 or QC2 connected to FSX2020 and the "GCQuad Combine Test" program installed on your
-computer.
+All you need is QCQuad, GC3 or QC2 connected to FSX2020 and the "Combine Test" program installed on your computer (this
+software could be easily modified to support other launch monitors, it just needs some data like distance carry per
+shot).
 
 In FSX2020 you have to start the Practice Range and enable "Write Shots CSV" in the Settings:
 [FSX2020 User Manual - General Settings](https://www.foresightsports.com/fsx-2020-user-manual#:~:text=Write%20Shots%20CSV%3A%20When%20enabled,game%20to%20assist%20with%20aim)
@@ -13,8 +14,8 @@ In FSX2020 you have to start the Practice Range and enable "Write Shots CSV" in 
 Every last shot data is now automatically exported to folder C:/Program Files (x86)/Foresight Sports
 Experience/System/LastShot.CSV
 
-The "GCQuad Combine Test" program reads this file and displays some shot data together with the points you get from the
-shots gained rating and the Trackman score.
+The "Combine Test" program reads this file and displays some shot data together with the points you get from the shots
+gained rating and the Trackman score.
 
 If you have a 2 or more monitor setup (beamer + monitor or beamer + laptop display) you can run FSX2020 on the beamer to
 see the range and the ball flights and run the QCQuadCombineTest on the other monitor to see the ball/club data, shots
@@ -23,9 +24,9 @@ gained and Trackman score.
 ### Install
 
 Create from source (see below) or just download and install
-the [Latest Release](https://github.com/christianrehn/GCQuadCombineTest/releases) named
-GCQuadCombineTest-X.Y.Z.Setup.exe where X.Y.Z is the release number. As of version 1.2.6 sel-update functionallity has
-been implemented. Updates are automatically downloaded and installed on the next start of the application.
+the [Latest Release](https://github.com/christianrehn/GCQuadCombineTest/releases) named CombineTest-X.Y.Z.Setup.exe
+where X.Y.Z is the release number. As of version 1.2.6 sel-update functionallity has been implemented. Updates are
+automatically downloaded and installed on the next start of the application.
 
 When you see the "Windows protected your PC" message click on "More info" and "Run anyway" because I did not pay
 Microsoft for a code validation certificate.
@@ -33,16 +34,16 @@ Microsoft for a code validation certificate.
 ### Usage
 
 Select one of the predefined drill configurations:
-![Predefined drills](screenshots/220106_GCQuadCombineTest_SelectDrill.png)
+![Predefined drills](screenshots/220106_CombineTest_SelectDrill.png)
 
 Or add a new drill configurations or edit existing ones:
-![Edit drill configuration](screenshots/220106_GCQuadCombineTest_EditDrillConfiguration.png)
+![Edit drill configuration](screenshots/220106_CombineTest_EditDrillConfiguration.png)
 
 Execute the shots and see the dispersion and Shots Gained and Trackman Scores for the last stroke:
-![One shot done](screenshots/220106_GCQuadCombineTest_OneShotDone.png)
+![One shot done](screenshots/220106_CombineTest_OneShotDone.png)
 
 Or for all shots in current session (without dispersion):
-![All shots](screenshots/220106_GCQuadCombineTest_AllShots.png)
+![All shots](screenshots/220106_CombineTest_AllShots.png)
 
 ### Inaccuracies
 
