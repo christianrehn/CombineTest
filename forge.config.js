@@ -28,7 +28,7 @@ module.exports = {
             config: {
                 repository: {
                     owner: 'christianrehn',
-                    name: 'GCQuadCombineTest'
+                    name: 'CombineTest'
                 },
                 authToken: process.env.GITHUB_TOKEN,
                 draft: false,

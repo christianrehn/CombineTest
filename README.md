@@ -24,8 +24,8 @@ gained and Trackman score.
 ### Install
 
 Create from source (see below) or just download and install
-the [Latest Release](https://github.com/christianrehn/GCQuadCombineTest/releases) named CombineTest-X.Y.Z.Setup.exe
-where X.Y.Z is the release number. As of version 1.2.6 sel-update functionallity has been implemented. Updates are
+the [Latest Release](https://github.com/christianrehn/CombineTest/releases) named CombineTest-X.Y.Z.Setup.exe where
+X.Y.Z is the release number. As of version 1.2.6 sel-update functionallity has been implemented. Updates are
 automatically downloaded and installed on the next start of the application.
 
 When you see the "Windows protected your PC" message click on "More info" and "Run anyway" because I did not pay
