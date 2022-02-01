@@ -12,7 +12,7 @@ In addition my "Combine Test" program also rates each shot using
 the [shots gained approach](https://www.pgatour.com/news/2016/05/31/strokes-gained-defined.html) which is explained in
 detail in [Mark Broadie's Book Every Shot Counts](https://www.amazon.com/-/es/Mark-Broadie/dp/1592407501).
 
-## Prerequisites to run my "Combine Test" program
+## Prerequisites to run my "Combine Test"
 
 All you need is QCQuad, GC3 or QC2 connected to FSX2020 and my 100% free and open source "Combine Test" program
 installed on your computer (
@@ -56,9 +56,9 @@ Execute the shots and see the dispersion and Shots Gained and Trackman Scores fo
 Or for all shots in current session (without dispersion):
 ![All shots](screenshots/220106_CombineTest_AllShots.png)
 
-## Maybe you also want to track your golf training data
+## Track your golf training data
 
-Check out my 100% free iOS App: [Golf Logbook](https://christianrehn.github.io/golf-logbook/)
+Maybe you also want to check out my 100% free iOS App: [Golf Logbook](https://christianrehn.github.io/golf-logbook/)
 
 ## Known inaccuracies
 
@@ -71,14 +71,14 @@ Check out my 100% free iOS App: [Golf Logbook](https://christianrehn.github.io/g
   need to calculate shots gained rating and the Trackman score. But currently it is the best approximation I currently
   have.
 
-## Please support me with your data or code
+## Please support me
 
-### Data
+### With your data
 
 Please support me by sharing your Trackman scores with me (if possible in Excel format). The more data I have the better
 my score calcualtion gets. To share it create a branch in this GitHub repo or mail it to golf.logbook@gmail.com.
 
-### Code
+### Whith a ball flight model
 
 If you have a good ball flight model implementation and you are willing to share it with me I would like to directly
 connect my QCQuad/GC3/GC2 with this App. I have already analyzed the QCQuad network traffic to get all the data QCQuad
