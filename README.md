@@ -71,10 +71,14 @@ Check out my 100% free iOS App: [Golf Logbook](https://christianrehn.github.io/g
   need to calculate shots gained rating and the Trackman score. But currently it is the best approximation I currently
   have.
 
-## Please support me with your data
+## Please support me with your data or code
+
+### Data
 
 Please support me by sharing your Trackman scores with me (if possible in Excel format). The more data I have the better
 my score calcualtion gets. To share it create a branch in this GitHub repo or mail it to golf.logbook@gmail.com.
+
+### Code
 
 If you have a good ball flight model implementation and you are willing to share it with me I would like to directly
 connect my QCQuad/GC3/GC2 with this App. I have already analyzed the QCQuad network traffic to get all the data QCQuad
