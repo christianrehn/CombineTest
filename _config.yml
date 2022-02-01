@@ -3,3 +3,13 @@ title: Golf Combine and Pitch Test
 author: Christian Rehn
 show_downloads: false
 favicon: favicon.ico
+
+include:
+    - favicon.ico
+
+# Select which social network share links to show in posts
+share-links-active:
+    twitter: true
+    facebook: true
+    linkedin: true
+    vk: false
