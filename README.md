@@ -1,16 +1,22 @@
 ![One shot](screenshots/220106_CombineTest_OneShot.png)
 
+## Background
+
 The idea comes from
 the [Trackman Combine test](https://www.dennissalesgolf.com/golf-drills-and-practice-blogs/2016/3/6/trackman-combine-test-benchmark-your-game)
-. The quality of each of your shots is rated with a score between 0 and
+. The quality of each of your shots is rated with a score between 0 and 100. Because I do not own a Trackman bit a
+GCQuad I decided to implement my own "Combine Test" program that delivers (nearly)
+the same score numbers as the original Trackman Combine.
 
-100.
+In addition my "Combine Test" program also rates each shot using
+the [shots gained approach](https://www.pgatour.com/news/2016/05/31/strokes-gained-defined.html) which is explained in
+detail in [Mark Broadie's Book Every Shot Counts](https://www.amazon.com/-/es/Mark-Broadie/dp/1592407501).
 
-In addition this program also rates each shot using
-the [shots gained approach](https://www.pgatour.com/news/2016/05/31/strokes-gained-defined.html).
+## Prerequisites to run my "Combine Test" program
 
-All you need is QCQuad, GC3 or QC2 connected to FSX2020 and the "Combine Test" program installed on your computer (this
-software could be easily modified to support other launch monitors, it just needs some data like distance carry per
+All you need is QCQuad, GC3 or QC2 connected to FSX2020 and my 100% free and open source "Combine Test" program
+installed on your computer (
+this software could be easily modified to support other launch monitors, it just needs some data like distance carry per
 shot).
 
 In FSX2020 you have to start the Practice Range and enable "Write Shots CSV" in the Settings:
@@ -26,7 +32,7 @@ If you have a 2 or more monitor setup (beamer + monitor or beamer + laptop displ
 see the range and the ball flights and run the QCQuadCombineTest on the other monitor to see the ball/club data, shots
 gained and Trackman score.
 
-### Install
+## Install
 
 Create from source (see below) or just download and install
 the [Latest Release](https://github.com/christianrehn/CombineTest/releases) named CombineTest-X.Y.Z.Setup.exe where
@@ -36,7 +42,7 @@ automatically downloaded and installed on the next start of the application.
 When you see the "Windows protected your PC" message click on "More info" and "Run anyway" because I did not pay
 Microsoft for a code validation certificate.
 
-### Usage
+## Usage
 
 Select one of the predefined drill configurations:
 ![Predefined drills](screenshots/220106_CombineTest_SelectDrill.png)
@@ -50,7 +56,11 @@ Execute the shots and see the dispersion and Shots Gained and Trackman Scores fo
 Or for all shots in current session (without dispersion):
 ![All shots](screenshots/220106_CombineTest_AllShots.png)
 
-### Inaccuracies
+## Maybe you also want to track your golf training data
+
+Check out my 100% free iOS App: [Golf Logbook](https://christianrehn.github.io/golf-logbook/)
+
+## Known inaccuracies
 
 * I do not have shots gained values for carry distances so the shots gained for total distances are used to compute
   shots gained for carry distances.
@@ -61,7 +71,7 @@ Or for all shots in current session (without dispersion):
   need to calculate shots gained rating and the Trackman score. But currently it is the best approximation I currently
   have.
 
-### Please support me
+## Please support me with your data
 
 Please support me by sharing your Trackman scores with me (if possible in Excel format). The more data I have the better
 my score calcualtion gets. To share it create a branch in this GitHub repo or mail it to golf.logbook@gmail.com.
@@ -71,11 +81,7 @@ connect my QCQuad/GC3/GC2 with this App. I have already analyzed the QCQuad netw
 provides. But values like carry/total distances or offline have to be calculated by a ball flight model (which is
 currently the task of the FSX2020 software).
 
-### Maybe you want to track your training data
-
-Check out my 100% free iOS App: [Golf Logbook](https://christianrehn.github.io/golf-logbook/)
-
-### Ideas for the next versions:
+## Ideas for the next versions
 
 * Show version number in app.
 * Show additional club/ball data so you do not have to switch to FSX2020 to see them.
@@ -103,8 +109,8 @@ After cloning the repo you can:
 * build a new executable version using maker-squirrel on a MS Windows system:
     * update version number in package.json
     * yarn clean && yarn ci && yarn make
-    * in order to yarn electron-forge publish to the github repo the environment variable GITHUB_TOKEN has to be set because
-      it is used in forge.config.js
+    * in order to yarn electron-forge publish to the github repo the environment variable GITHUB_TOKEN has to be set
+      because it is used in forge.config.js
 * check for outdated packages: yarn outdated
 * upgrade packages: yarn upgrade
 * to see console logs of main in production add --enable-logging command line option
