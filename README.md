@@ -1,8 +1,13 @@
 ![One shot](screenshots/220106_CombineTest_OneShot.png)
 
-## Combine Test
+The idea comes from
+the [Trackman Combine test](https://www.dennissalesgolf.com/golf-drills-and-practice-blogs/2016/3/6/trackman-combine-test-benchmark-your-game)
+. The quality of each of your shots is rated with a score between 0 and
 
-The idea comes from the Trackman Combine test. The quality of your shots is rated using the shots gained approach.
+100.
+
+In addition this program also rates each shot using
+the [shots gained approach](https://www.pgatour.com/news/2016/05/31/strokes-gained-defined.html).
 
 All you need is QCQuad, GC3 or QC2 connected to FSX2020 and the "Combine Test" program installed on your computer (this
 software could be easily modified to support other launch monitors, it just needs some data like distance carry per
