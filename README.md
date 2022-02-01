@@ -18,8 +18,8 @@ detail in [Mark Broadie's Book Every Shot Counts](https://www.amazon.com/-/es/Ma
 
 All you need is QCQuad, GC3 or QC2 connected to FSX2020 and my 100% free and open source "Combine Test" program
 installed on your computer (my software could be easily modified to support other launch monitors, it just needs some
-ball and club data like carry distance per shot in a CSV file or I could also provide an additional technical interface)
-.
+ball and club data like carry distance or offline per shot in a CSV file or I could also provide an additional technical
+interface).
 
 In FSX2020 you have to start the Practice Range and enable "Write Shots CSV" in the Settings:
 [FSX2020 User Manual - General Settings](https://www.foresightsports.com/fsx-2020-user-manual#:~:text=Write%20Shots%20CSV%3A%20When%20enabled,game%20to%20assist%20with%20aim)
