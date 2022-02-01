@@ -4,9 +4,11 @@
 
 The idea comes from
 the [Trackman Combine test](https://www.dennissalesgolf.com/golf-drills-and-practice-blogs/2016/3/6/trackman-combine-test-benchmark-your-game)
-. The quality of each of your shots is rated with a score between 0 and 100. Because I do not own a Trackman bit a
+. The quality of each of your shots is rated with a score between 0 and 100. Because I do not own a Trackman but a
 GCQuad I decided to implement my own "Combine Test" program that delivers (nearly)
-the same score numbers as the original Trackman Combine.
+the same score numbers as the original Trackman Combine. As the algorithms to calculate combine scores are not public I
+collected as much Trackman data as I could find and analysed the combine score calculation with Excel. The results of
+this analysis are the parameters for the linear functions of the score calculation in my program that.
 
 In addition my "Combine Test" program also rates each shot using
 the [shots gained approach](https://www.pgatour.com/news/2016/05/31/strokes-gained-defined.html) which is explained in
