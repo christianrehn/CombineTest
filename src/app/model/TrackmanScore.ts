@@ -21,17 +21,17 @@ distanceToSlopeYInterceptMap.set(43, {m: 0.118524395188642, t: 0.606739334726558
 distanceToSlopeYInterceptMap.set(48, {m: 0.117781043350478, t: 0.685892725936812});
 distanceToSlopeYInterceptMap.set(50, {m: 0.124439577428498, t: 0.642746714764235});
 distanceToSlopeYInterceptMap.set(52, {m: 0.125615444923559, t: 0.697279498235985});
-distanceToSlopeYInterceptMap.set(55, {m: 0.132136678200692, t: 0.672822952710497});
+distanceToSlopeYInterceptMap.set(55, {m: 0.131769420047162, t: 0.669503434605789});
 distanceToSlopeYInterceptMap.set(58, {m: 0.138921258177733, t: 0.711125805691636});
-distanceToSlopeYInterceptMap.set(65, {m: 0.155092517508293, t: 0.784546111315886});
+distanceToSlopeYInterceptMap.set(65, {m: 0.155716022045074, t: 0.773187383131583});
 distanceToSlopeYInterceptMap.set(68, {m: 0.16422708618331, t: 0.850683994528045});
-distanceToSlopeYInterceptMap.set(75, {m: 0.181360424028269, t: 0.852473498233215});
-distanceToSlopeYInterceptMap.set(85, {m: 0.204903758020165, t: 0.98198900091659});
-distanceToSlopeYInterceptMap.set(95, {m: 0.235931174089069, t: 0.982388663967611});
-distanceToSlopeYInterceptMap.set(105, {m: 0.25752808988764, t: 1.22681647940075});
-distanceToSlopeYInterceptMap.set(125, {m: 0.297707006369427, t: 1.52789808917198});
-distanceToSlopeYInterceptMap.set(145, {m: 0.344881889763779, t: 1.76188976377953});
-distanceToSlopeYInterceptMap.set(165, {m: 0.39717791411043, t: 1.95429447852761});
+distanceToSlopeYInterceptMap.set(75, {m: 0.177998586128348, t: 0.895522739769068});
+distanceToSlopeYInterceptMap.set(85, {m: 0.205057208237986, t: 0.998443935926772});
+distanceToSlopeYInterceptMap.set(95, {m: 0.230882352941177, t: 1.08676470588235});
+distanceToSlopeYInterceptMap.set(105, {m: 0.256567685589519, t: 1.23177292576419});
+distanceToSlopeYInterceptMap.set(125, {m: 0.296081680654301, t: 1.57135296947667});
+distanceToSlopeYInterceptMap.set(145, {m: 0.345151665837892, t: 1.75997016409746});
+distanceToSlopeYInterceptMap.set(165, {m: 0.394541543425652, t: 1.96611992471094});
 
 const distanceToSlopeYInterceptAscMap: Map<number, SlopeYInterceptType> =
     new Map([...distanceToSlopeYInterceptMap.entries()]
