@@ -21,7 +21,8 @@ detail in [Mark Broadie's Book Every Shot Counts](https://www.amazon.com/-/es/Ma
 All you need is [QCQuad](https://www.foresightsports.com/gcquad-quadrascopic-launch-monitor)
 , [GC3](https://www.foresightsports.com/gc3),
 [QC2](https://shop.foresightsports.com/collections/certified-pre-owned-gc-launch-monitors/products/cpo-gc2)
-or [GCHawk](https://www.foresightsports.com/gchawk) connected to FSX2020 and my 100% free and open source "Combine Test"
+or [GCHawk](https://www.foresightsports.com/gchawk) connected to [FSX2020](https://www.foresightsports.com/fsx2020) and
+my 100% free and open source "Combine Test"
 program installed on your computer (my software could be easily modified to support other launch monitors, it just needs
 some ball and club data like carry distance or offline per shot in a CSV file or I could also provide an additional
 technical interface).
@@ -30,8 +31,8 @@ In [FSX2020](https://www.foresightsports.com/fsx2020) you have to start the Prac
 in the
 Settings: [FSX2020 User Manual - General Settings](https://www.foresightsports.com/fsx-2020-user-manual#:~:text=Write%20Shots%20CSV%3A%20When%20enabled,game%20to%20assist%20with%20aim)
 
-Every last shot data is now automatically exported to folder C:/Program Files (x86)/Foresight Sports
-Experience/System/LastShot.CSV
+Every last shot data is now automatically exported to folder
+"C:/Program Files (x86)/Foresight Sports Experience/System/LastShot.CSV"
 
 The "Combine Test" program reads this file and displays some shot data together with the points you get from the shots
 gained rating and the Trackman score.
