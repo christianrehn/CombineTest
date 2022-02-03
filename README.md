@@ -5,7 +5,8 @@
 The idea comes from
 the [Trackman Combine test](https://www.dennissalesgolf.com/golf-drills-and-practice-blogs/2016/3/6/trackman-combine-test-benchmark-your-game)
 . The quality of each of your shots is rated with a score between 0 and 100. Because I do not own a Trackman but a
-GCQuad I decided to implement my own "Combine Test" program that delivers (nearly)
+[GCQuad](https://www.foresightsports.com/gcquad-quadrascopic-launch-monitor) from Foresight Sports I decided to
+implement my own "Combine Test" program that delivers (nearly)
 the same score numbers as the original Trackman Combine. As the algorithms to calculate combine scores are not public I
 collected as much Trackman data as I could find and analysed the combine score calculation with Excel. The results of
 this analysis are the parameters for the linear functions of the score calculation in my program that.
@@ -16,13 +17,17 @@ detail in [Mark Broadie's Book Every Shot Counts](https://www.amazon.com/-/es/Ma
 
 ## Prerequisites to run my "Combine Test"
 
-All you need is QCQuad, GC3 or QC2 connected to FSX2020 and my 100% free and open source "Combine Test" program
-installed on your computer (my software could be easily modified to support other launch monitors, it just needs some
-ball and club data like carry distance or offline per shot in a CSV file or I could also provide an additional technical
-interface).
+All you need is [QCQuad](https://www.foresightsports.com/gcquad-quadrascopic-launch-monitor)
+, [GC3](https://www.foresightsports.com/gc3),
+QC2(https://shop.foresightsports.com/collections/certified-pre-owned-gc-launch-monitors/products/cpo-gc2)
+or [GCHawk](https://www.foresightsports.com/gchawk) connected to FSX2020 and my 100% free and open source "Combine Test"
+program installed on your computer (my software could be easily modified to support other launch monitors, it just needs
+some ball and club data like carry distance or offline per shot in a CSV file or I could also provide an additional
+technical interface).
 
-In FSX2020 you have to start the Practice Range and enable "Write Shots CSV" in the Settings:
-[FSX2020 User Manual - General Settings](https://www.foresightsports.com/fsx-2020-user-manual#:~:text=Write%20Shots%20CSV%3A%20When%20enabled,game%20to%20assist%20with%20aim)
+In [FSX2020](https://www.foresightsports.com/fsx2020) you have to start the Practice Range and enable "Write Shots CSV"
+in the
+Settings: [FSX2020 User Manual - General Settings](https://www.foresightsports.com/fsx-2020-user-manual#:~:text=Write%20Shots%20CSV%3A%20When%20enabled,game%20to%20assist%20with%20aim)
 
 Every last shot data is now automatically exported to folder C:/Program Files (x86)/Foresight Sports
 Experience/System/LastShot.CSV
