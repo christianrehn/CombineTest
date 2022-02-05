@@ -23,6 +23,11 @@ const shotDataTable = (props: IAllShotsTableProps): JSX.Element => {
     const empty: JSX.Element = <span>&nbsp;</span>;
     let strokesGainedValues: number[] = [];
     let trackmanScoreValues: number[] = [];
+    let targetDistanceValues: number[] = [];
+    let carryValues: number[] = [];
+    let totalDistanceValues: number[] = [];
+    let offlineValues: number[] = [];
+    let absoluteDeviationValues: number[] = [];
     let relativeDeviationValues: number[] = [];
     return (
         <table className="table-with-shots">
@@ -54,21 +59,40 @@ const shotDataTable = (props: IAllShotsTableProps): JSX.Element => {
                     const averageStrokesFromStartDistance: number = props.selectedDrillConfiguration.computeAverageStrokesFromStartDistance(shotData.targetDistance);
                     const absoluteDeviation: Unit = computeAbsoluteDeviation(shotData);
                     const averageStrokesFromEndDistance: number = props.selectedDrillConfiguration.computeAverageStrokesFromEndDistance(absoluteDeviation);
+
                     const strokesGained: number = computeStrokesGained(averageStrokesFromStartDistance, averageStrokesFromEndDistance);
                     strokesGainedValues.push(strokesGained);
+
                     const trackmanScore: number = computeTrackmanScore(shotData.targetDistance, absoluteDeviation);
                     trackmanScoreValues.push(trackmanScore);
+
+                    const targetDistance: number = shotData.targetDistance.toNumber(props.selectedDrillConfiguration.getUnit());
+                    targetDistanceValues.push(targetDistance);
+
+                    const carry: number = shotData.carry.toNumber(props.selectedDrillConfiguration.getUnit());
+                    carryValues.push(carry);
+
+                    const totalDistance: number = shotData.totalDistance.toNumber(props.selectedDrillConfiguration.getUnit());
+                    totalDistanceValues.push(totalDistance);
+
+                    const offline: number = shotData.offline.toNumber(props.selectedDrillConfiguration.getUnit());
+                    offlineValues.push(offline);
+
+                    const absoluteDeviationAsNumber: number = computeAbsoluteDeviation(shotData).toNumber(props.selectedDrillConfiguration.getUnit());
+                    absoluteDeviationValues.push(absoluteDeviationAsNumber);
+
                     const relativeDeviation: number = (computeRelativeDeviation(shotData) * 100);
                     relativeDeviationValues.push(relativeDeviation);
+
                     return <tr className="row-with-shot-details">
                         <td>{(index + 1).toString(10)}</td>
                         <td>{strokesGained.toFixed(3)}</td>
                         <td>{trackmanScore.toFixed(1)}</td>
-                        <td>{shotData.targetDistance.toNumber(props.selectedDrillConfiguration.getUnit()).toFixed(2)}</td>
-                        <td>{shotData.carry.toNumber(props.selectedDrillConfiguration.getUnit()).toFixed(2)}</td>
-                        <td>{shotData.totalDistance.toNumber(props.selectedDrillConfiguration.getUnit()).toFixed(2)}</td>
-                        <td>{shotData.offline.toNumber(props.selectedDrillConfiguration.getUnit()).toFixed(2)}</td>
-                        <td>{computeAbsoluteDeviation(shotData).toNumber(props.selectedDrillConfiguration.getUnit()).toFixed(2)}</td>
+                        <td>{targetDistance.toFixed(2)}</td>
+                        <td>{carry.toFixed(2)}</td>
+                        <td>{totalDistance.toFixed(2)}</td>
+                        <td>{offline.toFixed(2)}</td>
+                        <td>{absoluteDeviationAsNumber.toFixed(2)}</td>
                         <td>{relativeDeviation.toFixed(1)}</td>
                     </tr>;
                 })
@@ -77,23 +101,22 @@ const shotDataTable = (props: IAllShotsTableProps): JSX.Element => {
                 <td>Average</td>
                 <td>{props.shotDatas.length > 0 ? computeAverage(strokesGainedValues).toFixed(3) : ""}</td>
                 <td>{props.shotDatas.length > 0 ? computeAverage(trackmanScoreValues).toFixed(1) : ""}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{props.shotDatas.length > 0 ? computeAverage(targetDistanceValues).toFixed(2) : ""}</td>
+                <td>{props.shotDatas.length > 0 ? computeAverage(carryValues).toFixed(2) : ""}</td>
+                <td>{props.shotDatas.length > 0 ? computeAverage(totalDistanceValues).toFixed(2) : ""}</td>
+                <td>{props.shotDatas.length > 0 ? computeAverage(offlineValues).toFixed(2) : ""}</td>
+                <td>{props.shotDatas.length > 0 ? computeAverage(absoluteDeviationValues).toFixed(2) : ""}</td>
                 <td>{props.shotDatas.length > 0 ? computeAverage(relativeDeviationValues).toFixed(1) : ""}</td>
             </tr>
             <tr className="consistency-values-row bottom-values-row">
                 <td>Consistency</td>
-                <td>{props.shotDatas.length > 0 ? computeStandardDeviationEntirePopulation(strokesGainedValues).toFixed(3) : ""
-                }</td>
+                <td>{props.shotDatas.length > 0 ? computeStandardDeviationEntirePopulation(strokesGainedValues).toFixed(3) : ""}</td>
                 <td>{props.shotDatas.length > 0 ? computeStandardDeviationEntirePopulation(trackmanScoreValues).toFixed(1) : ""}</td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{props.shotDatas.length > 0 ? computeStandardDeviationEntirePopulation(carryValues).toFixed(2) : ""}</td>
+                <td>{props.shotDatas.length > 0 ? computeStandardDeviationEntirePopulation(totalDistanceValues).toFixed(2) : ""}</td>
+                <td>{props.shotDatas.length > 0 ? computeStandardDeviationEntirePopulation(offlineValues).toFixed(2) : ""}</td>
+                <td>{props.shotDatas.length > 0 ? computeStandardDeviationEntirePopulation(absoluteDeviationValues).toFixed(2) : ""}</td>
                 <td>{props.shotDatas.length > 0 ? computeStandardDeviationEntirePopulation(relativeDeviationValues).toFixed(1) : ""}</td>
             </tr>
         </table>
