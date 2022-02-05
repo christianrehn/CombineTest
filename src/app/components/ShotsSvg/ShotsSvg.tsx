@@ -1,9 +1,10 @@
 import React from "react";
 import {assert} from "chai";
-import {computeAbsoluteDeviation, IShotData} from "../../model/ShotData";
+import {IShotData} from "../../model/ShotData";
 import './ShotsSvg.scss';
 import {Unit} from "mathjs";
 import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
+import {computeAbsoluteDeviation} from "../../util/MathUtil";
 
 export interface IShotsSvg {
     svgNumberOfCircles: number,

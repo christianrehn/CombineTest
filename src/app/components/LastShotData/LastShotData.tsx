@@ -1,4 +1,4 @@
-import {computeAbsoluteDeviation, computeRelativeDeviation, IShotData} from "../../model/ShotData";
+import {IShotData} from "../../model/ShotData";
 import React from "react";
 import './LastShotData.scss';
 import * as math from "mathjs";
@@ -7,6 +7,13 @@ import {assert} from "chai";
 import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
 import {computeTrackmanScore} from "../../model/TrackmanScore";
 import {computeStrokesGained} from "../../model/StrokesGained";
+import {
+    computeAbsoluteDeviation,
+    computeAverage,
+    computeRelativeDeviation,
+    computeStandardDeviationEntirePopulation,
+    computeSum
+} from "../../util/MathUtil";
 
 const SHOW_ADDITIONAL_DATA_FOR_ALL_SHOTS: boolean = false;
 
@@ -72,14 +79,12 @@ const shotsGainedData = (props: ILastShotDataProps, targetDistance: string): JSX
     const averageStrokesFromEndDistance: number | undefined = props.selectedDrillConfiguration.computeAverageStrokesFromEndDistance(absoluteDeviation);
     const strokesGained: number = computeStrokesGained(averageStrokesFromStartDistance, averageStrokesFromEndDistance);
 
-    const strokesGainedSum: number = props.shotDatas
-        .map((shotData: IShotData) => {
-            const averageStrokesFromStartDistance: number = props.selectedDrillConfiguration.computeAverageStrokesFromStartDistance(shotData.targetDistance);
-            const absoluteDeviation: Unit = computeAbsoluteDeviation(shotData);
-            const averageStrokesFromEndDistance: number = props.selectedDrillConfiguration.computeAverageStrokesFromEndDistance(absoluteDeviation);
-            return computeStrokesGained(averageStrokesFromStartDistance, averageStrokesFromEndDistance);
-        })
-        .reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0);
+    const strokesGainedValues: number[] = props.shotDatas.map((shotData: IShotData) => {
+        const averageStrokesFromStartDistance: number = props.selectedDrillConfiguration.computeAverageStrokesFromStartDistance(shotData.targetDistance);
+        const absoluteDeviation: Unit = computeAbsoluteDeviation(shotData);
+        const averageStrokesFromEndDistance: number = props.selectedDrillConfiguration.computeAverageStrokesFromEndDistance(absoluteDeviation);
+        return computeStrokesGained(averageStrokesFromStartDistance, averageStrokesFromEndDistance);
+    });
 
     const absoluteDeviationString: string = !!absoluteDeviation ? absoluteDeviation.toNumber(props.selectedDrillConfiguration.getUnit()).toFixed(2) : "";
     const distanceUnit: string = !!props.lastShot ? props.selectedDrillConfiguration.getUnit() : "";
@@ -117,15 +122,31 @@ const shotsGainedData = (props: ILastShotDataProps, targetDistance: string): JSX
             </div>
         </div>,
         <div
-            key="strokesGainedSum"
+            key="sumStrokesGained"
             className="last-shot__row last-shot__gained-row last-shot__sum-gained-row">
             <div className="last-shot-item__label">Sum Gained</div>
             <div className="last-shot-item__data"> {
-                !!props.lastShot ? strokesGainedSum.toFixed(3) : ""
+                !!props.lastShot ? computeSum(strokesGainedValues).toFixed(3) : ""
             } </div>
             <div
                 className="last-shot-item__unit"> Strokes
             </div>
+        </div>,
+        <div
+            key="averageStrokesGained"
+            className="last-shot__row last-shot__gained-row last-shot__avg-gained-row">
+            <div className="last-shot-item__label">Average Gained</div>
+            <div className="last-shot-item__data"> {
+                !!props.lastShot ? computeAverage(strokesGainedValues).toFixed(3) : ""
+            } </div>
+        </div>,
+        <div
+            key="consistencyStrokesGained"
+            className="last-shot__row last-shot__gained-row last-shot__consistency-gained-row">
+            <div className="last-shot-item__label">Consistency Gained</div>
+            <div className="last-shot-item__data"> {
+                !!props.lastShot ? computeStandardDeviationEntirePopulation(strokesGainedValues).toFixed(3) : ""
+            } </div>
         </div>
     ];
 }
@@ -138,12 +159,7 @@ const trackmanScoreData = (props: ILastShotDataProps): JSX.Element[] => {
     const absoluteDeviation: Unit = computeAbsoluteDeviation(props.lastShot);
     const trackmanScore: number = computeTrackmanScore(props.lastShot.targetDistance, absoluteDeviation);
 
-    const trackmanScoreSum: number = props.shotDatas
-        .map((shotData: IShotData) => {
-            const absoluteDeviation: Unit = computeAbsoluteDeviation(shotData);
-            return computeTrackmanScore(shotData.targetDistance, absoluteDeviation);
-        })
-        .reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0);
+    const trackmanScoreValues: number[] = props.shotDatas.map((shotData: IShotData) => computeTrackmanScore(shotData.targetDistance, computeAbsoluteDeviation(shotData)));
 
     return [
         <div
@@ -155,19 +171,19 @@ const trackmanScoreData = (props: ILastShotDataProps): JSX.Element[] => {
             } </div>
         </div>,
         <div
-            key="trackmanScoreAverage"
+            key="averageTrackmanScore"
             className="last-shot__row last-shot__trackmanscore-row last-shot__avg-trackmanscore-row">
-            <div className="last-shot-item__label">Score Average</div>
+            <div className="last-shot-item__label">Average Score</div>
             <div className="last-shot-item__data"> {
-                !!props.lastShot ? (trackmanScoreSum / props.shotDatas.length).toFixed(1) : ""
+                !!props.lastShot ? computeAverage(trackmanScoreValues).toFixed(1) : ""
             } </div>
         </div>,
         <div
-            key="trackmanConsistency"
-            className="last-shot__row last-shot__trackmanscore-row last-shot__trackmanconsistency-row">
-            <div className="last-shot-item__label">Consistency</div>
+            key="consistencyTrackmanScore"
+            className="last-shot__row last-shot__trackmanscore-row last-shot__consistency-trackmanscore-row">
+            <div className="last-shot-item__label">Consistency Score</div>
             <div className="last-shot-item__data"> {
-                !!props.lastShot ? "" : "" // CRTODO: compute consistency
+                !!props.lastShot ? computeStandardDeviationEntirePopulation(trackmanScoreValues).toFixed(1) : ""
             } </div>
         </div>
     ];
