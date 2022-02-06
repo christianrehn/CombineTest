@@ -62,9 +62,7 @@ export const computeTrackmanScore = (targetDistance: Unit, fromPin: Unit): numbe
 
     // convert all input values to meters because the interpolation of trackman scores is in meters
     const targetDistanceMeter = targetDistance.toNumber(meter);
-    console.log("computeTrackmanScore - targetDistanceMeter=", targetDistanceMeter);
     const fromPinMeter = fromPin.toNumber(meter);
-    console.log("computeTrackmanScore - fromPinMeter=", fromPinMeter);
 
     // get best matching values for m and t from map
     let nextSmallerDistance: number = Number.MAX_VALUE;
@@ -117,10 +115,8 @@ export const computeTrackmanScore = (targetDistance: Unit, fromPin: Unit): numbe
         nextLargerDistance = nextSmallerDistance;
         nextSmallerDistance = distanceToSlopeYInterceptAscArray[distanceToSlopeYInterceptAscArray.length - 2][0];
     }
-    console.log("computeTrackmanScore - nextSmallerDistance=", nextSmallerDistance);
-    console.log(`score for slopeYInterceptNextSmallerDistance (${nextSmallerDistance}): `, computeTrackmanScoreUsingYFromPinAndSlopeYIntercept(fromPinMeter, slopeYInterceptNextSmallerDistance));
-    console.log("computeTrackmanScore - nextLargerDistance=", nextLargerDistance);
-    console.log(`score for slopeYInterceptNextLargerDistance: (${nextLargerDistance})`, computeTrackmanScoreUsingYFromPinAndSlopeYIntercept(fromPinMeter, slopeYInterceptNextLargerDistance));
+    console.log(`computeTrackmanScore - score for slopeYInterceptNextSmallerDistance (${nextSmallerDistance}): `, computeTrackmanScoreUsingYFromPinAndSlopeYIntercept(fromPinMeter, slopeYInterceptNextSmallerDistance));
+    console.log(`computeTrackmanScore - score for slopeYInterceptNextLargerDistance: (${nextLargerDistance})`, computeTrackmanScoreUsingYFromPinAndSlopeYIntercept(fromPinMeter, slopeYInterceptNextLargerDistance));
 
     // do inter-/ertrapolation for m and t
     const m: number = interAndExtraPolation(nextSmallerDistance, slopeYInterceptNextSmallerDistance.m, nextLargerDistance, slopeYInterceptNextLargerDistance.m, targetDistanceMeter)

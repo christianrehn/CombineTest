@@ -17,12 +17,16 @@ import averageShotsFromRoughCsvPath from "../data/rough.csv";
 import averageShotsFromGreenCsvPath from "../data/green.csv";
 import {AverageStrokesData, IAverageStrokesData} from "./model/AverageStrokesData/AverageStrokesData";
 import {SelectDrillPage, SelectDrillPageName} from "./views/SelectDrillPage/SelectDrillPage";
-import {
-    drillConfigurationsFromJson,
-    drillConfigurationsToString
-} from "./model/DrillConfiguration/DrillConfigurationConverter";
+import {drillConfigurationsFromJson} from "./model/DrillConfiguration/DrillConfigurationConverter";
 import {assert} from "chai";
 import {Fairway, Green, Rough, Tee} from "./model/AverageStrokesData/GroundType";
+import {
+    loadUserDrillConfigurationsAsJson,
+    saveUserDrillConfigurations
+} from "./model/DrillConfiguration/DrillConfigurationsFilesystemHandler";
+import {loadSessionsAsJson, saveSessions} from "./model/Session/SessionsFilesystemHandler";
+import {ISession} from "./model/Session/Session";
+import {sessionsFromJson} from "./model/Session/SessionConverter";
 
 const App: React.FC<{}> = (): JSX.Element => {
     // page that is currently visible
@@ -34,6 +38,9 @@ const App: React.FC<{}> = (): JSX.Element => {
 
     const [drillConfigurations, setDrillConfigurations] = React.useState<IDrillConfiguration[]>([]);
     const [selectedDrillConfiguration, setSelectedDrillConfiguration] = React.useState<IDrillConfiguration>();
+
+    const [sessions, setSessions] = React.useState<ISession[]>([]);
+    const [lastSession, setLastSession] = React.useState<ISession>(undefined);
 
     const [averageStrokesDataMap, setAverageStrokesDataMap] =
         React.useState<Map<string, IAverageStrokesData>>(new Map<string, IAverageStrokesData>());
@@ -72,15 +79,6 @@ const App: React.FC<{}> = (): JSX.Element => {
             : setSelectedDrillConfiguration(new EmptyDrillConfiguration(averageStrokesDataMap));
     }
 
-    const loadUserDrillConfigurationsAsJson = (): any[] => {
-        const userDrillConfigurationsAsString: string = ipcRenderer.sendSync('loadUserDrillConfigurationsAsString', undefined);
-        if (!userDrillConfigurationsAsString) {
-            console.log("loadUserDrillConfigurationsAsJson - no user configuration file found");
-            return [];
-        }
-        return JSON.parse(userDrillConfigurationsAsString);
-    }
-
     const handleSaveUserDrillConfigurations = (changedDrillConfiguration: IDrillConfiguration): void => {
         const drillConfigurationsClone: IDrillConfiguration[] = [...drillConfigurations];
         const drillConfigurationUuids: string[] = drillConfigurationsClone.map((drillConfiguration: IDrillConfiguration) => drillConfiguration.getUuid());
@@ -107,11 +105,28 @@ const App: React.FC<{}> = (): JSX.Element => {
         }
 
         setDrillConfigurations(drillConfigurationsClone);
-        console.log("handleSaveUserDrillConfigurations - drillConfigurationsClone=", drillConfigurationsClone);
-        const drillConfigurationsAsString: string = drillConfigurationsToString(drillConfigurationsClone);
-        const success = ipcRenderer.sendSync('saveUserDrillConfigurations', drillConfigurationsAsString);
-        console.log("handleSaveUserDrillConfigurations - success=", success)
+        saveUserDrillConfigurations(drillConfigurationsClone);
     }
+
+    React.useEffect((): void => {
+        const sessionsAsJson: any[] = loadSessionsAsJson();
+        const sessions: ISession[] = sessionsFromJson(sessionsAsJson || []);
+        setSessions(sessions);
+    }, []);
+
+    const handleSaveSessions = (session: ISession): void => {
+        assert(!!session, "!session");
+
+        console.log("handleSaveSessions - session=", session);
+        setLastSession(session);
+
+        const sessionsClone: ISession[] = [...sessions];
+        sessionsClone.push(session);
+        setSessions(sessionsClone);
+
+        saveSessions(sessionsClone);
+    }
+
 
     return (
         <div className="app">
@@ -135,6 +150,7 @@ const App: React.FC<{}> = (): JSX.Element => {
                             lastShotCsvPath={lastShotCsvPath}
                             selectedDrillConfiguration={selectedDrillConfiguration}
                             handleSelectPageClicked={setSelectedPage}
+                            handleSaveSessions={handleSaveSessions}
                         />
                         : null
             }

@@ -33,7 +33,6 @@ export const computeAbsoluteDeviation = (shotData: IShotData): Unit => {
 
 export const computeRelativeDeviation = (shotData: IShotData): number => {
     assert(!!shotData, "!shotData");
-    console.log("shotData.targetDistance.formatUnits()", shotData.targetDistance.formatUnits());
 
     const absoluteDeviationAsNumber: number = computeAbsoluteDeviation(shotData).toNumber(shotData.targetDistance.formatUnits());
     const targetDistanceAsNumber: number = shotData.targetDistance.toNumber(shotData.targetDistance.formatUnits());

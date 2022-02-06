@@ -14,6 +14,7 @@ import * as math from 'mathjs'
 import {Unit} from 'mathjs'
 import {SelectDrillPageName} from "../SelectDrillPage/SelectDrillPage";
 import {AllShotsTable} from "../../components/AllShotsTable/AllShotsTable";
+import {ISession} from "../../model/Session/Session";
 
 export const DrillPageName: string = "DrillPage";
 
@@ -21,6 +22,7 @@ interface IDrillPageProps {
     lastShotCsvPath: string;
     selectedDrillConfiguration: IDrillConfiguration;
     handleSelectPageClicked: (page: string) => void;
+    handleSaveSessions: (session: ISession) => void;
 }
 
 export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JSX.Element => {
@@ -42,8 +44,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
         const lastShotData: any = await parseCsvToFirstRowAsObject(props.lastShotCsvPath);
         const shotIdFromLastShotFile: number = lastShotData["shot_id"];
         if (!!shotIdFromLastShotFile) {
-            console.log(`shot id=${shotIdFromLastShotFile} has been executed`);
-            console.log(`shot lastShotData`, lastShotData);
+            console.log(`shot id=${shotIdFromLastShotFile} has been executed, lastShotData: ${JSON.stringify(lastShotData)}`);
             setShotData({
                 id: shotIdFromLastShotFile,
                 club: lastShotData["club"],
@@ -113,8 +114,13 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                 if (shotDatasClone.length < props.selectedDrillConfiguration.getNumberOfShots()) {
                     nextDistanceRef.current = props.selectedDrillConfiguration.getNextDistance(shotDatasClone.length);
                 } else {
-                    console.log("all shots executed");
+                    // all shots finished -> set nextDistanceRef to undefined
+                    console.log("all shots executed -> save session");
                     nextDistanceRef.current = undefined;
+                    props.handleSaveSessions({
+                        drillConfiguration: props.selectedDrillConfiguration,
+                        shotDatas
+                    });
                 }
                 setNextDistance(nextDistanceRef.current);
             }
