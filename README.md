@@ -98,14 +98,12 @@ currently the task of the FSX2020 software).
 
 * Show version number in app.
 * Show additional club/ball data so you do not have to switch to FSX2020 to see them.
-* Calculate consistency for different values like score, dynamic loft, ... (Gaussian standard deviation).
-* Save shot history.
-* Add rating that is similar to Trackman Combine Test for Drives.
 * Show overview/report like Trackman "Test Center or Combine report". Create links to share reports.
-* Improve splash screen.
-
-* Installer looks ugly -> change
+* Add rating that is similar to Trackman Combine Test for Drives.
 * Shots gained rating for tee shots with the driver
+
+* Improve splash screen.
+* Installer looks ugly -> change
 * Select between Total and Carry (currently only carry is used)
 * Enter directory to watch for LastShot.CSV
 
