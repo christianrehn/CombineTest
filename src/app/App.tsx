@@ -27,6 +27,7 @@ import {
 import {loadSessionsAsJson, saveSessions} from "./model/Session/SessionsFilesystemHandler";
 import {ISession} from "./model/Session/Session";
 import {sessionsFromJson} from "./model/Session/SessionConverter";
+import {ReportsPage, ReportsPageName} from "./views/ReportsPage/ReportsPage";
 
 const App: React.FC<{}> = (): JSX.Element => {
     // page that is currently visible
@@ -127,7 +128,6 @@ const App: React.FC<{}> = (): JSX.Element => {
         saveSessions(sessionsClone);
     }
 
-
     return (
         <div className="app">
             {selectedPage === SelectDrillPageName
@@ -152,7 +152,11 @@ const App: React.FC<{}> = (): JSX.Element => {
                             handleSelectPageClicked={setSelectedPage}
                             handleSaveSessions={handleSaveSessions}
                         />
-                        : null
+                        : selectedPage === ReportsPageName
+                            ? <ReportsPage
+                                handleBackClicked={() => setSelectedPage(SelectDrillPageName)}
+                            />
+                            : null
             }
         </div>
     );

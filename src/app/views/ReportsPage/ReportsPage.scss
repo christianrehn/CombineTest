@@ -1,0 +1,24 @@
+.reports-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.reports-page .reports-top {
+    display: flex;
+    flex-direction: row;
+}
+
+.reports-page .reports-input {
+    padding-left: var(--page-margin-horizontal);
+    padding-right: var(--page-margin-horizontal);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    height: 100%;
+}
+
+.reports-page .reports-flex-item {
+    flex: 1;
+}

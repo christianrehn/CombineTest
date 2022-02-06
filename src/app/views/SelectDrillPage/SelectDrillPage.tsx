@@ -1,6 +1,7 @@
 import React from 'react';
 import './SelectDrillPage.scss';
 import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
+import reportsIcon from '../../../assets/reports.png';
 import editIcon from '../../../assets/edit.png';
 import glassesIcon from "../../../assets/glasses.png";
 import exitIcon from '../../../assets/exit.png';
@@ -8,6 +9,7 @@ import {DrillPageName} from "../DrillPage/DrillPage";
 import {DrillTile} from "../../components/DrillTile/DrillTile";
 import {ipcRenderer} from "electron";
 import {EditDrillConfigurationPageName} from "../EditDrillConfigurationPage/EditDrillConfigurationPage";
+import {ReportsPageName} from "../ReportsPage/ReportsPage";
 
 export const SelectDrillPageName: string = "SelectDrillPage";
 
@@ -32,6 +34,21 @@ export const SelectDrillPage: React.FC<ISelectDrillPageProps> = (props: ISelectD
                 </div>
 
                 <div className="top-buttons-flex-item">
+                    <div className="reports-flex-item flex-item">
+                        <span className="reports-span"
+                              onClick={(): void => {
+                                  props.handleSelectPageClicked(ReportsPageName)
+                              }}
+                        >
+
+                            <div className="top-button-img-div">
+                                <img className="top-button-img"
+                                     src={reportsIcon}
+                                     alt={"Reports"}
+                                />
+                            </div>
+                        </span>
+                    </div>
                     <div className="edit-flex-item flex-item">
                         <span className="edit-span"
                               onClick={(): void => {
