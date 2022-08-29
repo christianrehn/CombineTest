@@ -14,7 +14,6 @@ import backIcon from '../../../assets/back.png';
 import {
     DrillConfigurationSelect
 } from "../../components/DrillConfiguration/DrillConfigurationSelect/DrillConfigurationSelect";
-import {lengthUnits} from "../../model/Unit/Unit";
 import {assert} from "chai";
 import {
     createNewDrillConfigurationWithDistanceGenerator,
@@ -27,6 +26,8 @@ import {IAverageStrokesData} from "../../model/AverageStrokesData/AverageStrokes
 import {NumberPlusMinusInput} from "../../components/DrillConfiguration/NumberPlusMinusInput/NumberPlusMinusInput";
 import {EndGroundConfigsTable} from "../../components/DrillConfiguration/EndGroundConfigsTable/EndGroundConfigsTable";
 import {startGroundTypes,} from "../../model/AverageStrokesData/GroundType";
+import {drillTypes, shotsGainedDrillType, spinDrillType} from "../../model/SelectValues/DrillType";
+import {lengthUnits} from "../../model/SelectValues/LengthUnit";
 
 export const EditDrillConfigurationPageName: string = "EditDrillConfigurationPage";
 
@@ -36,6 +37,11 @@ interface IEditDrillConfigurationPageProps {
     handleSaveDrillConfigurations: (changedDrillConfiguration: IDrillConfiguration) => void;
     averageStrokesDataMap: Map<string, IAverageStrokesData>
 }
+
+const DEFAULT_DRILL_TYPE: string = shotsGainedDrillType;
+
+const MIN_TARGET_RPM_PER_UNIT: number = 1;
+const DEFAULT_TARGET_RPM_PER_UNIT: number = 200;
 
 const MIN_NAME: number = 1;
 const MAX_NAME: number = 30;
@@ -55,7 +61,10 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     const [name, setName] = React.useState<string>(props.selectedDrillConfiguration.getName());
     const [nameError, setNameError] = React.useState<boolean>(true);
     const [description, setDescription] = React.useState<string>(props.selectedDrillConfiguration.getDescription());
+    const [drillType, setDrillType] = React.useState<string>(props.selectedDrillConfiguration.getDrillType() || DEFAULT_DRILL_TYPE);
     const [unit, setUnit] = React.useState<string>(props.selectedDrillConfiguration.getUnit());
+    const [targetRpmPerUnit, setTargetRpmPerUnit] = React.useState<number>(props.selectedDrillConfiguration.getTargetRpmPerUnit() || DEFAULT_TARGET_RPM_PER_UNIT);
+    const [targetRpmPerUnitError, setTargetRpmPerUnitError] = React.useState<boolean>(true);
     const [startGroundType, setStartGroundType] = React.useState<string>(props.selectedDrillConfiguration.getStartGroundType());
     const [endGroundConfigs, setEndGroundConfigs] = React.useState<IEndGroundConfig[]>(props.selectedDrillConfiguration.getEndGroundConfigs());
     const [distanceGenerator, setDistanceGenerator] = React.useState<string>(props.selectedDrillConfiguration.getDistanceGenerator());
@@ -76,6 +85,11 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     }, [name])
 
     React.useEffect((): void => {
+        // validate targetRpmPerUnit
+        setTargetRpmPerUnitError(drillType === shotsGainedDrillType && targetRpmPerUnit < MIN_TARGET_RPM_PER_UNIT);
+    }, [targetRpmPerUnit])
+
+    React.useEffect((): void => {
         // validate distances
         setDistancesError(distances.length <= 0);
     }, [distances])
@@ -91,7 +105,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     }, [maxExcludedDistanceError])
 
     const error = (): boolean => {
-        return nameError || (distanceGenerator === RANDOM_DISTANCES_GENERATOR
+        return nameError || targetRpmPerUnitError || (distanceGenerator === RANDOM_DISTANCES_GENERATOR
             ? minIncludedDistanceError || maxExcludedDistanceError
             : [FIXED_DISTANCES_GENERATOR, RANDOM_FROM_FIXED_DISTANCES_GENERATOR].includes(distanceGenerator)
                 ? distancesError
@@ -135,7 +149,9 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                           props.selectedDrillConfiguration.getUuid(),
                                           name,
                                           description,
+                                          drillType,
                                           unit,
+                                          targetRpmPerUnit,
                                           distanceGenerator,
                                           startGroundType,
                                           endGroundConfigs,
@@ -189,6 +205,17 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         }}
                     />
                 </div>
+                <div className="drillType-select">
+                    <DrillConfigurationSelect
+                        label={"Drill Type"}
+                        index={drillTypes.indexOf(drillType)}
+                        stringValues={drillTypes}
+                        handleOnChange={(index: number): void => {
+                            assert(index >= 0, "index < 0");
+                            setDrillType(drillTypes[index]);
+                        }}
+                    />
+                </div>
                 <div className="unit-select">
                     <DrillConfigurationSelect
                         label={"Unit"}
@@ -197,6 +224,20 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         handleOnChange={(index: number): void => {
                             assert(index >= 0, "index < 0");
                             setUnit(lengthUnits[index]);
+                        }}
+                    />
+                </div>
+                <div className="target-rpm-per-meter-input">
+                    <DrillConfigurationTextInput
+                        label={"Target RPM per Unit"}
+                        visible={drillType === spinDrillType}
+                        error={targetRpmPerUnitError}
+                        type="number"
+                        value={targetRpmPerUnit}
+                        maxLength={4}
+                        min={MIN_TARGET_RPM_PER_UNIT}
+                        handleOnChange={(value: string): void => {
+                            setTargetRpmPerUnit(Number(value));
                         }}
                     />
                 </div>
