@@ -167,7 +167,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
     const allShotsTabName: string = "allShotsTab";
     const [activeTab, setActiveTab] = React.useState(oneShotTabName);
 
-    const oneShotTab = (): JSX.Element => {
+    const oneShotTab = (nextDistance: Unit): JSX.Element => {
         return (
             activeTab === oneShotTabName
                 ? <div className="one-shot-tab">
@@ -192,6 +192,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                                 svgNumberOfCircles={svgNumberOfCircles}
                                 shotDatas={shotDatas}
                                 selectedDrillConfiguration={props.selectedDrillConfiguration}
+                                nextDistance={nextDistance}
                             />
                         </div>
                     </div>
@@ -226,7 +227,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
         return (
             <div className="shot-tabs">
                 {/* Tab content */}
-                {oneShotTab()}
+                {oneShotTab(nextDistanceRef.current)}
                 {allShotsTab()}
 
                 {/* Tab links */}

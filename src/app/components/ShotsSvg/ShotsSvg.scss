@@ -53,7 +53,12 @@
     fill: red;
 }
 
-.shots_svg_maxdeviation {
+.shots_svg_lastmaxdeviation {
+    stroke: red;
+    stroke-width: 0.6;
+}
+
+.shots_svg_nextmaxdeviation {
     stroke: mediumslateblue;
     stroke-width: 0.6;
 }

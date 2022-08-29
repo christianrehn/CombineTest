@@ -10,21 +10,27 @@ export interface IShotsSvg {
     svgNumberOfCircles: number,
     shotDatas: IShotData[],
     selectedDrillConfiguration: IDrillConfiguration;
+    nextDistance: Unit;
 }
 
 export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
     assert(!!props, "!props");
 
-    const absoluteDeviationMaxAsNumber: number =
+    const absoluteDeviationMaxInUnitAsNumber: number =
         props.shotDatas
             .map((shotData: IShotData) => computeAbsoluteDeviation(shotData))
-            .reduce((accumulator: number, absoluteDeviation: Unit) => {
-                const absoluteDeviationAsNumber: number = absoluteDeviation.toNumber(props.selectedDrillConfiguration.getUnit());
-                return accumulator > absoluteDeviationAsNumber ? accumulator : absoluteDeviationAsNumber
+            .reduce((accumulator: number, absoluteDeviationAsUnit: Unit): number => {
+                const absoluteDeviationInUnitAsNumber: number = absoluteDeviationAsUnit.toNumber(props.selectedDrillConfiguration.getUnit());
+                return accumulator > absoluteDeviationInUnitAsNumber ? accumulator : absoluteDeviationInUnitAsNumber
             }, 0);
-    const scaleFactor: number = (Math.floor(absoluteDeviationMaxAsNumber / props.svgNumberOfCircles) + 1) * props.svgNumberOfCircles;
+    const scaleFactor: number = (Math.floor(absoluteDeviationMaxInUnitAsNumber / props.svgNumberOfCircles) + 1) * props.svgNumberOfCircles;
     const svgScaleFactor: number = 100 / scaleFactor;
     const circleLabelPosition: number = scaleFactor / props.svgNumberOfCircles;
+
+    const lastShotTargetDistanceInUnitAsNumber = props.shotDatas.length > 0 ? props.shotDatas[props.shotDatas.length - 1].targetDistance.toNumber(props.selectedDrillConfiguration.getUnit()) : 0;
+    const lastShotMaxDeviationInUnitAsNumber: number = props.selectedDrillConfiguration.getMaxDeviationInPercent() * lastShotTargetDistanceInUnitAsNumber / 100;
+    const nextShotTargetDistanceInUnitAsNumber = props.nextDistance.toNumber(props.selectedDrillConfiguration.getUnit());
+    const nextShotMaxDeviationInUnitAsNumber: number = props.selectedDrillConfiguration.getMaxDeviationInPercent() * nextShotTargetDistanceInUnitAsNumber / 100;
 
     return <svg width="100%" height="100%" viewBox="-110 -110.5 220.3 220.2"
                 preserveAspectRatio="xMidYMid meet"
@@ -43,7 +49,7 @@ export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
 
         {/* circles around 0,0 */}
         {
-            Array.from({length: props.svgNumberOfCircles}, (_, i) => (circleLabelPosition) * (i + 1)).map((factor) => {
+            Array.from({length: props.svgNumberOfCircles}, (_, i: number) => (circleLabelPosition) * (i + 1)).map((factor: number) => {
                 return <g key={`shots_svg_circle_${factor}`}>
                     <circle className="shots_svg_circle" r={factor * svgScaleFactor}/>
                     {/* x-axis positive */}
@@ -72,6 +78,28 @@ export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
                     </text>
                 </g>
             })
+        }
+
+        {/*line for lastShotMaxDeviationInUnitAsNumber*/}
+        {
+            props.shotDatas.length > 0 ?
+                <>
+                    <path className="shots_svg_lastmaxdeviation"
+                          d={`M-110,${-lastShotMaxDeviationInUnitAsNumber * svgScaleFactor} h220`}/>
+                    <path className="shots_svg_lastmaxdeviation"
+                          d={`M-110,${lastShotMaxDeviationInUnitAsNumber * svgScaleFactor} h220`}/>
+                </>
+                : null
+        }
+
+        {/*line for nextShotMaxDeviationInUnitAsNumber*/}
+        {
+            <>
+                <path className="shots_svg_nextmaxdeviation"
+                      d={`M-110,${-nextShotMaxDeviationInUnitAsNumber * svgScaleFactor} h220`}/>
+                <path className="shots_svg_nextmaxdeviation"
+                      d={`M-110,${nextShotMaxDeviationInUnitAsNumber * svgScaleFactor} h220`}/>
+            </>
         }
 
         {/*circle for current shot*/}
