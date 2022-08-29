@@ -4,32 +4,40 @@ import {IDrillConfiguration} from "./DrillConfiguration/DrillConfiguration";
 import {spinDrillType} from "./SelectValues/DrillType";
 
 
-export const computeSpinScore = (drillConfiguration: IDrillConfiguration, targetDistance: Unit, totalSpin: number, carry: Unit): number => {
+export const computeSpinScore = (drillConfiguration: IDrillConfiguration, targetDistance: Unit, totalSpinInRpm: number, carry: Unit): number => {
     assert(!!drillConfiguration, "!drillConfiguration");
     if (drillConfiguration.getDrillType() !== spinDrillType) {
         // score can only be computes for drill configuration type spin
         return 0;
     }
-    assert(drillConfiguration.getTargetRpmPerUnit() > 0, "!(drillConfiguration.getTargetRpmPerUnit() > 0)");
-    assert(drillConfiguration.getDeviationInUnit() > 0, "!(drillConfiguration.getDeviationInUnit() > 0)");
+    assert(drillConfiguration.getTargetSpinInRpmPerUnit() > 0, "!(drillConfiguration.getTargetSpinInRpmPerUnit() > 0)");
+    assert(drillConfiguration.getMaxDeviationInPercent() > 0, "!(drillConfiguration.getMaxDeviationInPercent() > 0)");
     assert(!!targetDistance, "!targetDistance");
-    assert(totalSpin >= 0, "!(totalSpin >= 0)");
+    assert(totalSpinInRpm >= 0, "!(totalSpin >= 0)");
     assert(!!carry, "!carry");
 
-    const currentDeviation: number = Math.abs(targetDistance.toNumber(drillConfiguration.getUnit()) - carry.toNumber(drillConfiguration.getUnit()))
-    console.log("currentDeviation", currentDeviation)
-    if (currentDeviation > drillConfiguration.getDeviationInUnit()) {
-        // outside corridor => 0 score
+    const targetDistanceAsNumber = targetDistance.toNumber(drillConfiguration.getUnit());
+    const currentDeviationInUnitAsNumber: number = Math.abs(targetDistanceAsNumber - carry.toNumber(drillConfiguration.getUnit()))
+    console.log("currentDeviationInUnitAsNumber", currentDeviationInUnitAsNumber)
+    const maxDeviationInUnitAsNumber: number = drillConfiguration.getMaxDeviationInPercent() * targetDistanceAsNumber / 100;
+    console.log("maxDeviationInUnitAsNumber", maxDeviationInUnitAsNumber)
+    if (currentDeviationInUnitAsNumber > maxDeviationInUnitAsNumber) {
+        // outside corridor -> 0 score
+        console.log(`Deviation ${currentDeviationInUnitAsNumber} > Max. Deviation ${maxDeviationInUnitAsNumber} -> outside corridor -> 0 score`);
         return 0
     }
 
     // inside corridor => calculate score for total spin
-    const setpointSpinInRpm: number = drillConfiguration.getTargetRpmPerUnit() * targetDistance.toNumber(targetDistance.formatUnits());
-    if (totalSpin >= setpointSpinInRpm) {
+    console.log(`Deviation ${currentDeviationInUnitAsNumber} <= Max. Deviation ${maxDeviationInUnitAsNumber} -> inside corridor -> calculate score depending on total spin`);
+    const targetSpinInRpm: number = drillConfiguration.getTargetSpinInRpmPerUnit() * targetDistance.toNumber(targetDistance.formatUnits());
+    console.log("targetSpinInRpm", targetSpinInRpm)
+    if (totalSpinInRpm >= targetSpinInRpm) {
         // maximum score is 100
+        console.log(`totalSpinInRpm=${totalSpinInRpm} > targetSpinInRpm=${targetSpinInRpm} -> 100 score`)
         return 100;
     }
 
-
-    return Math.round(totalSpin * 1000 / setpointSpinInRpm) / 10;
+    // linear score between setpointSpinInRpm and zero spin
+    console.log(`totalSpinInRpm=${totalSpinInRpm} / targetSpinInRpm=${targetSpinInRpm} = ${totalSpinInRpm / targetSpinInRpm}`)
+    return Math.round(totalSpinInRpm * 1000 / targetSpinInRpm) / 10;
 }

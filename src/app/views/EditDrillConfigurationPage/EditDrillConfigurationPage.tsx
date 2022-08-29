@@ -43,8 +43,9 @@ const DEFAULT_DRILL_TYPE: string = shotsGainedDrillType;
 const MIN_TARGET_RPM_PER_UNIT: number = 1;
 const DEFAULT_TARGET_RPM_PER_UNIT: number = 200;
 
-const MIN_DEVIATION_IN_UNIT: number = 0.1;
-const DEFAULT_DEVIATION_IN_UNIT: number = 1.0;
+const MIN_DEVIATION_IN_PERCENT: number = 1;
+const MAX_DEVIATION_IN_PERCENT: number = 100;
+const DEFAULT_DEVIATION_IN_PERCENT: number = 1;
 
 const MIN_NAME: number = 1;
 const MAX_NAME: number = 30;
@@ -66,10 +67,10 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     const [description, setDescription] = React.useState<string>(props.selectedDrillConfiguration.getDescription());
     const [drillType, setDrillType] = React.useState<string>(props.selectedDrillConfiguration.getDrillType() || DEFAULT_DRILL_TYPE);
     const [lengthUnit, setLengthUnit] = React.useState<string>(props.selectedDrillConfiguration.getUnit());
-    const [targetRpmPerUnit, setTargetRpmPerUnit] = React.useState<number>(props.selectedDrillConfiguration.getTargetRpmPerUnit() || DEFAULT_TARGET_RPM_PER_UNIT);
-    const [targetRpmPerUnitError, setTargetRpmPerUnitError] = React.useState<boolean>(true);
-    const [deviationInUnit, setDeviationInUnit] = React.useState<number>(props.selectedDrillConfiguration.getDeviationInUnit() || DEFAULT_DEVIATION_IN_UNIT);
-    const [deviationInUnitError, setDeviationInUnitError] = React.useState<boolean>(true);
+    const [targetSpinInRpmPerUnit, setTargetSpinInRpmPerUnit] = React.useState<number>(props.selectedDrillConfiguration.getTargetSpinInRpmPerUnit() || DEFAULT_TARGET_RPM_PER_UNIT);
+    const [targetSpinInRpmPerUnitError, setTargetSpinInRpmPerUnitError] = React.useState<boolean>(true);
+    const [maxDeviationInPercent, setMaxDeviationInPercent] = React.useState<number>(props.selectedDrillConfiguration.getMaxDeviationInPercent() || DEFAULT_DEVIATION_IN_PERCENT);
+    const [maxDeviationInPercentError, setMaxDeviationInPercentError] = React.useState<boolean>(true);
     const [startGroundType, setStartGroundType] = React.useState<string>(props.selectedDrillConfiguration.getStartGroundType());
     const [endGroundConfigs, setEndGroundConfigs] = React.useState<IEndGroundConfig[]>(props.selectedDrillConfiguration.getEndGroundConfigs());
     const [distanceGenerator, setDistanceGenerator] = React.useState<string>(props.selectedDrillConfiguration.getDistanceGenerator());
@@ -90,14 +91,14 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     }, [name])
 
     React.useEffect((): void => {
-        // validate targetRpmPerUnit
-        setTargetRpmPerUnitError(drillType === shotsGainedDrillType && targetRpmPerUnit < MIN_TARGET_RPM_PER_UNIT);
-    }, [targetRpmPerUnit])
+        // validate targetSpinInRpmPerUnit
+        setTargetSpinInRpmPerUnitError(drillType === shotsGainedDrillType && targetSpinInRpmPerUnit < MIN_TARGET_RPM_PER_UNIT);
+    }, [targetSpinInRpmPerUnit])
 
     React.useEffect((): void => {
-        // validate deviationInUnit
-        setDeviationInUnitError(drillType === shotsGainedDrillType && deviationInUnit < MIN_DEVIATION_IN_UNIT);
-    }, [deviationInUnit])
+        // validate maxDeviationInPercent
+        setMaxDeviationInPercentError(drillType === shotsGainedDrillType && (maxDeviationInPercent < MIN_DEVIATION_IN_PERCENT || maxDeviationInPercent > MAX_DEVIATION_IN_PERCENT));
+    }, [maxDeviationInPercent])
 
     React.useEffect((): void => {
         // validate distances
@@ -115,7 +116,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     }, [maxExcludedDistanceError])
 
     const error = (): boolean => {
-        return nameError || targetRpmPerUnitError || deviationInUnitError || (distanceGenerator === RANDOM_DISTANCES_GENERATOR
+        return nameError || targetSpinInRpmPerUnitError || maxDeviationInPercentError || (distanceGenerator === RANDOM_DISTANCES_GENERATOR
             ? minIncludedDistanceError || maxExcludedDistanceError
             : [FIXED_DISTANCES_GENERATOR, RANDOM_FROM_FIXED_DISTANCES_GENERATOR].includes(distanceGenerator)
                 ? distancesError
@@ -161,8 +162,8 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                           description,
                                           drillType,
                                           lengthUnit,
-                                          targetRpmPerUnit,
-                                          deviationInUnit,
+                                          targetSpinInRpmPerUnit,
+                                          maxDeviationInPercent,
                                           distanceGenerator,
                                           startGroundType,
                                           endGroundConfigs,
@@ -240,29 +241,29 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 </div>
                 <div className="target-rpm-per-unit-input">
                     <DrillConfigurationTextInput
-                        label={`Target RPM per ${lengthUnit}`}
+                        label={`Target Spin in RPM per ${lengthUnit}`}
                         hidden={drillType !== spinDrillType}
-                        error={targetRpmPerUnitError}
+                        error={targetSpinInRpmPerUnitError}
                         type="number"
-                        value={targetRpmPerUnit}
+                        value={targetSpinInRpmPerUnit}
                         maxLength={4}
                         min={MIN_TARGET_RPM_PER_UNIT}
                         handleOnChange={(value: string): void => {
-                            setTargetRpmPerUnit(Number(value));
+                            setTargetSpinInRpmPerUnit(Number(value));
                         }}
                     />
                 </div>
                 <div className="deviation-in-unit-input">
                     <DrillConfigurationTextInput
-                        label={`Deviation in ${lengthUnit}`}
+                        label={`Max. Carry Deviation in %`}
                         hidden={drillType !== spinDrillType}
-                        error={deviationInUnitError}
+                        error={maxDeviationInPercentError}
                         type="number"
-                        value={deviationInUnit}
-                        maxLength={3}
-                        min={MIN_DEVIATION_IN_UNIT}
+                        value={maxDeviationInPercent}
+                        // maxLength={3}
+                        min={MIN_DEVIATION_IN_PERCENT}
                         handleOnChange={(value: string): void => {
-                            setDeviationInUnit(Number(value));
+                            setMaxDeviationInPercent(Number(value));
                         }}
                     />
                 </div>

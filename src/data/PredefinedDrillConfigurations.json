@@ -59,8 +59,8 @@
         "description": "5 pitches with maximum spin",
         "drillType": "Spin",
         "unit": "meter",
-        "targetRpmPerUnit": 250,
-        "deviationInUnit": 1.5,
+        "targetSpinInRpmPerUnit": 250,
+        "maxDeviationInPercent": 20,
         "distanceGenerator": {
             "type": "FixedDistancesGenerator",
             "distances": [

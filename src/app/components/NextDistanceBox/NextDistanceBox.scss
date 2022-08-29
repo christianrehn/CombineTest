@@ -22,8 +22,31 @@
     font-size: 30px;
     color: orange;
 }
+
 .next-distance-average-strokes {
     padding-top: 50px;
     font-size: 60px;
     color: orange;
+}
+
+.next-distance-target-spin-label {
+    padding-top: 50px;
+    font-size: 30px;
+    color: blueviolet;
+}
+
+.next-distance-target-spin {
+    padding-top: 10px;
+    font-size: 60px;
+    color: blueviolet;
+}
+
+.next-distance-max-deviation-label {
+    padding-top: 50px;
+    font-size: 24px;
+}
+
+.next-distance-max-deviation-percent, .next-distance-max-deviation-unit {
+    padding-top: 10px;
+    font-size: 30px;
 }

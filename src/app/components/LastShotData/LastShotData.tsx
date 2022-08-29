@@ -242,7 +242,8 @@ export const LastShotData: React.FC<ILastShotDataProps> = (props: ILastShotDataP
     const absoluteDeviation: Unit | undefined = props.shotDatas.length > 0 ? computeAbsoluteDeviation(props.shotDatas[props.shotDatas.length - 1]) : undefined;
     const relativeDeviation: number | undefined = props.shotDatas.length > 0 ? computeRelativeDeviation(props.shotDatas[props.shotDatas.length - 1]) : undefined;
 
-    const targetDistanceString: string = !!props.lastShot ? props.lastShot.targetDistance.toNumber(props.selectedDrillConfiguration.getUnit()).toFixed(2) : "";
+    const targetDistanceInUnitAsNumber: number = !!props.lastShot ? props.lastShot.targetDistance.toNumber(props.selectedDrillConfiguration.getUnit()) : 0;
+    const targetDistanceString: string = !!props.lastShot ? targetDistanceInUnitAsNumber.toFixed(2) : "";
     const absoluteDeviationString: string = !!absoluteDeviation ? absoluteDeviation.toNumber(props.selectedDrillConfiguration.getUnit()).toFixed(2) : "";
     const relativeDeviationString: string = !!relativeDeviation ? (relativeDeviation * 100).toFixed(1) : "";
     const distanceUnit: string = !!props.lastShot ? props.selectedDrillConfiguration.getUnit() : "";
@@ -291,6 +292,13 @@ export const LastShotData: React.FC<ILastShotDataProps> = (props: ILastShotDataP
                 <div className="last-shot-item__unit"> {!!props.lastShot ? `%` : ""} </div>
             </div>
             <div className="last-shot__row">
+                <div className="last-shot-item__label">Target Total Spin</div>
+                <div
+                    className="last-shot-item__data"> {!!props.lastShot ? (props.selectedDrillConfiguration.getTargetSpinInRpmPerUnit() * targetDistanceInUnitAsNumber).toFixed(0) : ""} </div>
+                <div
+                    className="last-shot-item__unit"> {rpmUnit} </div>
+            </div>
+            <div className="last-shot__row">
                 <div className="last-shot-item__label">Total Spin</div>
                 <div
                     className="last-shot-item__data"> {!!props.lastShot ? props.lastShot.totalSpin.toFixed(0) : ""} </div>
@@ -311,8 +319,9 @@ export const LastShotData: React.FC<ILastShotDataProps> = (props: ILastShotDataP
                 <div
                     className="last-shot-item__unit"> {rpmUnit} </div>
             </div>
-            {props.selectedDrillConfiguration.getDrillType() === spinDrillType ? spinScoreData(props) : shotsGainedData(props, targetDistanceString)}
-            {props.selectedDrillConfiguration.getDrillType() === spinDrillType ? null : trackmanScoreData(props)}
+            {props.selectedDrillConfiguration.getDrillType() !== spinDrillType ? shotsGainedData(props, targetDistanceString) : null}
+            {props.selectedDrillConfiguration.getDrillType() !== spinDrillType ? trackmanScoreData(props) : null}
+            {props.selectedDrillConfiguration.getDrillType() === spinDrillType ? spinScoreData(props) : null}
 
             {/* data for all shots */}
             {SHOW_ADDITIONAL_DATA_FOR_ALL_SHOTS ? additionalDataForAllShots(props) : null}

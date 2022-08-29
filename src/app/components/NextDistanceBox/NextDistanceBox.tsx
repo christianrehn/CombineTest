@@ -25,21 +25,43 @@ export const NextDistanceBox: React.FC<INextDistanceBoxProps> = (props: INextDis
             <p className="next-distance-number">{!!nextDistanceInDistancesGeneratorUnit ? nextDistanceInDistancesGeneratorUnit :
                 <span>&nbsp;</span>}</p>
             <p className="next-distance-unit"> {!!nextDistanceInDistancesGeneratorUnit ? props.selectedDrillConfiguration.getUnit() : "DONE"}</p>
-            <p className="next-distance-average-strokes">{
-                props.selectedDrillConfiguration.getDrillType() === spinDrillType
-                    ?
-                    <span>Max&nbsp;Dev {(props.selectedDrillConfiguration.getDeviationInUnit()).toFixed(1)}&nbsp;{props.selectedDrillConfiguration.getUnit()}</span>
-                    : !averageStrokesFromStartDistance
-                        ? <span>&nbsp;</span>
-                        : averageStrokesFromStartDistance.toFixed(3)
+            {
+                props.selectedDrillConfiguration.getDrillType() !== spinDrillType
+                    ? // != spin type
+                    <>
+                        <p className="next-distance-average-strokes">{
+                            !averageStrokesFromStartDistance
+                                ? <span>&nbsp;</span>
+                                : averageStrokesFromStartDistance.toFixed(3)
+                        }
+                        </p>
+                        <p className="next-distance-average-strokes-label">{
+                            !averageStrokesFromStartDistance
+                                ? <span>&nbsp;</span>
+                                : "Strokes"
+                        }</p>
+                    </>
+                    :  // == spin type
+                    props.selectedDrillConfiguration.getDrillType() === spinDrillType ?
+                        <>
+                            <p className="next-distance-target-spin-label">
+                                {`Target Spin`}
+                            </p>
+                            <p className="next-distance-target-spin">
+                                {(props.selectedDrillConfiguration.getTargetSpinInRpmPerUnit() * nextDistanceInDistancesGeneratorUnit).toFixed(0)}
+                            </p>
+                            <p className="next-distance-max-deviation-label">
+                                {
+                                    <span>Max.&nbsp;Deviation</span>}
+                            </p>
+                            <p className="next-distance-max-deviation-percent">
+                                {(props.selectedDrillConfiguration.getMaxDeviationInPercent()).toFixed(0)}&nbsp;%
+                            </p>
+                            <p className="next-distance-max-deviation-unit">
+                                {(props.selectedDrillConfiguration.getMaxDeviationInPercent() * nextDistanceInDistancesGeneratorUnit / 100).toFixed(1)}&nbsp;{props.selectedDrillConfiguration.getUnit()}
+                            </p>
+                        </>
+                        : null
             }
-            </p>
-            <p className="next-distance-average-strokes-label">{
-                props.selectedDrillConfiguration.getDrillType() === spinDrillType
-                    ? `Setpoint ${(props.selectedDrillConfiguration.getTargetRpmPerUnit() * nextDistanceInDistancesGeneratorUnit).toFixed(0)} RPM`
-                    : !averageStrokesFromStartDistance
-                        ? <span>&nbsp;</span>
-                        : "Strokes"
-            }</p>
         </div>);
 }
