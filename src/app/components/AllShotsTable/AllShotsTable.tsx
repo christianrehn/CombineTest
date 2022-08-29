@@ -36,6 +36,7 @@ const shotDataTable = (props: IAllShotsTableProps): JSX.Element => {
     let totalSpinInRpmValues: number[] = [];
     return (
         <table className="table-with-shots">
+            <tbody>
             <tr className="parameter-names-row">
                 <td>Shot</td>
                 {props.selectedDrillConfiguration.getDrillType() === spinDrillType ? null :
@@ -128,7 +129,8 @@ const shotDataTable = (props: IAllShotsTableProps): JSX.Element => {
 
 
                     return <tr
-                        className={`row-with-shot-details ${props.selectedDrillConfiguration.getDrillType() === spinDrillType ? "row-with-shot-details-spin" : "row-with-shot-details-no-spin"}`}>
+                        className={`row-with-shot-details ${props.selectedDrillConfiguration.getDrillType() === spinDrillType ? "row-with-shot-details-spin" : "row-with-shot-details-no-spin"}`}
+                        key={`row-with-shot-details_${index}`}>
                         <td>{(index + 1).toString(10)}</td>
                         {props.selectedDrillConfiguration.getDrillType() === spinDrillType ? null :
                             <td>{strokesGained.toFixed(3)}</td>}
@@ -206,6 +208,7 @@ const shotDataTable = (props: IAllShotsTableProps): JSX.Element => {
                     </>
                 }
             </tr>
+            </tbody>
         </table>
     );
 }
