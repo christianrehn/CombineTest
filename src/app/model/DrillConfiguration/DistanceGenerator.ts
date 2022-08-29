@@ -17,7 +17,9 @@ export const createNewDrillConfigurationWithDistanceGenerator = (
     uuid: string,
     name: string,
     description: string,
+    drillType: string,
     unit: string,
+    targetRpmPerUnit: number,
     distanceGenerator: string,
     startGroundType: string,
     endGroundConfigs: IEndGroundConfig[],
@@ -30,10 +32,10 @@ export const createNewDrillConfigurationWithDistanceGenerator = (
 ): IDrillConfiguration => {
     switch (distanceGenerator) {
         case RANDOM_DISTANCES_GENERATOR:
-            return new DrillConfigurationWithRandomDistancesGenerator(uuid, name, description, unit, startGroundType, endGroundConfigs, minIncludedDistance, maxExcludedDistance, numberOfShots, averageStrokesDataMap);
+            return new DrillConfigurationWithRandomDistancesGenerator(uuid, name, description, drillType, unit, targetRpmPerUnit, startGroundType, endGroundConfigs, minIncludedDistance, maxExcludedDistance, numberOfShots, averageStrokesDataMap);
         case FIXED_DISTANCES_GENERATOR:
-            return new DrillConfigurationWithFixedDistancesGenerator(uuid, name, description, unit, startGroundType, endGroundConfigs, distances, numberOfRounds, averageStrokesDataMap);
+            return new DrillConfigurationWithFixedDistancesGenerator(uuid, name, description, drillType, unit, targetRpmPerUnit, startGroundType, endGroundConfigs, distances, numberOfRounds, averageStrokesDataMap);
         case RANDOM_FROM_FIXED_DISTANCES_GENERATOR:
-            return new DrillConfigurationWithRandomFromFixedDistancesGenerator(uuid, name, description, unit, startGroundType, endGroundConfigs, distances, numberOfRounds, averageStrokesDataMap);
+            return new DrillConfigurationWithRandomFromFixedDistancesGenerator(uuid, name, drillType, description, unit, targetRpmPerUnit, startGroundType, endGroundConfigs, distances, numberOfRounds, averageStrokesDataMap);
     }
 }
