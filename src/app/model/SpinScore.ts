@@ -27,17 +27,9 @@ export const computeSpinScore = (drillConfiguration: IDrillConfiguration, target
         return 0
     }
 
-    // inside corridor => calculate score for total spin
+    // inside corridor => calculate linear score for total spin
     console.log(`Deviation ${currentDeviationInUnitAsNumber} <= Max. Deviation ${maxDeviationInUnitAsNumber} -> inside corridor -> calculate score depending on total spin`);
     const targetSpinInRpm: number = drillConfiguration.getTargetSpinInRpmPerUnit() * targetDistanceInUnitAsNumber;
-    console.log("targetSpinInRpm", targetSpinInRpm)
-    if (totalSpinInRpm >= targetSpinInRpm) {
-        // maximum score is 100
-        console.log(`totalSpinInRpm=${totalSpinInRpm} > targetSpinInRpm=${targetSpinInRpm} -> 100 score`)
-        return 100;
-    }
-
-    // linear score between setpointSpinInRpm and zero spin
     console.log(`totalSpinInRpm=${totalSpinInRpm} / targetSpinInRpm=${targetSpinInRpm} = ${totalSpinInRpm / targetSpinInRpm}`)
     return Math.round(totalSpinInRpm * 1000 / targetSpinInRpm) / 10;
 }
