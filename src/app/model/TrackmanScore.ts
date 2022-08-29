@@ -1,6 +1,6 @@
 import {Unit} from "mathjs";
 import {assert} from "chai";
-import {meter} from "./Unit/Unit";
+import {meterLengthUnit} from "./SelectValues/LengthUnit";
 
 // slope m and y-intercept t of a linear functions f(x) = m*x + t
 // where f(x) is fromPin in meter and x is 100 - trackman score
@@ -61,8 +61,8 @@ export const computeTrackmanScore = (targetDistance: Unit, fromPin: Unit): numbe
     assert(!!fromPin, "!fromPin");
 
     // convert all input values to meters because the interpolation of trackman scores is in meters
-    const targetDistanceMeter = targetDistance.toNumber(meter);
-    const fromPinMeter = fromPin.toNumber(meter);
+    const targetDistanceMeter = targetDistance.toNumber(meterLengthUnit);
+    const fromPinMeter = fromPin.toNumber(meterLengthUnit);
 
     // get best matching values for m and t from map
     let nextSmallerDistance: number = Number.MAX_VALUE;
