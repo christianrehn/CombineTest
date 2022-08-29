@@ -10,12 +10,12 @@ export interface IDrillConfigurationTextInputProps {
     min?: number;
     max?: number;
     error?: boolean;
-    visible?: boolean;
+    hidden?: boolean;
     handleOnChange: (value: string) => void;
 }
 
 export const DrillConfigurationTextInput: React.FC<IDrillConfigurationTextInputProps> = (props: IDrillConfigurationTextInputProps): any => {
-    return (props.visible ?
+    return (props.hidden ? null :
             <div className="drill-configuration-text-input-container">
                 <label
                     className="drill-configuration-text-input-label"
@@ -41,7 +41,7 @@ export const DrillConfigurationTextInput: React.FC<IDrillConfigurationTextInputP
                         }}
                     />
                 </div>
-            </div> : null
+            </div>
     );
 
 }

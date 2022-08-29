@@ -230,7 +230,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="target-rpm-per-meter-input">
                     <DrillConfigurationTextInput
                         label={"Target RPM per Unit"}
-                        visible={drillType === spinDrillType}
+                        hidden={drillType !== spinDrillType}
                         error={targetRpmPerUnitError}
                         type="number"
                         value={targetRpmPerUnit}
