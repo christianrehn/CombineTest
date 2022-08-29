@@ -5,11 +5,12 @@ export interface IDrillConfigurationSelectProps {
     label: string;
     index: number;
     stringValues: string[];
+    hidden?: boolean;
     handleOnChange: (index: number) => void;
 }
 
 export const DrillConfigurationSelect: React.FC<IDrillConfigurationSelectProps> = (props: IDrillConfigurationSelectProps): JSX.Element => {
-    return (
+    return (props.hidden ? null :
         <div className="drill-configuration-select-container">
             <label
                 className="drill-configuration-select-label"

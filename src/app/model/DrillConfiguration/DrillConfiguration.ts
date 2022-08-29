@@ -38,6 +38,7 @@ export interface IDrillConfiguration {
     getDrillType: () => string;
     getUnit: () => string;
     getTargetRpmPerUnit: () => number;
+    getDeviationInUnit: () => number;
     getStartGroundType: () => string;
     getEndGroundConfigs: () => IEndGroundConfig[]
     getDistanceGenerator: () => string;
@@ -69,6 +70,7 @@ abstract class AbstractDrillConfiguration {
     protected _description: string;
     protected _drillType: string;
     protected _targetRpmPerUnit: number;
+    protected _deviationInUnit: number;
     protected _startGroundType: string;
     protected _endGroundConfigs: IEndGroundConfig[];
     protected readonly _averageShotsStartGroundType: string;
@@ -80,6 +82,7 @@ abstract class AbstractDrillConfiguration {
         description: string,
         drillType: string,
         targetRpmPerUnit: number,
+        deviationInUnit: number,
         startGroundType: string,
         endGroundConfigs: IEndGroundConfig[],
         averageStrokesDataMap: Map<string, IAverageStrokesData>,
@@ -89,6 +92,7 @@ abstract class AbstractDrillConfiguration {
         this._description = description;
         this._drillType = drillType;
         this._targetRpmPerUnit = targetRpmPerUnit;
+        this._deviationInUnit = deviationInUnit;
         this._startGroundType = startGroundType;
         this._endGroundConfigs = endGroundConfigs;
         this._averageShotsStartGroundType = startGroundType;
@@ -112,6 +116,10 @@ abstract class AbstractDrillConfiguration {
 
     public getTargetRpmPerUnit = (): number => {
         return this._targetRpmPerUnit;
+    }
+
+    public getDeviationInUnit = (): number => {
+        return this._deviationInUnit;
     }
 
     public getStartGroundType = (): string => {
@@ -206,7 +214,7 @@ abstract class AbstractDrillConfiguration {
 
 export interface IEndGroundConfig {
     type: string,
-    to?: number
+    to?: number // = radius = distance to hole
 }
 
 export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDrillConfiguration implements IDrillConfiguration, IRandomDistancesGenerator {
@@ -222,6 +230,7 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
         drillType: string,
         unit: string,
         targetRpmPerUnit: number,
+        deviationInUnit: number,
         startGroundType: string,
         endGroundConfigs: IEndGroundConfig[],
         minIncludedDistance: number,
@@ -229,7 +238,7 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
         numberOfShots: number,
         averageStrokesDataMap: Map<string, IAverageStrokesData>
     ) {
-        super(uuid, name, description, drillType, targetRpmPerUnit, startGroundType, endGroundConfigs, averageStrokesDataMap);
+        super(uuid, name, description, drillType, targetRpmPerUnit, deviationInUnit, startGroundType, endGroundConfigs, averageStrokesDataMap);
 
         this._minIncludedDistance = minIncludedDistance;
         this._maxExcludedDistance = maxExcludedDistance;
@@ -275,6 +284,7 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
             drillType: this.getDrillType(),
             unit: this.getUnit(),
             targetRpmPerUnit: this.getTargetRpmPerUnit(),
+            deviationInUnit: this.getDeviationInUnit(),
             distanceGenerator: {
                 minIncludedDistance: this._minIncludedDistance,
                 maxExcludedDistance: this._maxExcludedDistance,
@@ -298,6 +308,7 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
         drillType: string,
         unit: string,
         targetRpmPerUnit: number,
+        deviationInUnit: number,
         startGroundType: string,
         endGroundConfigs: IEndGroundConfig[],
         distances: number[],
@@ -310,6 +321,7 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
             description,
             drillType,
             targetRpmPerUnit,
+            deviationInUnit,
             startGroundType,
             endGroundConfigs,
             averageStrokesDataMap);
@@ -357,6 +369,7 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
             drillType: this.getDrillType(),
             unit: this.getUnit(),
             targetRpmPerUnit: this.getTargetRpmPerUnit(),
+            deviationInUnit: this.getDeviationInUnit(),
             distanceGenerator: {
                 type: distanceGeneratorType,
                 distances: this._distances,
@@ -383,13 +396,14 @@ export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends Dri
         drillType: string,
         unit: string,
         targetRpmPerUnit: number,
+        deviationInUnit: number,
         startGroundType: string,
         endGroundConfigs: IEndGroundConfig[],
         distances: number[],
         numberOfRounds: number,
         averageStrokesDataMap: Map<string, IAverageStrokesData>
     ) {
-        super(uuid, name, description, drillType, unit, targetRpmPerUnit, startGroundType, endGroundConfigs, distances, numberOfRounds, averageStrokesDataMap);
+        super(uuid, name, description, drillType, unit, targetRpmPerUnit, deviationInUnit, startGroundType, endGroundConfigs, distances, numberOfRounds, averageStrokesDataMap);
         this.distancesNotYetReturned = [...distances];
     }
 
@@ -442,6 +456,7 @@ export class EmptyDrillConfiguration extends DrillConfigurationWithFixedDistance
             "",
             shotsGainedDrillType,
             meterLengthUnit,
+            0,
             0,
             Fairway,
             [{type: Green, to: 5}, {type: Fairway}],

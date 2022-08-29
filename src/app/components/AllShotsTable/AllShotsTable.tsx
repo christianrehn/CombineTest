@@ -12,6 +12,8 @@ import {
     computeRelativeDeviation,
     computeStandardDeviationEntirePopulation
 } from "../../util/MathUtil";
+import {spinDrillType} from "../../model/SelectValues/DrillType";
+import {computeSpinScore} from "../../model/SpinScore";
 
 export interface IAllShotsTableProps {
     lastShot: IShotData,
@@ -23,6 +25,7 @@ const shotDataTable = (props: IAllShotsTableProps): JSX.Element => {
     const empty: JSX.Element = <span>&nbsp;</span>;
     let strokesGainedValues: number[] = [];
     let trackmanScoreValues: number[] = [];
+    let spinScoreValues: number[] = [];
     let targetDistanceValues: number[] = [];
     let carryValues: number[] = [];
     let totalDistanceValues: number[] = [];
@@ -33,8 +36,10 @@ const shotDataTable = (props: IAllShotsTableProps): JSX.Element => {
         <table className="table-with-shots">
             <tr className="parameter-names-row">
                 <td>Shot</td>
-                <td>Gained</td>
-                <td>Score</td>
+                {props.selectedDrillConfiguration.getDrillType() === spinDrillType ? null :
+                    <td>Gained</td>}
+                {props.selectedDrillConfiguration.getDrillType() === spinDrillType ? null :
+                    <td>Score</td>}
                 <td>Target</td>
                 <td>Carry</td>
                 <td>Total</td>
@@ -44,8 +49,10 @@ const shotDataTable = (props: IAllShotsTableProps): JSX.Element => {
             </tr>
             <tr className="parameter-units-row">
                 <td>{empty}</td>
-                <td>Strokes</td>
-                <td>{empty}</td>
+                {props.selectedDrillConfiguration.getDrillType() === spinDrillType ? null :
+                    <td>Strokes</td>}
+                {props.selectedDrillConfiguration.getDrillType() === spinDrillType ? null :
+                    <td>{empty}</td>}
                 <td>{props.selectedDrillConfiguration.getUnit()}</td>
                 <td>{props.selectedDrillConfiguration.getUnit()}</td>
                 <td>{props.selectedDrillConfiguration.getUnit()}</td>
@@ -65,6 +72,9 @@ const shotDataTable = (props: IAllShotsTableProps): JSX.Element => {
 
                     const trackmanScore: number = computeTrackmanScore(shotData.targetDistance, absoluteDeviation);
                     trackmanScoreValues.push(trackmanScore);
+
+                    const spinScore: number = computeSpinScore(props.selectedDrillConfiguration, shotData.targetDistance, shotData.totalSpin, shotData.carry);
+                    spinScoreValues.push(spinScore);
 
                     const targetDistance: number = shotData.targetDistance.toNumber(props.selectedDrillConfiguration.getUnit());
                     targetDistanceValues.push(targetDistance);
@@ -86,8 +96,10 @@ const shotDataTable = (props: IAllShotsTableProps): JSX.Element => {
 
                     return <tr className="row-with-shot-details">
                         <td>{(index + 1).toString(10)}</td>
-                        <td>{strokesGained.toFixed(3)}</td>
-                        <td>{trackmanScore.toFixed(1)}</td>
+                        {props.selectedDrillConfiguration.getDrillType() === spinDrillType ? null :
+                            <td>{strokesGained.toFixed(3)}</td>}
+                        {props.selectedDrillConfiguration.getDrillType() === spinDrillType ? null :
+                            <td>{trackmanScore.toFixed(1)}</td>}
                         <td>{targetDistance.toFixed(2)}</td>
                         <td>{carry.toFixed(2)}</td>
                         <td>{totalDistance.toFixed(2)}</td>

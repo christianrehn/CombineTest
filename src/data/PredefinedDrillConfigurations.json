@@ -60,20 +60,14 @@
         "drillType": "Spin",
         "unit": "meter",
         "targetRpmPerUnit": 250,
+        "deviationInUnit": 1.5,
         "distanceGenerator": {
             "type": "FixedDistancesGenerator",
             "distances": [
                 10
             ],
             "numberOfRounds": 10
-        },
-        "startGroundType": "Fairway",
-        "endGroundConfigs": [
-            {
-                "type": "Green",
-                "to": 2
-            }
-        ]
+        }
     },
     {
         "uuid": "fedb883f-c575-44b6-99d1-88a364be5091",

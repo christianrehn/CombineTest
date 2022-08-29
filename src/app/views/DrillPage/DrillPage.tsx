@@ -52,6 +52,9 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                 carry: math.unit(lastShotData["carry_m"], "m"),
                 totalDistance: math.unit(lastShotData["total_distance_m"], "m"),
                 offline: math.unit(lastShotData["offline_m"], "m"),
+                totalSpin: lastShotData["total_spin_rpm"],
+                sideSpin: lastShotData["side_spin_rpm"],
+                backSpin: lastShotData["back_spin_rpm"],
                 targetDistance: nextDistanceRef.current
             });
         }

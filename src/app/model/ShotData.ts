@@ -7,5 +7,8 @@ export interface IShotData {
     carry: Unit,
     totalDistance: Unit,
     offline: Unit,
+    totalSpin: number,
+    sideSpin: number,
+    backSpin: number,
     targetDistance: Unit,
 }

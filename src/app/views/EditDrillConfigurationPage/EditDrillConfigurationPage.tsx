@@ -43,6 +43,9 @@ const DEFAULT_DRILL_TYPE: string = shotsGainedDrillType;
 const MIN_TARGET_RPM_PER_UNIT: number = 1;
 const DEFAULT_TARGET_RPM_PER_UNIT: number = 200;
 
+const MIN_DEVIATION_IN_UNIT: number = 0.1;
+const DEFAULT_DEVIATION_IN_UNIT: number = 1.0;
+
 const MIN_NAME: number = 1;
 const MAX_NAME: number = 30;
 
@@ -62,9 +65,11 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     const [nameError, setNameError] = React.useState<boolean>(true);
     const [description, setDescription] = React.useState<string>(props.selectedDrillConfiguration.getDescription());
     const [drillType, setDrillType] = React.useState<string>(props.selectedDrillConfiguration.getDrillType() || DEFAULT_DRILL_TYPE);
-    const [unit, setUnit] = React.useState<string>(props.selectedDrillConfiguration.getUnit());
+    const [lengthUnit, setLengthUnit] = React.useState<string>(props.selectedDrillConfiguration.getUnit());
     const [targetRpmPerUnit, setTargetRpmPerUnit] = React.useState<number>(props.selectedDrillConfiguration.getTargetRpmPerUnit() || DEFAULT_TARGET_RPM_PER_UNIT);
     const [targetRpmPerUnitError, setTargetRpmPerUnitError] = React.useState<boolean>(true);
+    const [deviationInUnit, setDeviationInUnit] = React.useState<number>(props.selectedDrillConfiguration.getDeviationInUnit() || DEFAULT_DEVIATION_IN_UNIT);
+    const [deviationInUnitError, setDeviationInUnitError] = React.useState<boolean>(true);
     const [startGroundType, setStartGroundType] = React.useState<string>(props.selectedDrillConfiguration.getStartGroundType());
     const [endGroundConfigs, setEndGroundConfigs] = React.useState<IEndGroundConfig[]>(props.selectedDrillConfiguration.getEndGroundConfigs());
     const [distanceGenerator, setDistanceGenerator] = React.useState<string>(props.selectedDrillConfiguration.getDistanceGenerator());
@@ -90,6 +95,11 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     }, [targetRpmPerUnit])
 
     React.useEffect((): void => {
+        // validate deviationInUnit
+        setDeviationInUnitError(drillType === shotsGainedDrillType && deviationInUnit < MIN_DEVIATION_IN_UNIT);
+    }, [deviationInUnit])
+
+    React.useEffect((): void => {
         // validate distances
         setDistancesError(distances.length <= 0);
     }, [distances])
@@ -105,7 +115,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     }, [maxExcludedDistanceError])
 
     const error = (): boolean => {
-        return nameError || targetRpmPerUnitError || (distanceGenerator === RANDOM_DISTANCES_GENERATOR
+        return nameError || targetRpmPerUnitError || deviationInUnitError || (distanceGenerator === RANDOM_DISTANCES_GENERATOR
             ? minIncludedDistanceError || maxExcludedDistanceError
             : [FIXED_DISTANCES_GENERATOR, RANDOM_FROM_FIXED_DISTANCES_GENERATOR].includes(distanceGenerator)
                 ? distancesError
@@ -150,8 +160,9 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                           name,
                                           description,
                                           drillType,
-                                          unit,
+                                          lengthUnit,
                                           targetRpmPerUnit,
+                                          deviationInUnit,
                                           distanceGenerator,
                                           startGroundType,
                                           endGroundConfigs,
@@ -219,17 +230,17 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="unit-select">
                     <DrillConfigurationSelect
                         label={"Unit"}
-                        index={lengthUnits.indexOf(unit)}
+                        index={lengthUnits.indexOf(lengthUnit)}
                         stringValues={lengthUnits}
                         handleOnChange={(index: number): void => {
                             assert(index >= 0, "index < 0");
-                            setUnit(lengthUnits[index]);
+                            setLengthUnit(lengthUnits[index]);
                         }}
                     />
                 </div>
-                <div className="target-rpm-per-meter-input">
+                <div className="target-rpm-per-unit-input">
                     <DrillConfigurationTextInput
-                        label={"Target RPM per Unit"}
+                        label={`Target RPM per ${lengthUnit}`}
                         hidden={drillType !== spinDrillType}
                         error={targetRpmPerUnitError}
                         type="number"
@@ -241,9 +252,24 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         }}
                     />
                 </div>
+                <div className="deviation-in-unit-input">
+                    <DrillConfigurationTextInput
+                        label={`Deviation in ${lengthUnit}`}
+                        hidden={drillType !== spinDrillType}
+                        error={deviationInUnitError}
+                        type="number"
+                        value={deviationInUnit}
+                        maxLength={3}
+                        min={MIN_DEVIATION_IN_UNIT}
+                        handleOnChange={(value: string): void => {
+                            setDeviationInUnit(Number(value));
+                        }}
+                    />
+                </div>
                 <div className="start-ground-type-select">
                     <DrillConfigurationSelect
                         label={"Start Ground Type"}
+                        hidden={drillType === spinDrillType}
                         index={startGroundTypes.indexOf(startGroundType)}
                         stringValues={startGroundTypes}
                         handleOnChange={(index: number): void => {
@@ -257,6 +283,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="end-ground-types-table">
                     <EndGroundConfigsTable
                         label="End Ground Types"
+                        hidden={drillType === spinDrillType}
                         endGroundConfigs={endGroundConfigs}
                         handleEndGroundConfigChanged={(endGroundConfig: IEndGroundConfig, endGroundConfigsIndex: number, newNotCHanged: boolean): void => {
                             assert(endGroundConfigsIndex >= 0, `endGroundConfigsIndex < 0: ${endGroundConfigsIndex}`);
