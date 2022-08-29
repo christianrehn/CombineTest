@@ -9,6 +9,8 @@ import {
     RANDOM_DISTANCES_GENERATOR,
     RANDOM_FROM_FIXED_DISTANCES_GENERATOR
 } from "./DistanceGenerator";
+import {shotsGainedDrillType} from "../SelectValues/DrillType";
+import {meterLengthUnit} from "../SelectValues/LengthUnit";
 
 /**
  * Create random integer between [min, max[.
@@ -33,7 +35,9 @@ export interface IDrillConfiguration {
     getUuid: () => string;
     getName: () => string;
     getDescription: () => string;
+    getDrillType: () => string;
     getUnit: () => string;
+    getTargetRpmPerUnit: () => number;
     getStartGroundType: () => string;
     getEndGroundConfigs: () => IEndGroundConfig[]
     getDistanceGenerator: () => string;
@@ -63,6 +67,8 @@ abstract class AbstractDrillConfiguration {
     protected _uuid: string;
     protected _name: string;
     protected _description: string;
+    protected _drillType: string;
+    protected _targetRpmPerUnit: number;
     protected _startGroundType: string;
     protected _endGroundConfigs: IEndGroundConfig[];
     protected readonly _averageShotsStartGroundType: string;
@@ -72,6 +78,8 @@ abstract class AbstractDrillConfiguration {
         uuid: string,
         name: string,
         description: string,
+        drillType: string,
+        targetRpmPerUnit: number,
         startGroundType: string,
         endGroundConfigs: IEndGroundConfig[],
         averageStrokesDataMap: Map<string, IAverageStrokesData>,
@@ -79,6 +87,8 @@ abstract class AbstractDrillConfiguration {
         this._uuid = uuid;
         this._name = name;
         this._description = description;
+        this._drillType = drillType;
+        this._targetRpmPerUnit = targetRpmPerUnit;
         this._startGroundType = startGroundType;
         this._endGroundConfigs = endGroundConfigs;
         this._averageShotsStartGroundType = startGroundType;
@@ -95,6 +105,13 @@ abstract class AbstractDrillConfiguration {
 
     public getDescription = (): string => {
         return this._description;
+    }
+    public getDrillType = (): string => {
+        return this._drillType;
+    }
+
+    public getTargetRpmPerUnit = (): number => {
+        return this._targetRpmPerUnit;
     }
 
     public getStartGroundType = (): string => {
@@ -202,7 +219,9 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
         uuid: string,
         name: string,
         description: string,
+        drillType: string,
         unit: string,
+        targetRpmPerUnit: number,
         startGroundType: string,
         endGroundConfigs: IEndGroundConfig[],
         minIncludedDistance: number,
@@ -210,7 +229,7 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
         numberOfShots: number,
         averageStrokesDataMap: Map<string, IAverageStrokesData>
     ) {
-        super(uuid, name, description, startGroundType, endGroundConfigs, averageStrokesDataMap);
+        super(uuid, name, description, drillType, targetRpmPerUnit, startGroundType, endGroundConfigs, averageStrokesDataMap);
 
         this._minIncludedDistance = minIncludedDistance;
         this._maxExcludedDistance = maxExcludedDistance;
@@ -253,7 +272,9 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
             uuid: this.getUuid(),
             name: this.getName(),
             description: this.getDescription(),
+            drillType: this.getDrillType(),
             unit: this.getUnit(),
+            targetRpmPerUnit: this.getTargetRpmPerUnit(),
             distanceGenerator: {
                 minIncludedDistance: this._minIncludedDistance,
                 maxExcludedDistance: this._maxExcludedDistance,
@@ -274,7 +295,9 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
         uuid: string,
         name: string,
         description: string,
+        drillType: string,
         unit: string,
+        targetRpmPerUnit: number,
         startGroundType: string,
         endGroundConfigs: IEndGroundConfig[],
         distances: number[],
@@ -285,6 +308,8 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
             uuid,
             name,
             description,
+            drillType,
+            targetRpmPerUnit,
             startGroundType,
             endGroundConfigs,
             averageStrokesDataMap);
@@ -329,7 +354,9 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
             uuid: this.getUuid(),
             name: this.getName(),
             description: this.getDescription(),
+            drillType: this.getDrillType(),
             unit: this.getUnit(),
+            targetRpmPerUnit: this.getTargetRpmPerUnit(),
             distanceGenerator: {
                 type: distanceGeneratorType,
                 distances: this._distances,
@@ -353,14 +380,16 @@ export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends Dri
         uuid: string,
         name: string,
         description: string,
+        drillType: string,
         unit: string,
+        targetRpmPerUnit: number,
         startGroundType: string,
         endGroundConfigs: IEndGroundConfig[],
         distances: number[],
         numberOfRounds: number,
         averageStrokesDataMap: Map<string, IAverageStrokesData>
     ) {
-        super(uuid, name, description, unit, startGroundType, endGroundConfigs, distances, numberOfRounds, averageStrokesDataMap);
+        super(uuid, name, description, drillType, unit, targetRpmPerUnit, startGroundType, endGroundConfigs, distances, numberOfRounds, averageStrokesDataMap);
         this.distancesNotYetReturned = [...distances];
     }
 
@@ -411,7 +440,9 @@ export class EmptyDrillConfiguration extends DrillConfigurationWithFixedDistance
             uuidv4(),
             "",
             "",
-            "meter",
+            shotsGainedDrillType,
+            meterLengthUnit,
+            0,
             Fairway,
             [{type: Green, to: 5}, {type: Fairway}],
             [],
