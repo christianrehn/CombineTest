@@ -49,7 +49,6 @@ export const SelectDrill: React.FC<ISelectDrillProps> = (props: ISelectDrillProp
                                   setEditMode(!editMode);
                               }}
                         >
-
                             <div className="top-button-img-div">
                                 <img className="top-button-img"
                                      src={editMode ? glassesIcon : editIcon}
