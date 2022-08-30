@@ -1,0 +1,25 @@
+.home-page {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--font-white);
+    row-gap: 3px;
+}
+
+.home-page .home-top {
+    display: flex;
+    flex-direction: row;
+    background-color: var(--background-dark);
+}
+
+.home-page .home-main {
+    display: flex;
+    flex-direction: row;
+    column-gap: 3px;
+    height: 100%;
+    flex: 1 1 auto;
+    overflow: hidden;
+}
+
+.home-page .home-flex-item {
+    flex: 1;
+}

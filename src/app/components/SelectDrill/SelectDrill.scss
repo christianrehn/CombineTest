@@ -1,19 +1,20 @@
 .select-drill-page {
     display: flex;
+    flex: 1 1 auto;
     flex-direction: column;
+    background-color: var(--font-white);
+    gap: 3px 3px;
 }
 
 .select-drill-page .select-drill-top {
     display: flex;
     flex-direction: row;
-}
-
-.select-drill-page .select-drill-flex-item {
-    flex: 1;
+    width: 100%;
+    background-color: var(--background-dark);
 }
 
 .select-drill-page .drill-tiles-flex-item {
-    padding-top: 10px;
+    background-color: var(--background-dark);
     padding-left: var(--page-margin-horizontal);
     padding-right: var(--page-margin-horizontal);
     align-content: flex-start;
@@ -21,6 +22,8 @@
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    gap: 50px 50px;
+    gap: 40px 40px;
+    padding-top: 10px;
+    padding-bottom: 20px;
     overflow-y: auto;
 }

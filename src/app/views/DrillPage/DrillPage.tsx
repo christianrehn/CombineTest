@@ -12,9 +12,9 @@ import backIcon from '../../../assets/back.png';
 import {RestartButton} from "../../components/RestartButton/RestartButton";
 import * as math from 'mathjs'
 import {Unit} from 'mathjs'
-import {SelectDrillPageName} from "../SelectDrillPage/SelectDrillPage";
 import {AllShotsTable} from "../../components/AllShotsTable/AllShotsTable";
 import {ISession} from "../../model/Session/Session";
+import {HomePageName} from "../HomePage/HomePage";
 
 export const DrillPageName: string = "DrillPage";
 
@@ -257,7 +257,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                 <div className="back-flex-item flex-item">
                         <span className="back-span"
                               onClick={(): void => {
-                                  props.handleSelectPageClicked(SelectDrillPageName)
+                                  props.handleSelectPageClicked(HomePageName)
                               }}
                         >
                             <div className="top-button-img-div">

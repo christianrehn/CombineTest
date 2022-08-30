@@ -16,7 +16,6 @@ import averageShotsFromFairwayCsvPath from "../data/fairway.csv";
 import averageShotsFromRoughCsvPath from "../data/rough.csv";
 import averageShotsFromGreenCsvPath from "../data/green.csv";
 import {AverageStrokesData, IAverageStrokesData} from "./model/AverageStrokesData/AverageStrokesData";
-import {SelectDrillPage, SelectDrillPageName} from "./views/SelectDrillPage/SelectDrillPage";
 import {drillConfigurationsFromJson} from "./model/DrillConfiguration/DrillConfigurationConverter";
 import {assert} from "chai";
 import {Fairway, Green, Rough, Tee} from "./model/AverageStrokesData/GroundType";
@@ -28,10 +27,12 @@ import {loadSessionsAsJson, saveSessions} from "./model/Session/SessionsFilesyst
 import {ISession} from "./model/Session/Session";
 import {sessionsFromJson} from "./model/Session/SessionConverter";
 import {ReportsPage, ReportsPageName} from "./views/ReportsPage/ReportsPage";
+import {HomePage, HomePageName} from "./views/HomePage/HomePage";
+import {IPlayer} from "./model/Player/Player";
 
 const App: React.FC<{}> = (): JSX.Element => {
     // page that is currently visible
-    const [selectedPage, setSelectedPage] = React.useState<string>(SelectDrillPageName);
+    const [selectedPage, setSelectedPage] = React.useState<string>(HomePageName);
 
     const lastShotCsvPath: string = process.platform !== 'darwin'
         ? "C:/Program Files (x86)/Foresight Sports Experience/System/LastShot.CSV"
@@ -39,6 +40,8 @@ const App: React.FC<{}> = (): JSX.Element => {
 
     const [drillConfigurations, setDrillConfigurations] = React.useState<IDrillConfiguration[]>([]);
     const [selectedDrillConfiguration, setSelectedDrillConfiguration] = React.useState<IDrillConfiguration>();
+
+    const [players, setPlayers] = React.useState<IPlayer[]>([]);
 
     const [sessions, setSessions] = React.useState<ISession[]>([]);
     const [lastSession, setLastSession] = React.useState<ISession>(undefined);
@@ -130,8 +133,10 @@ const App: React.FC<{}> = (): JSX.Element => {
 
     return (
         <div className="app">
-            {selectedPage === SelectDrillPageName
-                ? <SelectDrillPage
+            {selectedPage === HomePageName
+                ? <HomePage
+                    players={players}
+                    sessions={sessions}
                     drillConfigurations={drillConfigurations}
                     handleDrillConfigurationsChanged={handleDrillConfigurationsChanged}
                     selectedDrillConfiguration={selectedDrillConfiguration}
@@ -141,7 +146,7 @@ const App: React.FC<{}> = (): JSX.Element => {
                 : selectedPage === EditDrillConfigurationPageName
                     ? <EditDrillConfigurationPage
                         selectedDrillConfiguration={selectedDrillConfiguration}
-                        handleBackClicked={() => setSelectedPage(SelectDrillPageName)}
+                        handleBackClicked={() => setSelectedPage(HomePageName)}
                         handleSaveDrillConfigurations={handleSaveUserDrillConfigurations}
                         averageStrokesDataMap={averageStrokesDataMap}
                     />
@@ -154,7 +159,7 @@ const App: React.FC<{}> = (): JSX.Element => {
                         />
                         : selectedPage === ReportsPageName
                             ? <ReportsPage
-                                handleBackClicked={() => setSelectedPage(SelectDrillPageName)}
+                                handleBackClicked={() => setSelectedPage(HomePageName)}
                             />
                             : null
             }
