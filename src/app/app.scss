@@ -132,6 +132,14 @@ html, body, #root {
     }
 }
 
+.column-header {
+    h3 {
+        font-size: var(--font-site-header);
+        text-align: center;
+        padding: 30px;
+    }
+}
+
 .disabled {
     pointer-events: none;
     opacity: 0.4;
