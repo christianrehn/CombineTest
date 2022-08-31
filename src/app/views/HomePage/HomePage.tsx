@@ -12,6 +12,7 @@ import {EditDrillConfigurationPageName} from "../EditDrillConfigurationPage/Edit
 import {DrillPageName} from "../DrillPage/DrillPage";
 import {EditPlayerPageName} from "../EditPlayerPage/EditPlayerPage";
 import {assert} from "chai";
+import packageJson from '../../../../package.json';
 
 export const HomePageName: string = "HomePage";
 
@@ -55,7 +56,7 @@ export const HomePage: React.FC<IHomePageProps> = (props: IHomePageProps): JSX.E
 
                 <div className="home-flex-item flex-item">
                     <div className="page-header">
-                        <h3>Home</h3>
+                        <h3>GCQuad Combine Test v{packageJson?.version}</h3>
                     </div>
                 </div>
             </div>
@@ -77,7 +78,7 @@ export const HomePage: React.FC<IHomePageProps> = (props: IHomePageProps): JSX.E
                     selectedSession={props.selectedSession}
                     tileClickedHandler={(session: ISession, editMode: boolean): void => {
                         assert(!editMode, "!!editMode")
-                        
+
                         props.handleSelectedSessionChanged(session);
                     }}
                 />
