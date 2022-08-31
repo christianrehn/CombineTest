@@ -21,14 +21,13 @@ export abstract class Entity implements IEntity {
 
     public abstract toJson(): any;
 
-    public static handleSaveEntities = <T extends IEntity>(
-        changedEntity: T,
-        entities: T[],
-        setEntities: Dispatch<SetStateAction<T[]>>,
-        selectedEntity: T,
-        setSelectedEntity: Dispatch<SetStateAction<T>>,
-        saveEntities: (entities: T[]) => void
-    ): void => {
+    public static handleSaveEntities = <T extends IEntity>
+    (entities: T[],
+     setEntities: Dispatch<SetStateAction<T[]>>,
+     selectedEntity: T,
+     setSelectedEntity: Dispatch<SetStateAction<T>>,
+     saveEntities: (entities: T[]) => void
+    ) => (changedEntity: T): void => {
         const entitiesClone: T[] = [...entities];
         const entityUuids: string[] = entitiesClone.map((entity: T) => entity.getUuid());
         console.log("handleSaveEntities - entityUuids=", entityUuids);

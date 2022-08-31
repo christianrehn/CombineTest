@@ -17,7 +17,6 @@ import averageShotsFromRoughCsvPath from "../data/rough.csv";
 import averageShotsFromGreenCsvPath from "../data/green.csv";
 import {AverageStrokesData, IAverageStrokesData} from "./model/AverageStrokesData/AverageStrokesData";
 import {drillConfigurationsFromJson} from "./model/DrillConfiguration/DrillConfigurationConverter";
-import {assert} from "chai";
 import {Fairway, Green, Rough, Tee} from "./model/AverageStrokesData/GroundType";
 import {
     loadUserDrillConfigurationsAsJson,
@@ -93,48 +92,24 @@ const App: React.FC<{}> = (): JSX.Element => {
     }, [predefinedDrillConfigurationsAsJson, averageStrokesDataMap]);
 
     const handleSavePlayers = (changedPlayer: IPlayer): void => {
-        const playersClone: IPlayer[] = [...players];
-        const playerUuids: string[] = playersClone.map((player: IPlayer) => player.getUuid());
-        console.log("handleSavePlayers - playerUuids=", playerUuids);
-
-        if (!changedPlayer) {
-            // selectedPlayer has been deleted
-            const deletedPlayerIndex: number = playerUuids.indexOf(selectedPlayer.getUuid())
-            console.log("handleSaveDrillConfigurations - deletedPlayerIndex=", deletedPlayerIndex);
-            assert(deletedPlayerIndex >= 0, "deletedPlayerIndex < 0");
-            playersClone.splice(deletedPlayerIndex, 1);
-            setSelectedPlayer(undefined);
-        } else {
-            // selectedPlayer has been updated or is new
-            assert(!!selectedPlayer.getUuid(), "!selectedPlayer.getUuid()");
-            const changedPlayerIndex: number = playerUuids.indexOf(changedPlayer.getUuid())
-            console.log("handleSavePlayers - changedPlayerIndex=", changedPlayerIndex);
-            if (changedPlayerIndex >= 0) {
-                playersClone[changedPlayerIndex] = changedPlayer; // replace with changed entry
-            } else {
-                playersClone.push(changedPlayer); // new entry
-            }
-            setSelectedPlayer(changedPlayer);
-        }
-
-
-        setPlayers(playersClone);
-        savePlayers(playersClone);
+        Entity.handleSaveEntities(
+            players,
+            setPlayers,
+            selectedPlayer,
+            setSelectedPlayer,
+            savePlayers
+        )(changedPlayer);
     }
 
-    const handleSaveSessions = (session: ISession): void => {
-        assert(!!session, "!session");
-
-        console.log("handleSaveSessions - session=", session);
-        setSelectedSession(session);
-
-        const sessionsClone: ISession[] = [...sessions];
-        sessionsClone.push(session);
-        setSessions(sessionsClone);
-
-        saveSessions(sessionsClone);
+    const handleSaveSessions = (changedSession: ISession): void => {
+        Entity.handleSaveEntities(
+            sessions,
+            setSessions,
+            selectedSession,
+            setSelectedSession,
+            saveSessions
+        )(changedSession);
     }
-
 
     const handlePlayersChanged = (players: IPlayer[]): void => {
         setPlayers(players);
@@ -158,41 +133,13 @@ const App: React.FC<{}> = (): JSX.Element => {
 
     const handleSaveDrillConfigurations = (changedDrillConfiguration: IDrillConfiguration): void => {
         Entity.handleSaveEntities(
-            changedDrillConfiguration,
             drillConfigurations,
             setDrillConfigurations,
             selectedDrillConfiguration,
             setSelectedDrillConfiguration,
             saveUserDrillConfigurations
-        );
-        const drillConfigurationsClone: IDrillConfiguration[] = [...drillConfigurations];
-        const drillConfigurationUuids: string[] = drillConfigurationsClone.map((drillConfiguration: IDrillConfiguration) => drillConfiguration.getUuid());
-        console.log("handleSaveDrillConfigurations - drillConfigurationUuids=", drillConfigurationUuids);
-
-        if (!changedDrillConfiguration) {
-            // selectedDrillConfiguration has been deleted
-            const deletedDrillConfigurationIndex: number = drillConfigurationUuids.indexOf(selectedDrillConfiguration.getUuid())
-            console.log("handleSaveDrillConfigurations - deletedDrillConfigurationIndex=", deletedDrillConfigurationIndex);
-            assert(deletedDrillConfigurationIndex >= 0, "deletedDrillConfigurationIndex < 0");
-            drillConfigurationsClone.splice(deletedDrillConfigurationIndex, 1);
-            setSelectedDrillConfiguration(undefined);
-        } else {
-            // selectedDrillConfiguration has been updated or is new
-            assert(!!changedDrillConfiguration.getUuid(), "!changedDrillConfiguration.getUuid()");
-            const changedDrillConfigurationIndex: number = drillConfigurationUuids.indexOf(changedDrillConfiguration.getUuid())
-            console.log("handleSaveDrillConfigurations - changedDrillConfigurationIndex=", changedDrillConfigurationIndex);
-            if (changedDrillConfigurationIndex >= 0) {
-                drillConfigurationsClone[changedDrillConfigurationIndex] = changedDrillConfiguration; // replace with changed entry
-            } else {
-                drillConfigurationsClone.push(changedDrillConfiguration); // new entry
-            }
-            setSelectedDrillConfiguration(changedDrillConfiguration);
-        }
-
-        setDrillConfigurations(drillConfigurationsClone);
-        saveUserDrillConfigurations(drillConfigurationsClone);
+        )(changedDrillConfiguration);
     }
-
 
     return (
         <div className="app">
