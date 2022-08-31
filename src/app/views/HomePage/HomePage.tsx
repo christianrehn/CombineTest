@@ -58,7 +58,7 @@ export const HomePage: React.FC<IHomePageProps> = (props: IHomePageProps): JSX.E
 
                 <div className="home-flex-item flex-item">
                     <div className="page-header">
-                        <h3>GCQuad Combine Test{!!version ? ` v${version}` : ""}</h3>
+                        <h3>Combine Test{!!version ? ` v${version}` : ""}</h3>
                     </div>
                 </div>
             </div>
