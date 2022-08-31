@@ -46,16 +46,6 @@ export const SelectDrill: React.FC<ISelectDrillProps> = (props: ISelectDrillProp
             </div>
 
             <div className="drill-tiles-flex-item">
-                { // existing configurations
-                    !props.selectedPlayer ? "Please select a Player" :
-                        props.drillConfigurations.map((drillConfiguration: IDrillConfiguration, index: number) =>
-                            <DrillTile
-                                key={`DrillTile_${index}`}
-                                drillConfiguration={drillConfiguration}
-                                editMode={editMode}
-                                handleTileClicked={props.tileClickedHandler}
-                            />)
-                }
                 { // additional tile to add a new configuration
                     !props.selectedPlayer ? null :
                         editMode ?
@@ -66,6 +56,16 @@ export const SelectDrill: React.FC<ISelectDrillProps> = (props: ISelectDrillProp
                                 handleTileClicked={props.tileClickedHandler}
                             />
                             : null
+                }
+                { // existing configurations
+                    !props.selectedPlayer ? "Please select a Player" :
+                        props.drillConfigurations.map((drillConfiguration: IDrillConfiguration, index: number) =>
+                            <DrillTile
+                                key={`DrillTile_${index}`}
+                                drillConfiguration={drillConfiguration}
+                                editMode={editMode}
+                                handleTileClicked={props.tileClickedHandler}
+                            />)
                 }
             </div>
         </div>

@@ -35,11 +35,11 @@ export const EditDrillConfigurationPageName: string = "EditDrillConfigurationPag
 const DEFAULT_DRILL_TYPE: string = shotsGainedDrillType;
 
 const MIN_TARGET_RPM_PER_UNIT: number = 1;
-const DEFAULT_TARGET_RPM_PER_UNIT: number = 200;
+const DEFAULT_TARGET_RPM_PER_UNIT: number = 250;
 
 const MIN_DEVIATION_IN_PERCENT: number = 1;
 const MAX_DEVIATION_IN_PERCENT: number = 100;
-const DEFAULT_DEVIATION_IN_PERCENT: number = 1;
+const DEFAULT_DEVIATION_IN_PERCENT: number = 10;
 
 const MIN_NAME: number = 1;
 const MAX_NAME: number = 30;
@@ -152,7 +152,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                             </div>
                         </span>
                     </div>
-                    <div className={error() ? "disabled back-flex-item flex-item" : "back-flex-item flex-item"}>
+                    <div className={`back-flex-item flex-item ${error() ? "disabled " : ""}`}>
                         <span className="back-span"
                               onClick={(): void => {
                                   // save changes

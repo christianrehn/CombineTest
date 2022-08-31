@@ -35,9 +35,11 @@ export abstract class Entity implements IEntity {
             // selectedEntity has been deleted
             const deletedEntityIndex: number = entityUuids.indexOf(selectedEntity.getUuid())
             console.log("handleSaveEntities - deletedEntityIndex=", deletedEntityIndex);
-            assert(deletedEntityIndex >= 0, "deletedEntityIndex < 0");
-            entitiesClone.splice(deletedEntityIndex, 1);
-            setSelectedEntity(undefined);
+            if (deletedEntityIndex >= 0) {
+                // an already existing entity has been deleted (not a newly created one)
+                entitiesClone.splice(deletedEntityIndex, 1);
+                setSelectedEntity(undefined);
+            }
         } else {
             // selectedEntity has been updated or is new
             assert(!!changedEntity.getUuid(), "!changedEntity.getUuid()");
