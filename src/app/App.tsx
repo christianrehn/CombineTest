@@ -29,8 +29,11 @@ import {ISession} from "./model/Session/Session";
 import {sessionsFromJson} from "./model/Session/SessionConverter";
 import {ReportsPage, ReportsPageName} from "./views/ReportsPage/ReportsPage";
 import {HomePage, HomePageName} from "./views/HomePage/HomePage";
-import {IPlayer} from "./model/Player/Player";
+import {IPlayer, Player} from "./model/Player/Player";
 import {playersFromJson} from "./model/Player/PlayerConverter";
+import {v4 as uuidv4} from "uuid";
+import {EditPlayerPage, EditPlayerPageName} from "./views/EditPlayerPage/EditPlayerPage";
+import {Entity} from "./model/base/Entity";
 
 const App: React.FC<{}> = (): JSX.Element => {
     // page that is currently visible
@@ -68,6 +71,19 @@ const App: React.FC<{}> = (): JSX.Element => {
     }, [averageShotsFromTeeCsvPath, averageShotsFromFairwayCsvPath, averageShotsFromRoughCsvPath, averageShotsFromGreenCsvPath])
 
     React.useEffect((): void => {
+        const playersAsJson: any[] = loadPlayersAsJson();
+        const players: IPlayer[] = playersFromJson(playersAsJson || []);
+        setPlayers(players);
+    }, []);
+
+
+    React.useEffect((): void => {
+        const sessionsAsJson: any[] = loadSessionsAsJson();
+        const sessions: ISession[] = sessionsFromJson(sessionsAsJson || []);
+        setSessions(sessions);
+    }, []);
+
+    React.useEffect((): void => {
         const userDrillConfigurationsAsJson: any[] = loadUserDrillConfigurationsAsJson();
         const drillConfigurationsAsJson: any[] = !!userDrillConfigurationsAsJson && userDrillConfigurationsAsJson.length > 0
             ? userDrillConfigurationsAsJson
@@ -76,69 +92,35 @@ const App: React.FC<{}> = (): JSX.Element => {
         setDrillConfigurations(drillConfigurations);
     }, [predefinedDrillConfigurationsAsJson, averageStrokesDataMap]);
 
-    const handleDrillConfigurationsChanged = (drillConfigurations: IDrillConfiguration[]): void => {
-        setDrillConfigurations(drillConfigurations);
-    }
+    const handleSavePlayers = (changedPlayer: IPlayer): void => {
+        const playersClone: IPlayer[] = [...players];
+        const playerUuids: string[] = playersClone.map((player: IPlayer) => player.getUuid());
+        console.log("handleSavePlayers - playerUuids=", playerUuids);
 
-    const handleSelectedDrillConfigurationChanged = (drillConfiguration: IDrillConfiguration): void => {
-        !!drillConfiguration
-            ? setSelectedDrillConfiguration(drillConfiguration)
-            : setSelectedDrillConfiguration(new EmptyDrillConfiguration(averageStrokesDataMap));
-    }
-
-    const handleSaveUserDrillConfigurations = (changedDrillConfiguration: IDrillConfiguration): void => {
-        const drillConfigurationsClone: IDrillConfiguration[] = [...drillConfigurations];
-        const drillConfigurationUuids: string[] = drillConfigurationsClone.map((drillConfiguration: IDrillConfiguration) => drillConfiguration.getUuid());
-        console.log("handleSaveUserDrillConfigurations - drillConfigurationUuids=", drillConfigurationUuids);
-
-        if (!changedDrillConfiguration) {
-            // selectedDrillConfiguration has been deleted
-            const deletedDrillConfigurationIndex: number = drillConfigurationUuids.indexOf(selectedDrillConfiguration.getUuid())
-            console.log("handleSaveUserDrillConfigurations - deletedDrillConfigurationIndex=", deletedDrillConfigurationIndex);
-            assert(deletedDrillConfigurationIndex >= 0, "deletedDrillConfigurationIndex < 0");
-            drillConfigurationsClone.splice(deletedDrillConfigurationIndex, 1);
-            setSelectedDrillConfiguration(undefined);
+        if (!changedPlayer) {
+            // selectedPlayer has been deleted
+            const deletedPlayerIndex: number = playerUuids.indexOf(selectedPlayer.getUuid())
+            console.log("handleSaveDrillConfigurations - deletedPlayerIndex=", deletedPlayerIndex);
+            assert(deletedPlayerIndex >= 0, "deletedPlayerIndex < 0");
+            playersClone.splice(deletedPlayerIndex, 1);
+            setSelectedPlayer(undefined);
         } else {
-            // selectedDrillConfiguration has been updated or is new
-            assert(!!changedDrillConfiguration.getUuid(), "!changedDrillConfiguration.getUuid()");
-            const changedDrillConfigurationIndex: number = drillConfigurationUuids.indexOf(changedDrillConfiguration.getUuid())
-            console.log("handleSaveUserDrillConfigurations - changedDrillConfigurationIndex=", changedDrillConfigurationIndex);
-            if (changedDrillConfigurationIndex >= 0) {
-                drillConfigurationsClone[changedDrillConfigurationIndex] = changedDrillConfiguration; // replace with changed entry
+            // selectedPlayer has been updated or is new
+            assert(!!selectedPlayer.getUuid(), "!selectedPlayer.getUuid()");
+            const changedPlayerIndex: number = playerUuids.indexOf(changedPlayer.getUuid())
+            console.log("handleSavePlayers - changedPlayerIndex=", changedPlayerIndex);
+            if (changedPlayerIndex >= 0) {
+                playersClone[changedPlayerIndex] = changedPlayer; // replace with changed entry
             } else {
-                drillConfigurationsClone.push(changedDrillConfiguration); // new entry
+                playersClone.push(changedPlayer); // new entry
             }
-            setSelectedDrillConfiguration(changedDrillConfiguration);
+            setSelectedPlayer(changedPlayer);
         }
 
-        setDrillConfigurations(drillConfigurationsClone);
-        saveUserDrillConfigurations(drillConfigurationsClone);
-    }
 
-    React.useEffect((): void => {
-        const playersAsJson: any[] = loadPlayersAsJson();
-        const players: IPlayer[] = playersFromJson(playersAsJson || []);
-        setPlayers(players);
-    }, []);
-
-    const handleSavePlayers = (player: IPlayer): void => {
-        assert(!!player, "!player");
-
-        console.log("handleSavePlayers - player=", player);
-        setSelectedPlayer(player);
-
-        const playersClone: IPlayer[] = [...players];
-        playersClone.push(player);
         setPlayers(playersClone);
-
         savePlayers(playersClone);
     }
-
-    React.useEffect((): void => {
-        const sessionsAsJson: any[] = loadSessionsAsJson();
-        const sessions: ISession[] = sessionsFromJson(sessionsAsJson || []);
-        setSessions(sessions);
-    }, []);
 
     const handleSaveSessions = (session: ISession): void => {
         assert(!!session, "!session");
@@ -153,11 +135,73 @@ const App: React.FC<{}> = (): JSX.Element => {
         saveSessions(sessionsClone);
     }
 
+
+    const handlePlayersChanged = (players: IPlayer[]): void => {
+        setPlayers(players);
+    }
+
+    const handleSelectedPlayerChanged = (player: IPlayer): void => {
+        !!player
+            ? setSelectedPlayer(player)
+            : setSelectedPlayer(new Player(uuidv4(), '', ''));
+    }
+
+    const handleDrillConfigurationsChanged = (drillConfigurations: IDrillConfiguration[]): void => {
+        setDrillConfigurations(drillConfigurations);
+    }
+
+    const handleSelectedDrillConfigurationChanged = (drillConfiguration: IDrillConfiguration): void => {
+        !!drillConfiguration
+            ? setSelectedDrillConfiguration(drillConfiguration)
+            : setSelectedDrillConfiguration(new EmptyDrillConfiguration(averageStrokesDataMap));
+    }
+
+    const handleSaveDrillConfigurations = (changedDrillConfiguration: IDrillConfiguration): void => {
+        Entity.handleSaveEntities(
+            changedDrillConfiguration,
+            drillConfigurations,
+            setDrillConfigurations,
+            selectedDrillConfiguration,
+            setSelectedDrillConfiguration,
+            saveUserDrillConfigurations
+        );
+        const drillConfigurationsClone: IDrillConfiguration[] = [...drillConfigurations];
+        const drillConfigurationUuids: string[] = drillConfigurationsClone.map((drillConfiguration: IDrillConfiguration) => drillConfiguration.getUuid());
+        console.log("handleSaveDrillConfigurations - drillConfigurationUuids=", drillConfigurationUuids);
+
+        if (!changedDrillConfiguration) {
+            // selectedDrillConfiguration has been deleted
+            const deletedDrillConfigurationIndex: number = drillConfigurationUuids.indexOf(selectedDrillConfiguration.getUuid())
+            console.log("handleSaveDrillConfigurations - deletedDrillConfigurationIndex=", deletedDrillConfigurationIndex);
+            assert(deletedDrillConfigurationIndex >= 0, "deletedDrillConfigurationIndex < 0");
+            drillConfigurationsClone.splice(deletedDrillConfigurationIndex, 1);
+            setSelectedDrillConfiguration(undefined);
+        } else {
+            // selectedDrillConfiguration has been updated or is new
+            assert(!!changedDrillConfiguration.getUuid(), "!changedDrillConfiguration.getUuid()");
+            const changedDrillConfigurationIndex: number = drillConfigurationUuids.indexOf(changedDrillConfiguration.getUuid())
+            console.log("handleSaveDrillConfigurations - changedDrillConfigurationIndex=", changedDrillConfigurationIndex);
+            if (changedDrillConfigurationIndex >= 0) {
+                drillConfigurationsClone[changedDrillConfigurationIndex] = changedDrillConfiguration; // replace with changed entry
+            } else {
+                drillConfigurationsClone.push(changedDrillConfiguration); // new entry
+            }
+            setSelectedDrillConfiguration(changedDrillConfiguration);
+        }
+
+        setDrillConfigurations(drillConfigurationsClone);
+        saveUserDrillConfigurations(drillConfigurationsClone);
+    }
+
+
     return (
         <div className="app">
             {selectedPage === HomePageName
                 ? <HomePage
                     players={players}
+                    selectedPlayer={selectedPlayer}
+                    handlePlayersChanged={handlePlayersChanged}
+                    handleSelectedPlayerChanged={handleSelectedPlayerChanged}
                     sessions={sessions}
                     drillConfigurations={drillConfigurations}
                     handleDrillConfigurationsChanged={handleDrillConfigurationsChanged}
@@ -165,27 +209,34 @@ const App: React.FC<{}> = (): JSX.Element => {
                     handleSelectedDrillConfigurationChanged={handleSelectedDrillConfigurationChanged}
                     handleSelectPageClicked={setSelectedPage}
                 />
-                : selectedPage === EditDrillConfigurationPageName
-                    ? <EditDrillConfigurationPage
-                        selectedDrillConfiguration={selectedDrillConfiguration}
+                : selectedPage === EditPlayerPageName
+                    ? <EditPlayerPage
+                        selectedPlayer={selectedPlayer}
                         handleBackClicked={() => setSelectedPage(HomePageName)}
-                        handleSaveDrillConfigurations={handleSaveUserDrillConfigurations}
-                        averageStrokesDataMap={averageStrokesDataMap}
+                        handleSavePlayer={handleSavePlayers}
                     />
-                    : selectedPage === DrillPageName
-                        ? <DrillPage
-                            lastShotCsvPath={lastShotCsvPath}
-                            selectedPlayer={selectedPlayer}
-                            selectedSession={selectedSession}
+                    : selectedPage === EditDrillConfigurationPageName
+                        ? <EditDrillConfigurationPage
                             selectedDrillConfiguration={selectedDrillConfiguration}
-                            handleSelectPageClicked={setSelectedPage}
-                            handleSaveSessions={handleSaveSessions}
+                            handleBackClicked={() => setSelectedPage(HomePageName)}
+                            handleSaveDrillConfiguration={handleSaveDrillConfigurations}
+                            averageStrokesDataMap={averageStrokesDataMap}
                         />
-                        : selectedPage === ReportsPageName
-                            ? <ReportsPage
-                                handleBackClicked={() => setSelectedPage(HomePageName)}
+
+                        : selectedPage === DrillPageName
+                            ? <DrillPage
+                                lastShotCsvPath={lastShotCsvPath}
+                                selectedPlayer={selectedPlayer}
+                                selectedSession={selectedSession}
+                                selectedDrillConfiguration={selectedDrillConfiguration}
+                                handleSelectPageClicked={setSelectedPage}
+                                handleSaveSessions={handleSaveSessions}
                             />
-                            : null
+                            : selectedPage === ReportsPageName
+                                ? <ReportsPage
+                                    handleBackClicked={() => setSelectedPage(HomePageName)}
+                                />
+                                : null
             }
         </div>
     );

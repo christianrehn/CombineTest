@@ -1,0 +1,60 @@
+.edit-player-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.edit-player-page .edit-player-top {
+    display: flex;
+    flex-direction: row;
+}
+
+.edit-player-page .edit-player-input {
+    padding-left: var(--page-margin-horizontal);
+    padding-right: var(--page-margin-horizontal);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    height: 100%;
+}
+
+.edit-player-page .edit-player-flex-item {
+    flex: 1;
+}
+
+.edit-player-page .name-input {
+    width: 31em;
+}
+
+.edit-player-page .description-input {
+    width: 111em;
+}
+
+.edit-player-page .unit-select {
+    width: calc(16em + 16px);
+}
+
+.edit-player-page .start-ground-type-select {
+    width: calc(16em + 16px);
+}
+
+.edit-player-page .end-ground-types-table {
+    width: 50em;
+}
+
+.edit-player-page .distance-generator-select {
+    width: 23em;
+}
+
+.edit-player-page .min-included-distance-input {
+    width: 16em;
+}
+
+.edit-player-page .max-excluded-distance-input {
+    width: 16em;
+}
+
+.edit-player-page .distances-input {
+    width: 51em;
+}

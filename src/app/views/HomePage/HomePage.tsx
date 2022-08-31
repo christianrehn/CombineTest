@@ -8,11 +8,17 @@ import {SelectSession} from "../../components/SelectSession/SelectSession";
 import {ISession} from "../../model/Session/Session";
 import {SelectPlayer} from "../../components/SelectPlayer/SelectPlayer";
 import {IPlayer} from "../../model/Player/Player";
+import {EditDrillConfigurationPageName} from "../EditDrillConfigurationPage/EditDrillConfigurationPage";
+import {DrillPageName} from "../DrillPage/DrillPage";
+import {EditPlayerPageName} from "../EditPlayerPage/EditPlayerPage";
 
 export const HomePageName: string = "HomePage";
 
 interface IHomePageProps {
     players: IPlayer[];
+    selectedPlayer: IPlayer;
+    handlePlayersChanged: (players: IPlayer[]) => void;
+    handleSelectedPlayerChanged: (player: IPlayer) => void;
     sessions: ISession[];
     drillConfigurations: IDrillConfiguration[];
     handleDrillConfigurationsChanged: (drillConfigurations: IDrillConfiguration[]) => void;
@@ -51,14 +57,27 @@ export const HomePage: React.FC<IHomePageProps> = (props: IHomePageProps): JSX.E
                 </div>
             </div>
             <div className="home-main">
-                <SelectPlayer players={props.players}/>
+                <SelectPlayer
+                    players={props.players}
+                    selectedPlayer={props.selectedPlayer}
+                    tileClickedHandler={(player: IPlayer, editMode: boolean): void => {
+                        props.handleSelectedPlayerChanged(player);
+                        if (editMode) {
+                            // switch to other page
+                            props.handleSelectPageClicked(EditPlayerPageName);
+                        }
+                    }}
+                />
                 <SelectSession sessions={props.sessions}/>
                 <SelectDrill
                     drillConfigurations={props.drillConfigurations}
                     handleDrillConfigurationsChanged={props.handleDrillConfigurationsChanged}
                     selectedDrillConfiguration={props.selectedDrillConfiguration}
-                    handleSelectedDrillConfigurationChanged={props.handleSelectedDrillConfigurationChanged}
-                    handleSelectPageClicked={props.handleSelectPageClicked}
+                    tileClickedHandler={(drillConfiguration: IDrillConfiguration, editMode: boolean): void => {
+                        props.handleSelectedDrillConfigurationChanged(drillConfiguration);
+                        // switch to other page
+                        props.handleSelectPageClicked(editMode ? EditDrillConfigurationPageName : DrillPageName);
+                    }}
                 />
             </div>
         </div>

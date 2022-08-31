@@ -11,6 +11,7 @@ import {
 } from "./DistanceGenerator";
 import {shotsGainedDrillType} from "../SelectValues/DrillType";
 import {meterLengthUnit} from "../SelectValues/LengthUnit";
+import {Entity, IEntity} from "../base/Entity";
 
 /**
  * Create random integer between [min, max[.
@@ -31,8 +32,7 @@ const createRandomNumber = (minIncluded: number, maxExcluded: number): number =>
  *
  * HINT: setter and getter implementations of base class were not called through the interface -> changed to get.../set... methods
  */
-export interface IDrillConfiguration {
-    getUuid: () => string;
+export interface IDrillConfiguration extends IEntity {
     getName: () => string;
     getDescription: () => string;
     getDrillType: () => string;
@@ -47,7 +47,6 @@ export interface IDrillConfiguration {
     reset: () => void;
     computeAverageStrokesFromStartDistance: (startDistance: Unit) => number;
     computeAverageStrokesFromEndDistance: (endDistance: Unit) => number | undefined;
-    toJson: () => any;
 }
 
 export interface IRandomDistancesGenerator {
@@ -64,8 +63,7 @@ export interface IFixedDistancesGenerator {
 /**
  * Base class for DrillConfigurations below
  */
-abstract class AbstractDrillConfiguration {
-    protected _uuid: string;
+abstract class AbstractDrillConfiguration extends Entity {
     protected _name: string;
     protected _description: string;
     protected _drillType: string;
@@ -87,7 +85,8 @@ abstract class AbstractDrillConfiguration {
         endGroundConfigs: IEndGroundConfig[],
         averageStrokesDataMap: Map<string, IAverageStrokesData>,
     ) {
-        this._uuid = uuid;
+        super(uuid);
+
         this._name = name;
         this._description = description;
         this._drillType = drillType;
@@ -97,10 +96,6 @@ abstract class AbstractDrillConfiguration {
         this._endGroundConfigs = endGroundConfigs;
         this._averageShotsStartGroundType = startGroundType;
         this._averageStrokesDataMap = averageStrokesDataMap;
-    }
-
-    public getUuid = (): string => {
-        return this._uuid;
     }
 
     public getName = (): string => {

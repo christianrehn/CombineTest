@@ -1,5 +1,5 @@
 import {assert} from "chai";
-import {IPlayer} from "./Player";
+import {IPlayer, Player} from "./Player";
 
 export const playersToString = (
     players: IPlayer[],
@@ -7,7 +7,10 @@ export const playersToString = (
     assert(players !== undefined, "players === undefined");
     assert(players !== null, "players === null");
 
-    return JSON.stringify(players);
+    const playersAsJson: any[] = players.map((player: IPlayer) => {
+        return player.toJson();
+    });
+    return JSON.stringify(playersAsJson);
 }
 
 export const playersFromJson = (
@@ -16,5 +19,9 @@ export const playersFromJson = (
     assert(playersAsJson !== undefined, "playersAsJson === undefined");
     assert(playersAsJson !== null, "playersAsJson === null");
 
-    return playersAsJson;
+    return playersAsJson
+        .map((playerAsJson: any): IPlayer => {
+            return new Player(playerAsJson.uuid, playerAsJson.lastname, playerAsJson.firstname)
+        })
+        .filter((player: IPlayer) => !!player);
 }

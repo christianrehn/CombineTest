@@ -31,12 +31,6 @@ import {lengthUnits} from "../../model/SelectValues/LengthUnit";
 
 export const EditDrillConfigurationPageName: string = "EditDrillConfigurationPage";
 
-interface IEditDrillConfigurationPageProps {
-    selectedDrillConfiguration: IDrillConfiguration;
-    handleBackClicked: () => void;
-    handleSaveDrillConfigurations: (changedDrillConfiguration: IDrillConfiguration) => void;
-    averageStrokesDataMap: Map<string, IAverageStrokesData>
-}
 
 const DEFAULT_DRILL_TYPE: string = shotsGainedDrillType;
 
@@ -57,6 +51,13 @@ const MIN_ROUNDS: number = 1;
 const MAX_ROUNDS: number = 99;
 
 const MIN_SHOTS: number = 1;
+
+interface IEditDrillConfigurationPageProps {
+    selectedDrillConfiguration: IDrillConfiguration;
+    handleBackClicked: () => void;
+    handleSaveDrillConfiguration: (changedDrillConfiguration: IDrillConfiguration) => void;
+    averageStrokesDataMap: Map<string, IAverageStrokesData>
+}
 
 export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPageProps> = (props: IEditDrillConfigurationPageProps): JSX.Element => {
     assert(!!props.selectedDrillConfiguration, "EditDrillConfigurationPage - !props.selectedDrillConfiguration");
@@ -137,7 +138,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         <span className="delete-span"
                               onClick={(): void => {
                                   // save changes
-                                  props.handleSaveDrillConfigurations(undefined);
+                                  props.handleSaveDrillConfiguration(undefined);
 
                                   // back to drill selection page
                                   props.handleBackClicked()
@@ -175,7 +176,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                           props.averageStrokesDataMap
                                       )
                                   ;
-                                  props.handleSaveDrillConfigurations(newDrillConfiguration);
+                                  props.handleSaveDrillConfiguration(newDrillConfiguration);
 
                                   // back to drill selection page
                                   props.handleBackClicked()

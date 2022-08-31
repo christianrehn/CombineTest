@@ -1,15 +1,14 @@
 import {IDrillConfiguration} from "../DrillConfiguration/DrillConfiguration";
 import {IShotData} from "../ShotData";
+import {Entity, IEntity} from "../base/Entity";
 
-export interface ISession {
-    getUuid: () => string;
+export interface ISession extends IEntity {
     getPlayerUuid: () => string;
     getDrillConfiguration: () => IDrillConfiguration;
     getShotDatas: () => IShotData[];
 }
 
-export class Session implements ISession {
-    protected _uuid: string;
+export class Session extends Entity implements ISession {
     protected _playerUuid: string;
     protected _drillConfiguration: IDrillConfiguration;
     protected _shotDatas: IShotData[];
@@ -20,14 +19,11 @@ export class Session implements ISession {
         drillConfiguration: IDrillConfiguration,
         shotDatas: IShotData[],
     ) {
-        this._uuid = uuid;
+        super(uuid);
+
         this._playerUuid = playerUuid;
         this._drillConfiguration = drillConfiguration;
         this._shotDatas = shotDatas;
-    }
-
-    public getUuid = (): string => {
-        return this._uuid;
     }
 
     public getPlayerUuid = (): string => {
@@ -40,5 +36,14 @@ export class Session implements ISession {
 
     public getShotDatas = (): IShotData[] => {
         return this._shotDatas;
+    }
+
+    public toJson = (): any => {
+        return {
+            uuid: this.getUuid(),
+            playerUuid: this.getPlayerUuid(),
+            drillConfiguration: this.getDrillConfiguration(),
+            shotDatas: this.getShotDatas(),
+        }
     }
 }

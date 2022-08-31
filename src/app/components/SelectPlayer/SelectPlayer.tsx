@@ -3,9 +3,12 @@ import './SelectPlayer.scss';
 import {IPlayer} from "../../model/Player/Player";
 import editIcon from '../../../assets/edit.png';
 import glassesIcon from "../../../assets/glasses.png";
+import {PlayerTile} from "./PlayerTile/PlayerTile";
 
 interface ISelectPlayerProps {
     players: IPlayer[];
+    selectedPlayer: IPlayer;
+    tileClickedHandler: (player: IPlayer, editMode: boolean) => void;
 }
 
 export const SelectPlayer: React.FC<ISelectPlayerProps> = (props: ISelectPlayerProps): JSX.Element => {
@@ -38,8 +41,28 @@ export const SelectPlayer: React.FC<ISelectPlayerProps> = (props: ISelectPlayerP
                 </div>
             </div>
 
-            <div className="players-flex-item">
-                TODO
+            <div className="player-tiles-flex-item">
+                { // existing configurations
+                    props.players.map((player: IPlayer, index: number) =>
+                        <PlayerTile
+                            key={`PlayerTile_${index}`}
+                            player={player}
+                            selectedPlayer={props.selectedPlayer}
+                            editMode={editMode}
+                            handleTileClicked={props.tileClickedHandler}
+                        />)
+                }
+                { // additional tile to add a new player
+                    editMode ?
+                        <PlayerTile
+                            key={`PlayerTile_add`}
+                            player={null}
+                            selectedPlayer={props.selectedPlayer}
+                            editMode={editMode}
+                            handleTileClicked={props.tileClickedHandler}
+                        />
+                        : null
+                }
             </div>
         </div>
     );

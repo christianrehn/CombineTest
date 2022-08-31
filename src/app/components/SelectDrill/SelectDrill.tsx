@@ -3,20 +3,18 @@ import './SelectDrill.scss';
 import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
 import editIcon from '../../../assets/edit.png';
 import glassesIcon from "../../../assets/glasses.png";
-import {DrillTile} from "../DrillTile/DrillTile";
-import {EditDrillConfigurationPageName} from "../../views/EditDrillConfigurationPage/EditDrillConfigurationPage";
-import {DrillPageName} from "../../views/DrillPage/DrillPage";
+import {DrillTile} from "./DrillTile/DrillTile";
 
 interface ISelectDrillProps {
     drillConfigurations: IDrillConfiguration[];
     handleDrillConfigurationsChanged: (drillConfigurations: IDrillConfiguration[]) => void;
     selectedDrillConfiguration: IDrillConfiguration;
-    handleSelectedDrillConfigurationChanged: (drillConfiguration: IDrillConfiguration) => void;
-    handleSelectPageClicked: (page: string) => void;
+    tileClickedHandler: (drillConfiguration: IDrillConfiguration, editMode: boolean) => void;
 }
 
 export const SelectDrill: React.FC<ISelectDrillProps> = (props: ISelectDrillProps): JSX.Element => {
     const [editMode, setEditMode] = React.useState<boolean>(false);
+
 
     return (
         <div className="select-drill-page page">
@@ -28,21 +26,6 @@ export const SelectDrill: React.FC<ISelectDrillProps> = (props: ISelectDrillProp
                 </div>
 
                 <div className="top-buttons-flex-item">
-                    {/*<div className="reports-flex-item flex-item">*/}
-                    {/*    <span className="reports-span"*/}
-                    {/*          onClick={(): void => {*/}
-                    {/*              props.handleSelectPageClicked(ReportsPageName)*/}
-                    {/*          }}*/}
-                    {/*    >*/}
-
-                    {/*        <div className="top-button-img-div">*/}
-                    {/*            <img className="top-button-img"*/}
-                    {/*                 src={reportsIcon}*/}
-                    {/*                 alt={"Reports"}*/}
-                    {/*            />*/}
-                    {/*        </div>*/}
-                    {/*    </span>*/}
-                    {/*</div>*/}
                     <div className="edit-flex-item flex-item">
                         <span className="edit-span"
                               onClick={(): void => {
@@ -62,31 +45,21 @@ export const SelectDrill: React.FC<ISelectDrillProps> = (props: ISelectDrillProp
 
             <div className="drill-tiles-flex-item">
                 { // existing configurations
-                    props.drillConfigurations.map((distancesGenerator: IDrillConfiguration, index: number) =>
+                    props.drillConfigurations.map((drillConfiguration: IDrillConfiguration, index: number) =>
                         <DrillTile
                             key={`DrillTile_${index}`}
-                            drillConfiguration={distancesGenerator}
+                            drillConfiguration={drillConfiguration}
                             editMode={editMode}
-                            handleTileClicked={(distancesGenerator: IDrillConfiguration): void => {
-                                // set selected distancesGenerator
-                                props.handleSelectedDrillConfigurationChanged(distancesGenerator);
-                                // switch to other page
-                                props.handleSelectPageClicked(editMode ? EditDrillConfigurationPageName : DrillPageName);
-                            }}
+                            handleTileClicked={props.tileClickedHandler}
                         />)
                 }
                 { // additional tile to add a new configuration
                     editMode ?
                         <DrillTile
+                            key={`DrillTile_add`}
                             drillConfiguration={null}
                             editMode={editMode}
-                            handleTileClicked={
-                                (distancesGenerator: IDrillConfiguration): void => {
-                                    // set selected distancesGenerator
-                                    props.handleSelectedDrillConfigurationChanged(distancesGenerator);
-                                    // switch to other page
-                                    props.handleSelectPageClicked(EditDrillConfigurationPageName);
-                                }}
+                            handleTileClicked={props.tileClickedHandler}
                         />
                         : null
                 }

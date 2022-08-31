@@ -1,12 +1,12 @@
-export interface IPlayer {
-    getUuid: () => string;
+import {Entity, IEntity} from "../base/Entity";
+
+export interface IPlayer extends IEntity {
     getLastname: () => string;
     getFirstname: () => string;
-
+    getName: () => string;
 }
 
-export class Player implements IPlayer {
-    protected _uuid: string;
+export class Player extends Entity implements IPlayer {
     protected _lastname: string;
     protected _firstname: string;
 
@@ -15,13 +15,10 @@ export class Player implements IPlayer {
         lastname: string,
         firstname: string,
     ) {
-        this._uuid = uuid;
+        super(uuid);
+
         this._lastname = lastname;
         this._firstname = firstname;
-    }
-
-    public getUuid = (): string => {
-        return this._uuid;
     }
 
     public getLastname = (): string => {
@@ -29,5 +26,17 @@ export class Player implements IPlayer {
     }
     public getFirstname = (): string => {
         return this._firstname;
+    }
+
+    public getName = (): string => {
+        return `${this._lastname}, ${this._firstname}`;
+    }
+
+    public toJson = (): any => {
+        return {
+            uuid: this.getUuid(),
+            lastname: this.getLastname(),
+            firstname: this.getFirstname(),
+        }
     }
 }
