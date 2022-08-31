@@ -33,6 +33,7 @@ import {playersFromJson} from "./model/Player/PlayerConverter";
 import {v4 as uuidv4} from "uuid";
 import {EditPlayerPage, EditPlayerPageName} from "./views/EditPlayerPage/EditPlayerPage";
 import {Entity} from "./model/base/Entity";
+import {assert} from "chai";
 
 const App: React.FC<{}> = (): JSX.Element => {
     // page that is currently visible
@@ -78,7 +79,7 @@ const App: React.FC<{}> = (): JSX.Element => {
 
     React.useEffect((): void => {
         const sessionsAsJson: any[] = loadSessionsAsJson();
-        const sessions: ISession[] = sessionsFromJson(sessionsAsJson || []);
+        const sessions: ISession[] = sessionsFromJson(sessionsAsJson || [], averageStrokesDataMap);
         setSessions(sessions);
     }, []);
 
@@ -121,6 +122,12 @@ const App: React.FC<{}> = (): JSX.Element => {
             : setSelectedPlayer(new Player(uuidv4(), '', ''));
     }
 
+    const handleSelectedSessionChanged = (session: ISession): void => {
+        assert(!!session, "!session")
+
+        setSelectedSession(session)
+    }
+
     const handleDrillConfigurationsChanged = (drillConfigurations: IDrillConfiguration[]): void => {
         setDrillConfigurations(drillConfigurations);
     }
@@ -150,6 +157,8 @@ const App: React.FC<{}> = (): JSX.Element => {
                     handlePlayersChanged={handlePlayersChanged}
                     handleSelectedPlayerChanged={handleSelectedPlayerChanged}
                     sessions={sessions}
+                    selectedSession={selectedSession}
+                    handleSelectedSessionChanged={handleSelectedSessionChanged}
                     drillConfigurations={drillConfigurations}
                     handleDrillConfigurationsChanged={handleDrillConfigurationsChanged}
                     selectedDrillConfiguration={selectedDrillConfiguration}

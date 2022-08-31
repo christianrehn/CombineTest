@@ -4,8 +4,10 @@ import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfigura
 import editIcon from '../../../assets/edit.png';
 import glassesIcon from "../../../assets/glasses.png";
 import {DrillTile} from "./DrillTile/DrillTile";
+import {IPlayer} from "../../model/Player/Player";
 
 interface ISelectDrillProps {
+    selectedPlayer: IPlayer;
     drillConfigurations: IDrillConfiguration[];
     handleDrillConfigurationsChanged: (drillConfigurations: IDrillConfiguration[]) => void;
     selectedDrillConfiguration: IDrillConfiguration;
@@ -45,23 +47,25 @@ export const SelectDrill: React.FC<ISelectDrillProps> = (props: ISelectDrillProp
 
             <div className="drill-tiles-flex-item">
                 { // existing configurations
-                    props.drillConfigurations.map((drillConfiguration: IDrillConfiguration, index: number) =>
-                        <DrillTile
-                            key={`DrillTile_${index}`}
-                            drillConfiguration={drillConfiguration}
-                            editMode={editMode}
-                            handleTileClicked={props.tileClickedHandler}
-                        />)
+                    !props.selectedPlayer ? "Please select a Player" :
+                        props.drillConfigurations.map((drillConfiguration: IDrillConfiguration, index: number) =>
+                            <DrillTile
+                                key={`DrillTile_${index}`}
+                                drillConfiguration={drillConfiguration}
+                                editMode={editMode}
+                                handleTileClicked={props.tileClickedHandler}
+                            />)
                 }
                 { // additional tile to add a new configuration
-                    editMode ?
-                        <DrillTile
-                            key={`DrillTile_add`}
-                            drillConfiguration={null}
-                            editMode={editMode}
-                            handleTileClicked={props.tileClickedHandler}
-                        />
-                        : null
+                    !props.selectedPlayer ? null :
+                        editMode ?
+                            <DrillTile
+                                key={`DrillTile_add`}
+                                drillConfiguration={null}
+                                editMode={editMode}
+                                handleTileClicked={props.tileClickedHandler}
+                            />
+                            : null
                 }
             </div>
         </div>

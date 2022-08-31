@@ -3,6 +3,7 @@ import {Dispatch, SetStateAction} from "react";
 
 export interface IEntity {
     getUuid: () => string;
+    getName: () => string;
     toJson: () => any;
 }
 
@@ -18,8 +19,6 @@ export abstract class Entity implements IEntity {
     public getUuid = (): string => {
         return this._uuid;
     }
-
-    public abstract toJson(): any;
 
     public static handleSaveEntities = <T extends IEntity>
     (entities: T[],
@@ -55,4 +54,8 @@ export abstract class Entity implements IEntity {
         setEntities(entitiesClone);
         saveEntities(entitiesClone);
     }
+
+    public abstract getName(): string;
+
+    abstract toJson(): any;
 }

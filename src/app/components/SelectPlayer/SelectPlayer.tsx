@@ -42,7 +42,7 @@ export const SelectPlayer: React.FC<ISelectPlayerProps> = (props: ISelectPlayerP
             </div>
 
             <div className="player-tiles-flex-item">
-                { // existing configurations
+                { // existing players
                     props.players.map((player: IPlayer, index: number) =>
                         <PlayerTile
                             key={`PlayerTile_${index}`}

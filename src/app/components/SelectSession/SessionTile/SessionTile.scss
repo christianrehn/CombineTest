@@ -1,0 +1,21 @@
+.session-tile-flex-item {
+    min-width: 285px;
+    max-width: 285px;
+    min-height: 60px;
+    max-height: 60px;
+    flex: 1;
+    background-color: var(--font-white);
+    color: var(--background-dark);
+    display: flex;
+    align-items: center;
+}
+
+.session-tile-name {
+    margin-left: 10px;
+    font-size: 20px;
+}
+
+.session-tile-selected {
+    background-color: orange;
+    color: var(--font-white);
+}

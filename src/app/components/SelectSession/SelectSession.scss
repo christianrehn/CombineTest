@@ -13,12 +13,13 @@
     background-color: var(--background-dark);
 }
 
-.select-session-page .sessions-flex-item {
+.select-session-page .session-tiles-flex-item {
     background-color: var(--background-dark);
     padding-left: var(--page-margin-horizontal);
     padding-right: var(--page-margin-horizontal);
     align-content: flex-start;
     height: 100%;
+    display: flex;
     flex-wrap: wrap;
     flex-direction: row;
     gap: 40px 40px;

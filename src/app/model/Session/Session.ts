@@ -9,21 +9,28 @@ export interface ISession extends IEntity {
 }
 
 export class Session extends Entity implements ISession {
+    protected _name: string;
     protected _playerUuid: string;
     protected _drillConfiguration: IDrillConfiguration;
     protected _shotDatas: IShotData[];
 
     constructor(
         uuid: string,
+        name: string,
         playerUuid: string,
         drillConfiguration: IDrillConfiguration,
         shotDatas: IShotData[],
     ) {
         super(uuid);
 
+        this._name = name;
         this._playerUuid = playerUuid;
         this._drillConfiguration = drillConfiguration;
         this._shotDatas = shotDatas;
+    }
+
+    public getName = (): string => {
+        return this._name;
     }
 
     public getPlayerUuid = (): string => {
@@ -41,8 +48,9 @@ export class Session extends Entity implements ISession {
     public toJson = (): any => {
         return {
             uuid: this.getUuid(),
+            name: this.getName(),
             playerUuid: this.getPlayerUuid(),
-            drillConfiguration: this.getDrillConfiguration(),
+            drillConfiguration: this.getDrillConfiguration().toJson(),
             shotDatas: this.getShotDatas(),
         }
     }

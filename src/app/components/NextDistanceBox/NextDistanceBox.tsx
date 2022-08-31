@@ -48,7 +48,10 @@ export const NextDistanceBox: React.FC<INextDistanceBoxProps> = (props: INextDis
                                 {`Target Spin`}
                             </p>
                             <p className="next-distance-target-spin">
-                                {(props.selectedDrillConfiguration.getTargetSpinInRpmPerUnit() * nextDistanceInDistancesGeneratorUnit).toFixed(0)}
+                                {!!nextDistanceInDistancesGeneratorUnit ?
+                                    (props.selectedDrillConfiguration.getTargetSpinInRpmPerUnit() * nextDistanceInDistancesGeneratorUnit).toFixed(0)
+                                    : null
+                                }
                             </p>
                             <p className="next-distance-max-deviation-label">
                                 {

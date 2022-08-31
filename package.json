@@ -87,6 +87,7 @@
         "fg-select-css": "^3.2.0",
         "lodash": "^4.17.21",
         "mathjs": "^9.2.0",
+        "moment": "^2.29.4",
         "react": "^17.0.1",
         "react-dom": "^17.0.1",
         "react-hot-loader": "^4.13.0",

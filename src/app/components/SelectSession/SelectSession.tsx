@@ -2,9 +2,14 @@ import React from 'react';
 import './SelectSession.scss';
 import {ISession} from "../../model/Session/Session";
 import reportsIcon from "../../../assets/reports.png";
+import {SessionTile} from "../SelectSession/SessionTile/SessionTile";
+import {IPlayer} from "../../model/Player/Player";
 
 interface ISelectSessionProps {
+    selectedPlayer: IPlayer;
     sessions: ISession[];
+    selectedSession: ISession;
+    tileClickedHandler: (session: ISession, editMode: boolean) => void;
 }
 
 export const SelectSession: React.FC<ISelectSessionProps> = (props: ISelectSessionProps): JSX.Element => {
@@ -21,6 +26,8 @@ export const SelectSession: React.FC<ISelectSessionProps> = (props: ISelectSessi
                     <div className="reports-flex-item flex-item">
                         <span className="reports-span"
                               onClick={(): void => {
+                                  console.log("selectedSession", props.selectedSession)
+                                  // CRTODO
                                   // props.handleSelectPageClicked(ReportsPageName)
                               }}
                         >
@@ -36,8 +43,17 @@ export const SelectSession: React.FC<ISelectSessionProps> = (props: ISelectSessi
                 </div>
             </div>
 
-            <div className="sessions-flex-item">
-                Hallo
+            <div className="session-tiles-flex-item">
+                { // existing sessions
+                    props.sessions.filter((session: ISession): boolean => session.getPlayerUuid() === props.selectedPlayer?.getUuid())
+                        .map((session: ISession, index: number) =>
+                            <SessionTile
+                                key={`SessionTile_${index}`}
+                                session={session}
+                                selectedSession={props.selectedSession}
+                                handleTileClicked={props.tileClickedHandler}
+                            />)
+                }
             </div>
         </div>
     );

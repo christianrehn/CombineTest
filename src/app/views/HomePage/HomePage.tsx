@@ -11,6 +11,7 @@ import {IPlayer} from "../../model/Player/Player";
 import {EditDrillConfigurationPageName} from "../EditDrillConfigurationPage/EditDrillConfigurationPage";
 import {DrillPageName} from "../DrillPage/DrillPage";
 import {EditPlayerPageName} from "../EditPlayerPage/EditPlayerPage";
+import {assert} from "chai";
 
 export const HomePageName: string = "HomePage";
 
@@ -20,6 +21,8 @@ interface IHomePageProps {
     handlePlayersChanged: (players: IPlayer[]) => void;
     handleSelectedPlayerChanged: (player: IPlayer) => void;
     sessions: ISession[];
+    selectedSession: ISession;
+    handleSelectedSessionChanged: (session: ISession) => void;
     drillConfigurations: IDrillConfiguration[];
     handleDrillConfigurationsChanged: (drillConfigurations: IDrillConfiguration[]) => void;
     selectedDrillConfiguration: IDrillConfiguration;
@@ -33,12 +36,6 @@ export const HomePage: React.FC<IHomePageProps> = (props: IHomePageProps): JSX.E
     return (
         <div className="home-page page">
             <div className="home-top">
-                <div className="home-flex-item flex-item">
-                    <div className="page-header">
-                        <h3>Home</h3>
-                    </div>
-                </div>
-
                 <div className="top-buttons-flex-item">
                     <div className="exit-flex-item flex-item">
                         <span className="exit-span"
@@ -55,6 +52,12 @@ export const HomePage: React.FC<IHomePageProps> = (props: IHomePageProps): JSX.E
                         </span>
                     </div>
                 </div>
+
+                <div className="home-flex-item flex-item">
+                    <div className="page-header">
+                        <h3>Home</h3>
+                    </div>
+                </div>
             </div>
             <div className="home-main">
                 <SelectPlayer
@@ -68,8 +71,18 @@ export const HomePage: React.FC<IHomePageProps> = (props: IHomePageProps): JSX.E
                         }
                     }}
                 />
-                <SelectSession sessions={props.sessions}/>
+                <SelectSession
+                    selectedPlayer={props.selectedPlayer}
+                    sessions={props.sessions}
+                    selectedSession={props.selectedSession}
+                    tileClickedHandler={(session: ISession, editMode: boolean): void => {
+                        assert(!editMode, "!!editMode")
+                        
+                        props.handleSelectedSessionChanged(session);
+                    }}
+                />
                 <SelectDrill
+                    selectedPlayer={props.selectedPlayer}
                     drillConfigurations={props.drillConfigurations}
                     handleDrillConfigurationsChanged={props.handleDrillConfigurationsChanged}
                     selectedDrillConfiguration={props.selectedDrillConfiguration}

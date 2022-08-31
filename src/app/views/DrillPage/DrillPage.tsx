@@ -16,7 +16,8 @@ import {AllShotsTable} from "../../components/AllShotsTable/AllShotsTable";
 import {ISession, Session} from "../../model/Session/Session";
 import {HomePageName} from "../HomePage/HomePage";
 import {IPlayer} from "../../model/Player/Player";
-import {v4 as uuidv4} from 'uuid';
+import moment from "moment/moment";
+import {v4 as uuidv4} from "uuid";
 
 export const DrillPageName: string = "DrillPage";
 
@@ -122,10 +123,12 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                     nextDistanceRef.current = props.selectedDrillConfiguration.getNextDistance(shotDatasClone.length);
                 } else {
                     // all shots finished -> set nextDistanceRef to undefined
-                    console.log("all shots executed -> save session");
+                    const sessionName: string = moment(new Date()).format("YYMMDD_HHmmss");
+                    console.log(`all shots executed -> save session ${sessionName}`);
                     nextDistanceRef.current = undefined;
                     props.handleSaveSessions(new Session(
                         uuidv4(),
+                        sessionName,
                         props.selectedPlayer?.getUuid(),
                         props.selectedDrillConfiguration,
                         shotDatas))

@@ -29,7 +29,7 @@ export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
 
     const lastShotTargetDistanceInUnitAsNumber = props.shotDatas.length > 0 ? props.shotDatas[props.shotDatas.length - 1].targetDistance.toNumber(props.selectedDrillConfiguration.getUnit()) : 0;
     const lastShotMaxDeviationInUnitAsNumber: number = props.selectedDrillConfiguration.getMaxDeviationInPercent() * lastShotTargetDistanceInUnitAsNumber / 100;
-    const nextShotTargetDistanceInUnitAsNumber = props.nextDistance.toNumber(props.selectedDrillConfiguration.getUnit());
+    const nextShotTargetDistanceInUnitAsNumber = props.nextDistance?.toNumber(props.selectedDrillConfiguration.getUnit());
     const nextShotMaxDeviationInUnitAsNumber: number = props.selectedDrillConfiguration.getMaxDeviationInPercent() * nextShotTargetDistanceInUnitAsNumber / 100;
 
     return <svg width="100%" height="100%" viewBox="-110 -110.5 220.3 220.2"

@@ -1,5 +1,7 @@
 import {assert} from "chai";
 import {ISession, Session} from "./Session";
+import {drillConfigurationsFromJson} from "../DrillConfiguration/DrillConfigurationConverter";
+import {IAverageStrokesData} from "../AverageStrokesData/AverageStrokesData";
 
 export const sessionsToString = (
     sessions: ISession[],
@@ -8,6 +10,7 @@ export const sessionsToString = (
     assert(sessions !== null, "sessions === null");
 
     const sessionsAsJson: any[] = sessions.map((session: ISession) => {
+        assert(!!session.getName(), "!!session.getName()")
         return session.toJson();
     });
     return JSON.stringify(sessionsAsJson);
@@ -15,6 +18,7 @@ export const sessionsToString = (
 
 export const sessionsFromJson = (
     sessionsAsJson: any[],
+    averageStrokesDataMap: Map<string, IAverageStrokesData>
 ): ISession[] => {
     assert(sessionsAsJson !== undefined, "sessionsAsJson === undefined");
     assert(sessionsAsJson !== null, "sessionsAsJson === null");
@@ -23,8 +27,9 @@ export const sessionsFromJson = (
         .map((sessionAsJson: any): ISession => {
             return new Session(
                 sessionAsJson.uuid,
+                sessionAsJson.name,
                 sessionAsJson.playerUuid,
-                sessionAsJson.drillConfiguration,
+                drillConfigurationsFromJson([sessionAsJson.drillConfiguration], averageStrokesDataMap)[0],
                 sessionAsJson.shotDatas)
         })
         .filter((session: ISession) => !!session);
