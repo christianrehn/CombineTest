@@ -102,6 +102,27 @@ const createWindow = (): void => {
         });
     }
 
+    // loadPlayersAsString and savePlayers listener
+    {
+        const playersFilename: string = path.join(app.getPath('userData'), "Players.json");
+
+        ipcMain.on("loadPlayersAsString", (event: Electron.IpcMainEvent, arg: any): void => {
+            console.log("loadPlayersAsString - playersFilename=", playersFilename);
+            if (!fs.existsSync(playersFilename)) {
+                console.log("loadPlayersAsString - no players file found");
+                event.returnValue = '';
+            } else {
+                event.returnValue = fs.readFileSync(playersFilename, 'utf8');
+            }
+        });
+
+        ipcMain.on("savePlayers", (event: Electron.IpcMainEvent, playersAsString: any): void => {
+            console.log("savePlayers - playersFilename=", playersFilename);
+            fs.writeFileSync(playersFilename, playersAsString, 'utf8');
+            event.returnValue = true;
+        });
+    }
+
     // loadSessionsAsString and saveSessions listener
     {
         const sessionsFilename: string = path.join(app.getPath('userData'), "Sessions.json");

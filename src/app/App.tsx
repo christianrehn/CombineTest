@@ -23,12 +23,14 @@ import {
     loadUserDrillConfigurationsAsJson,
     saveUserDrillConfigurations
 } from "./model/DrillConfiguration/DrillConfigurationsFilesystemHandler";
+import {loadPlayersAsJson, savePlayers} from "./model/Player/PlayersFilesystemHandler";
 import {loadSessionsAsJson, saveSessions} from "./model/Session/SessionsFilesystemHandler";
 import {ISession} from "./model/Session/Session";
 import {sessionsFromJson} from "./model/Session/SessionConverter";
 import {ReportsPage, ReportsPageName} from "./views/ReportsPage/ReportsPage";
 import {HomePage, HomePageName} from "./views/HomePage/HomePage";
 import {IPlayer} from "./model/Player/Player";
+import {playersFromJson} from "./model/Player/PlayerConverter";
 
 const App: React.FC<{}> = (): JSX.Element => {
     // page that is currently visible
@@ -42,9 +44,10 @@ const App: React.FC<{}> = (): JSX.Element => {
     const [selectedDrillConfiguration, setSelectedDrillConfiguration] = React.useState<IDrillConfiguration>();
 
     const [players, setPlayers] = React.useState<IPlayer[]>([]);
+    const [selectedPlayer, setSelectedPlayer] = React.useState<IPlayer>(undefined);
 
     const [sessions, setSessions] = React.useState<ISession[]>([]);
-    const [lastSession, setLastSession] = React.useState<ISession>(undefined);
+    const [selectedSession, setSelectedSession] = React.useState<ISession>(undefined);
 
     const [averageStrokesDataMap, setAverageStrokesDataMap] =
         React.useState<Map<string, IAverageStrokesData>>(new Map<string, IAverageStrokesData>());
@@ -113,6 +116,25 @@ const App: React.FC<{}> = (): JSX.Element => {
     }
 
     React.useEffect((): void => {
+        const playersAsJson: any[] = loadPlayersAsJson();
+        const players: IPlayer[] = playersFromJson(playersAsJson || []);
+        setPlayers(players);
+    }, []);
+
+    const handleSavePlayers = (player: IPlayer): void => {
+        assert(!!player, "!player");
+
+        console.log("handleSavePlayers - player=", player);
+        setSelectedPlayer(player);
+
+        const playersClone: IPlayer[] = [...players];
+        playersClone.push(player);
+        setPlayers(playersClone);
+
+        savePlayers(playersClone);
+    }
+
+    React.useEffect((): void => {
         const sessionsAsJson: any[] = loadSessionsAsJson();
         const sessions: ISession[] = sessionsFromJson(sessionsAsJson || []);
         setSessions(sessions);
@@ -122,7 +144,7 @@ const App: React.FC<{}> = (): JSX.Element => {
         assert(!!session, "!session");
 
         console.log("handleSaveSessions - session=", session);
-        setLastSession(session);
+        setSelectedSession(session);
 
         const sessionsClone: ISession[] = [...sessions];
         sessionsClone.push(session);
@@ -153,6 +175,8 @@ const App: React.FC<{}> = (): JSX.Element => {
                     : selectedPage === DrillPageName
                         ? <DrillPage
                             lastShotCsvPath={lastShotCsvPath}
+                            selectedPlayer={selectedPlayer}
+                            selectedSession={selectedSession}
                             selectedDrillConfiguration={selectedDrillConfiguration}
                             handleSelectPageClicked={setSelectedPage}
                             handleSaveSessions={handleSaveSessions}

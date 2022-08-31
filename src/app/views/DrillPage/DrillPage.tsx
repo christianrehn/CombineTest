@@ -15,11 +15,14 @@ import {Unit} from 'mathjs'
 import {AllShotsTable} from "../../components/AllShotsTable/AllShotsTable";
 import {ISession} from "../../model/Session/Session";
 import {HomePageName} from "../HomePage/HomePage";
+import {IPlayer} from "../../model/Player/Player";
 
 export const DrillPageName: string = "DrillPage";
 
 interface IDrillPageProps {
     lastShotCsvPath: string;
+    selectedPlayer: IPlayer;
+    selectedSession: ISession;
     selectedDrillConfiguration: IDrillConfiguration;
     handleSelectPageClicked: (page: string) => void;
     handleSaveSessions: (session: ISession) => void;
@@ -121,6 +124,8 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                     console.log("all shots executed -> save session");
                     nextDistanceRef.current = undefined;
                     props.handleSaveSessions({
+                        uuid: "",
+                        playerUuid: props.selectedPlayer.uuid,
                         drillConfiguration: props.selectedDrillConfiguration,
                         shotDatas
                     });

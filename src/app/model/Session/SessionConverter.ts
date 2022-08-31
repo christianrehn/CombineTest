@@ -13,8 +13,8 @@ export const sessionsToString = (
 export const sessionsFromJson = (
     sessionsAsJson: any[],
 ): ISession[] => {
-    assert(sessionsAsJson !== undefined, "drillConfigurationsAsJson === undefined");
-    assert(sessionsAsJson !== null, "drillConfigurationsAsJson === null");
+    assert(sessionsAsJson !== undefined, "sessionsAsJson === undefined");
+    assert(sessionsAsJson !== null, "sessionsAsJson === null");
 
     return sessionsAsJson;
 }
