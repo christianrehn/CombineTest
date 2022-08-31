@@ -34,6 +34,8 @@ interface IHomePageProps {
 export const HomePage: React.FC<IHomePageProps> = (props: IHomePageProps): JSX.Element => {
     const [editMode, setEditMode] = React.useState<boolean>(false);
 
+    const version: string = packageJson?.version;
+
     return (
         <div className="home-page page">
             <div className="home-top">
@@ -56,7 +58,7 @@ export const HomePage: React.FC<IHomePageProps> = (props: IHomePageProps): JSX.E
 
                 <div className="home-flex-item flex-item">
                     <div className="page-header">
-                        <h3>GCQuad Combine Test v{packageJson?.version}</h3>
+                        <h3>GCQuad Combine Test{!!version ? ` v${version}` : ""}</h3>
                     </div>
                 </div>
             </div>
