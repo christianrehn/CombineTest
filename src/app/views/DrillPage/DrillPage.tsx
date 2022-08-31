@@ -13,9 +13,10 @@ import {RestartButton} from "../../components/RestartButton/RestartButton";
 import * as math from 'mathjs'
 import {Unit} from 'mathjs'
 import {AllShotsTable} from "../../components/AllShotsTable/AllShotsTable";
-import {ISession} from "../../model/Session/Session";
+import {ISession, Session} from "../../model/Session/Session";
 import {HomePageName} from "../HomePage/HomePage";
 import {IPlayer} from "../../model/Player/Player";
+import {v4 as uuidv4} from 'uuid';
 
 export const DrillPageName: string = "DrillPage";
 
@@ -123,12 +124,11 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                     // all shots finished -> set nextDistanceRef to undefined
                     console.log("all shots executed -> save session");
                     nextDistanceRef.current = undefined;
-                    props.handleSaveSessions({
-                        uuid: "",
-                        playerUuid: props.selectedPlayer.uuid,
-                        drillConfiguration: props.selectedDrillConfiguration,
-                        shotDatas
-                    });
+                    props.handleSaveSessions(new Session(
+                        uuidv4(),
+                        props.selectedPlayer?.getUuid(),
+                        props.selectedDrillConfiguration,
+                        shotDatas))
                 }
                 setNextDistance(nextDistanceRef.current);
             }
