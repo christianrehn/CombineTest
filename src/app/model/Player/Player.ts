@@ -24,6 +24,7 @@ export class Player extends Entity implements IPlayer {
     public getLastname = (): string => {
         return this._lastname;
     }
+    
     public getFirstname = (): string => {
         return this._firstname;
     }
