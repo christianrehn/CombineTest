@@ -1,10 +1,11 @@
 import React from "react";
 import {assert} from "chai";
-import {IShotData} from "../../model/ShotData";
+import {IShotData} from "../../model/ShotData/ShotData";
 import './ShotsSvg.scss';
 import {Unit} from "mathjs";
 import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
 import {computeAbsoluteDeviation} from "../../util/MathUtil";
+import {spinDrillType} from "../../model/SelectValues/DrillType";
 
 export interface IShotsSvg {
     svgNumberOfCircles: number,
@@ -27,7 +28,7 @@ export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
     const svgScaleFactor: number = 100 / scaleFactor;
     const circleLabelPosition: number = scaleFactor / props.svgNumberOfCircles;
 
-    const lastShotTargetDistanceInUnitAsNumber = props.shotDatas.length > 0 ? props.shotDatas[props.shotDatas.length - 1].targetDistance.toNumber(props.selectedDrillConfiguration.getUnit()) : 0;
+    const lastShotTargetDistanceInUnitAsNumber = props.shotDatas.length > 0 ? props.shotDatas[props.shotDatas.length - 1].getTargetDistance().toNumber(props.selectedDrillConfiguration.getUnit()) : 0;
     const lastShotMaxDeviationInUnitAsNumber: number = props.selectedDrillConfiguration.getMaxDeviationInPercent() * lastShotTargetDistanceInUnitAsNumber / 100;
     const nextShotTargetDistanceInUnitAsNumber = props.nextDistance?.toNumber(props.selectedDrillConfiguration.getUnit());
     const nextShotMaxDeviationInUnitAsNumber: number = props.selectedDrillConfiguration.getMaxDeviationInPercent() * nextShotTargetDistanceInUnitAsNumber / 100;
@@ -82,7 +83,7 @@ export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
 
         {/*line for lastShotMaxDeviationInUnitAsNumber*/}
         {
-            props.shotDatas.length > 0 ?
+            props.selectedDrillConfiguration.getDrillType() === spinDrillType && props.shotDatas.length > 0 ?
                 <>
                     <path className="shots_svg_lastmaxdeviation"
                           d={`M-110,${-lastShotMaxDeviationInUnitAsNumber * svgScaleFactor} h220`}/>
@@ -94,26 +95,28 @@ export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
 
         {/*line for nextShotMaxDeviationInUnitAsNumber*/}
         {
-            <>
-                <path className="shots_svg_nextmaxdeviation"
-                      d={`M-110,${-nextShotMaxDeviationInUnitAsNumber * svgScaleFactor} h220`}/>
-                <path className="shots_svg_nextmaxdeviation"
-                      d={`M-110,${nextShotMaxDeviationInUnitAsNumber * svgScaleFactor} h220`}/>
-            </>
+            props.selectedDrillConfiguration.getDrillType() === spinDrillType ?
+                <>
+                    <path className="shots_svg_nextmaxdeviation"
+                          d={`M-110,${-nextShotMaxDeviationInUnitAsNumber * svgScaleFactor} h220`}/>
+                    <path className="shots_svg_nextmaxdeviation"
+                          d={`M-110,${nextShotMaxDeviationInUnitAsNumber * svgScaleFactor} h220`}/>
+                </>
+                : null
         }
 
         {/*circle for current shot*/}
         {
             props.shotDatas.map((shotData: IShotData, index: number) => {
-                const deltaY: number = shotData.targetDistance.toNumber(props.selectedDrillConfiguration.getUnit()) - shotData.carry.toNumber(props.selectedDrillConfiguration.getUnit());
+                const deltaY: number = shotData.getTargetDistance().toNumber(props.selectedDrillConfiguration.getUnit()) - shotData.getCarry().toNumber(props.selectedDrillConfiguration.getUnit());
                 return <g key={`shots_svg_shotcircle_${index}`}>
                     <circle
                         className={props.shotDatas.length === index + 1 ? 'shots_svg_lastshotcircle' : 'shots_svg_shotcircle'}
-                        cx={shotData.offline.toNumber(props.selectedDrillConfiguration.getUnit()) * svgScaleFactor}
+                        cx={shotData.getOffline().toNumber(props.selectedDrillConfiguration.getUnit()) * svgScaleFactor}
                         cy={deltaY * svgScaleFactor}/>
                     <text
                         className={props.shotDatas.length === index + 1 ? 'shots_svg_lastshotcircletext' : 'shots_svg_shotcircletext'}
-                        x={shotData.offline.toNumber(props.selectedDrillConfiguration.getUnit()) * svgScaleFactor}
+                        x={shotData.getOffline().toNumber(props.selectedDrillConfiguration.getUnit()) * svgScaleFactor}
                         y={deltaY * svgScaleFactor}
                     > {index + 1}
                     </text>
