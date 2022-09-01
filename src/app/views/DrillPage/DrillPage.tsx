@@ -131,7 +131,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                         sessionName,
                         props.selectedPlayer?.getUuid(),
                         props.selectedDrillConfiguration,
-                        shotDatas))
+                        shotDatasClone))
                 }
                 setNextDistance(nextDistanceRef.current);
             }
