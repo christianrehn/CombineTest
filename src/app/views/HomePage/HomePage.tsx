@@ -85,6 +85,7 @@ export const HomePage: React.FC<IHomePageProps> = (props: IHomePageProps): JSX.E
                     }}
                 />
                 <SelectDrill
+                    players={props.players}
                     selectedPlayer={props.selectedPlayer}
                     drillConfigurations={props.drillConfigurations}
                     handleDrillConfigurationsChanged={props.handleDrillConfigurationsChanged}

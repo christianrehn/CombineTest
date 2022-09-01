@@ -7,6 +7,7 @@ import {DrillTile} from "./DrillTile/DrillTile";
 import {IPlayer} from "../../model/Player/Player";
 
 interface ISelectDrillProps {
+    players: IPlayer[];
     selectedPlayer: IPlayer;
     drillConfigurations: IDrillConfiguration[];
     handleDrillConfigurationsChanged: (drillConfigurations: IDrillConfiguration[]) => void;
@@ -58,8 +59,10 @@ export const SelectDrill: React.FC<ISelectDrillProps> = (props: ISelectDrillProp
                             : null
                 }
                 { // existing configurations
-                    !props.selectedPlayer ? "Please select a Player" :
-                        props.drillConfigurations.map((drillConfiguration: IDrillConfiguration, index: number) =>
+                    !props.selectedPlayer
+                        ? props.players.length > 0 ? <div className="drill-tiles-message">Please select a Player</div> :
+                            <div className="drill-tiles-message">Please create and select a Player</div>
+                        : props.drillConfigurations.map((drillConfiguration: IDrillConfiguration, index: number) =>
                             <DrillTile
                                 key={`DrillTile_${index}`}
                                 drillConfiguration={drillConfiguration}
