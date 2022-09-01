@@ -13,9 +13,30 @@ interface EditPlayerPageProps {
     handleBackClicked: () => void;
 }
 
+
 export const ReportSessionPage: React.FC<EditPlayerPageProps> = (props: EditPlayerPageProps): JSX.Element => {
     assert(!!props.selectedSession, "!!props.selectedSession")
 
+    const allShotsTabName: string = "allShotsTab";
+    const dispersionTabName: string = "dispersionTab";
+    const [activeTab, setActiveTab] = React.useState(allShotsTabName);
+
+    const allShotsTab = (): JSX.Element => {
+        return (
+            activeTab === allShotsTabName
+                ? <div className="all-shots-tab">
+                    <div className="all-shots-table-flex-item flex-item">
+                        <div className="all-shots-table">
+                            <AllShotsTable
+                                shotDatas={props.selectedSession.getShotDatas()}
+                                selectedDrillConfiguration={props.selectedSession.getDrillConfiguration()}
+                            />
+                        </div>
+                    </div>
+                </div>
+                : null
+        );
+    }
     return (
         <div className="report-session-page page">
             <div className="report-session-top">
@@ -46,11 +67,26 @@ export const ReportSessionPage: React.FC<EditPlayerPageProps> = (props: EditPlay
                 </div>
             </div>
 
-            <div className="all-shots-table">
-                <AllShotsTable
-                    shotDatas={props.selectedSession.getShotDatas()}
-                    selectedDrillConfiguration={props.selectedSession.getDrillConfiguration()}
-                />
+            <div className="shot-tabs">
+                {/* Tab content */}
+                {/*{dispersionTab(nextDistanceRef.current)}*/}
+                {allShotsTab()}
+
+                {/* Tab links */}
+                <div className="tab-links">
+                    <button
+                        className={`tab-link-button ${activeTab === allShotsTabName ? "tab-link-button-active" : ""}`}
+                        onClick={() => setActiveTab(allShotsTabName)}
+                    >
+                        All Shots in Session
+                    </button>
+                    <button
+                        className={`tab-link-button ${activeTab === dispersionTabName ? "tab-link-button-active" : ""}`}
+                        onClick={() => setActiveTab(dispersionTabName)}
+                    >
+                        Dispersion
+                    </button>
+                </div>
             </div>
         </div>
     );

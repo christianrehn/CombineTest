@@ -74,17 +74,6 @@ export const HomePage: React.FC<IHomePageProps> = (props: IHomePageProps): JSX.E
                         }
                     }}
                 />
-                <SelectSession
-                    selectedPlayer={props.selectedPlayer}
-                    sessions={props.sessions}
-                    selectedSession={props.selectedSession}
-                    tileClickedHandler={(session: ISession, editMode: boolean): void => {
-                        assert(!editMode, "!!editMode")
-
-                        props.handleSelectedSessionChanged(session);
-                    }}
-                    handleSelectPageClicked={props.handleSelectPageClicked}
-                />
                 <SelectDrill
                     players={props.players}
                     selectedPlayer={props.selectedPlayer}
@@ -96,6 +85,17 @@ export const HomePage: React.FC<IHomePageProps> = (props: IHomePageProps): JSX.E
                         // switch to other page
                         props.handleSelectPageClicked(editMode ? EditDrillConfigurationPageName : DrillPageName);
                     }}
+                />
+                <SelectSession
+                    selectedPlayer={props.selectedPlayer}
+                    sessions={props.sessions}
+                    selectedSession={props.selectedSession}
+                    tileClickedHandler={(session: ISession, editMode: boolean): void => {
+                        assert(!editMode, "!!editMode")
+
+                        props.handleSelectedSessionChanged(session);
+                    }}
+                    handleSelectPageClicked={props.handleSelectPageClicked}
                 />
             </div>
         </div>

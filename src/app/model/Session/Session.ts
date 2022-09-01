@@ -1,5 +1,5 @@
 import {IDrillConfiguration} from "../DrillConfiguration/DrillConfiguration";
-import {IShotData} from "../ShotData";
+import {IShotData} from "../ShotData/ShotData";
 import {Entity, IEntity} from "../base/Entity";
 
 export interface ISession extends IEntity {
@@ -51,7 +51,7 @@ export class Session extends Entity implements ISession {
             name: this.getName(),
             playerUuid: this.getPlayerUuid(),
             drillConfiguration: this.getDrillConfiguration().toJson(),
-            shotDatas: this.getShotDatas(),
+            shotDatas: this.getShotDatas().map((shotData: IShotData) => shotData.toJson()),
         }
     }
 }

@@ -2,6 +2,7 @@ import {assert} from "chai";
 import {ISession, Session} from "./Session";
 import {drillConfigurationsFromJson} from "../DrillConfiguration/DrillConfigurationConverter";
 import {IAverageStrokesData} from "../AverageStrokesData/AverageStrokesData";
+import {shotDatasFromJson} from "../ShotData/ShotDataConverter";
 
 export const sessionsToString = (
     sessions: ISession[],
@@ -30,7 +31,7 @@ export const sessionsFromJson = (
                 sessionAsJson.name,
                 sessionAsJson.playerUuid,
                 drillConfigurationsFromJson([sessionAsJson.drillConfiguration], averageStrokesDataMap)[0],
-                sessionAsJson.shotDatas)
+                shotDatasFromJson(sessionAsJson.shotDatas))
         })
         .filter((session: ISession) => !!session);
 }

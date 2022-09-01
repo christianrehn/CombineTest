@@ -11,6 +11,7 @@ export interface IShotData {
     getSideSpin: () => number;
     getBackSpin: () => number;
     getTargetDistance: () => Unit;
+    toJson: () => any;
 }
 
 export class ShotData implements IShotData {
@@ -87,5 +88,21 @@ export class ShotData implements IShotData {
 
     public getTargetDistance = (): Unit => {
         return this._targetDistance;
+    }
+
+
+    public toJson = (): any => {
+        return {
+            id: this.getId(),
+            club: this.getClub(),
+            clubHeadSpeed: this.getClubHeadSpeed().toJSON(),
+            carry: this.getCarry().toJSON(),
+            totalDistance: this.getTotalDistance().toJSON(),
+            offline: this.getOffline().toJSON(),
+            totalSpin: this.getTotalSpin(),
+            sideSpin: this.getSideSpin(),
+            backSpin: this.getBackSpin(),
+            targetDistance: this.getTargetDistance().toJSON(),
+        }
     }
 }
