@@ -83,6 +83,7 @@ export const HomePage: React.FC<IHomePageProps> = (props: IHomePageProps): JSX.E
 
                         props.handleSelectedSessionChanged(session);
                     }}
+                    handleSelectPageClicked={props.handleSelectPageClicked}
                 />
                 <SelectDrill
                     players={props.players}

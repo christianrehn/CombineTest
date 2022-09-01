@@ -4,12 +4,14 @@ import {ISession} from "../../model/Session/Session";
 import reportsIcon from "../../../assets/reports.png";
 import {SessionTile} from "../SelectSession/SessionTile/SessionTile";
 import {IPlayer} from "../../model/Player/Player";
+import {ReportSessionPageName} from "../../views/ReportSessionPage/ReportSessionPage";
 
 interface ISelectSessionProps {
     selectedPlayer: IPlayer;
     sessions: ISession[];
     selectedSession: ISession;
     tileClickedHandler: (session: ISession, editMode: boolean) => void;
+    handleSelectPageClicked: (page: string) => void;
 }
 
 export const SelectSession: React.FC<ISelectSessionProps> = (props: ISelectSessionProps): JSX.Element => {
@@ -26,9 +28,7 @@ export const SelectSession: React.FC<ISelectSessionProps> = (props: ISelectSessi
                     <div className="reports-flex-item flex-item">
                         <span className="reports-span"
                               onClick={(): void => {
-                                  console.log("selectedSession", props.selectedSession)
-                                  // CRTODO
-                                  // props.handleSelectPageClicked(ReportsPageName)
+                                  props.handleSelectPageClicked(ReportSessionPageName)
                               }}
                         >
 

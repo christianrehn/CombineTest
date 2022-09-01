@@ -220,7 +220,6 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                         </div>
                         <div className="all-shots-table">
                             <AllShotsTable
-                                lastShot={lastShot}
                                 shotDatas={shotDatas}
                                 selectedDrillConfiguration={props.selectedDrillConfiguration}
                             />

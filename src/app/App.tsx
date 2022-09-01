@@ -26,7 +26,6 @@ import {loadPlayersAsJson, savePlayers} from "./model/Player/PlayersFilesystemHa
 import {loadSessionsAsJson, saveSessions} from "./model/Session/SessionsFilesystemHandler";
 import {ISession} from "./model/Session/Session";
 import {sessionsFromJson} from "./model/Session/SessionConverter";
-import {ReportsPage, ReportsPageName} from "./views/ReportsPage/ReportsPage";
 import {HomePage, HomePageName} from "./views/HomePage/HomePage";
 import {IPlayer, Player} from "./model/Player/Player";
 import {playersFromJson} from "./model/Player/PlayerConverter";
@@ -34,6 +33,7 @@ import {v4 as uuidv4} from "uuid";
 import {EditPlayerPage, EditPlayerPageName} from "./views/EditPlayerPage/EditPlayerPage";
 import {Entity} from "./model/base/Entity";
 import {assert} from "chai";
+import {ReportSessionPage, ReportSessionPageName} from "./views/ReportSessionPage/ReportSessionPage";
 
 const App: React.FC<{}> = (): JSX.Element => {
     // page that is currently visible
@@ -171,26 +171,27 @@ const App: React.FC<{}> = (): JSX.Element => {
                         handleBackClicked={() => setSelectedPage(HomePageName)}
                         handleSavePlayer={handleSavePlayers}
                     />
-                    : selectedPage === EditDrillConfigurationPageName
-                        ? <EditDrillConfigurationPage
-                            selectedDrillConfiguration={selectedDrillConfiguration}
+                    : selectedPage === ReportSessionPageName
+                        ? <ReportSessionPage
+                            selectedSession={selectedSession}
                             handleBackClicked={() => setSelectedPage(HomePageName)}
-                            handleSaveDrillConfiguration={handleSaveDrillConfigurations}
-                            averageStrokesDataMap={averageStrokesDataMap}
                         />
-
-                        : selectedPage === DrillPageName
-                            ? <DrillPage
-                                lastShotCsvPath={lastShotCsvPath}
-                                selectedPlayer={selectedPlayer}
-                                selectedSession={selectedSession}
+                        : selectedPage === EditDrillConfigurationPageName
+                            ? <EditDrillConfigurationPage
                                 selectedDrillConfiguration={selectedDrillConfiguration}
-                                handleSelectPageClicked={setSelectedPage}
-                                handleSaveSessions={handleSaveSessions}
+                                handleBackClicked={() => setSelectedPage(HomePageName)}
+                                handleSaveDrillConfiguration={handleSaveDrillConfigurations}
+                                averageStrokesDataMap={averageStrokesDataMap}
                             />
-                            : selectedPage === ReportsPageName
-                                ? <ReportsPage
-                                    handleBackClicked={() => setSelectedPage(HomePageName)}
+
+                            : selectedPage === DrillPageName
+                                ? <DrillPage
+                                    lastShotCsvPath={lastShotCsvPath}
+                                    selectedPlayer={selectedPlayer}
+                                    selectedSession={selectedSession}
+                                    selectedDrillConfiguration={selectedDrillConfiguration}
+                                    handleSelectPageClicked={setSelectedPage}
+                                    handleSaveSessions={handleSaveSessions}
                                 />
                                 : null
             }

@@ -1,0 +1,18 @@
+.report-session-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.report-session-page .report-session-top {
+    display: flex;
+    flex-direction: row;
+}
+
+.report-session-page .report-session-flex-item {
+    flex: 1;
+}
+
+.report-session-page .name-input {
+    width: 31em;
+}
