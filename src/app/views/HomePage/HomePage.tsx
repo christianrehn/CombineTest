@@ -62,6 +62,7 @@ export const HomePage: React.FC<IHomePageProps> = (props: IHomePageProps): JSX.E
                     </div>
                 </div>
             </div>
+            
             <div className="home-main">
                 <SelectPlayer
                     players={props.players}

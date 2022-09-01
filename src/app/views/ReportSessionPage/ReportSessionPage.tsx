@@ -4,6 +4,7 @@ import backIcon from '../../../assets/back.png';
 import {ISession} from "../../model/Session/Session";
 import {assert} from "chai";
 import {AllShotsTable} from "../../components/AllShotsTable/AllShotsTable";
+import {ShotsSvg} from "../../components/ShotsSvg/ShotsSvg";
 
 export const ReportSessionPageName: string = "ReportSessionPage";
 
@@ -37,6 +38,28 @@ export const ReportSessionPage: React.FC<EditPlayerPageProps> = (props: EditPlay
                 : null
         );
     }
+
+    const dispersionTab = (): JSX.Element => {
+        return (
+            activeTab === dispersionTabName
+                ? <div className="shots-svg flex-item">
+                    <div className="page-header">
+                        <h3>Dispersion</h3>
+                    </div>
+                    <div className="t">
+                        <div className="ShotsSvg">
+                            <ShotsSvg
+                                shotDatas={props.selectedSession.getShotDatas()}
+                                selectedDrillConfiguration={props.selectedSession.getDrillConfiguration()}
+                                nextDistance={undefined}
+                            />
+                        </div>
+                    </div>
+                </div>
+                : null
+        );
+    }
+
     return (
         <div className="report-session-page page">
             <div className="report-session-top">
@@ -69,8 +92,8 @@ export const ReportSessionPage: React.FC<EditPlayerPageProps> = (props: EditPlay
 
             <div className="shot-tabs">
                 {/* Tab content */}
-                {/*{dispersionTab(nextDistanceRef.current)}*/}
                 {allShotsTab()}
+                {dispersionTab()}
 
                 {/* Tab links */}
                 <div className="tab-links">

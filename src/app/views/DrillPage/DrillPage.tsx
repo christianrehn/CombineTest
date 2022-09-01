@@ -146,9 +146,6 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
     }
 
     const lastShot: IShotData | undefined = shotDatas.length > 0 ? shotDatas[shotDatas.length - 1] : undefined;
-    const svgNumberOfCircles: number = 5;
-
-    console.log("shotDatas", shotDatas)
 
     const nextDistanceBox = (): JSX.Element => {
         return (
@@ -197,7 +194,6 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                         </div>
                         <div className="ShotsSvg">
                             <ShotsSvg
-                                svgNumberOfCircles={svgNumberOfCircles}
                                 shotDatas={shotDatas}
                                 selectedDrillConfiguration={props.selectedDrillConfiguration}
                                 nextDistance={nextDistance}

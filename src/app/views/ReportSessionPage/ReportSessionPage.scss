@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    overflow: auto;
 }
 
 .report-session-page .report-session-top {
@@ -13,6 +14,14 @@
     flex: 1;
 }
 
-.report-session-page .name-input {
-    width: 31em;
+.report-session-page .t {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+}
+
+.report-session-page .ShotsSvg {
+    flex: 0 0 60vh;
+    background: var(--font-white);
 }
