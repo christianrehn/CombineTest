@@ -1,4 +1,4 @@
-import {IShotData} from "../../model/ShotData";
+import {IShotData} from "../../model/ShotData/ShotData";
 import React from "react";
 import './AllShotsTable.scss';
 import {assert} from "chai";
@@ -97,29 +97,29 @@ export const AllShotsTable: React.FC<IAllShotsTableProps> = (props: IAllShotsTab
                 {
                     props.shotDatas.map((shotData: IShotData, index: number): JSX.Element => {
                         // compute strokes gained
-                        const averageStrokesFromStartDistance: number = props.selectedDrillConfiguration.computeAverageStrokesFromStartDistance(shotData.targetDistance);
+                        const averageStrokesFromStartDistance: number = props.selectedDrillConfiguration.computeAverageStrokesFromStartDistance(shotData.getTargetDistance());
                         const absoluteDeviation: Unit = computeAbsoluteDeviation(shotData);
                         const averageStrokesFromEndDistance: number = props.selectedDrillConfiguration.computeAverageStrokesFromEndDistance(absoluteDeviation);
 
                         const strokesGained: number = computeStrokesGained(averageStrokesFromStartDistance, averageStrokesFromEndDistance);
                         strokesGainedValues.push(strokesGained);
 
-                        const trackmanScore: number = computeTrackmanScore(shotData.targetDistance, absoluteDeviation);
+                        const trackmanScore: number = computeTrackmanScore(shotData.getTargetDistance(), absoluteDeviation);
                         trackmanScoreValues.push(trackmanScore);
 
-                        const spinScore: number = computeSpinScore(props.selectedDrillConfiguration, shotData.targetDistance, shotData.totalSpin, shotData.carry);
+                        const spinScore: number = computeSpinScore(props.selectedDrillConfiguration, shotData.getTargetDistance(), shotData.getTotalSpin(), shotData.getCarry());
                         spinScoreValues.push(spinScore);
 
-                        const targetDistanceInUnitAsNumber: number = shotData.targetDistance.toNumber(props.selectedDrillConfiguration.getUnit());
+                        const targetDistanceInUnitAsNumber: number = shotData.getTargetDistance().toNumber(props.selectedDrillConfiguration.getUnit());
                         targetDistanceInUnitAsNumberValues.push(targetDistanceInUnitAsNumber);
 
-                        const carry: number = shotData.carry.toNumber(props.selectedDrillConfiguration.getUnit());
+                        const carry: number = shotData.getCarry().toNumber(props.selectedDrillConfiguration.getUnit());
                         carryValues.push(carry);
 
-                        const totalDistanceInUnitAsNumber: number = shotData.totalDistance.toNumber(props.selectedDrillConfiguration.getUnit());
+                        const totalDistanceInUnitAsNumber: number = shotData.getTotalDistance().toNumber(props.selectedDrillConfiguration.getUnit());
                         totalDistanceInUnitAsNumberValues.push(totalDistanceInUnitAsNumber);
 
-                        const offlineInUnitAsNumber: number = shotData.offline.toNumber(props.selectedDrillConfiguration.getUnit());
+                        const offlineInUnitAsNumber: number = shotData.getOffline().toNumber(props.selectedDrillConfiguration.getUnit());
                         offlineInUnitAsNumberValues.push(offlineInUnitAsNumber);
 
                         const absoluteDeviationInUnitAsNumber: number = computeAbsoluteDeviation(shotData).toNumber(props.selectedDrillConfiguration.getUnit());
@@ -131,7 +131,7 @@ export const AllShotsTable: React.FC<IAllShotsTableProps> = (props: IAllShotsTab
                         const targetSpinInRpm: number = props.selectedDrillConfiguration.getTargetSpinInRpmPerUnit() * targetDistanceInUnitAsNumber;
                         targetSpinInRpmValues.push(targetSpinInRpm);
 
-                        const totalSpinInRpm: number = shotData.totalSpin;
+                        const totalSpinInRpm: number = shotData.getTotalSpin();
                         totalSpinInRpmValues.push(totalSpinInRpm);
 
 
