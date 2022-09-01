@@ -1,7 +1,7 @@
 import {assert} from "chai";
 import * as math from "mathjs";
 import {MathType, Unit} from "mathjs";
-import {IShotData} from "../model/ShotData";
+import {IShotData} from "../model/ShotData/ShotData";
 
 export const computeSum = (values: number[]) => {
     assert(values.length > 0, "!values.length > 0");
@@ -26,16 +26,16 @@ export const computeStandardDeviationEntirePopulation = (values: number[]): numb
 export const computeAbsoluteDeviation = (shotData: IShotData): Unit => {
     assert(!!shotData, "!shotData");
 
-    const deltaDistance: Unit = math.subtract(shotData.carry, shotData.targetDistance) as Unit;
-    const absoluteDeviation: MathType = math.sqrt(math.add(math.square(deltaDistance), math.square(shotData.offline)) as Unit);
+    const deltaDistance: Unit = math.subtract(shotData.getCarry(), shotData.getTargetDistance()) as Unit;
+    const absoluteDeviation: MathType = math.sqrt(math.add(math.square(deltaDistance), math.square(shotData.getOffline())) as Unit);
     return absoluteDeviation;
 }
 
 export const computeRelativeDeviation = (shotData: IShotData): number => {
     assert(!!shotData, "!shotData");
 
-    const absoluteDeviationAsNumber: number = computeAbsoluteDeviation(shotData).toNumber(shotData.targetDistance.formatUnits());
-    const targetDistanceAsNumber: number = shotData.targetDistance.toNumber(shotData.targetDistance.formatUnits());
+    const absoluteDeviationAsNumber: number = computeAbsoluteDeviation(shotData).toNumber(shotData.getTargetDistance().formatUnits());
+    const targetDistanceAsNumber: number = shotData.getTargetDistance().toNumber(shotData.getTargetDistance().formatUnits());
     const relativeDeviation: number = absoluteDeviationAsNumber / targetDistanceAsNumber;
     return relativeDeviation;
 }
