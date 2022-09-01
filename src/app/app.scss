@@ -77,8 +77,8 @@ html, body, #root {
 :root {
     --bg: #234050;
     --font-white: #eeeeee;
-    --font-site-normal: 24px;
-    --font-site-header: 40px;
+    --font-size-normal: 24px;
+    --font-size-header: 40px;
     --background-dark: #234050;
     --page-margin-horizontal: 5ex;
     --page-icon-width: 6ex;
@@ -126,7 +126,7 @@ html, body, #root {
 
 .page-header {
     h3 {
-        font-size: var(--font-site-header);
+        font-size: var(--font-size-header);
         text-align: center;
         margin-bottom: 50px;
     }
@@ -134,7 +134,7 @@ html, body, #root {
 
 .column-header {
     h3 {
-        font-size: var(--font-site-header);
+        font-size: var(--font-size-header);
         text-align: center;
         padding: 40px;
     }
