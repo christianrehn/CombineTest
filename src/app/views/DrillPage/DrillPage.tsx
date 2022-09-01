@@ -4,7 +4,7 @@ import './DrillPage.scss';
 import {parseCsvToFirstRowAsObject} from "../../util/CsvParser";
 import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
 import {ShotsSvg} from "../../components/ShotsSvg/ShotsSvg";
-import {IShotData} from "../../model/ShotData";
+import {IShotData, ShotData} from "../../model/ShotData/ShotData";
 import {LastShotData} from "../../components/LastShotData/LastShotData";
 import {assert} from "chai";
 import {NextDistanceBox} from "../../components/NextDistanceBox/NextDistanceBox";
@@ -50,18 +50,18 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
         const shotIdFromLastShotFile: number = lastShotData["shot_id"];
         if (!!shotIdFromLastShotFile) {
             console.log(`shot id=${shotIdFromLastShotFile} has been executed, lastShotData: ${JSON.stringify(lastShotData)}`);
-            setShotData({
-                id: shotIdFromLastShotFile,
-                club: lastShotData["club"],
-                clubHeadSpeed: math.unit(lastShotData["club_head_speed_ms"], "m"),
-                carry: math.unit(lastShotData["carry_m"], "m"),
-                totalDistance: math.unit(lastShotData["total_distance_m"], "m"),
-                offline: math.unit(lastShotData["offline_m"], "m"),
-                totalSpin: lastShotData["total_spin_rpm"],
-                sideSpin: lastShotData["side_spin_rpm"],
-                backSpin: lastShotData["back_spin_rpm"],
-                targetDistance: nextDistanceRef.current
-            });
+            setShotData(new ShotData(
+                shotIdFromLastShotFile,
+                lastShotData["club"],
+                math.unit(lastShotData["club_head_speed_ms"], "m"),
+                math.unit(lastShotData["carry_m"], "m"),
+                math.unit(lastShotData["total_distance_m"], "m"),
+                math.unit(lastShotData["offline_m"], "m"),
+                lastShotData["total_spin_rpm"],
+                lastShotData["side_spin_rpm"],
+                lastShotData["back_spin_rpm"],
+                nextDistanceRef.current
+            ));
         }
     }
 
@@ -106,12 +106,12 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
     }, [props.lastShotCsvPath])
 
     React.useEffect((): void => {
-        if (!!shotData && (shotDatas.length === 0 || shotData.id !== shotDatas[shotDatas.length - 1].id)) {
+        if (!!shotData && (shotDatas.length === 0 || shotData.getId() !== shotDatas[shotDatas.length - 1].getId())) {
             // new shot detected
 
             if (shotDatas.length >= props.selectedDrillConfiguration.getNumberOfShots()) {
                 // shot executed but number of shots was already reached -> ignore
-                console.log(`shot id=${shotData.id} executed but number of shots was already reached -> ignore`);
+                console.log(`shot id=${shotData.getId()} executed but number of shots was already reached -> ignore`);
             } else {
                 // add new shot to array
                 const shotDatasClone: IShotData[] = [...shotDatas];
