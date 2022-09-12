@@ -9,7 +9,7 @@ import {
     RANDOM_DISTANCES_GENERATOR,
     RANDOM_FROM_FIXED_DISTANCES_GENERATOR
 } from "./DistanceGenerator";
-import {shotsGainedDrillType} from "../SelectValues/DrillType";
+import {trackmanScoreAndShotsGainedDrillType} from "../SelectValues/DrillType";
 import {meterLengthUnit} from "../SelectValues/LengthUnit";
 import {Entity, IEntity} from "../base/Entity";
 
@@ -449,7 +449,7 @@ export class EmptyDrillConfiguration extends DrillConfigurationWithFixedDistance
             uuidv4(),
             "",
             "",
-            shotsGainedDrillType,
+            trackmanScoreAndShotsGainedDrillType,
             meterLengthUnit,
             0,
             0,

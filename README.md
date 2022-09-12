@@ -65,6 +65,8 @@ Execute the shots and see the dispersion and Shots Gained and Trackman Scores fo
 Or for all shots in current session (without dispersion):
 ![All shots](screenshots/220106_CombineTest_AllShots.png)
 
+### Drill
+
 ## Track your golf training data
 
 Maybe you also want to check out my 100% free iOS App: [Golf Logbook](https://christianrehn.github.io/golf-logbook/)

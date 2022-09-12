@@ -26,13 +26,13 @@ import {IAverageStrokesData} from "../../model/AverageStrokesData/AverageStrokes
 import {NumberPlusMinusInput} from "../../components/DrillConfiguration/NumberPlusMinusInput/NumberPlusMinusInput";
 import {EndGroundConfigsTable} from "../../components/DrillConfiguration/EndGroundConfigsTable/EndGroundConfigsTable";
 import {startGroundTypes,} from "../../model/AverageStrokesData/GroundType";
-import {drillTypes, shotsGainedDrillType, spinDrillType} from "../../model/SelectValues/DrillType";
+import {drillTypes, spinDrillType, trackmanScoreAndShotsGainedDrillType} from "../../model/SelectValues/DrillType";
 import {lengthUnits} from "../../model/SelectValues/LengthUnit";
 
 export const EditDrillConfigurationPageName: string = "EditDrillConfigurationPage";
 
 
-const DEFAULT_DRILL_TYPE: string = shotsGainedDrillType;
+const DEFAULT_DRILL_TYPE: string = trackmanScoreAndShotsGainedDrillType;
 
 const MIN_TARGET_RPM_PER_UNIT: number = 1;
 const DEFAULT_TARGET_RPM_PER_UNIT: number = 250;
@@ -93,12 +93,12 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
 
     React.useEffect((): void => {
         // validate targetSpinInRpmPerUnit
-        setTargetSpinInRpmPerUnitError(drillType === shotsGainedDrillType && targetSpinInRpmPerUnit < MIN_TARGET_RPM_PER_UNIT);
+        setTargetSpinInRpmPerUnitError(drillType === trackmanScoreAndShotsGainedDrillType && targetSpinInRpmPerUnit < MIN_TARGET_RPM_PER_UNIT);
     }, [targetSpinInRpmPerUnit])
 
     React.useEffect((): void => {
         // validate maxDeviationInPercent
-        setMaxDeviationInPercentError(drillType === shotsGainedDrillType && (maxDeviationInPercent < MIN_DEVIATION_IN_PERCENT || maxDeviationInPercent > MAX_DEVIATION_IN_PERCENT));
+        setMaxDeviationInPercentError(drillType === trackmanScoreAndShotsGainedDrillType && (maxDeviationInPercent < MIN_DEVIATION_IN_PERCENT || maxDeviationInPercent > MAX_DEVIATION_IN_PERCENT));
     }, [maxDeviationInPercent])
 
     React.useEffect((): void => {
