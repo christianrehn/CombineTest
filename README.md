@@ -158,6 +158,7 @@ After cloning the repo you can:
     * yarn clean && yarn ci && yarn make
     * in order to yarn electron-forge publish to the github repo the environment variable GITHUB_TOKEN has to be set
       because it is used in forge.config.js
+    * add new versions for auto-update to updates.json file
 * check for outdated packages: yarn outdated
 * upgrade packages: yarn upgrade
 * to see console logs of main in production add --enable-logging command line option
