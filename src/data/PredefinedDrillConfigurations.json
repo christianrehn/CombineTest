@@ -120,7 +120,7 @@
             "distances": [
                 10
             ],
-            "numberOfRounds": 10
+            "numberOfRounds": 5
         }
     },
     {
