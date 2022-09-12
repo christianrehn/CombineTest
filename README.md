@@ -53,11 +53,20 @@ Microsoft for a code validation certificate.
 
 ## Usage
 
+Create a new Player:
+![Create player 1](screenshots/220912_CombineTest_CreatePlayer1.png)
+![Create player 2](screenshots/220912_CombineTest_CreatePlayer2.png)
+![Create player 3](screenshots/220912_CombineTest_CreatePlayer3.png)
+![Create player 4](screenshots/220912_CombineTest_CreatePlayer4.png)
+
+Select one of the players:
+![Select player](screenshots/220912_CombineTest_SelectPlayer.png)
+
 Select one of the predefined drill configurations:
-![Predefined drills](screenshots/220106_CombineTest_SelectDrill.png)
+![Predefined drills](screenshots/220912_CombineTest_SelectDrill.png)
 
 Or add a new drill configurations or edit existing ones:
-![Edit drill configuration](screenshots/220106_CombineTest_EditDrillConfiguration.png)
+![Edit drill configuration](screenshots/220912_CombineTest_EditDrillConfiguration.png)
 
 Execute the shots and see the dispersion and Shots Gained and Trackman Scores for the last stroke:
 ![One shot done](screenshots/220106_CombineTest_OneShotDone.png)
@@ -87,6 +96,10 @@ If you create more or less spin you get a higher or lower score.
 The score is linearly dependent on the generated spin.
 So if you only create half of the predefined target spin per meter you only get a score of 50.
 If you create two times the predefined target spin per meter you get a score of 200.
+
+#### Hitting Circle
+
+Will be available from version 2.1
 
 ## Track your golf training data
 
