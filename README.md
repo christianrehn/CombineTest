@@ -65,7 +65,28 @@ Execute the shots and see the dispersion and Shots Gained and Trackman Scores fo
 Or for all shots in current session (without dispersion):
 ![All shots](screenshots/220106_CombineTest_AllShots.png)
 
-### Drill
+### Drill Type
+
+Starting from version 2.0 you can select between different drill types:
+
+#### Trackman Combine and Shots gained
+
+This drill type is what you already know from the Trackman Combine Test.
+You have a target and try to shoot as near as possible to the target.
+The lower the distance to the target the higher the score.
+
+#### Spin
+
+The Spin type is completely different.
+As you can already guess from the name you have to produce a lot of spin to get a high score.
+Each spin drill defines a landing area.
+If your ball lands outside this corridor you get a zero score.
+If your ball is inside this corridor you get a score that depends on the total spin you created with your shot.
+The drill configuration defines the spin per meter that you have to create in order to get a score of 100.
+If you create more or less spin you get a higher or lower score.
+The score is linearly dependent on the generated spin.
+So if you only create half of the predefined target spin per meter you only get a score of 50.
+If you create two times the predefined target spin per meter you get a score of 200.
 
 ## Track your golf training data
 
