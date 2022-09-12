@@ -1,6 +1,7 @@
 import React from "react";
 import './NextDistanceBox.scss';
 import {assert} from "chai";
+import * as math from "mathjs";
 import {Unit} from "mathjs";
 import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
 import {spinDrillType} from "../../model/SelectValues/DrillType";
@@ -14,17 +15,17 @@ export const NextDistanceBox: React.FC<INextDistanceBoxProps> = (props: INextDis
     assert(!!props, "!props");
     assert(!!props.selectedDrillConfiguration, "NextDistanceBox - !props.selectedDistancesGenerator");
 
-    const nextDistanceInDistancesGeneratorUnit: number =
+    const nextDistanceInDistancesGeneratorInUnitAsNumber: number =
         !!props.nextDistance
-            ? props.nextDistance.toNumber(props.selectedDrillConfiguration.getUnit())
+            ? math.round(props.nextDistance.toNumber(props.selectedDrillConfiguration.getUnit()) * 10) / 10
             : undefined;
 
     const averageStrokesFromStartDistance: number = props.selectedDrillConfiguration.getDrillType() !== spinDrillType ? props.selectedDrillConfiguration.computeAverageStrokesFromStartDistance(props.nextDistance) : null;
     return (
         <div className="next-distance box">
-            <p className="next-distance-number">{!!nextDistanceInDistancesGeneratorUnit ? nextDistanceInDistancesGeneratorUnit :
+            <p className="next-distance-number">{!!nextDistanceInDistancesGeneratorInUnitAsNumber ? nextDistanceInDistancesGeneratorInUnitAsNumber :
                 <span>&nbsp;</span>}</p>
-            <p className="next-distance-unit"> {!!nextDistanceInDistancesGeneratorUnit ? props.selectedDrillConfiguration.getUnit() : "DONE"}</p>
+            <p className="next-distance-unit"> {!!nextDistanceInDistancesGeneratorInUnitAsNumber ? props.selectedDrillConfiguration.getUnit() : "DONE"}</p>
             {
                 props.selectedDrillConfiguration.getDrillType() !== spinDrillType
                     ? // != spin type
@@ -48,8 +49,8 @@ export const NextDistanceBox: React.FC<INextDistanceBoxProps> = (props: INextDis
                                 {`Target Spin`}
                             </p>
                             <p className="next-distance-target-spin">
-                                {!!nextDistanceInDistancesGeneratorUnit ?
-                                    (props.selectedDrillConfiguration.getTargetSpinInRpmPerUnit() * nextDistanceInDistancesGeneratorUnit).toFixed(0)
+                                {!!nextDistanceInDistancesGeneratorInUnitAsNumber ?
+                                    (props.selectedDrillConfiguration.getTargetSpinInRpmPerUnit() * nextDistanceInDistancesGeneratorInUnitAsNumber).toFixed(0)
                                     : null
                                 }
                             </p>
@@ -61,7 +62,7 @@ export const NextDistanceBox: React.FC<INextDistanceBoxProps> = (props: INextDis
                                 {(props.selectedDrillConfiguration.getMaxDeviationInPercent()).toFixed(0)}&nbsp;%
                             </p>
                             <p className="next-distance-max-deviation-unit">
-                                {(props.selectedDrillConfiguration.getMaxDeviationInPercent() * nextDistanceInDistancesGeneratorUnit / 100).toFixed(1)}&nbsp;{props.selectedDrillConfiguration.getUnit()}
+                                {(props.selectedDrillConfiguration.getMaxDeviationInPercent() * nextDistanceInDistancesGeneratorInUnitAsNumber / 100).toFixed(1)}&nbsp;{props.selectedDrillConfiguration.getUnit()}
                             </p>
                         </>
                         : null
