@@ -114,7 +114,25 @@
         "drillType": "Spin",
         "unit": "meter",
         "targetSpinInRpmPerUnit": 250,
-        "maxDeviationInPercent": 20,
+        "maxDeviationAsUnitNotPercent": true,
+        "maxDeviationInUnit": 2,
+        "distanceGenerator": {
+            "type": "FixedDistancesGenerator",
+            "distances": [
+                6
+            ],
+            "numberOfRounds": 5
+        }
+    },
+    {
+        "uuid": "97445e5c-1cbd-4f42-a788-5bdaa6e13124",
+        "name": "Spin with Deviation %",
+        "description": "5 pitches with maximum spin",
+        "drillType": "Spin",
+        "unit": "meter",
+        "targetSpinInRpmPerUnit": 250,
+        "maxDeviationAsUnitNotPercent": false,
+        "maxDeviationInPercent": 30,
         "distanceGenerator": {
             "type": "FixedDistancesGenerator",
             "distances": [
