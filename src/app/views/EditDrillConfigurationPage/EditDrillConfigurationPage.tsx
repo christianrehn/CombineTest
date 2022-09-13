@@ -265,7 +265,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         }}
                     />
                 </div>
-                <div className="deviation-in-percent-input">
+                <div className="max-deviation-in-percent-input">
                     <NumberPlusMinusInput
                         label={`Max. Carry Deviation in %`}
                         hidden={drillType !== spinDrillType || maxDeviationAsUnitNotPercent}
@@ -276,7 +276,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         }}
                     />
                 </div>
-                <div className="deviation-in-unit-input">
+                <div className="max-deviation-in-unit-input">
                     <NumberPlusMinusInput
                         label={`Max. Carry Deviation in ${lengthUnit}`}
                         hidden={drillType !== spinDrillType || !maxDeviationAsUnitNotPercent}
