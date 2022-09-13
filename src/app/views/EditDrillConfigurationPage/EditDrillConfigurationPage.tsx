@@ -38,8 +38,10 @@ const MIN_TARGET_RPM_PER_UNIT: number = 1;
 const DEFAULT_TARGET_RPM_PER_UNIT: number = 250;
 
 const MIN_DEVIATION_IN_PERCENT: number = 1;
-const MAX_DEVIATION_IN_PERCENT: number = 100;
-const DEFAULT_DEVIATION_IN_PERCENT: number = 10;
+const DEFAULT_DEVIATION_IN_PERCENT: number = 30;
+
+const MIN_DEVIATION_IN_UNIT: number = 1;
+const DEFAULT_DEVIATION_IN_UNIT: number = 3;
 
 const MIN_NAME: number = 1;
 const MAX_NAME: number = 30;
@@ -70,8 +72,9 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     const [lengthUnit, setLengthUnit] = React.useState<string>(props.selectedDrillConfiguration.getUnit());
     const [targetSpinInRpmPerUnit, setTargetSpinInRpmPerUnit] = React.useState<number>(props.selectedDrillConfiguration.getTargetSpinInRpmPerUnit() || DEFAULT_TARGET_RPM_PER_UNIT);
     const [targetSpinInRpmPerUnitError, setTargetSpinInRpmPerUnitError] = React.useState<boolean>(true);
+    const [maxDeviationAsUnitNotPercent, setMaxDeviationAsUnitNotPercent] = React.useState<boolean>(props.selectedDrillConfiguration.getMaxDeviationAsUnitNotPercent() || true);
     const [maxDeviationInPercent, setMaxDeviationInPercent] = React.useState<number>(props.selectedDrillConfiguration.getMaxDeviationInPercent() || DEFAULT_DEVIATION_IN_PERCENT);
-    const [maxDeviationInPercentError, setMaxDeviationInPercentError] = React.useState<boolean>(true);
+    const [maxDeviationInUnit, setMaxDeviationInUnit] = React.useState<number>(props.selectedDrillConfiguration.getMaxDeviationInUnit() || DEFAULT_DEVIATION_IN_UNIT);
     const [startGroundType, setStartGroundType] = React.useState<string>(props.selectedDrillConfiguration.getStartGroundType());
     const [endGroundConfigs, setEndGroundConfigs] = React.useState<IEndGroundConfig[]>(props.selectedDrillConfiguration.getEndGroundConfigs());
     const [distanceGenerator, setDistanceGenerator] = React.useState<string>(props.selectedDrillConfiguration.getDistanceGenerator());
@@ -97,11 +100,6 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     }, [targetSpinInRpmPerUnit])
 
     React.useEffect((): void => {
-        // validate maxDeviationInPercent
-        setMaxDeviationInPercentError(drillType === trackmanScoreAndShotsGainedDrillType && (maxDeviationInPercent < MIN_DEVIATION_IN_PERCENT || maxDeviationInPercent > MAX_DEVIATION_IN_PERCENT));
-    }, [maxDeviationInPercent])
-
-    React.useEffect((): void => {
         // validate distances
         setDistancesError(distances.length <= 0);
     }, [distances])
@@ -117,7 +115,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     }, [maxExcludedDistanceError])
 
     const error = (): boolean => {
-        return nameError || targetSpinInRpmPerUnitError || maxDeviationInPercentError || (distanceGenerator === RANDOM_DISTANCES_GENERATOR
+        return nameError || targetSpinInRpmPerUnitError || (distanceGenerator === RANDOM_DISTANCES_GENERATOR
             ? minIncludedDistanceError || maxExcludedDistanceError
             : [FIXED_DISTANCES_GENERATOR, RANDOM_FROM_FIXED_DISTANCES_GENERATOR].includes(distanceGenerator)
                 ? distancesError
@@ -164,7 +162,9 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                           drillType,
                                           lengthUnit,
                                           targetSpinInRpmPerUnit,
+                                          maxDeviationAsUnitNotPercent,
                                           maxDeviationInPercent,
+                                          maxDeviationInUnit,
                                           distanceGenerator,
                                           startGroundType,
                                           endGroundConfigs,
@@ -254,17 +254,36 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         }}
                     />
                 </div>
-                <div className="deviation-in-unit-input">
+                <div className="deviation-in-percent-input">
                     <DrillConfigurationTextInput
-                        label={`Max. Carry Deviation in %`}
+                        label={`Max. Carry Deviation as ${lengthUnit} or %`}
                         hidden={drillType !== spinDrillType}
-                        error={maxDeviationInPercentError}
-                        type="number"
+                        type="checkbox"
+                        checked={maxDeviationAsUnitNotPercent}
+                        handleOnChange={(): void => {
+                            setMaxDeviationAsUnitNotPercent(!maxDeviationAsUnitNotPercent);
+                        }}
+                    />
+                </div>
+                <div className="deviation-in-percent-input">
+                    <NumberPlusMinusInput
+                        label={`Max. Carry Deviation in %`}
+                        hidden={drillType !== spinDrillType || maxDeviationAsUnitNotPercent}
                         value={maxDeviationInPercent}
-                        // maxLength={3}
                         min={MIN_DEVIATION_IN_PERCENT}
-                        handleOnChange={(value: string): void => {
-                            setMaxDeviationInPercent(Number(value));
+                        handleOnClick={(value: number): void => {
+                            setMaxDeviationInPercent(value);
+                        }}
+                    />
+                </div>
+                <div className="deviation-in-unit-input">
+                    <NumberPlusMinusInput
+                        label={`Max. Carry Deviation in ${lengthUnit}`}
+                        hidden={drillType !== spinDrillType || !maxDeviationAsUnitNotPercent}
+                        value={maxDeviationInUnit}
+                        min={MIN_DEVIATION_IN_UNIT}
+                        handleOnClick={(value: number): void => {
+                            setMaxDeviationInUnit(value);
                         }}
                     />
                 </div>
