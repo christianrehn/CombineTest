@@ -38,7 +38,9 @@ export interface IDrillConfiguration extends IEntity {
     getDrillType: () => string;
     getUnit: () => string;
     getTargetSpinInRpmPerUnit: () => number;
+    getMaxDeviationAsUnitNotPercent: () => boolean;
     getMaxDeviationInPercent: () => number;
+    getMaxDeviationInUnit: () => number;
     getStartGroundType: () => string;
     getEndGroundConfigs: () => IEndGroundConfig[]
     getDistanceGenerator: () => string;
@@ -68,7 +70,9 @@ abstract class AbstractDrillConfiguration extends Entity {
     protected _description: string;
     protected _drillType: string;
     protected _targetSpinInRpmPerUnit: number;
+    protected _maxDeviationAsUnitNotPercent: boolean;
     protected _maxDeviationInPercent: number;
+    protected _maxDeviationInUnit: number;
     protected _startGroundType: string;
     protected _endGroundConfigs: IEndGroundConfig[];
     protected readonly _averageShotsStartGroundType: string;
@@ -80,7 +84,9 @@ abstract class AbstractDrillConfiguration extends Entity {
         description: string,
         drillType: string,
         targetSpinInRpmPerUnit: number,
+        maxDeviationAsUnitNotPercent: boolean,
         maxDeviationInPercent: number,
+        maxDeviationInUnit: number,
         startGroundType: string,
         endGroundConfigs: IEndGroundConfig[],
         averageStrokesDataMap: Map<string, IAverageStrokesData>,
@@ -91,7 +97,9 @@ abstract class AbstractDrillConfiguration extends Entity {
         this._description = description;
         this._drillType = drillType;
         this._targetSpinInRpmPerUnit = targetSpinInRpmPerUnit;
+        this._maxDeviationAsUnitNotPercent = maxDeviationAsUnitNotPercent;
         this._maxDeviationInPercent = maxDeviationInPercent;
+        this._maxDeviationInUnit = maxDeviationInUnit;
         this._startGroundType = startGroundType;
         this._endGroundConfigs = endGroundConfigs;
         this._averageShotsStartGroundType = startGroundType;
@@ -113,8 +121,16 @@ abstract class AbstractDrillConfiguration extends Entity {
         return this._targetSpinInRpmPerUnit;
     }
 
+    public getMaxDeviationAsUnitNotPercent = (): boolean => {
+        return this._maxDeviationAsUnitNotPercent;
+    }
+
     public getMaxDeviationInPercent = (): number => {
         return this._maxDeviationInPercent;
+    }
+
+    public getMaxDeviationInUnit = (): number => {
+        return this._maxDeviationInUnit;
     }
 
     public getStartGroundType = (): string => {
@@ -225,7 +241,9 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
         drillType: string,
         unit: string,
         targetSpinInRpmPerUnit: number,
+        maxDeviationAsUnitNotPercent: boolean,
         maxDeviationInPercent: number,
+        maxDeviationInUnit: number,
         startGroundType: string,
         endGroundConfigs: IEndGroundConfig[],
         minIncludedDistance: number,
@@ -233,7 +251,7 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
         numberOfShots: number,
         averageStrokesDataMap: Map<string, IAverageStrokesData>
     ) {
-        super(uuid, name, description, drillType, targetSpinInRpmPerUnit, maxDeviationInPercent, startGroundType, endGroundConfigs, averageStrokesDataMap);
+        super(uuid, name, description, drillType, targetSpinInRpmPerUnit, maxDeviationAsUnitNotPercent, maxDeviationInPercent, maxDeviationInUnit, startGroundType, endGroundConfigs, averageStrokesDataMap);
 
         this._minIncludedDistance = minIncludedDistance;
         this._maxExcludedDistance = maxExcludedDistance;
@@ -279,7 +297,9 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
             drillType: this.getDrillType(),
             unit: this.getUnit(),
             targetSpinInRpmPerUnit: this.getTargetSpinInRpmPerUnit(),
+            maxDeviationAsUnitNotPercent: this.getMaxDeviationAsUnitNotPercent(),
             maxDeviationInPercent: this.getMaxDeviationInPercent(),
+            maxDeviationInUnit: this.getMaxDeviationInUnit(),
             distanceGenerator: {
                 minIncludedDistance: this._minIncludedDistance,
                 maxExcludedDistance: this._maxExcludedDistance,
@@ -303,7 +323,9 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
         drillType: string,
         unit: string,
         targetSpinInRpmPerUnit: number,
+        maxDeviationAsUnitNotPercent: boolean,
         maxDeviationInPercent: number,
+        maxDeviationInUnit: number,
         startGroundType: string,
         endGroundConfigs: IEndGroundConfig[],
         distances: number[],
@@ -316,7 +338,9 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
             description,
             drillType,
             targetSpinInRpmPerUnit,
+            maxDeviationAsUnitNotPercent,
             maxDeviationInPercent,
+            maxDeviationInUnit,
             startGroundType,
             endGroundConfigs,
             averageStrokesDataMap);
@@ -364,7 +388,9 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
             drillType: this.getDrillType(),
             unit: this.getUnit(),
             targetSpinInRpmPerUnit: this.getTargetSpinInRpmPerUnit(),
+            maxDeviationAsUnitNotPercent: this.getMaxDeviationAsUnitNotPercent(),
             maxDeviationInPercent: this.getMaxDeviationInPercent(),
+            maxDeviationInUnit: this.getMaxDeviationInUnit(),
             distanceGenerator: {
                 type: distanceGeneratorType,
                 distances: this._distances,
@@ -391,14 +417,16 @@ export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends Dri
         drillType: string,
         unit: string,
         targetSpinInRpmPerUnit: number,
+        maxDeviationAsUnitNotPercent: boolean,
         maxDeviationInPercent: number,
+        maxDeviationInUnit: number,
         startGroundType: string,
         endGroundConfigs: IEndGroundConfig[],
         distances: number[],
         numberOfRounds: number,
         averageStrokesDataMap: Map<string, IAverageStrokesData>
     ) {
-        super(uuid, name, description, drillType, unit, targetSpinInRpmPerUnit, maxDeviationInPercent, startGroundType, endGroundConfigs, distances, numberOfRounds, averageStrokesDataMap);
+        super(uuid, name, description, drillType, unit, targetSpinInRpmPerUnit, maxDeviationAsUnitNotPercent, maxDeviationInPercent, maxDeviationInUnit, startGroundType, endGroundConfigs, distances, numberOfRounds, averageStrokesDataMap);
         this.distancesNotYetReturned = [...distances];
     }
 
@@ -451,6 +479,8 @@ export class EmptyDrillConfiguration extends DrillConfigurationWithFixedDistance
             "",
             trackmanScoreAndShotsGainedDrillType,
             meterLengthUnit,
+            0,
+            true,
             0,
             0,
             Fairway,
