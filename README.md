@@ -88,14 +88,14 @@ The lower the distance to the target the higher the score.
 
 The Spin type is completely different.
 As you can already guess from the name you have to produce a lot of spin to get a high score.
-Each spin drill defines a landing area.
+Each spin drill defines a landing area in percent or meter/yard.
 If your ball lands outside this corridor you get a zero score.
 If your ball is inside this corridor you get a score that depends on the total spin you created with your shot.
-The drill configuration defines the spin per meter that you have to create in order to get a score of 100.
+The drill configuration defines the spin per meter/yard that you have to create in order to get a score of 100.
 If you create more or less spin you get a higher or lower score.
 The score is linearly dependent on the generated spin.
-So if you only create half of the predefined target spin per meter you only get a score of 50.
-If you create two times the predefined target spin per meter you get a score of 200.
+So if you only create half of the predefined target spin per meter/yard you only get a score of 50.
+If you create two times the predefined target spin per meter/yard you get a score of 200.
 
 #### Hitting Circle
 
