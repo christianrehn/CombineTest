@@ -24,7 +24,7 @@ export const DrillConfigurationTextInput: React.FC<IDrillConfigurationTextInputP
                 </label>
                 <div className="drill-configuration-text-input-box">
                     <input
-                        className={props.error ? "error drill-configuration-text-input input-css" : "drill-configuration-text-input input-css"}
+                        className={`drill-configuration-text-input input-css ${props.error ? "error " : ""} ${props.type === "checkbox" ? "drill-configuration-checkbox" : ""}`}
                         type={props.type}
                         value={props.value}
                         checked={props.checked}
