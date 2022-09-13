@@ -4,7 +4,8 @@ import './DrillConfigurationTextInput.scss';
 export interface IDrillConfigurationTextInputProps {
     label: string;
     type: string;
-    value: string | number | undefined;
+    value?: string | number | undefined;
+    checked?: boolean | undefined;
     minLength?: number;
     maxLength?: number;
     min?: number;
@@ -26,6 +27,7 @@ export const DrillConfigurationTextInput: React.FC<IDrillConfigurationTextInputP
                         className={props.error ? "error drill-configuration-text-input input-css" : "drill-configuration-text-input input-css"}
                         type={props.type}
                         value={props.value}
+                        checked={props.checked}
                         minLength={props.minLength}
                         maxLength={props.maxLength}
                         min={props.min}
