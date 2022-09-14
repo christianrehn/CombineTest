@@ -108,6 +108,38 @@
         ]
     },
     {
+        "uuid": "97445e5c-1cbd-4f42-a788-5bdaa6e13122",
+        "name": "BGV Pitch 2022 %",
+        "description": "5 pitches to 5% Target Circle",
+        "drillType": "Target Circle",
+        "unit": "meter",
+        "targetCircleRadiusAsUnitNotPercent": false,
+        "targetCircleRadiusInPercent": 5,
+        "distanceGenerator": {
+            "type": "FixedDistancesGenerator",
+            "distances": [
+                50
+            ],
+            "numberOfRounds": 5
+        }
+    },
+    {
+        "uuid": "97445e5c-1cbd-4f42-a788-5bdaa6e13122",
+        "name": "BGV Pitch 2022 m",
+        "description": "5 pitches to 5 meter Target Circle",
+        "drillType": "Target Circle",
+        "unit": "meter",
+        "targetCircleRadiusAsUnitNotPercent": true,
+        "targetCircleRadiusInUnit": 5,
+        "distanceGenerator": {
+            "type": "FixedDistancesGenerator",
+            "distances": [
+                50
+            ],
+            "numberOfRounds": 5
+        }
+    },
+    {
         "uuid": "97445e5c-1cbd-4f42-a788-5bdaa6e13123",
         "name": "BGV Spin 2022",
         "description": "5 pitches with maximum spin",

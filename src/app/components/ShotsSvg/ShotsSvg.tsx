@@ -94,7 +94,7 @@ export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
 
             {/*line for lastShotMaxDeviationInUnitAsNumber*/}
             {
-                props.selectedDrillConfiguration.getDrillType() === spinDrillType && props.shotDatas.length > 0 ?
+                [spinDrillType].includes(props.selectedDrillConfiguration.getDrillType()) && props.shotDatas.length > 0 ?
                     <>
                         <path className="shots_svg_lastmaxdeviation"
                               d={`M-110,${-lastShotMaxDeviationInUnitAsNumber * svgScaleFactor} h220`}/>
@@ -106,7 +106,7 @@ export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
 
             {/*line for nextShotMaxDeviationInUnitAsNumber*/}
             {
-                props.selectedDrillConfiguration.getDrillType() === spinDrillType ?
+                [spinDrillType].includes(props.selectedDrillConfiguration.getDrillType()) ?
                     <>
                         <path className="shots_svg_nextmaxdeviation"
                               d={`M-110,${-nextShotMaxDeviationInUnitAsNumber * svgScaleFactor} h220`}/>

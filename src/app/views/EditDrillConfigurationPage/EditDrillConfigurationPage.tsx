@@ -26,7 +26,12 @@ import {IAverageStrokesData} from "../../model/AverageStrokesData/AverageStrokes
 import {NumberPlusMinusInput} from "../../components/DrillConfiguration/NumberPlusMinusInput/NumberPlusMinusInput";
 import {EndGroundConfigsTable} from "../../components/DrillConfiguration/EndGroundConfigsTable/EndGroundConfigsTable";
 import {startGroundTypes,} from "../../model/AverageStrokesData/GroundType";
-import {drillTypes, spinDrillType, trackmanScoreAndShotsGainedDrillType} from "../../model/SelectValues/DrillType";
+import {
+    drillTypes,
+    spinDrillType,
+    targetCircleDrillType,
+    trackmanScoreAndShotsGainedDrillType
+} from "../../model/SelectValues/DrillType";
 import {lengthUnits} from "../../model/SelectValues/LengthUnit";
 
 export const EditDrillConfigurationPageName: string = "EditDrillConfigurationPage";
@@ -37,11 +42,17 @@ const DEFAULT_DRILL_TYPE: string = trackmanScoreAndShotsGainedDrillType;
 const MIN_TARGET_RPM_PER_UNIT: number = 1;
 const DEFAULT_TARGET_RPM_PER_UNIT: number = 250;
 
+const MIN_DEVIATION_IN_UNIT: number = 1;
+const DEFAULT_DEVIATION_IN_UNIT: number = 3;
+
 const MIN_DEVIATION_IN_PERCENT: number = 1;
 const DEFAULT_DEVIATION_IN_PERCENT: number = 30;
 
-const MIN_DEVIATION_IN_UNIT: number = 1;
-const DEFAULT_DEVIATION_IN_UNIT: number = 3;
+const MIN_TARGET_CIRCLE_RADIUS_IN_UNIT: number = 1;
+const DEFAULT_TARGET_CIRCLE_RADIUS_IN_UNIT: number = 2;
+
+const MIN_TARGET_CIRCLE_RADIUS_IN_PERCENT: number = 1;
+const DEFAULT_TARGET_CIRCLE_RADIUS_IN_PERCENT: number = 5;
 
 const MIN_NAME: number = 1;
 const MAX_NAME: number = 30;
@@ -73,8 +84,11 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     const [targetSpinInRpmPerUnit, setTargetSpinInRpmPerUnit] = React.useState<number>(props.selectedDrillConfiguration.getTargetSpinInRpmPerUnit() || DEFAULT_TARGET_RPM_PER_UNIT);
     const [targetSpinInRpmPerUnitError, setTargetSpinInRpmPerUnitError] = React.useState<boolean>(true);
     const [maxDeviationAsUnitNotPercent, setMaxDeviationAsUnitNotPercent] = React.useState<boolean>(props.selectedDrillConfiguration.getMaxDeviationAsUnitNotPercent() || true);
-    const [maxDeviationInPercent, setMaxDeviationInPercent] = React.useState<number>(props.selectedDrillConfiguration.getMaxDeviationInPercent() || DEFAULT_DEVIATION_IN_PERCENT);
     const [maxDeviationInUnit, setMaxDeviationInUnit] = React.useState<number>(props.selectedDrillConfiguration.getMaxDeviationInUnit() || DEFAULT_DEVIATION_IN_UNIT);
+    const [maxDeviationInPercent, setMaxDeviationInPercent] = React.useState<number>(props.selectedDrillConfiguration.getMaxDeviationInPercent() || DEFAULT_DEVIATION_IN_PERCENT);
+    const [targetCircleRadiusAsUnitNotPercent, setTargetCircleRadiusAsUnitNotPercent] = React.useState<boolean>(props.selectedDrillConfiguration.getTargetCircleRadiusAsUnitNotPercent() || true);
+    const [targetCircleRadiusInUnit, setTargetCircleRadiusInUnit] = React.useState<number>(props.selectedDrillConfiguration.getTargetCircleRadiusInUnit() || DEFAULT_TARGET_CIRCLE_RADIUS_IN_UNIT);
+    const [targetCircleRadiusInPercent, setTargetCircleRadiusInPercent] = React.useState<number>(props.selectedDrillConfiguration.getTargetCircleRadiusInPercent() || DEFAULT_TARGET_CIRCLE_RADIUS_IN_PERCENT);
     const [startGroundType, setStartGroundType] = React.useState<string>(props.selectedDrillConfiguration.getStartGroundType());
     const [endGroundConfigs, setEndGroundConfigs] = React.useState<IEndGroundConfig[]>(props.selectedDrillConfiguration.getEndGroundConfigs());
     const [distanceGenerator, setDistanceGenerator] = React.useState<string>(props.selectedDrillConfiguration.getDistanceGenerator());
@@ -163,8 +177,11 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                           lengthUnit,
                                           targetSpinInRpmPerUnit,
                                           maxDeviationAsUnitNotPercent,
-                                          maxDeviationInPercent,
                                           maxDeviationInUnit,
+                                          maxDeviationInPercent,
+                                          targetCircleRadiusAsUnitNotPercent,
+                                          targetCircleRadiusInUnit,
+                                          targetCircleRadiusInPercent,
                                           distanceGenerator,
                                           startGroundType,
                                           endGroundConfigs,
@@ -243,7 +260,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="target-rpm-per-unit-input">
                     <DrillConfigurationTextInput
                         label={`Target Spin in RPM per ${lengthUnit}`}
-                        hidden={drillType !== spinDrillType}
+                        hidden={![spinDrillType].includes(drillType)}
                         error={targetSpinInRpmPerUnitError}
                         type="number"
                         value={targetSpinInRpmPerUnit}
@@ -254,10 +271,10 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         }}
                     />
                 </div>
-                <div className="deviation-in-percent-input">
+                <div className="max-deviation-as-unit-not-percent-input">
                     <DrillConfigurationTextInput
                         label={`Max. Carry Deviation as ${lengthUnit} or %`}
-                        hidden={drillType !== spinDrillType}
+                        hidden={![spinDrillType].includes(drillType)}
                         type="checkbox"
                         checked={maxDeviationAsUnitNotPercent}
                         handleOnChange={(): void => {
@@ -265,21 +282,10 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         }}
                     />
                 </div>
-                <div className="max-deviation-in-percent-input">
-                    <NumberPlusMinusInput
-                        label={`Max. Carry Deviation in %`}
-                        hidden={drillType !== spinDrillType || maxDeviationAsUnitNotPercent}
-                        value={maxDeviationInPercent}
-                        min={MIN_DEVIATION_IN_PERCENT}
-                        handleOnClick={(value: number): void => {
-                            setMaxDeviationInPercent(value);
-                        }}
-                    />
-                </div>
                 <div className="max-deviation-in-unit-input">
                     <NumberPlusMinusInput
                         label={`Max. Carry Deviation in ${lengthUnit}`}
-                        hidden={drillType !== spinDrillType || !maxDeviationAsUnitNotPercent}
+                        hidden={![spinDrillType].includes(drillType) || !maxDeviationAsUnitNotPercent}
                         value={maxDeviationInUnit}
                         min={MIN_DEVIATION_IN_UNIT}
                         handleOnClick={(value: number): void => {
@@ -287,10 +293,54 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         }}
                     />
                 </div>
+                <div className="max-deviation-in-percent-input">
+                    <NumberPlusMinusInput
+                        label={`Max. Carry Deviation in %`}
+                        hidden={![spinDrillType].includes(drillType) || maxDeviationAsUnitNotPercent}
+                        value={maxDeviationInPercent}
+                        min={MIN_DEVIATION_IN_PERCENT}
+                        handleOnClick={(value: number): void => {
+                            setMaxDeviationInPercent(value);
+                        }}
+                    />
+                </div>
+                <div className="target-circle-radius-as-unit-not-percent-input">
+                    <DrillConfigurationTextInput
+                        label={`Target Circle Radius as ${lengthUnit} or %`}
+                        hidden={![targetCircleDrillType].includes(drillType)}
+                        type="checkbox"
+                        checked={targetCircleRadiusAsUnitNotPercent}
+                        handleOnChange={(): void => {
+                            setTargetCircleRadiusAsUnitNotPercent(!targetCircleRadiusAsUnitNotPercent);
+                        }}
+                    />
+                </div>
+                <div className="target-circle-radius-in-unit-input">
+                    <NumberPlusMinusInput
+                        label={`Target Circle Radius in ${lengthUnit}`}
+                        hidden={![targetCircleDrillType].includes(drillType) || !targetCircleRadiusAsUnitNotPercent}
+                        value={targetCircleRadiusInUnit}
+                        min={MIN_TARGET_CIRCLE_RADIUS_IN_UNIT}
+                        handleOnClick={(value: number): void => {
+                            setTargetCircleRadiusInUnit(value);
+                        }}
+                    />
+                </div>
+                <div className="target-circle-radius-in-percent-input">
+                    <NumberPlusMinusInput
+                        label={`Target Circle Radius in %`}
+                        hidden={![targetCircleDrillType].includes(drillType) || targetCircleRadiusAsUnitNotPercent}
+                        value={targetCircleRadiusInPercent}
+                        min={MIN_TARGET_CIRCLE_RADIUS_IN_PERCENT}
+                        handleOnClick={(value: number): void => {
+                            setTargetCircleRadiusInPercent(value);
+                        }}
+                    />
+                </div>
                 <div className="start-ground-type-select">
                     <DrillConfigurationSelect
                         label={"Start Ground Type"}
-                        hidden={drillType === spinDrillType}
+                        hidden={[spinDrillType, targetCircleDrillType].includes(drillType)}
                         index={startGroundTypes.indexOf(startGroundType)}
                         stringValues={startGroundTypes}
                         handleOnChange={(index: number): void => {
@@ -304,7 +354,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="end-ground-types-table">
                     <EndGroundConfigsTable
                         label="End Ground Types"
-                        hidden={drillType === spinDrillType}
+                        hidden={[spinDrillType, targetCircleDrillType].includes(drillType)}
                         endGroundConfigs={endGroundConfigs}
                         handleEndGroundConfigChanged={(endGroundConfig: IEndGroundConfig, endGroundConfigsIndex: number, newNotCHanged: boolean): void => {
                             assert(endGroundConfigsIndex >= 0, `endGroundConfigsIndex < 0: ${endGroundConfigsIndex}`);

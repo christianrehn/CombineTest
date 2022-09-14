@@ -46,7 +46,17 @@
     font-size: 24px;
 }
 
-.next-distance-max-deviation-in-unit, .next-distance-max-deviation-in-percent, .next-distance-max-deviation-unit {
+.next-distance-max-deviation-in-unit, .next-distance-max-deviation-in-percent {
+    padding-top: 10px;
+    font-size: 30px;
+}
+
+.next-distance-target-circle-radius-label {
+    padding-top: 50px;
+    font-size: 16px;
+}
+
+.next-distance-target-circle-radius-in-unit, .next-distance-target-circle-radius-in-percent {
     padding-top: 10px;
     font-size: 30px;
 }

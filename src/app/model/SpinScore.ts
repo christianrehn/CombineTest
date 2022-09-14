@@ -6,7 +6,7 @@ import {spinDrillType} from "./SelectValues/DrillType";
 
 export const computeSpinScore = (drillConfiguration: IDrillConfiguration, targetDistance: Unit, totalSpinInRpm: number, carry: Unit): number => {
     assert(!!drillConfiguration, "!drillConfiguration");
-    if (drillConfiguration.getDrillType() !== spinDrillType) {
+    if (![spinDrillType].includes(drillConfiguration.getDrillType())) {
         // score can only be computes for drill configuration type spin
         return 0;
     }

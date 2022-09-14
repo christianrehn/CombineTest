@@ -14,7 +14,7 @@ import {
     computeStandardDeviationEntirePopulation,
     computeSum
 } from "../../util/MathUtil";
-import {spinDrillType} from "../../model/SelectValues/DrillType";
+import {spinDrillType, trackmanScoreAndShotsGainedDrillType} from "../../model/SelectValues/DrillType";
 import {computeSpinScore} from "../../model/SpinScore";
 
 const SHOW_ADDITIONAL_DATA_FOR_ALL_SHOTS: boolean = false;
@@ -280,8 +280,8 @@ export const LastShotData: React.FC<ILastShotDataProps> = (props: ILastShotDataP
                 <div
                     className="last-shot-item__unit"> {distanceUnit} </div>
             </div>
-            {props.selectedDrillConfiguration.getDrillType() === spinDrillType ? null :
-                <>
+            {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                ? <>
                     <div className="last-shot__row">
                         <div className="last-shot-item__label">Absolute Deviation</div>
                         <div className="last-shot-item__data"> {absoluteDeviationString} </div>
@@ -294,15 +294,16 @@ export const LastShotData: React.FC<ILastShotDataProps> = (props: ILastShotDataP
                         <div className="last-shot-item__unit"> {!!props.lastShot ? `%` : ""} </div>
                     </div>
                 </>
-            }
-            {props.selectedDrillConfiguration.getDrillType() !== spinDrillType ? null :
-                <div className="last-shot__row">
+                : null}
+            {[spinDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                ? <div className="last-shot__row">
                     <div className="last-shot-item__label">Target Total Spin</div>
                     <div
                         className="last-shot-item__data"> {!!props.lastShot ? (props.selectedDrillConfiguration.getTargetSpinInRpmPerUnit() * targetDistanceInUnitAsNumber).toFixed(0) : ""} </div>
                     <div
                         className="last-shot-item__unit"> {rpmUnit} </div>
-                </div>}
+                </div>
+                : null}
             <div className="last-shot__row">
                 <div className="last-shot-item__label">Total Spin</div>
                 <div
@@ -310,8 +311,8 @@ export const LastShotData: React.FC<ILastShotDataProps> = (props: ILastShotDataP
                 <div
                     className="last-shot-item__unit"> {rpmUnit} </div>
             </div>
-            {props.selectedDrillConfiguration.getDrillType() !== spinDrillType ? null :
-                <>
+            {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                ? <>
                     <div className="last-shot__row">
                         <div className="last-shot-item__label">Side Spin</div>
                         <div
@@ -327,10 +328,16 @@ export const LastShotData: React.FC<ILastShotDataProps> = (props: ILastShotDataP
                             className="last-shot-item__unit"> {rpmUnit} </div>
                     </div>
                 </>
-            }
-            {props.selectedDrillConfiguration.getDrillType() !== spinDrillType ? shotsGainedData(props, targetDistanceString) : null}
-            {props.selectedDrillConfiguration.getDrillType() !== spinDrillType ? trackmanScoreData(props) : null}
-            {props.selectedDrillConfiguration.getDrillType() === spinDrillType ? spinScoreData(props) : null}
+                : null}
+            {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                ? shotsGainedData(props, targetDistanceString)
+                : null}
+            {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                ? trackmanScoreData(props)
+                : null}
+            {[spinDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                ? spinScoreData(props)
+                : null}
 
             {/* data for all shots */}
             {SHOW_ADDITIONAL_DATA_FOR_ALL_SHOTS ? additionalDataForAllShots(props) : null}
