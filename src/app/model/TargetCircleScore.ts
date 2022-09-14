@@ -26,13 +26,5 @@ export const computeTargetCircleScore = (drillConfiguration: IDrillConfiguration
             : drillConfiguration.getTargetCircleRadiusInPercent() * targetDistanceInUnitAsNumber / 100;
     console.log("maxFromPinInUnitAsNumber", maxFromPinInUnitAsNumber)
 
-    if (fromPinInUnitAsNumber > maxFromPinInUnitAsNumber) {
-        // outside target circle -> 0 score
-        console.log(`From Pin ${fromPinInUnitAsNumber} > Max. From Pin ${maxFromPinInUnitAsNumber} -> outside target circle -> 0 score`);
-        return 0
-    }
-
-    // inside target circle => calculate linear score
-    console.log(`From Pin ${fromPinInUnitAsNumber} <= Max. From Pin ${maxFromPinInUnitAsNumber} -> inside target circle -> calculate score`);
-    return Math.round((maxFromPinInUnitAsNumber + (maxFromPinInUnitAsNumber - fromPinInUnitAsNumber)) * 1000 / maxFromPinInUnitAsNumber) / 10;
+    return Math.max(Math.round((maxFromPinInUnitAsNumber + (maxFromPinInUnitAsNumber - fromPinInUnitAsNumber)) * 1000 / maxFromPinInUnitAsNumber) / 10, 0);
 }
