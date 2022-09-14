@@ -97,7 +97,7 @@ The score is linearly dependent on the generated spin.
 So if you only create half of the predefined target spin per meter/yard you only get a score of 50.
 If you create two times the predefined target spin per meter/yard you get a score of 200.
 
-#### Hitting Circle
+#### Target Circle
 
 Will be available from version 2.1
 
