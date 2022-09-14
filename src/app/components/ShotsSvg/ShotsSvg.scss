@@ -62,3 +62,20 @@
     stroke: mediumslateblue;
     stroke-width: 0.6;
 }
+
+.shots_svg_lasttargetcircle {
+    stroke: red;
+    stroke-width: 0.8;
+    fill: none;
+    cx: 0;
+    cy: 0;
+}
+
+.shots_svg_nexttargetcircle {
+    stroke: mediumslateblue;
+    stroke-width: 0.8;
+    fill: mediumslateblue;
+    fill-opacity: 20%;
+    cx: 0;
+    cy: 0;
+}

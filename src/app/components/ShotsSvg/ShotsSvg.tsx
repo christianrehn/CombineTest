@@ -5,7 +5,7 @@ import './ShotsSvg.scss';
 import {Unit} from "mathjs";
 import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
 import {computeAbsoluteDeviation} from "../../util/MathUtil";
-import {spinDrillType} from "../../model/SelectValues/DrillType";
+import {spinDrillType, targetCircleDrillType} from "../../model/SelectValues/DrillType";
 
 const NUMBER_OF_CIRCLES: number = 5;
 
@@ -29,19 +29,32 @@ export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
     const svgScaleFactor: number = 100 / scaleFactor;
     const circleLabelPosition: number = scaleFactor / NUMBER_OF_CIRCLES;
 
+    // target distance
     const lastShotTargetDistanceInUnitAsNumber =
         props.shotDatas.length > 0
             ? props.shotDatas[props.shotDatas.length - 1].getTargetDistance().toNumber(props.selectedDrillConfiguration.getUnit())
             : 0;
+    const nextShotTargetDistanceInUnitAsNumber = props.nextDistance?.toNumber(props.selectedDrillConfiguration.getUnit());
+
+    // deviation
     const lastShotMaxDeviationInUnitAsNumber: number =
         props.selectedDrillConfiguration.getMaxDeviationAsUnitNotPercent()
             ? props.selectedDrillConfiguration.getMaxDeviationInUnit()
             : props.selectedDrillConfiguration.getMaxDeviationInPercent() * lastShotTargetDistanceInUnitAsNumber / 100;
-    const nextShotTargetDistanceInUnitAsNumber = props.nextDistance?.toNumber(props.selectedDrillConfiguration.getUnit());
     const nextShotMaxDeviationInUnitAsNumber: number =
         props.selectedDrillConfiguration.getMaxDeviationAsUnitNotPercent()
             ? props.selectedDrillConfiguration.getMaxDeviationInUnit()
             : props.selectedDrillConfiguration.getMaxDeviationInPercent() * nextShotTargetDistanceInUnitAsNumber / 100;
+
+    // target circle
+    const lastShotTargetCircleRadiusInUnitAsNumber: number =
+        props.selectedDrillConfiguration.getTargetCircleRadiusAsUnitNotPercent()
+            ? props.selectedDrillConfiguration.getTargetCircleRadiusInUnit()
+            : props.selectedDrillConfiguration.getTargetCircleRadiusInPercent() * lastShotTargetDistanceInUnitAsNumber / 100;
+    const nextShotTargetCircleRadiusInUnitAsNumber: number =
+        props.selectedDrillConfiguration.getTargetCircleRadiusAsUnitNotPercent()
+            ? props.selectedDrillConfiguration.getTargetCircleRadiusInUnit()
+            : props.selectedDrillConfiguration.getTargetCircleRadiusInPercent() * nextShotTargetDistanceInUnitAsNumber / 100;
 
     return (
         <svg width="100%" height="100%" viewBox="-110 -110.5 220.3 220.2"
@@ -113,6 +126,22 @@ export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
                         <path className="shots_svg_nextmaxdeviation"
                               d={`M-110,${nextShotMaxDeviationInUnitAsNumber * svgScaleFactor} h220`}/>
                     </>
+                    : null
+            }
+
+            {/*circle for lastShotTargetCircleRadiusInUnitAsNumber*/}
+            {
+                [targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType()) ?
+                    <circle className="shots_svg_lasttargetcircle"
+                            r={lastShotTargetCircleRadiusInUnitAsNumber * svgScaleFactor}/>
+                    : null
+            }
+
+            {/*circle for nextShotTargetCircleRadiusInUnitAsNumber*/}
+            {
+                [targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType()) ?
+                    <circle className="shots_svg_nexttargetcircle"
+                            r={nextShotTargetCircleRadiusInUnitAsNumber * svgScaleFactor}/>
                     : null
             }
 
