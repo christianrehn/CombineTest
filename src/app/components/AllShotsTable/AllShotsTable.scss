@@ -63,16 +63,20 @@
     text-align: left;
 }
 
-.row-with-shot-details-no-spin > td:nth-child(2) {
+.row-with-shot-details-trackman-score-and-shots-gained > td:nth-child(2) {
     color: lightgreen;
 }
 
-.row-with-shot-details-no-spin > td:nth-child(3) {
+.row-with-shot-details-trackman-score-and-shots-gained > td:nth-child(3) {
     color: orange;
 }
 
 .row-with-shot-details-spin > td:nth-child(2) {
     color: mediumslateblue;
+}
+
+.row-with-shot-details-target-circle > td:nth-child(2) {
+    color: gold;
 }
 
 .bottom-values-row {
@@ -93,11 +97,11 @@
     text-align: left;
 }
 
-.bottom-values-row-no-spin > td:nth-child(2) {
+.bottom-values-row-trackman-score-and-shots-gained > td:nth-child(2) {
     color: lightgreen;
 }
 
-.bottom-values-row-no-spin > td:nth-child(3) {
+.bottom-values-row-trackman-score-and-shots-gained > td:nth-child(3) {
     color: orange;
 }
 
@@ -105,14 +109,22 @@
     color: mediumslateblue;
 }
 
-.average-values-row-no-spin > td:nth-child(2) {
+.bottom-values-row-target-circle > td:nth-child(2) {
+    color: gold;
+}
+
+.average-values-row-trackman-score-and-shots-gained > td:nth-child(2) {
     font-weight: bolder;
 }
 
-.average-values-row-no-spin > td:nth-child(3) {
+.average-values-row-trackman-score-and-shots-gained > td:nth-child(3) {
     font-weight: bolder;
 }
 
 .average-values-row-spin > td:nth-child(2) {
+    font-weight: bolder;
+}
+
+.average-values-row-target-circle > td:nth-child(2) {
     font-weight: bolder;
 }

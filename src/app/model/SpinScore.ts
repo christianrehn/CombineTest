@@ -14,7 +14,7 @@ export const computeSpinScore = (drillConfiguration: IDrillConfiguration, target
     assert(!drillConfiguration.getMaxDeviationAsUnitNotPercent() || drillConfiguration.getMaxDeviationInUnit() > 0, "!(!drillConfiguration.getMaxDeviationAsUnitNotPercent() || drillConfiguration.getMaxDeviationInUnit() > 0)");
     assert(drillConfiguration.getMaxDeviationAsUnitNotPercent() || drillConfiguration.getMaxDeviationInPercent() > 0, "!(drillConfiguration.getMaxDeviationAsUnitNotPercent() || drillConfiguration.getMaxDeviationInPercent() > 0)");
     assert(!!targetDistance, "!targetDistance");
-    assert(totalSpinInRpm >= 0, "!(totalSpin >= 0)");
+    assert(totalSpinInRpm >= 0, "!(totalSpinInRpm >= 0)");
     assert(!!carry, "!carry");
 
     const targetDistanceInUnitAsNumber: number = targetDistance.toNumber(drillConfiguration.getUnit());

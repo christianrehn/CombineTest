@@ -109,7 +109,7 @@
     },
     {
         "uuid": "97445e5c-1cbd-4f42-a788-5bdaa6e13122",
-        "name": "BGV Pitch 2022 %",
+        "name": "BGV Pitch 2022 50m 5%",
         "description": "5 pitches to 5% Target Circle",
         "drillType": "Target Circle",
         "unit": "meter",
@@ -125,7 +125,7 @@
     },
     {
         "uuid": "97445e5c-1cbd-4f42-a788-5bdaa6e13122",
-        "name": "BGV Pitch 2022 m",
+        "name": "Pitch 100m 5m",
         "description": "5 pitches to 5 meter Target Circle",
         "drillType": "Target Circle",
         "unit": "meter",
@@ -134,7 +134,7 @@
         "distanceGenerator": {
             "type": "FixedDistancesGenerator",
             "distances": [
-                50
+                100
             ],
             "numberOfRounds": 5
         }

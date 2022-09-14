@@ -12,8 +12,13 @@ import {
     computeRelativeDeviation,
     computeStandardDeviationEntirePopulation
 } from "../../util/MathUtil";
-import {spinDrillType, trackmanScoreAndShotsGainedDrillType} from "../../model/SelectValues/DrillType";
+import {
+    spinDrillType,
+    targetCircleDrillType,
+    trackmanScoreAndShotsGainedDrillType
+} from "../../model/SelectValues/DrillType";
 import {computeSpinScore} from "../../model/SpinScore";
+import {computeTargetCircleScore} from "../../model/TargetCircleScore";
 
 
 export interface IAllShotsTableProps {
@@ -32,6 +37,7 @@ export const AllShotsTable: React.FC<IAllShotsTableProps> = (props: IAllShotsTab
     let strokesGainedValues: number[] = [];
     let trackmanScoreValues: number[] = [];
     let spinScoreValues: number[] = [];
+    let targerCircleScoreValues: number[] = [];
     let targetDistanceInUnitAsNumberValues: number[] = [];
     let carryValues: number[] = [];
     let totalDistanceInUnitAsNumberValues: number[] = [];
@@ -47,19 +53,22 @@ export const AllShotsTable: React.FC<IAllShotsTableProps> = (props: IAllShotsTab
                 <tr className="parameter-names-row">
                     <td>Shot</td>
                     {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
-                        ? <td>Gained</td>
-                        : null}
-                    {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
-                        ? <td>Score</td>
+                        ? <>
+                            <td>Gained</td>
+                            <td>Score</td>
+                        </>
                         : null}
                     {[spinDrillType].includes(props.selectedDrillConfiguration.getDrillType())
                         ? <td>Spin Score</td>
+                        : null}
+                    {[targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                        ? <td>TC Score</td>
                         : null}
                     <td>Target</td>
                     <td>Carry</td>
                     <td>Total</td>
                     <td>Offline</td>
-                    {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                    {[trackmanScoreAndShotsGainedDrillType, targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
                         ? <>
                             <td>Abs. Dev.</td>
                             <td>Rel. Dev.</td>
@@ -77,19 +86,22 @@ export const AllShotsTable: React.FC<IAllShotsTableProps> = (props: IAllShotsTab
                 <tr className="parameter-units-row">
                     <td>{empty}</td>
                     {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
-                        ? <td>Strokes</td>
-                        : null}
-                    {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
-                        ? <td>{empty}</td>
+                        ? <>
+                            <td>Strokes</td>
+                            <td>{empty}</td>
+                        </>
                         : null}
                     {[spinDrillType].includes(props.selectedDrillConfiguration.getDrillType())
                         ? <td>{empty}</td>
                         : null}
+                    {[targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                        ? <td>{empty}</td>
+                        : null}
                     <td>{props.selectedDrillConfiguration.getUnit()}</td>
                     <td>{props.selectedDrillConfiguration.getUnit()}</td>
                     <td>{props.selectedDrillConfiguration.getUnit()}</td>
                     <td>{props.selectedDrillConfiguration.getUnit()}</td>
-                    {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                    {[trackmanScoreAndShotsGainedDrillType, targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
                         ? <>
                             <td>{props.selectedDrillConfiguration.getUnit()}</td>
                             <td>%</td>
@@ -119,6 +131,9 @@ export const AllShotsTable: React.FC<IAllShotsTableProps> = (props: IAllShotsTab
                         const spinScore: number = computeSpinScore(props.selectedDrillConfiguration, shotData.getTargetDistance(), shotData.getTotalSpin(), shotData.getCarry());
                         spinScoreValues.push(spinScore);
 
+                        const targerCircleScore: number = computeTargetCircleScore(props.selectedDrillConfiguration, shotData.getTargetDistance(), absoluteDeviation);
+                        targerCircleScoreValues.push(targerCircleScore);
+
                         const targetDistanceInUnitAsNumber: number = shotData.getTargetDistance().toNumber(props.selectedDrillConfiguration.getUnit());
                         targetDistanceInUnitAsNumberValues.push(targetDistanceInUnitAsNumber);
 
@@ -145,29 +160,41 @@ export const AllShotsTable: React.FC<IAllShotsTableProps> = (props: IAllShotsTab
 
 
                         return <tr
-                            className={`row-with-shot-details ${[spinDrillType].includes(props.selectedDrillConfiguration.getDrillType()) ? "row-with-shot-details-spin" : "row-with-shot-details-no-spin"}`}
+                            className={`row-with-shot-details ${
+                                [trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                                    ? "row-with-shot-details-trackman-score-and-shots-gained"
+                                    : [spinDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                                        ? "row-with-shot-details-spin"
+                                        : [targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                                            ? "row-with-shot-details-target-circle"
+                                            : assert.fail(`drill type unknown: ${props.selectedDrillConfiguration.getDrillType()}`)
+                            }`
+                            }
                             key={`row-with-shot-details_${index}`}>
                             <td>{(index + 1).toString(10)}</td>
                             {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
-                                ? <td>{strokesGained.toFixed(3)}</td>
-                                : null}
-                            {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
-                                ? <td>{trackmanScore.toFixed(1)}</td>
+                                ? <>
+                                    <td>{strokesGained.toFixed(3)}</td>
+                                    <td>{trackmanScore.toFixed(1)}</td>
+                                </>
                                 : null}
                             {[spinDrillType].includes(props.selectedDrillConfiguration.getDrillType())
                                 ? <td>{spinScore.toFixed(1)}</td>
+                                : null}
+                            {[targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                                ? <td>{targerCircleScore.toFixed(1)}</td>
                                 : null}
                             <td>{targetDistanceInUnitAsNumber.toFixed(2)}</td>
                             <td>{carry.toFixed(2)}</td>
                             <td>{totalDistanceInUnitAsNumber.toFixed(2)}</td>
                             <td>{offlineInUnitAsNumber.toFixed(2)}</td>
-                            {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                            {[trackmanScoreAndShotsGainedDrillType, targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
                                 ? <>
                                     <td>{absoluteDeviationInUnitAsNumber.toFixed(2)}</td>
                                     <td>{relativeDeviation.toFixed(1)}</td>
                                 </>
                                 : null}
-                            {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                            {[spinDrillType].includes(props.selectedDrillConfiguration.getDrillType())
                                 ? <>
                                     <td>{targetSpinInRpm.toFixed(0)}</td>
                                     <td>{totalSpinInRpm.toFixed(0)}</td>
@@ -177,22 +204,36 @@ export const AllShotsTable: React.FC<IAllShotsTableProps> = (props: IAllShotsTab
                     })
                 }
 
-                <tr className={`average-values-row bottom-values-row ${[spinDrillType].includes(props.selectedDrillConfiguration.getDrillType()) ? "average-values-row-spin bottom-values-row-spin" : "average-values-row-no-spin bottom-values-row-no-spin"}`}>
+                <tr className={`average-values-row bottom-values-row ${
+                    [trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                        ? "average-values-row-trackman-score-and-shots-gained bottom-values-row-trackman-score-and-shots-gained"
+                        : [spinDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                            ? "average-values-row-spin bottom-values-row-spin"
+                            : [targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                                ? "average-values-row-target-circle bottom-values-row-target-circle"
+                                : assert.fail(`drill type unknown: ${props.selectedDrillConfiguration.getDrillType()}`)
+                }`
+                }
+                >
                     <td>Average</td>
                     {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
-                        ? <td>{props.shotDatas.length > 0 ? computeAverage(strokesGainedValues).toFixed(3) : ""}</td>
-                        : null}
-                    {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
-                        ? <td>{props.shotDatas.length > 0 ? computeAverage(trackmanScoreValues).toFixed(1) : ""}</td>
+                        ? <>
+                            <td>{props.shotDatas.length > 0 ? computeAverage(strokesGainedValues).toFixed(3) : ""}</td>
+                            <td>{props.shotDatas.length > 0 ? computeAverage(trackmanScoreValues).toFixed(1) : ""}</td>
+                        </>
                         : null}
                     {[spinDrillType].includes(props.selectedDrillConfiguration.getDrillType())
                         ? <td>{props.shotDatas.length > 0 ? computeAverage(spinScoreValues).toFixed(1) : ""}</td>
+                        : null}
+                    {[targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                        ?
+                        <td>{props.shotDatas.length > 0 ? computeAverage(targerCircleScoreValues).toFixed(1) : ""}</td>
                         : null}
                     <td>{props.shotDatas.length > 0 ? computeAverage(targetDistanceInUnitAsNumberValues).toFixed(2) : ""}</td>
                     <td>{props.shotDatas.length > 0 ? computeAverage(carryValues).toFixed(2) : ""}</td>
                     <td>{props.shotDatas.length > 0 ? computeAverage(totalDistanceInUnitAsNumberValues).toFixed(2) : ""}</td>
                     <td>{props.shotDatas.length > 0 ? computeAverage(offlineInUnitAsNumberValues).toFixed(2) : ""}</td>
-                    {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                    {[trackmanScoreAndShotsGainedDrillType, targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
                         ? <>
                             <td>{props.shotDatas.length > 0 ? computeAverage(absoluteDeviationInUnitAsNumberValues).toFixed(2) : ""}</td>
                             <td>{props.shotDatas.length > 0 ? computeAverage(relativeDeviationValues).toFixed(1) : ""}</td>
@@ -205,25 +246,38 @@ export const AllShotsTable: React.FC<IAllShotsTableProps> = (props: IAllShotsTab
                         </>
                         : null}
                 </tr>
-                <tr className={`consistency-values-row bottom-values-row ${[spinDrillType].includes(props.selectedDrillConfiguration.getDrillType()) ? "bottom-values-row-spin" : "bottom-values-row-no-spin"}`}>
+                <tr className={`consistency-values-row bottom-values-row ${
+                    [trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                        ? "bottom-values-row-trackman-score-and-shots-gained"
+                        : [spinDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                            ? "bottom-values-row-spin"
+                            : [targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                                ? "bottom-values-row-target-circle"
+                                : assert.fail(`drill type unknown: ${props.selectedDrillConfiguration.getDrillType()}`)
+                }`
+                }
+                >
                     <td>Consistency</td>
                     {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
                         ?
-                        <td>{props.shotDatas.length > 0 ? computeStandardDeviationEntirePopulation(strokesGainedValues).toFixed(3) : ""}</td>
-                        : null}
-                    {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
-                        ?
-                        <td>{props.shotDatas.length > 0 ? computeStandardDeviationEntirePopulation(trackmanScoreValues).toFixed(1) : ""}</td>
+                        <>
+                            <td>{props.shotDatas.length > 0 ? computeStandardDeviationEntirePopulation(strokesGainedValues).toFixed(3) : ""}</td>
+                            <td>{props.shotDatas.length > 0 ? computeStandardDeviationEntirePopulation(trackmanScoreValues).toFixed(1) : ""}</td>
+                        </>
                         : null}
                     {[spinDrillType].includes(props.selectedDrillConfiguration.getDrillType())
                         ?
                         <td>{props.shotDatas.length > 0 ? computeStandardDeviationEntirePopulation(spinScoreValues).toFixed(1) : ""}</td>
                         : null}
+                    {[targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                        ?
+                        <td>{props.shotDatas.length > 0 ? computeStandardDeviationEntirePopulation(targerCircleScoreValues).toFixed(1) : ""}</td>
+                        : null}
                     <td></td>
                     <td>{props.shotDatas.length > 0 ? computeStandardDeviationEntirePopulation(carryValues).toFixed(2) : ""}</td>
                     <td>{props.shotDatas.length > 0 ? computeStandardDeviationEntirePopulation(totalDistanceInUnitAsNumberValues).toFixed(2) : ""}</td>
                     <td>{props.shotDatas.length > 0 ? computeStandardDeviationEntirePopulation(offlineInUnitAsNumberValues).toFixed(2) : ""}</td>
-                    {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                    {[trackmanScoreAndShotsGainedDrillType, targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
                         ? <>
                             <td>{props.shotDatas.length > 0 ? computeStandardDeviationEntirePopulation(absoluteDeviationInUnitAsNumberValues).toFixed(2) : ""}</td>
                             <td>{props.shotDatas.length > 0 ? computeStandardDeviationEntirePopulation(relativeDeviationValues).toFixed(1) : ""}</td>

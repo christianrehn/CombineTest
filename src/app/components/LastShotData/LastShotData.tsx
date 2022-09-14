@@ -14,8 +14,13 @@ import {
     computeStandardDeviationEntirePopulation,
     computeSum
 } from "../../util/MathUtil";
-import {spinDrillType, trackmanScoreAndShotsGainedDrillType} from "../../model/SelectValues/DrillType";
+import {
+    spinDrillType,
+    targetCircleDrillType,
+    trackmanScoreAndShotsGainedDrillType
+} from "../../model/SelectValues/DrillType";
 import {computeSpinScore} from "../../model/SpinScore";
+import {computeTargetCircleScore} from "../../model/TargetCircleScore";
 
 const SHOW_ADDITIONAL_DATA_FOR_ALL_SHOTS: boolean = false;
 
@@ -228,6 +233,44 @@ const spinScoreData = (props: ILastShotDataProps): JSX.Element[] => {
     ];
 }
 
+const targetCircleScoreData = (props: ILastShotDataProps): JSX.Element[] => {
+    if (!props.lastShot) {
+        return [];
+    }
+
+    const absoluteDeviation: Unit = computeAbsoluteDeviation(props.lastShot);
+    const targetCircleScore: number = computeTargetCircleScore(props.selectedDrillConfiguration, props.lastShot.getTargetDistance(), absoluteDeviation);
+
+    const targetCircleScoreValues: number[] = props.shotDatas.map((shotData: IShotData) => computeTargetCircleScore(props.selectedDrillConfiguration, shotData.getTargetDistance(), absoluteDeviation));
+
+    return [
+        <div
+            key="targetCircleScore"
+            className="last-shot__row last-shot__targetcirclescore-row">
+            <div className="last-shot-item__label">TC Score</div>
+            <div className="last-shot-item__data"> {
+                !!props.lastShot ? targetCircleScore.toFixed(1) : ""
+            } </div>
+        </div>,
+        <div
+            key="averageTargetCircleScore"
+            className="last-shot__row last-shot__targetcirclescore-row last-shot__avg-targetcirclescore-row">
+            <div className="last-shot-item__label">Average TC Score</div>
+            <div className="last-shot-item__data"> {
+                !!props.lastShot ? computeAverage(targetCircleScoreValues).toFixed(1) : ""
+            } </div>
+        </div>,
+        <div
+            key="consistencyTargetCircleScore"
+            className="last-shot__row last-shot__targetcirclescore-row last-shot__consistency-targetcirclescore-row">
+            <div className="last-shot-item__label">Consistency TC Score</div>
+            <div className="last-shot-item__data"> {
+                !!props.lastShot ? computeStandardDeviationEntirePopulation(targetCircleScoreValues).toFixed(1) : ""
+            } </div>
+        </div>
+    ];
+}
+
 export interface ILastShotDataProps {
     lastShot: IShotData,
     shotDatas: IShotData[],
@@ -244,8 +287,8 @@ export const LastShotData: React.FC<ILastShotDataProps> = (props: ILastShotDataP
 
     const targetDistanceInUnitAsNumber: number = !!props.lastShot ? props.lastShot.getTargetDistance().toNumber(props.selectedDrillConfiguration.getUnit()) : 0;
     const targetDistanceString: string = !!props.lastShot ? targetDistanceInUnitAsNumber.toFixed(2) : "";
-    const absoluteDeviationString: string = !!absoluteDeviation ? absoluteDeviation.toNumber(props.selectedDrillConfiguration.getUnit()).toFixed(2) : "";
-    const relativeDeviationString: string = !!relativeDeviation ? (relativeDeviation * 100).toFixed(1) : "";
+    const absoluteDeviationInUnitAsString: string = !!absoluteDeviation ? absoluteDeviation.toNumber(props.selectedDrillConfiguration.getUnit()).toFixed(2) : "";
+    const relativeDeviationInPercentAsString: string = !!relativeDeviation ? (relativeDeviation * 100).toFixed(1) : "";
     const distanceUnit: string = !!props.lastShot ? props.selectedDrillConfiguration.getUnit() : "";
     const rpmUnit: string = !!props.lastShot ? "RPM" : "";
 
@@ -280,17 +323,17 @@ export const LastShotData: React.FC<ILastShotDataProps> = (props: ILastShotDataP
                 <div
                     className="last-shot-item__unit"> {distanceUnit} </div>
             </div>
-            {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+            {[trackmanScoreAndShotsGainedDrillType, targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
                 ? <>
                     <div className="last-shot__row">
                         <div className="last-shot-item__label">Absolute Deviation</div>
-                        <div className="last-shot-item__data"> {absoluteDeviationString} </div>
+                        <div className="last-shot-item__data"> {absoluteDeviationInUnitAsString} </div>
                         <div
                             className="last-shot-item__unit"> {distanceUnit} </div>
                     </div>
                     <div className="last-shot__row">
                         <div className="last-shot-item__label">Relative Deviation</div>
-                        <div className="last-shot-item__data"> {relativeDeviationString} </div>
+                        <div className="last-shot-item__data"> {relativeDeviationInPercentAsString} </div>
                         <div className="last-shot-item__unit"> {!!props.lastShot ? `%` : ""} </div>
                     </div>
                 </>
@@ -311,7 +354,7 @@ export const LastShotData: React.FC<ILastShotDataProps> = (props: ILastShotDataP
                 <div
                     className="last-shot-item__unit"> {rpmUnit} </div>
             </div>
-            {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+            {[trackmanScoreAndShotsGainedDrillType, targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
                 ? <>
                     <div className="last-shot__row">
                         <div className="last-shot-item__label">Side Spin</div>
@@ -330,13 +373,16 @@ export const LastShotData: React.FC<ILastShotDataProps> = (props: ILastShotDataP
                 </>
                 : null}
             {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
-                ? shotsGainedData(props, targetDistanceString)
-                : null}
-            {[trackmanScoreAndShotsGainedDrillType].includes(props.selectedDrillConfiguration.getDrillType())
-                ? trackmanScoreData(props)
+                ? <>
+                    {shotsGainedData(props, targetDistanceString)}
+                    {trackmanScoreData(props)}
+                </>
                 : null}
             {[spinDrillType].includes(props.selectedDrillConfiguration.getDrillType())
                 ? spinScoreData(props)
+                : null}
+            {[targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                ? targetCircleScoreData(props)
                 : null}
 
             {/* data for all shots */}
