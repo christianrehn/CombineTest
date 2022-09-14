@@ -59,11 +59,11 @@ export const NextDistanceBox: React.FC<INextDistanceBoxProps> = (props: INextDis
                                     <span>Max.&nbsp;Deviation</span>}
                             </p>
                             {props.selectedDrillConfiguration.getMaxDeviationAsUnitNotPercent() ?
-                                <p className="next-distance-max-deviation-percent">
+                                <p className="next-distance-max-deviation-in-unit">
                                     {(props.selectedDrillConfiguration.getMaxDeviationInUnit())}&nbsp;{props.selectedDrillConfiguration.getUnit()}
                                 </p>
                                 : <>
-                                    <p className="next-distance-max-deviation-percent">
+                                    <p className="next-distance-max-deviation-in-percent">
                                         {(props.selectedDrillConfiguration.getMaxDeviationInPercent()).toFixed(0)}&nbsp;%
                                     </p>
                                     <p className="next-distance-max-deviation-unit">
