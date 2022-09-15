@@ -109,7 +109,7 @@
     },
     {
         "uuid": "97445e5c-1cbd-4f42-a788-5bdaa6e13121",
-        "name": "BGV 2022 Pitch 30-60m to 1.8/10m",
+        "name": "BGV 2022 30-60m to 1.8/10m",
         "description": "5 pitches to 1.8/10 meter Target Circles",
         "drillType": "Target Circle",
         "unit": "meter",
@@ -130,7 +130,7 @@
     },
     {
         "uuid": "97445e5c-1cbd-4f42-a788-5bdaa6e13123",
-        "name": "Pitch 50m to 5/20%",
+        "name": "50m to 5/20%",
         "description": "5 pitches to 5%/20% Target Circles",
         "drillType": "Target Circle",
         "unit": "meter",
