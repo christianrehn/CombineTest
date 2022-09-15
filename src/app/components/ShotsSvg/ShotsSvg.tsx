@@ -47,14 +47,22 @@ export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
             : props.selectedDrillConfiguration.getMaxDeviationInPercent() * nextShotTargetDistanceInUnitAsNumber / 100;
 
     // target circle
-    const lastShotTargetCircleRadiusInUnitAsNumber: number =
+    const lastShotTargetCircleRadiusScore100InUnitAsNumber: number =
         props.selectedDrillConfiguration.getTargetCircleRadiusAsUnitNotPercent()
-            ? props.selectedDrillConfiguration.getTargetCircleRadiusInUnit()
-            : props.selectedDrillConfiguration.getTargetCircleRadiusInPercent() * lastShotTargetDistanceInUnitAsNumber / 100;
-    const nextShotTargetCircleRadiusInUnitAsNumber: number =
+            ? props.selectedDrillConfiguration.getTargetCircleRadiusScore100InUnit()
+            : props.selectedDrillConfiguration.getTargetCircleRadiusScore100InPercent() * lastShotTargetDistanceInUnitAsNumber / 100;
+    const lastShotTargetCircleRadiusScore0InUnitAsNumber: number =
         props.selectedDrillConfiguration.getTargetCircleRadiusAsUnitNotPercent()
-            ? props.selectedDrillConfiguration.getTargetCircleRadiusInUnit()
-            : props.selectedDrillConfiguration.getTargetCircleRadiusInPercent() * nextShotTargetDistanceInUnitAsNumber / 100;
+            ? props.selectedDrillConfiguration.getTargetCircleRadiusScore0InUnit()
+            : props.selectedDrillConfiguration.getTargetCircleRadiusScore0InPercent() * lastShotTargetDistanceInUnitAsNumber / 100;
+    const nextShotTargetCircleRadiusScore100InUnitAsNumber: number =
+        props.selectedDrillConfiguration.getTargetCircleRadiusAsUnitNotPercent()
+            ? props.selectedDrillConfiguration.getTargetCircleRadiusScore100InUnit()
+            : props.selectedDrillConfiguration.getTargetCircleRadiusScore100InPercent() * nextShotTargetDistanceInUnitAsNumber / 100;
+    const nextShotTargetCircleRadiusScore0InUnitAsNumber: number =
+        props.selectedDrillConfiguration.getTargetCircleRadiusAsUnitNotPercent()
+            ? props.selectedDrillConfiguration.getTargetCircleRadiusScore0InUnit()
+            : props.selectedDrillConfiguration.getTargetCircleRadiusScore0InPercent() * nextShotTargetDistanceInUnitAsNumber / 100;
 
     return (
         <svg width="100%" height="100%" viewBox="-110 -110.5 220.3 220.2"
@@ -64,9 +72,76 @@ export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
                 <pattern id="grid" patternUnits="userSpaceOnUse" width="10" height="10" x="0" y="0">
                     <path d="M0,0 v10 h10" stroke="#57c4ff" fill="none"/>
                 </pattern>
+                <radialGradient id="TargetCircleRadialGradient100">
+                    <stop offset="0" stop-opacity="1" stop-color="darkgoldenrod"/>
+                    <stop offset="1" stop-opacity="0.5" stop-color="darkgoldenrod"/>
+                </radialGradient>
+                <radialGradient id="TargetCircleRadialGradient0">
+                    <stop offset="0" stop-opacity="1" stop-color="gold"/>
+                    <stop offset="0.4" stop-opacity="0.8" stop-color="gold"/>
+                    <stop offset="0.9" stop-opacity="0.4" stop-color="gold"/>
+                </radialGradient>
             </defs>
+
             {/* background grid*/}
             <rect x="-110" y="-110.4" width="220.3" height="220.4" fill="url(#grid)"></rect>
+
+            {/*line for lastShotMaxDeviationInUnitAsNumber*/}
+            {
+                [spinDrillType].includes(props.selectedDrillConfiguration.getDrillType()) && props.shotDatas.length > 0 ?
+                    <>
+                        <path className="shots_svg_lastmaxdeviation"
+                              d={`M-110,${-lastShotMaxDeviationInUnitAsNumber * svgScaleFactor} h220`}/>
+                        <path className="shots_svg_lastmaxdeviation"
+                              d={`M-110,${lastShotMaxDeviationInUnitAsNumber * svgScaleFactor} h220`}/>
+                    </>
+                    : null
+            }
+
+            {/*line for nextShotMaxDeviationInUnitAsNumber*/}
+            {
+                [spinDrillType].includes(props.selectedDrillConfiguration.getDrillType()) ?
+                    <>
+                        <path className="shots_svg_nextmaxdeviation"
+                              d={`M-110,${-nextShotMaxDeviationInUnitAsNumber * svgScaleFactor} h220`}/>
+                        <path className="shots_svg_nextmaxdeviation"
+                              d={`M-110,${nextShotMaxDeviationInUnitAsNumber * svgScaleFactor} h220`}/>
+                    </>
+                    : null
+            }
+
+            {/*circle for lastShotTargetCircleRadiusScore0InUnitAsNumber*/}
+            {
+                [targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType()) ?
+                    <circle className="shots_svg_lasttargetcircle_score0"
+                            r={lastShotTargetCircleRadiusScore0InUnitAsNumber * svgScaleFactor}/>
+                    : null
+            }
+
+            {/*circle for nextShotTargetCircleRadiusScore0InUnitAsNumber*/}
+            {
+                [targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType()) ?
+                    <circle className="shots_svg_nexttargetcircle_score0"
+                            r={nextShotTargetCircleRadiusScore0InUnitAsNumber * svgScaleFactor}/>
+                    : null
+            }
+
+            {/*circle for lastShotTargetCircleRadiusScore100InUnitAsNumber*/}
+            {
+                [targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType()) ?
+                    <circle className="shots_svg_lasttargetcircle_score100"
+                            r={lastShotTargetCircleRadiusScore100InUnitAsNumber * svgScaleFactor}/>
+                    : null
+            }
+
+            {/*circle for nextShotTargetCircleRadiusScore100InUnitAsNumber*/}
+            {
+                [targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType()) ?
+                    <circle className="shots_svg_nexttargetcircle_score100"
+                            r={nextShotTargetCircleRadiusScore100InUnitAsNumber * svgScaleFactor}/>
+                    : null
+            }
+
 
             {/* x-, y-axis*/}
             <path className="shots_svg_axis" d="M0,-110 v220"/>
@@ -103,46 +178,6 @@ export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
                         </text>
                     </g>
                 })
-            }
-
-            {/*line for lastShotMaxDeviationInUnitAsNumber*/}
-            {
-                [spinDrillType].includes(props.selectedDrillConfiguration.getDrillType()) && props.shotDatas.length > 0 ?
-                    <>
-                        <path className="shots_svg_lastmaxdeviation"
-                              d={`M-110,${-lastShotMaxDeviationInUnitAsNumber * svgScaleFactor} h220`}/>
-                        <path className="shots_svg_lastmaxdeviation"
-                              d={`M-110,${lastShotMaxDeviationInUnitAsNumber * svgScaleFactor} h220`}/>
-                    </>
-                    : null
-            }
-
-            {/*line for nextShotMaxDeviationInUnitAsNumber*/}
-            {
-                [spinDrillType].includes(props.selectedDrillConfiguration.getDrillType()) ?
-                    <>
-                        <path className="shots_svg_nextmaxdeviation"
-                              d={`M-110,${-nextShotMaxDeviationInUnitAsNumber * svgScaleFactor} h220`}/>
-                        <path className="shots_svg_nextmaxdeviation"
-                              d={`M-110,${nextShotMaxDeviationInUnitAsNumber * svgScaleFactor} h220`}/>
-                    </>
-                    : null
-            }
-
-            {/*circle for lastShotTargetCircleRadiusInUnitAsNumber*/}
-            {
-                [targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType()) ?
-                    <circle className="shots_svg_lasttargetcircle"
-                            r={lastShotTargetCircleRadiusInUnitAsNumber * svgScaleFactor}/>
-                    : null
-            }
-
-            {/*circle for nextShotTargetCircleRadiusInUnitAsNumber*/}
-            {
-                [targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType()) ?
-                    <circle className="shots_svg_nexttargetcircle"
-                            r={nextShotTargetCircleRadiusInUnitAsNumber * svgScaleFactor}/>
-                    : null
             }
 
             {/*circle for current shot*/}

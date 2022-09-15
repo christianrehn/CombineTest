@@ -48,11 +48,13 @@ const DEFAULT_DEVIATION_IN_UNIT: number = 3;
 const MIN_DEVIATION_IN_PERCENT: number = 1;
 const DEFAULT_DEVIATION_IN_PERCENT: number = 30;
 
-const MIN_TARGET_CIRCLE_RADIUS_IN_UNIT: number = 1;
-const DEFAULT_TARGET_CIRCLE_RADIUS_IN_UNIT: number = 2;
+const MIN_TARGET_CIRCLE_RADIUS_SCORE_100_IN_UNIT: number = 0.1;
+const DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_100_IN_UNIT: number = 1.8;
+const DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_0_IN_UNIT: number = 10.0;
 
-const MIN_TARGET_CIRCLE_RADIUS_IN_PERCENT: number = 1;
-const DEFAULT_TARGET_CIRCLE_RADIUS_IN_PERCENT: number = 5;
+const MIN_TARGET_CIRCLE_RADIUS_SCORE_100_IN_PERCENT: number = 1;
+const DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_100_IN_PERCENT: number = 5;
+const DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_0_IN_PERCENT: number = 30;
 
 const MIN_NAME: number = 1;
 const MAX_NAME: number = 30;
@@ -87,8 +89,10 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     const [maxDeviationInUnit, setMaxDeviationInUnit] = React.useState<number>(props.selectedDrillConfiguration.getMaxDeviationInUnit() || DEFAULT_DEVIATION_IN_UNIT);
     const [maxDeviationInPercent, setMaxDeviationInPercent] = React.useState<number>(props.selectedDrillConfiguration.getMaxDeviationInPercent() || DEFAULT_DEVIATION_IN_PERCENT);
     const [targetCircleRadiusAsUnitNotPercent, setTargetCircleRadiusAsUnitNotPercent] = React.useState<boolean>(props.selectedDrillConfiguration.getTargetCircleRadiusAsUnitNotPercent() || true);
-    const [targetCircleRadiusInUnit, setTargetCircleRadiusInUnit] = React.useState<number>(props.selectedDrillConfiguration.getTargetCircleRadiusInUnit() || DEFAULT_TARGET_CIRCLE_RADIUS_IN_UNIT);
-    const [targetCircleRadiusInPercent, setTargetCircleRadiusInPercent] = React.useState<number>(props.selectedDrillConfiguration.getTargetCircleRadiusInPercent() || DEFAULT_TARGET_CIRCLE_RADIUS_IN_PERCENT);
+    const [targetCircleRadiusScore100InUnit, setTargetCircleRadiusScore100InUnit] = React.useState<number>(props.selectedDrillConfiguration.getTargetCircleRadiusScore100InUnit() || DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_100_IN_UNIT);
+    const [targetCircleRadiusScore0InUnit, setTargetCircleRadiusScore0InUnit] = React.useState<number>(props.selectedDrillConfiguration.getTargetCircleRadiusScore100InUnit() || DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_0_IN_UNIT);
+    const [targetCircleRadiusScore100InPercent, setTargetCircleRadiusScore100InPercent] = React.useState<number>(props.selectedDrillConfiguration.getTargetCircleRadiusScore100InPercent() || DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_100_IN_PERCENT);
+    const [targetCircleRadiusScore0InPercent, setTargetCircleRadiusScore0InPercent] = React.useState<number>(props.selectedDrillConfiguration.getTargetCircleRadiusScore100InPercent() || DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_0_IN_PERCENT);
     const [startGroundType, setStartGroundType] = React.useState<string>(props.selectedDrillConfiguration.getStartGroundType());
     const [endGroundConfigs, setEndGroundConfigs] = React.useState<IEndGroundConfig[]>(props.selectedDrillConfiguration.getEndGroundConfigs());
     const [distanceGenerator, setDistanceGenerator] = React.useState<string>(props.selectedDrillConfiguration.getDistanceGenerator());
@@ -180,8 +184,10 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                           maxDeviationInUnit,
                                           maxDeviationInPercent,
                                           targetCircleRadiusAsUnitNotPercent,
-                                          targetCircleRadiusInUnit,
-                                          targetCircleRadiusInPercent,
+                                          targetCircleRadiusScore100InUnit,
+                                          targetCircleRadiusScore0InUnit,
+                                          targetCircleRadiusScore100InPercent,
+                                          targetCircleRadiusScore0InPercent,
                                           distanceGenerator,
                                           startGroundType,
                                           endGroundConfigs,
@@ -315,25 +321,47 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         }}
                     />
                 </div>
-                <div className="target-circle-radius-in-unit-input">
+                <div className="target-circle-radius-in-unit-score-100-input">
                     <NumberPlusMinusInput
-                        label={`Target Circle Radius in ${lengthUnit}`}
+                        label={`Target Circle Radius for a score of 100 in ${lengthUnit}`}
                         hidden={![targetCircleDrillType].includes(drillType) || !targetCircleRadiusAsUnitNotPercent}
-                        value={targetCircleRadiusInUnit}
-                        min={MIN_TARGET_CIRCLE_RADIUS_IN_UNIT}
+                        value={targetCircleRadiusScore100InUnit}
+                        min={MIN_TARGET_CIRCLE_RADIUS_SCORE_100_IN_UNIT}
                         handleOnClick={(value: number): void => {
-                            setTargetCircleRadiusInUnit(value);
+                            setTargetCircleRadiusScore100InUnit(value);
                         }}
                     />
                 </div>
-                <div className="target-circle-radius-in-percent-input">
+                <div className="target-circle-radius-in-unit-score-0-input">
                     <NumberPlusMinusInput
-                        label={`Target Circle Radius in %`}
-                        hidden={![targetCircleDrillType].includes(drillType) || targetCircleRadiusAsUnitNotPercent}
-                        value={targetCircleRadiusInPercent}
-                        min={MIN_TARGET_CIRCLE_RADIUS_IN_PERCENT}
+                        label={`Target Circle Radius for a score of 0 in ${lengthUnit}`}
+                        hidden={![targetCircleDrillType].includes(drillType) || !targetCircleRadiusAsUnitNotPercent}
+                        value={targetCircleRadiusScore0InUnit}
+                        min={targetCircleRadiusScore100InUnit}
                         handleOnClick={(value: number): void => {
-                            setTargetCircleRadiusInPercent(value);
+                            setTargetCircleRadiusScore0InUnit(value);
+                        }}
+                    />
+                </div>
+                <div className="target-circle-radius-in-percent-score-100-input">
+                    <NumberPlusMinusInput
+                        label={`Target Circle Radius for a score of 100 in %`}
+                        hidden={![targetCircleDrillType].includes(drillType) || targetCircleRadiusAsUnitNotPercent}
+                        value={targetCircleRadiusScore100InPercent}
+                        min={MIN_TARGET_CIRCLE_RADIUS_SCORE_100_IN_PERCENT}
+                        handleOnClick={(value: number): void => {
+                            setTargetCircleRadiusScore100InPercent(value);
+                        }}
+                    />
+                </div>
+                <div className="target-circle-radius-in-percent-score-0-input">
+                    <NumberPlusMinusInput
+                        label={`Target Circle Radius for a score of 0 in %`}
+                        hidden={![targetCircleDrillType].includes(drillType) || targetCircleRadiusAsUnitNotPercent}
+                        value={targetCircleRadiusScore0InPercent}
+                        min={targetCircleRadiusScore100InPercent}
+                        handleOnClick={(value: number): void => {
+                            setTargetCircleRadiusScore0InPercent(value);
                         }}
                     />
                 </div>

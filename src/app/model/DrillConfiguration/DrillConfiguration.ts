@@ -42,8 +42,10 @@ export interface IDrillConfiguration extends IEntity {
     getMaxDeviationInUnit: () => number;
     getMaxDeviationInPercent: () => number;
     getTargetCircleRadiusAsUnitNotPercent: () => boolean;
-    getTargetCircleRadiusInUnit: () => number;
-    getTargetCircleRadiusInPercent: () => number;
+    getTargetCircleRadiusScore100InUnit: () => number;
+    getTargetCircleRadiusScore0InUnit: () => number;
+    getTargetCircleRadiusScore100InPercent: () => number;
+    getTargetCircleRadiusScore0InPercent: () => number;
     getStartGroundType: () => string;
     getEndGroundConfigs: () => IEndGroundConfig[]
     getDistanceGenerator: () => string;
@@ -77,8 +79,10 @@ abstract class AbstractDrillConfiguration extends Entity {
     protected _maxDeviationInUnit: number;
     protected _maxDeviationInPercent: number;
     protected _targetCircleRadiusAsUnitNotPercent: boolean;
-    protected _targetCircleRadiusInUnit: number;
-    protected _targetCircleRadiusInPercent: number;
+    protected _targetCircleRadiusScore100InUnit: number;
+    protected _targetCircleRadiusScore0InUnit: number;
+    protected _targetCircleRadiusScore100InPercent: number;
+    protected _targetCircleRadiusScore0InPercent: number;
     protected _startGroundType: string;
     protected _endGroundConfigs: IEndGroundConfig[];
     protected readonly _averageShotsStartGroundType: string;
@@ -94,8 +98,10 @@ abstract class AbstractDrillConfiguration extends Entity {
         maxDeviationInUnit: number,
         maxDeviationInPercent: number,
         targetCircleRadiusAsUnitNotPercent: boolean,
-        targetCircleRadiusInUnit: number,
-        targetCircleRadiusInPercent: number,
+        targetCircleRadiusScore100InUnit: number,
+        targetCircleRadiusScore0InUnit: number,
+        targetCircleRadiusScore100InPercent: number,
+        targetCircleRadiusScore0InPercent: number,
         startGroundType: string,
         endGroundConfigs: IEndGroundConfig[],
         averageStrokesDataMap: Map<string, IAverageStrokesData>,
@@ -110,8 +116,10 @@ abstract class AbstractDrillConfiguration extends Entity {
         this._maxDeviationInUnit = maxDeviationInUnit;
         this._maxDeviationInPercent = maxDeviationInPercent;
         this._targetCircleRadiusAsUnitNotPercent = targetCircleRadiusAsUnitNotPercent;
-        this._targetCircleRadiusInUnit = targetCircleRadiusInUnit;
-        this._targetCircleRadiusInPercent = targetCircleRadiusInPercent;
+        this._targetCircleRadiusScore100InUnit = targetCircleRadiusScore100InUnit;
+        this._targetCircleRadiusScore0InUnit = targetCircleRadiusScore0InUnit;
+        this._targetCircleRadiusScore100InPercent = targetCircleRadiusScore100InPercent;
+        this._targetCircleRadiusScore0InPercent = targetCircleRadiusScore0InPercent;
         this._startGroundType = startGroundType;
         this._endGroundConfigs = endGroundConfigs;
         this._averageShotsStartGroundType = startGroundType;
@@ -149,12 +157,20 @@ abstract class AbstractDrillConfiguration extends Entity {
         return this._targetCircleRadiusAsUnitNotPercent;
     }
 
-    public getTargetCircleRadiusInUnit = (): number => {
-        return this._targetCircleRadiusInUnit;
+    public getTargetCircleRadiusScore100InUnit = (): number => {
+        return this._targetCircleRadiusScore100InUnit;
     }
 
-    public getTargetCircleRadiusInPercent = (): number => {
-        return this._targetCircleRadiusInPercent;
+    public getTargetCircleRadiusScore0InUnit = (): number => {
+        return this._targetCircleRadiusScore0InUnit;
+    }
+
+    public getTargetCircleRadiusScore100InPercent = (): number => {
+        return this._targetCircleRadiusScore100InPercent;
+    }
+
+    public getTargetCircleRadiusScore0InPercent = (): number => {
+        return this._targetCircleRadiusScore0InPercent;
     }
 
     public getStartGroundType = (): string => {
@@ -269,8 +285,10 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
         maxDeviationInUnit: number,
         maxDeviationInPercent: number,
         targetCircleRadiusAsUnitNotPercent: boolean,
-        targetCircleRadiusInUnit: number,
-        targetCircleRadiusInPercent: number,
+        targetCircleRadiusScore100InUnit: number,
+        targetCircleRadiusScore0InUnit: number,
+        targetCircleRadiusScore100InPercent: number,
+        targetCircleRadiusScore0InPercent: number,
         startGroundType: string,
         endGroundConfigs: IEndGroundConfig[],
         minIncludedDistance: number,
@@ -288,8 +306,10 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
             maxDeviationInUnit,
             maxDeviationInPercent,
             targetCircleRadiusAsUnitNotPercent,
-            targetCircleRadiusInUnit,
-            targetCircleRadiusInPercent,
+            targetCircleRadiusScore100InUnit,
+            targetCircleRadiusScore0InUnit,
+            targetCircleRadiusScore100InPercent,
+            targetCircleRadiusScore0InPercent,
             startGroundType,
             endGroundConfigs,
             averageStrokesDataMap);
@@ -342,8 +362,10 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
             maxDeviationInUnit: this.getMaxDeviationInUnit(),
             maxDeviationInPercent: this.getMaxDeviationInPercent(),
             targetCircleRadiusAsUnitNotPercent: this.getTargetCircleRadiusAsUnitNotPercent(),
-            targetCircleRadiusInUnit: this.getTargetCircleRadiusInUnit(),
-            targetCircleRadiusInPercent: this.getTargetCircleRadiusInPercent(),
+            targetCircleRadiusScore100InUnit: this.getTargetCircleRadiusScore100InUnit(),
+            targetCircleRadiusScore0InUnit: this.getTargetCircleRadiusScore0InUnit(),
+            targetCircleRadiusScore100InPercent: this.getTargetCircleRadiusScore100InPercent(),
+            targetCircleRadiusScore0InPercent: this.getTargetCircleRadiusScore0InPercent(),
             distanceGenerator: {
                 minIncludedDistance: this._minIncludedDistance,
                 maxExcludedDistance: this._maxExcludedDistance,
@@ -371,8 +393,10 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
         maxDeviationInUnit: number,
         maxDeviationInPercent: number,
         targetCircleRadiusAsUnitNotPercent: boolean,
-        targetCircleRadiusInUnit: number,
-        targetCircleRadiusInPercent: number,
+        targetCircleRadiusScore100InUnit: number,
+        targetCircleRadiusScore0InUnit: number,
+        targetCircleRadiusScore100InPercent: number,
+        targetCircleRadiusScore0InPercent: number,
         startGroundType: string,
         endGroundConfigs: IEndGroundConfig[],
         distances: number[],
@@ -389,8 +413,10 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
             maxDeviationInUnit,
             maxDeviationInPercent,
             targetCircleRadiusAsUnitNotPercent,
-            targetCircleRadiusInUnit,
-            targetCircleRadiusInPercent,
+            targetCircleRadiusScore100InUnit,
+            targetCircleRadiusScore0InUnit,
+            targetCircleRadiusScore100InPercent,
+            targetCircleRadiusScore0InPercent,
             startGroundType,
             endGroundConfigs,
             averageStrokesDataMap);
@@ -442,8 +468,10 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
             maxDeviationInUnit: this.getMaxDeviationInUnit(),
             maxDeviationInPercent: this.getMaxDeviationInPercent(),
             targetCircleRadiusAsUnitNotPercent: this.getTargetCircleRadiusAsUnitNotPercent(),
-            targetCircleRadiusInUnit: this.getTargetCircleRadiusInUnit(),
-            targetCircleRadiusInPercent: this.getTargetCircleRadiusInPercent(),
+            targetCircleRadiusScore100InUnit: this.getTargetCircleRadiusScore100InUnit(),
+            targetCircleRadiusScore0InUnit: this.getTargetCircleRadiusScore0InUnit(),
+            targetCircleRadiusScore100InPercent: this.getTargetCircleRadiusScore100InPercent(),
+            targetCircleRadiusScore0InPercent: this.getTargetCircleRadiusScore0InPercent(),
             distanceGenerator: {
                 type: distanceGeneratorType,
                 distances: this._distances,
@@ -474,8 +502,10 @@ export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends Dri
         maxDeviationInUnit: number,
         maxDeviationInPercent: number,
         targetCircleRadiusAsUnitNotPercent: boolean,
-        targetCircleRadiusInUnit: number,
-        targetCircleRadiusInPercent: number,
+        targetCircleRadiusScore100InUnit: number,
+        targetCircleRadiusScore0InUnit: number,
+        targetCircleRadiusScore100InPercent: number,
+        targetCircleRadiusScore0InPercent: number,
         startGroundType: string,
         endGroundConfigs: IEndGroundConfig[],
         distances: number[],
@@ -493,8 +523,10 @@ export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends Dri
             maxDeviationInUnit,
             maxDeviationInPercent,
             targetCircleRadiusAsUnitNotPercent,
-            targetCircleRadiusInUnit,
-            targetCircleRadiusInPercent,
+            targetCircleRadiusScore100InUnit,
+            targetCircleRadiusScore0InUnit,
+            targetCircleRadiusScore100InPercent,
+            targetCircleRadiusScore0InPercent,
             startGroundType,
             endGroundConfigs,
             distances,
@@ -557,6 +589,8 @@ export class EmptyDrillConfiguration extends DrillConfigurationWithFixedDistance
             0,
             0,
             true,
+            0,
+            0,
             0,
             0,
             Fairway,

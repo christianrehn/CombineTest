@@ -52,11 +52,26 @@
 }
 
 .next-distance-target-circle-radius-label {
-    padding-top: 50px;
+    padding-top: 55px;
     font-size: 16px;
 }
 
-.next-distance-target-circle-radius-in-unit, .next-distance-target-circle-radius-in-percent {
+.next-distance-target-circle-radius-score-100-label {
+    padding-top: 20px;
+    font-size: 16px;
+}
+
+.next-distance-target-circle-radius-score-100-in-unit, .next-distance-target-circle-radius-score-100-in-percent {
+    padding-top: 10px;
+    font-size: 30px;
+}
+
+.next-distance-target-circle-radius-score-0-label {
+    padding-top: 20px;
+    font-size: 16px;
+}
+
+.next-distance-target-circle-radius-score-0-in-unit, .next-distance-target-circle-radius-score-0-in-percent {
     padding-top: 10px;
     font-size: 30px;
 }

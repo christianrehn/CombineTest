@@ -80,18 +80,37 @@ export const NextDistanceBox: React.FC<INextDistanceBoxProps> = (props: INextDis
                         : [targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
                             ? <>
                                 <p className="next-distance-target-circle-radius-label">
-                                    {`Target Circle Radius`}
+                                    {`Radius Target Circles`}
+                                </p>
+                                <p className="next-distance-target-circle-radius-score-100-label">
+                                    {`Score 100`}
                                 </p>
                                 {props.selectedDrillConfiguration.getTargetCircleRadiusAsUnitNotPercent() ?
-                                    <p className="next-distance-target-circle-radius-in-unit">
-                                        {(props.selectedDrillConfiguration.getTargetCircleRadiusInUnit())}&nbsp;{props.selectedDrillConfiguration.getUnit()}
+                                    <p className="next-distance-target-circle-radius-score-100-in-unit">
+                                        {(props.selectedDrillConfiguration.getTargetCircleRadiusScore100InUnit())}&nbsp;{props.selectedDrillConfiguration.getUnit()}
                                     </p>
                                     : <>
-                                        <p className="next-distance-target-circle-radius-in-percent">
-                                            {(props.selectedDrillConfiguration.getTargetCircleRadiusInPercent()).toFixed(0)}&nbsp;%
+                                        <p className="next-distance-target-circle-radius-score-100-in-percent">
+                                            {(props.selectedDrillConfiguration.getTargetCircleRadiusScore100InPercent()).toFixed(0)}&nbsp;%
                                         </p>
-                                        <p className="next-distance-target-circle-radius-in-unit">
-                                            {(props.selectedDrillConfiguration.getTargetCircleRadiusInPercent() * nextDistanceInDistancesGeneratorInUnitAsNumber / 100).toFixed(1)}&nbsp;{props.selectedDrillConfiguration.getUnit()}
+                                        <p className="next-distance-target-circle-radius-score-100-in-unit">
+                                            {(props.selectedDrillConfiguration.getTargetCircleRadiusScore100InPercent() * nextDistanceInDistancesGeneratorInUnitAsNumber / 100).toFixed(1)}&nbsp;{props.selectedDrillConfiguration.getUnit()}
+                                        </p>
+                                    </>
+                                }
+                                <p className="next-distance-target-circle-radius-score-0-label">
+                                    {`Score 0`}
+                                </p>
+                                {props.selectedDrillConfiguration.getTargetCircleRadiusAsUnitNotPercent() ?
+                                    <p className="next-distance-target-circle-radius-score-0-in-unit">
+                                        {(props.selectedDrillConfiguration.getTargetCircleRadiusScore0InUnit())}&nbsp;{props.selectedDrillConfiguration.getUnit()}
+                                    </p>
+                                    : <>
+                                        <p className="next-distance-target-circle-radius-score-0-in-percent">
+                                            {(props.selectedDrillConfiguration.getTargetCircleRadiusScore0InPercent()).toFixed(0)}&nbsp;%
+                                        </p>
+                                        <p className="next-distance-target-circle-radius-score-0-in-unit">
+                                            {(props.selectedDrillConfiguration.getTargetCircleRadiusScore0InPercent() * nextDistanceInDistancesGeneratorInUnitAsNumber / 100).toFixed(1)}&nbsp;{props.selectedDrillConfiguration.getUnit()}
                                         </p>
                                     </>
                                 }

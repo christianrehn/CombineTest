@@ -63,19 +63,36 @@
     stroke-width: 0.6;
 }
 
-.shots_svg_lasttargetcircle {
+.shots_svg_lasttargetcircle_score100 {
     stroke: red;
-    stroke-width: 0.8;
+    stroke-width: 0.6;
     fill: none;
     cx: 0;
     cy: 0;
 }
 
-.shots_svg_nexttargetcircle {
+.shots_svg_nexttargetcircle_score100 {
+    stroke: darkgoldenrod;
+    stroke-width: 0.6;
+    fill: url(#TargetCircleRadialGradient100);
+    fill-opacity: 70%;
+    cx: 0;
+    cy: 0;
+}
+
+.shots_svg_lasttargetcircle_score0 {
+    stroke: red;
+    stroke-width: 0.6;
+    fill: none;
+    cx: 0;
+    cy: 0;
+}
+
+.shots_svg_nexttargetcircle_score0 {
     stroke: gold;
-    stroke-width: 0.8;
-    fill: gold;
-    fill-opacity: 20%;
+    stroke-width: 0.6;
+    fill: url(#TargetCircleRadialGradient0);
+    fill-opacity: 50%;
     cx: 0;
     cy: 0;
 }

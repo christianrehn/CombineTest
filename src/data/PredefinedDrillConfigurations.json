@@ -109,32 +109,37 @@
     },
     {
         "uuid": "97445e5c-1cbd-4f42-a788-5bdaa6e13122",
-        "name": "BGV Pitch 2022 50m 5%",
-        "description": "5 pitches to 5% Target Circle",
+        "name": "BGV 2022 Pitch 30-60m to 1.8m",
+        "description": "5 pitches to 1.8 meter Target Circle",
         "drillType": "Target Circle",
         "unit": "meter",
-        "targetCircleRadiusAsUnitNotPercent": false,
-        "targetCircleRadiusInPercent": 5,
+        "targetCircleRadiusAsUnitNotPercent": true,
+        "targetCircleRadiusScore100InUnit": 1.8,
+        "targetCircleRadiusScore0InUnit": 10,
         "distanceGenerator": {
             "type": "FixedDistancesGenerator",
             "distances": [
-                50
+                30,
+                40,
+                50,
+                60
             ],
             "numberOfRounds": 5
         }
     },
     {
         "uuid": "97445e5c-1cbd-4f42-a788-5bdaa6e13122",
-        "name": "Pitch 100m 5m",
-        "description": "5 pitches to 5 meter Target Circle",
+        "name": "Pitch 50m to 5%",
+        "description": "5 pitches to 5% Target Circle",
         "drillType": "Target Circle",
         "unit": "meter",
-        "targetCircleRadiusAsUnitNotPercent": true,
-        "targetCircleRadiusInUnit": 5,
+        "targetCircleRadiusAsUnitNotPercent": false,
+        "targetCircleRadiusScore100InPercent": 5,
+        "targetCircleRadiusScore0InPercent": 20,
         "distanceGenerator": {
             "type": "FixedDistancesGenerator",
             "distances": [
-                100
+                50
             ],
             "numberOfRounds": 5
         }
