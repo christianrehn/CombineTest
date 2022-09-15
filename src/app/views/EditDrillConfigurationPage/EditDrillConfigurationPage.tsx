@@ -90,9 +90,9 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     const [maxDeviationInPercent, setMaxDeviationInPercent] = React.useState<number>(props.selectedDrillConfiguration.getMaxDeviationInPercent() || DEFAULT_DEVIATION_IN_PERCENT);
     const [targetCircleRadiusAsUnitNotPercent, setTargetCircleRadiusAsUnitNotPercent] = React.useState<boolean>(props.selectedDrillConfiguration.getTargetCircleRadiusAsUnitNotPercent() || true);
     const [targetCircleRadiusScore100InUnit, setTargetCircleRadiusScore100InUnit] = React.useState<number>(props.selectedDrillConfiguration.getTargetCircleRadiusScore100InUnit() || DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_100_IN_UNIT);
-    const [targetCircleRadiusScore0InUnit, setTargetCircleRadiusScore0InUnit] = React.useState<number>(props.selectedDrillConfiguration.getTargetCircleRadiusScore100InUnit() || DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_0_IN_UNIT);
+    const [targetCircleRadiusScore0InUnit, setTargetCircleRadiusScore0InUnit] = React.useState<number>(props.selectedDrillConfiguration.getTargetCircleRadiusScore0InUnit() || DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_0_IN_UNIT);
     const [targetCircleRadiusScore100InPercent, setTargetCircleRadiusScore100InPercent] = React.useState<number>(props.selectedDrillConfiguration.getTargetCircleRadiusScore100InPercent() || DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_100_IN_PERCENT);
-    const [targetCircleRadiusScore0InPercent, setTargetCircleRadiusScore0InPercent] = React.useState<number>(props.selectedDrillConfiguration.getTargetCircleRadiusScore100InPercent() || DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_0_IN_PERCENT);
+    const [targetCircleRadiusScore0InPercent, setTargetCircleRadiusScore0InPercent] = React.useState<number>(props.selectedDrillConfiguration.getTargetCircleRadiusScore0InPercent() || DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_0_IN_PERCENT);
     const [startGroundType, setStartGroundType] = React.useState<string>(props.selectedDrillConfiguration.getStartGroundType());
     const [endGroundConfigs, setEndGroundConfigs] = React.useState<IEndGroundConfig[]>(props.selectedDrillConfiguration.getEndGroundConfigs());
     const [distanceGenerator, setDistanceGenerator] = React.useState<string>(props.selectedDrillConfiguration.getDistanceGenerator());

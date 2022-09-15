@@ -108,9 +108,9 @@
         ]
     },
     {
-        "uuid": "97445e5c-1cbd-4f42-a788-5bdaa6e13122",
-        "name": "BGV 2022 Pitch 30-60m to 1.8m",
-        "description": "5 pitches to 1.8 meter Target Circle",
+        "uuid": "97445e5c-1cbd-4f42-a788-5bdaa6e13121",
+        "name": "BGV 2022 Pitch 30-60m to 1.8/10m",
+        "description": "5 pitches to 1.8/10 meter Target Circles",
         "drillType": "Target Circle",
         "unit": "meter",
         "targetCircleRadiusAsUnitNotPercent": true,
@@ -128,9 +128,9 @@
         }
     },
     {
-        "uuid": "97445e5c-1cbd-4f42-a788-5bdaa6e13122",
-        "name": "Pitch 50m to 5%",
-        "description": "5 pitches to 5% Target Circle",
+        "uuid": "97445e5c-1cbd-4f42-a788-5bdaa6e13123",
+        "name": "Pitch 50m to 5/20%",
+        "description": "5 pitches to 5%/20% Target Circles",
         "drillType": "Target Circle",
         "unit": "meter",
         "targetCircleRadiusAsUnitNotPercent": false,
@@ -145,7 +145,7 @@
         }
     },
     {
-        "uuid": "97445e5c-1cbd-4f42-a788-5bdaa6e13123",
+        "uuid": "97445e5c-1cbd-4f42-a788-5bdaa6e13124",
         "name": "BGV Spin 2022",
         "description": "5 pitches with maximum spin",
         "drillType": "Spin",
@@ -162,7 +162,7 @@
         }
     },
     {
-        "uuid": "97445e5c-1cbd-4f42-a788-5bdaa6e13124",
+        "uuid": "97445e5c-1cbd-4f42-a788-5bdaa6e13125",
         "name": "Spin with Deviation %",
         "description": "5 pitches with maximum spin",
         "drillType": "Spin",
