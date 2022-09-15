@@ -99,7 +99,14 @@ If you create two times the predefined target spin per meter/yard you get a scor
 
 #### Target Circle
 
-Will be available from version 2.1
+This drill type is more like "Trackman Combine and Shots gained" but with another score computation.
+The Target Circle drills are good for Pitch training.
+The drill configuration defines two circles, one for a score of 100 (for example 2 yards or 1.8 meter) and one for a
+score of zero (for example 11 yards or 10 meter) in metes/yards or percent and target distances
+(for example from 30-65 yards or 28-60 meters).
+If your shot is outside or on the 0 score cirecle you get a score of 0.
+Between the 0 and the 100 score circle you get a score between 0 and 100. The score distribution is linear.
+Inside the 100 score circle the linear distribution is continued so that you get a score greater than 100.
 
 ## Track your golf training data
 
