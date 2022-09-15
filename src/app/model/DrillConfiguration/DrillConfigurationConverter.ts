@@ -33,7 +33,6 @@ export const drillConfigurationsFromJson = (
 
     return drillConfigurationsAsJson
         .map((drillConfigurationAsJson: any): IDrillConfiguration => {
-            console.log("drillConfigurationAsJson.targetCircleRadiusAsUnitNotPercent,", drillConfigurationAsJson.targetCircleRadiusAsUnitNotPercent,)
             switch (drillConfigurationAsJson.distanceGenerator.type) {
                 case RANDOM_DISTANCES_GENERATOR:
                     return new DrillConfigurationWithRandomDistancesGenerator(
