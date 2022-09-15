@@ -45,5 +45,5 @@ export const computeTargetCircleScore = (drillConfiguration: IDrillConfiguration
     console.log("fromPinDeltaInUnitAsNumber", fromPinDeltaInUnitAsNumber);
 
     // (delta_circle - delta_fromPin) * 100 / delta_circle
-    return Math.round((targetCircleRadiusDeltaInUnitAsNumber - fromPinDeltaInUnitAsNumber) * 1000 / targetCircleRadiusDeltaInUnitAsNumber) / 10;
+    return Math.max(Math.round((targetCircleRadiusDeltaInUnitAsNumber - fromPinDeltaInUnitAsNumber) * 1000 / targetCircleRadiusDeltaInUnitAsNumber) / 10, 0);
 }

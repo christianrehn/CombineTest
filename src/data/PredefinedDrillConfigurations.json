@@ -120,11 +120,12 @@
             "type": "FixedDistancesGenerator",
             "distances": [
                 30,
+                35,
                 40,
                 50,
                 60
             ],
-            "numberOfRounds": 5
+            "numberOfRounds": 2
         }
     },
     {
