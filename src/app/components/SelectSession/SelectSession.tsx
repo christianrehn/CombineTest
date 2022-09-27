@@ -24,8 +24,9 @@ export const SelectSession: React.FC<ISelectSessionProps> = (props: ISelectSessi
                     </div>
                 </div>
 
-                <div className="top-buttons-flex-item">
-                    <div className="reports-flex-item flex-item">
+                {!!props.selectedSession
+                    ? <div className="top-buttons-flex-item">
+                        <div className="reports-flex-item flex-item">
                         <span className="reports-span"
                               onClick={(): void => {
                                   props.handleSelectPageClicked(ReportSessionPageName)
@@ -39,8 +40,10 @@ export const SelectSession: React.FC<ISelectSessionProps> = (props: ISelectSessi
                                 />
                             </div>
                         </span>
+                        </div>
                     </div>
-                </div>
+                    : null
+                }
             </div>
 
             <div className="session-tiles-flex-item">
