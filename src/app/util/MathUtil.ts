@@ -9,10 +9,26 @@ export const computeSum = (values: number[]) => {
     return values.reduce((accumulator: number, currentValue: number) => accumulator + currentValue, 0);
 }
 
-export const computeAverage = (values: number[]) => {
+export const computeNumberOfShotsToDrop = (numberOfValues: number, numberOfDropShots: number) => {
+    assert(numberOfValues >= 0, "numberOfValues < 0")
+    assert(numberOfDropShots >= 0, "numberOfDropShots < 0")
+
+    return Math.max(Math.min(numberOfDropShots, numberOfValues - 1), 0);
+}
+export const computeAverage = (values: number[], numberOfDropShots: number = 0) => {
     assert(values.length > 0, "!values.length > 0");
 
-    return computeSum(values) / values.length;
+    const numberOfShotsToDrop: number = computeNumberOfShotsToDrop(values.length, numberOfDropShots);
+    const valuesToConsider: number[] = numberOfShotsToDrop > 0 ?
+        // do not compute average over all values but instead drop the worst (= lowest) results
+        values.sort((a: number, b: number) => b - a).slice(0, values.length - numberOfShotsToDrop)
+        : values;
+    if (numberOfShotsToDrop > 0) {
+        console.log("numberOfShotsToDrop", numberOfShotsToDrop)
+        console.log("values", values)
+        console.log("valuesToConsider", valuesToConsider)
+    }
+    return computeSum(valuesToConsider) / valuesToConsider.length;
 }
 
 export const computeStandardDeviationEntirePopulation = (values: number[]): number => {

@@ -36,6 +36,7 @@ export interface IDrillConfiguration extends IEntity {
     getName: () => string;
     getDescription: () => string;
     getDrillType: () => string;
+    getNumberOfDropShots: () => number;
     getUnit: () => string;
     getTargetSpinInRpmPerUnit: () => number;
     getMaxDeviationAsUnitNotPercent: () => boolean;
@@ -74,6 +75,7 @@ abstract class AbstractDrillConfiguration extends Entity {
     protected _name: string;
     protected _description: string;
     protected _drillType: string;
+    protected _numberOfDropShots: number;
     protected _targetSpinInRpmPerUnit: number;
     protected _maxDeviationAsUnitNotPercent: boolean;
     protected _maxDeviationInUnit: number;
@@ -93,6 +95,7 @@ abstract class AbstractDrillConfiguration extends Entity {
         name: string,
         description: string,
         drillType: string,
+        numberOfDropShots: number,
         targetSpinInRpmPerUnit: number,
         maxDeviationAsUnitNotPercent: boolean,
         maxDeviationInUnit: number,
@@ -111,6 +114,7 @@ abstract class AbstractDrillConfiguration extends Entity {
         this._name = name;
         this._description = description;
         this._drillType = drillType;
+        this._numberOfDropShots = numberOfDropShots;
         this._targetSpinInRpmPerUnit = targetSpinInRpmPerUnit;
         this._maxDeviationAsUnitNotPercent = maxDeviationAsUnitNotPercent;
         this._maxDeviationInUnit = maxDeviationInUnit;
@@ -135,6 +139,10 @@ abstract class AbstractDrillConfiguration extends Entity {
     }
     public getDrillType = (): string => {
         return this._drillType;
+    }
+
+    public getNumberOfDropShots = (): number => {
+        return this._numberOfDropShots;
     }
 
     public getTargetSpinInRpmPerUnit = (): number => {
@@ -279,6 +287,7 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
         name: string,
         description: string,
         drillType: string,
+        numberOfDropShots: number,
         unit: string,
         targetSpinInRpmPerUnit: number,
         maxDeviationAsUnitNotPercent: boolean,
@@ -301,6 +310,7 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
             name,
             description,
             drillType,
+            numberOfDropShots,
             targetSpinInRpmPerUnit,
             maxDeviationAsUnitNotPercent,
             maxDeviationInUnit,
@@ -356,6 +366,7 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
             name: this.getName(),
             description: this.getDescription(),
             drillType: this.getDrillType(),
+            numberOfDropShots: this.getNumberOfDropShots(),
             unit: this.getUnit(),
             targetSpinInRpmPerUnit: this.getTargetSpinInRpmPerUnit(),
             maxDeviationAsUnitNotPercent: this.getMaxDeviationAsUnitNotPercent(),
@@ -387,6 +398,7 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
         name: string,
         description: string,
         drillType: string,
+        numberOfDropShots: number,
         unit: string,
         targetSpinInRpmPerUnit: number,
         maxDeviationAsUnitNotPercent: boolean,
@@ -408,6 +420,7 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
             name,
             description,
             drillType,
+            numberOfDropShots,
             targetSpinInRpmPerUnit,
             maxDeviationAsUnitNotPercent,
             maxDeviationInUnit,
@@ -462,6 +475,7 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
             name: this.getName(),
             description: this.getDescription(),
             drillType: this.getDrillType(),
+            numberOfDropShots: this.getNumberOfDropShots(),
             unit: this.getUnit(),
             targetSpinInRpmPerUnit: this.getTargetSpinInRpmPerUnit(),
             maxDeviationAsUnitNotPercent: this.getMaxDeviationAsUnitNotPercent(),
@@ -496,6 +510,7 @@ export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends Dri
         name: string,
         description: string,
         drillType: string,
+        numberOfDropShots: number,
         unit: string,
         targetSpinInRpmPerUnit: number,
         maxDeviationAsUnitNotPercent: boolean,
@@ -517,6 +532,7 @@ export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends Dri
             name,
             description,
             drillType,
+            numberOfDropShots,
             unit,
             targetSpinInRpmPerUnit,
             maxDeviationAsUnitNotPercent,
@@ -583,6 +599,7 @@ export class EmptyDrillConfiguration extends DrillConfigurationWithFixedDistance
             "",
             "",
             trackmanScoreAndShotsGainedDrillType,
+            0,
             meterLengthUnit,
             0,
             true,

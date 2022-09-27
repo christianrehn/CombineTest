@@ -56,6 +56,10 @@
     font-weight: bolder;
 }
 
+.last-shot__truncated-avg-trackmanscore-row {
+    font-weight: bolder;
+}
+
 .last-shot__spinscore-row {
     color: mediumslateblue;
     font-size: 30px;
@@ -65,11 +69,19 @@
     font-weight: bolder;
 }
 
+.last-shot__truncated-avg-spinscore-row {
+    font-weight: bolder;
+}
+
 .last-shot__targetcirclescore-row {
     color: gold;
     font-size: 30px;
 }
 
 .last-shot__avg-targetcirclescore-row {
+    font-weight: bolder;
+}
+
+.last-shot__truncated-avg-targetcirclescore-row {
     font-weight: bolder;
 }

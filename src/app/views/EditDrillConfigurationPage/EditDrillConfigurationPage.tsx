@@ -39,6 +39,8 @@ export const EditDrillConfigurationPageName: string = "EditDrillConfigurationPag
 
 const DEFAULT_DRILL_TYPE: string = trackmanScoreAndShotsGainedDrillType;
 
+const DEFAULT_NUMBER_OF_DROP_SHOTS: number = 0;
+
 const MIN_TARGET_RPM_PER_UNIT: number = 1;
 const DEFAULT_TARGET_RPM_PER_UNIT: number = 250;
 
@@ -82,6 +84,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     const [nameError, setNameError] = React.useState<boolean>(true);
     const [description, setDescription] = React.useState<string>(props.selectedDrillConfiguration.getDescription());
     const [drillType, setDrillType] = React.useState<string>(props.selectedDrillConfiguration.getDrillType() || DEFAULT_DRILL_TYPE);
+    const [numberOfDropShots, setNumberOfDropShots] = React.useState<number>(props.selectedDrillConfiguration.getNumberOfDropShots() || DEFAULT_NUMBER_OF_DROP_SHOTS);
     const [lengthUnit, setLengthUnit] = React.useState<string>(props.selectedDrillConfiguration.getUnit());
     const [targetSpinInRpmPerUnit, setTargetSpinInRpmPerUnit] = React.useState<number>(props.selectedDrillConfiguration.getTargetSpinInRpmPerUnit() || DEFAULT_TARGET_RPM_PER_UNIT);
     const [targetSpinInRpmPerUnitError, setTargetSpinInRpmPerUnitError] = React.useState<boolean>(true);
@@ -178,6 +181,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                           name,
                                           description,
                                           drillType,
+                                          numberOfDropShots,
                                           lengthUnit,
                                           targetSpinInRpmPerUnit,
                                           maxDeviationAsUnitNotPercent,
@@ -249,6 +253,16 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         handleOnChange={(index: number): void => {
                             assert(index >= 0, "index < 0");
                             setDrillType(drillTypes[index]);
+                        }}
+                    />
+                </div>
+                <div className="number-of-drop-shots-input">
+                    <NumberPlusMinusInput
+                        label={`Number of worst shots to drop from average calculation`}
+                        value={numberOfDropShots}
+                        min={0}
+                        handleOnClick={(value: number): void => {
+                            setNumberOfDropShots(value);
                         }}
                     />
                 </div>

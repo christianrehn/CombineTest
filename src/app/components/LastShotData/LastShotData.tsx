@@ -10,6 +10,7 @@ import {computeStrokesGained} from "../../model/StrokesGained";
 import {
     computeAbsoluteDeviation,
     computeAverage,
+    computeNumberOfShotsToDrop,
     computeRelativeDeviation,
     computeStandardDeviationEntirePopulation,
     computeSum
@@ -74,6 +75,35 @@ const additionalDataForAllShots = (props: ILastShotDataProps) => {
         <div className="last-shot__row">
         </div>
     </div>);
+}
+
+const lastShotAverageDivs = (label: string, values: number[], truncated: boolean, fractionDigits: number, props: ILastShotDataProps) => {
+    const truncAvgUnitDiv = (props: ILastShotDataProps) => (
+        <div
+            className="last-shot-item__unit">({props.shotDatas.length - computeNumberOfShotsToDrop(props.shotDatas.length, props.selectedDrillConfiguration.getNumberOfDropShots())}/{props.shotDatas.length})
+        </div>
+    )
+
+    return (
+        <>
+            <div className="last-shot-item__label">{label}</div>
+            <div className="last-shot-item__data"> {
+                !!props.lastShot ? computeAverage(values, truncated ? props.selectedDrillConfiguration.getNumberOfDropShots() : 0).toFixed(fractionDigits) : ""
+            } </div>
+            {truncated ? truncAvgUnitDiv(props) : ""}
+        </>
+    );
+}
+
+const lastShotConsistencyDivs = (label: string, values: number[], fractionDigits: number, props: ILastShotDataProps) => {
+    return (
+        <>
+            <div className="last-shot-item__label">{label}</div>
+            <div className="last-shot-item__data"> {
+                !!props.lastShot ? computeStandardDeviationEntirePopulation(values).toFixed(fractionDigits) : ""
+            } </div>
+        </>
+    );
 }
 
 const shotsGainedData = (props: ILastShotDataProps, targetDistance: string): JSX.Element[] => {
@@ -142,18 +172,19 @@ const shotsGainedData = (props: ILastShotDataProps, targetDistance: string): JSX
         <div
             key="averageStrokesGained"
             className="last-shot__row last-shot__gained-row last-shot__avg-gained-row">
-            <div className="last-shot-item__label">Average Gained</div>
-            <div className="last-shot-item__data"> {
-                !!props.lastShot ? computeAverage(strokesGainedValues).toFixed(3) : ""
-            } </div>
+            {lastShotAverageDivs("Average Gained", strokesGainedValues, false, 3, props)}
         </div>,
+        props.selectedDrillConfiguration.getNumberOfDropShots() > 0
+            ? <div
+                key="truncatedAverageStrokesGained"
+                className="last-shot__row last-shot__gained-row last-shot__truncated-avg-gained-row">
+                {lastShotAverageDivs("Trunc Avg Gained", strokesGainedValues, true, 3, props)}
+            </div>
+            : null,
         <div
             key="consistencyStrokesGained"
             className="last-shot__row last-shot__gained-row last-shot__consistency-gained-row">
-            <div className="last-shot-item__label">Consistency Gained</div>
-            <div className="last-shot-item__data"> {
-                !!props.lastShot ? computeStandardDeviationEntirePopulation(strokesGainedValues).toFixed(3) : ""
-            } </div>
+            {lastShotConsistencyDivs("Consistency Gained", strokesGainedValues, 3, props)}
         </div>
     ];
 }
@@ -180,18 +211,19 @@ const trackmanScoreData = (props: ILastShotDataProps): JSX.Element[] => {
         <div
             key="averageTrackmanScore"
             className="last-shot__row last-shot__trackmanscore-row last-shot__avg-trackmanscore-row">
-            <div className="last-shot-item__label">Average Score</div>
-            <div className="last-shot-item__data"> {
-                !!props.lastShot ? computeAverage(trackmanScoreValues).toFixed(1) : ""
-            } </div>
+            {lastShotAverageDivs("Average Score", trackmanScoreValues, false, 1, props)}
         </div>,
+        props.selectedDrillConfiguration.getNumberOfDropShots() > 0
+            ? <div
+                key="truncatedAverageTrackmanScore"
+                className="last-shot__row last-shot__trackmanscore-row last-shot__truncated-avg-trackmanscore-row">
+                {lastShotAverageDivs("Trunc Avg Score", trackmanScoreValues, true, 1, props)}
+            </div>
+            : null,
         <div
             key="consistencyTrackmanScore"
             className="last-shot__row last-shot__trackmanscore-row last-shot__consistency-trackmanscore-row">
-            <div className="last-shot-item__label">Consistency Score</div>
-            <div className="last-shot-item__data"> {
-                !!props.lastShot ? computeStandardDeviationEntirePopulation(trackmanScoreValues).toFixed(1) : ""
-            } </div>
+            {lastShotConsistencyDivs("Consistency Score", trackmanScoreValues, 1, props)}
         </div>
     ];
 }
@@ -217,18 +249,19 @@ const spinScoreData = (props: ILastShotDataProps): JSX.Element[] => {
         <div
             key="averageSpinScore"
             className="last-shot__row last-shot__spinscore-row last-shot__avg-spinscore-row">
-            <div className="last-shot-item__label">Average Spin Score</div>
-            <div className="last-shot-item__data"> {
-                !!props.lastShot ? computeAverage(spinScoreValues).toFixed(1) : ""
-            } </div>
+            {lastShotAverageDivs("Average Spin Score", spinScoreValues, false, 1, props)}
         </div>,
+        props.selectedDrillConfiguration.getNumberOfDropShots() > 0
+            ? <div
+                key="truncatedAverageSpinScore"
+                className="last-shot__row last-shot__spinscore-row last-shot__truncated-avg-spinscore-row">
+                {lastShotAverageDivs("Trunc Avg Spin Score", spinScoreValues, true, 1, props)}
+            </div>
+            : null,
         <div
             key="consistencySpinScore"
             className="last-shot__row last-shot__spinscore-row last-shot__consistency-spinscore-row">
-            <div className="last-shot-item__label">Consistency Spin Score</div>
-            <div className="last-shot-item__data"> {
-                !!props.lastShot ? computeStandardDeviationEntirePopulation(spinScoreValues).toFixed(1) : ""
-            } </div>
+            {lastShotConsistencyDivs("Consistency Spin Score", spinScoreValues, 1, props)}
         </div>
     ];
 }
@@ -241,7 +274,8 @@ const targetCircleScoreData = (props: ILastShotDataProps): JSX.Element[] => {
     const absoluteDeviation: Unit = computeAbsoluteDeviation(props.lastShot);
     const targetCircleScore: number = computeTargetCircleScore(props.selectedDrillConfiguration, props.lastShot.getTargetDistance(), absoluteDeviation);
 
-    const targetCircleScoreValues: number[] = props.shotDatas.map((shotData: IShotData) => computeTargetCircleScore(props.selectedDrillConfiguration, shotData.getTargetDistance(), absoluteDeviation));
+    const targetCircleScoreValues: number[] = props.shotDatas.map((shotData: IShotData) => computeTargetCircleScore(props.selectedDrillConfiguration, shotData.getTargetDistance(), computeAbsoluteDeviation(shotData)));
+    console.log("targetCircleScoreValues", targetCircleScoreValues)
 
     return [
         <div
@@ -255,18 +289,19 @@ const targetCircleScoreData = (props: ILastShotDataProps): JSX.Element[] => {
         <div
             key="averageTargetCircleScore"
             className="last-shot__row last-shot__targetcirclescore-row last-shot__avg-targetcirclescore-row">
-            <div className="last-shot-item__label">Average TC Score</div>
-            <div className="last-shot-item__data"> {
-                !!props.lastShot ? computeAverage(targetCircleScoreValues).toFixed(1) : ""
-            } </div>
+            {lastShotAverageDivs("Average TC Score", targetCircleScoreValues, false, 1, props)}
         </div>,
+        props.selectedDrillConfiguration.getNumberOfDropShots() > 0
+            ? <div
+                key="truncatedAverageTargetCircleScore"
+                className="last-shot__row last-shot__targetcirclescore-row last-shot__truncated-avg-targetcirclescore-row">
+                {lastShotAverageDivs("Trunc Avg TC Score", targetCircleScoreValues, true, 1, props)}
+            </div>
+            : null,
         <div
             key="consistencyTargetCircleScore"
             className="last-shot__row last-shot__targetcirclescore-row last-shot__consistency-targetcirclescore-row">
-            <div className="last-shot-item__label">Consistency TC Score</div>
-            <div className="last-shot-item__data"> {
-                !!props.lastShot ? computeStandardDeviationEntirePopulation(targetCircleScoreValues).toFixed(1) : ""
-            } </div>
+            {lastShotConsistencyDivs("Consistency TC Score", targetCircleScoreValues, 1, props)}
         </div>
     ];
 }
