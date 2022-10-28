@@ -154,7 +154,7 @@ currently the task of the FSX2020 software).
 
 ### Technical Details
 
-This program has been built using Node v14, Electron v6, React v17 and Typescript v4. You can define new Tests (
+This program has been built using Node v16, Electron v6, React v18 and Typescript v4. You can define new Tests (
 distances, green size, yards or meter, ...) in file src/data/TestsConfiguration.json
 
 After cloning the repo you can:
