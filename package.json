@@ -47,7 +47,7 @@
         "@electron-forge/plugin-auto-unpack-natives": "^6.0.0-beta.63",
         "@electron-forge/plugin-webpack": "6.0.0-beta.54",
         "@electron-forge/publisher-github": "^6.0.0-beta.63",
-        "@hot-loader/react-dom": "^17.0.1",
+        "@hot-loader/react-dom": "^17.0.2",
         "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
         "@typescript-eslint/eslint-plugin": "^5.41.0",
         "@typescript-eslint/parser": "^5.41.0",
