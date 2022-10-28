@@ -3304,10 +3304,10 @@ electron-wix-msi@^3.0.6:
   optionalDependencies:
     "@bitdisaster/exe-icon-extractor" "^1.0.10"
 
-electron@16.0.4:
-  version "16.0.4"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-16.0.4.tgz#87dfe21d17608537fc6df292c437362297566a73"
-  integrity sha512-IptwmowvMP1SFOmZLh6rrURwfnOxbDBXBRBcaOdfBM5I+B9mgtdNwzNC3ymFFNzEkZUwdOyg9fu3iyjAAQIQgw==
+electron@16.2.8:
+  version "16.2.8"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-16.2.8.tgz#b7f2bd1184701e54a1bc902839d5a3ec95bb8982"
+  integrity sha512-KSOytY6SPLsh3iCziztqa/WgJyfDOKzCvNqku9gGIqSdT8CqtV66dTU1SOrKZQjRFLxHaF8LbyxUL1vwe4taqw==
   dependencies:
     "@electron/get" "^1.13.0"
     "@types/node" "^14.6.2"
