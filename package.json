@@ -61,7 +61,7 @@
         "file-loader": "^6.2.0",
         "fork-ts-checker-webpack-plugin": "^5.0.14",
         "node-loader": "^1.0.1",
-        "node-sass": "^4.14.1",
+        "node-sass": "^7.0.3",
         "postcss-loader": "^7.0.1",
         "rimraf": "^3.0.2",
         "sass-loader": "^10.3.1",
