@@ -1,7 +1,7 @@
 import React from 'react';
 import Chokidar, {FSWatcher} from 'chokidar';
 import './DrillPage.scss';
-import {parseCsvToAllRowsAsObjects, parseCsvToFirstRowAsObject} from "../../util/CsvParser";
+import {parseCsvToAllRowsAsObjects} from "../../util/CsvParser";
 import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
 import {ShotsSvg} from "../../components/ShotsSvg/ShotsSvg";
 import {IShotData, ShotData} from "../../model/ShotData/ShotData";
@@ -16,11 +16,11 @@ import {AllShotsTable} from "../../components/AllShotsTable/AllShotsTable";
 import {ISession, Session} from "../../model/Session/Session";
 import {HomePageName} from "../HomePage/HomePage";
 import {IPlayer} from "../../model/Player/Player";
-import moment from "moment/moment";
-import {v4 as uuidv4} from "uuid";
 import {IAppSettings} from "../../model/AppSettings/AppSettings";
 import {eventShotsUpdateType} from "../../model/SelectValues/ShotsUpdateType";
 import {poll} from "../../util/PollingUtil";
+import moment from "moment/moment";
+import {v4 as uuidv4} from "uuid";
 
 export const DrillPageName: string = "DrillPage";
 
@@ -44,44 +44,97 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
     }
 
     const [shotData, setShotData] = React.useState<IShotData | undefined>();
-    const [shotDatas, setShotDatas] = React.useState<IShotData[]>([]);
-
-    const [nextDistance, setNextDistance] = React.useState<Unit>(props.selectedDrillConfiguration.getNextDistance(shotDatas.length));
+    const [knownShotDatasInSession, setKnownShotDatasInSession] = React.useState<IShotData[]>([]);
+    console.log("XXXXXXXXXXXXXXXXXXXXX knownShotDatasInSession", JSON.stringify(knownShotDatasInSession, null, 2));
+    let allShotDataIdsBeforeSession: number[] = [];
+    const [nextDistance, setNextDistance] = React.useState<Unit>(props.selectedDrillConfiguration.getNextDistance(knownShotDatasInSession.length));
     const nextDistanceRef: React.MutableRefObject<Unit> = React.useRef<Unit>(nextDistance);
 
-    const pollLastShotCsvFile = async (): Promise<void> => {
-        const lastShotData: any[] = await parseCsvToAllRowsAsObjects(props.lastShotCsvPath);
-        console.log("lastShotData", JSON.stringify(lastShotData, null, 2));
+    async function checkLastShotCsvFile(): Promise<void> {
+        const allShotDatas: any[] = await parseCsvToAllRowsAsObjects(props.lastShotCsvPath);
+        const allShotDataIdsInCsvFile: number[] = allShotDatas.map(shotData => shotData["shot_id"])
+        const allShotDataIdsInSession: number[] = allShotDataIdsInCsvFile.filter((shotDataId: number) => !allShotDataIdsBeforeSession.includes(shotDataId));
+        const knownShotDataIdsInSession: number[] = knownShotDatasInSession.map((shotData: IShotData) => shotData.getId())
+        const newShotDataIdsInSession: number[] = allShotDataIdsInSession.filter((shotDataId: number) => !knownShotDataIdsInSession.includes(shotDataId));
+        console.log("allShotDataIdsInCsvFile", allShotDataIdsInCsvFile, new Date());
+        console.log("allShotDataIdsBeforeSession", allShotDataIdsBeforeSession);
+        console.log("allShotDataIdsInSession", allShotDataIdsInSession);
+        console.log("YYYYYYYYYYYYYYYYYYYY knownShotDatasInSession", JSON.stringify(knownShotDatasInSession, null, 2));
+        console.log("knownShotDataIdsInSession", knownShotDataIdsInSession);
+        console.log("newShotDataIdsInSession", newShotDataIdsInSession);
 
-        const shotIdFromLastShotCsvFile: number = lastShotData[0]["shot_id"];
-        console.log("lastShotFileChanged", shotIdFromLastShotCsvFile, new Date());
-        if (!!shotIdFromLastShotCsvFile) {
+        if (newShotDataIdsInSession.length > 0) {
+            // new shot(s) detected
+            const knownShotDatasInSessionClone: IShotData[] = [...knownShotDatasInSession];
+            let lastShotData: ShotData = undefined;
+            for (let i: number = 0; i < newShotDataIdsInSession.length; i++) {
+                const newShotDataIdInSession: number = newShotDataIdsInSession[i];
+                console.log(`new shot with id=${newShotDataIdInSession} detected`);
+                const newShotData: any = allShotDatas.find(shotData => shotData["shot_id"] === newShotDataIdInSession)
+                const shotData: ShotData = new ShotData(
+                    newShotDataIdInSession,
+                    newShotData["club"],
+                    math.unit(newShotData["club_head_speed_ms"], "m"),
+                    math.unit(newShotData["carry_m"], "m"),
+                    math.unit(newShotData["total_distance_m"], "m"),
+                    math.unit(newShotData["offline_m"], "m"),
+                    newShotData["total_spin_rpm"],
+                    newShotData["side_spin_rpm"],
+                    newShotData["back_spin_rpm"],
+                    nextDistanceRef.current
+                );
+                if (knownShotDatasInSessionClone.length >= props.selectedDrillConfiguration.getNumberOfShots()) {
+                    // shot executed but number of shots was already reached -> ignore and do not add to known shots
+                    console.log(`shot id=${shotData.getId()} executed but number of shots was already reached -> ignore`);
+                } else {
+                    // add new shot to array of known shots
+                    knownShotDatasInSessionClone.push(shotData);
 
+                    // this shot might have been the last one
+                    lastShotData = shotData;
+                }
+            }
+            // update states
+            assert(!!lastShotData, "!lastShotData");
+            setShotData(lastShotData); // show data of the last shot
+            setKnownShotDatasInSession(knownShotDatasInSessionClone);
+
+            // finally pick new distance for next shot
+            if (knownShotDatasInSessionClone.length < props.selectedDrillConfiguration.getNumberOfShots()) {
+                nextDistanceRef.current = props.selectedDrillConfiguration.getNextDistance(knownShotDatasInSessionClone.length);
+            } else {
+                // all shots finished -> set nextDistanceRef to undefined
+                const sessionName: string = moment(new Date()).format("YYMMDD_HHmmss");
+                console.log(`all shots executed -> save session ${sessionName}`);
+                nextDistanceRef.current = undefined;
+                props.handleSaveSessions(new Session(
+                    uuidv4(),
+                    sessionName,
+                    props.selectedPlayer?.getUuid(),
+                    props.selectedDrillConfiguration,
+                    knownShotDatasInSessionClone))
+            }
+            setNextDistance(nextDistanceRef.current);
         }
     }
 
-    const lastShotCsvFileChanged = async (): Promise<void> => {
-        const lastShotData: any = await parseCsvToFirstRowAsObject(props.lastShotCsvPath);
-        const shotIdFromLastShotCsvFile: number = lastShotData["shot_id"];
-        if (!!shotIdFromLastShotCsvFile) {
-            console.log(`shot id=${shotIdFromLastShotCsvFile} has been executed, lastShotData: ${JSON.stringify(lastShotData)}`);
-            setShotData(new ShotData(
-                shotIdFromLastShotCsvFile,
-                lastShotData["club"],
-                math.unit(lastShotData["club_head_speed_ms"], "m"),
-                math.unit(lastShotData["carry_m"], "m"),
-                math.unit(lastShotData["total_distance_m"], "m"),
-                math.unit(lastShotData["offline_m"], "m"),
-                lastShotData["total_spin_rpm"],
-                lastShotData["side_spin_rpm"],
-                lastShotData["back_spin_rpm"],
-                nextDistanceRef.current
-            ));
-        }
+    async function readShotDataIdsBeforeSessionAndStartPolling(): Promise<void> {
+        // check what is already insight the lastShotData csv file when new session starts
+        const shotDatasBeforeSession: any[] = await parseCsvToAllRowsAsObjects(props.lastShotCsvPath);
+        allShotDataIdsBeforeSession = shotDatasBeforeSession.map(shotDataBeforeSession => shotDataBeforeSession["shot_id"])
+        console.log("shotDataIdsBeforeSession", allShotDataIdsBeforeSession);
+        console.log("DONE reading shotDataIds before session DONE -> start polling now")
+
+        poll(checkLastShotCsvFile, props.appSettings.getPollingInterval(), shouldStopPolling)
     }
 
     let stopPolling: boolean = false;
-    const shouldStopPolling = () => stopPolling;
+
+    function shouldStopPolling(): boolean {
+        console.log("@shouldStopPolling - stopPolling=", stopPolling)
+        return stopPolling;
+    };
+
     React.useEffect((): void => {
         if (props.appSettings.getShotsUpdateType() === eventShotsUpdateType) {
             console.log("start watcher");
@@ -95,14 +148,14 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
             watcher
                 .on('add', (path: string): void => {
                     console.log('File', path, 'has been added');
-                    lastShotCsvFileChanged();
+                    checkLastShotCsvFile();
                 })
                 .on('addDir', (path: string): void => {
                     console.log('Directory', path, 'has been added');
                 })
                 .on('change', (path: string): void => {
                     console.log('File', path, 'has been changed');
-                    lastShotCsvFileChanged();
+                    checkLastShotCsvFile();
                 })
                 .on('unlink', function (path: string): void {
                     console.log('File', path, 'has been removed');
@@ -122,51 +175,19 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                 });
         } else {
             console.log(`do not start start watcher but start polling every ${props.appSettings.getPollingInterval()} milliseconds for changes of last shots csv file instead`);
-            poll(pollLastShotCsvFile, props.appSettings.getPollingInterval(), shouldStopPolling)
+            readShotDataIdsBeforeSessionAndStartPolling().catch(console.error);
         }
     }, [props.appSettings, props.lastShotCsvPath])
 
-    React.useEffect((): void => {
-        if (!!shotData && (shotDatas.length === 0 || shotData.getId() !== shotDatas[shotDatas.length - 1].getId())) {
-            // new shot detected
-
-            if (shotDatas.length >= props.selectedDrillConfiguration.getNumberOfShots()) {
-                // shot executed but number of shots was already reached -> ignore
-                console.log(`shot id=${shotData.getId()} executed but number of shots was already reached -> ignore`);
-            } else {
-                // add new shot to array
-                const shotDatasClone: IShotData[] = [...shotDatas];
-                shotDatasClone.push(shotData);
-                setShotDatas(shotDatasClone);
-
-                // pick new distance for next shot
-                if (shotDatasClone.length < props.selectedDrillConfiguration.getNumberOfShots()) {
-                    nextDistanceRef.current = props.selectedDrillConfiguration.getNextDistance(shotDatasClone.length);
-                } else {
-                    // all shots finished -> set nextDistanceRef to undefined
-                    const sessionName: string = moment(new Date()).format("YYMMDD_HHmmss");
-                    console.log(`all shots executed -> save session ${sessionName}`);
-                    nextDistanceRef.current = undefined;
-                    props.handleSaveSessions(new Session(
-                        uuidv4(),
-                        sessionName,
-                        props.selectedPlayer?.getUuid(),
-                        props.selectedDrillConfiguration,
-                        shotDatasClone))
-                }
-                setNextDistance(nextDistanceRef.current);
-            }
-        }
-    }, [shotData]);
-
+    // CRTODO
     const restart = (): void => {
         props.selectedDrillConfiguration.reset();
-        setShotDatas([]);
+        setKnownShotDatasInSession([]);
         nextDistanceRef.current = (props.selectedDrillConfiguration).getNextDistance(0);
         setNextDistance(nextDistanceRef.current);
     }
 
-    const lastShot: IShotData | undefined = shotDatas.length > 0 ? shotDatas[shotDatas.length - 1] : undefined;
+    const lastShot: IShotData | undefined = knownShotDatasInSession.length > 0 ? knownShotDatasInSession[knownShotDatasInSession.length - 1] : undefined;
 
     const nextDistanceBox = (): JSX.Element => {
         return (
@@ -199,12 +220,12 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                 ? <div className="one-shot-tab">
                     <div className="last-shot flex-item">
                         <div className="page-header">
-                            <h3>Shot {shotDatas.length} / {props.selectedDrillConfiguration.getNumberOfShots()} </h3>
+                            <h3>Shot {knownShotDatasInSession.length} / {props.selectedDrillConfiguration.getNumberOfShots()} </h3>
                         </div>
                         <div className="LastShotData">
                             <LastShotData
                                 lastShot={lastShot}
-                                shotDatas={shotDatas}
+                                shotDatas={knownShotDatasInSession}
                                 selectedDrillConfiguration={props.selectedDrillConfiguration}
                             />
                         </div>
@@ -215,7 +236,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                         </div>
                         <div className="ShotsSvg">
                             <ShotsSvg
-                                shotDatas={shotDatas}
+                                shotDatas={knownShotDatasInSession}
                                 selectedDrillConfiguration={props.selectedDrillConfiguration}
                                 nextDistance={nextDistance}
                             />
@@ -232,12 +253,13 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                 ? <div className="all-shots-tab">
                     <div className="all-shots-table-flex-item flex-item">
                         <div className="page-header">
-                            <h3>{shotDatas.length} / {props.selectedDrillConfiguration.getNumberOfShots()} Shots in
+                            <h3>{knownShotDatasInSession.length} / {props.selectedDrillConfiguration.getNumberOfShots()} Shots
+                                in
                                 Session</h3>
                         </div>
                         <div className="all-shots-table">
                             <AllShotsTable
-                                shotDatas={shotDatas}
+                                shotDatas={knownShotDatasInSession}
                                 selectedDrillConfiguration={props.selectedDrillConfiguration}
                             />
                         </div>
