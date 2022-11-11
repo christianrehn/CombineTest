@@ -14,5 +14,5 @@ export const appSettingsFromJson = (appSettingsAsJson: any,): IAppSettings => {
     assert(appSettingsAsJson !== undefined, "appSettingsAsJson === undefined");
     assert(appSettingsAsJson !== null, "appSettingsAsJson === null");
 
-    return new AppSettings(appSettingsAsJson.uuid ?? uuidv4(), appSettingsAsJson.shotsUpdateType);
+    return new AppSettings(appSettingsAsJson.uuid ?? uuidv4(), appSettingsAsJson.shotsUpdateType, appSettingsAsJson.pollingInterval);
 }

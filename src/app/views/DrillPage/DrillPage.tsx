@@ -1,7 +1,7 @@
 import React from 'react';
 import Chokidar, {FSWatcher} from 'chokidar';
 import './DrillPage.scss';
-import {parseCsvToFirstRowAsObject} from "../../util/CsvParser";
+import {parseCsvToAllRowsAsObjects, parseCsvToFirstRowAsObject} from "../../util/CsvParser";
 import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
 import {ShotsSvg} from "../../components/ShotsSvg/ShotsSvg";
 import {IShotData, ShotData} from "../../model/ShotData/ShotData";
@@ -18,10 +18,14 @@ import {HomePageName} from "../HomePage/HomePage";
 import {IPlayer} from "../../model/Player/Player";
 import moment from "moment/moment";
 import {v4 as uuidv4} from "uuid";
+import {IAppSettings} from "../../model/AppSettings/AppSettings";
+import {eventShotsUpdateType} from "../../model/SelectValues/ShotsUpdateType";
+import {poll} from "../../util/PollingUtil";
 
 export const DrillPageName: string = "DrillPage";
 
 interface IDrillPageProps {
+    appSettings: IAppSettings;
     lastShotCsvPath: string;
     selectedPlayer: IPlayer;
     selectedSession: ISession;
@@ -45,13 +49,24 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
     const [nextDistance, setNextDistance] = React.useState<Unit>(props.selectedDrillConfiguration.getNextDistance(shotDatas.length));
     const nextDistanceRef: React.MutableRefObject<Unit> = React.useRef<Unit>(nextDistance);
 
-    const lastShotFileChanged = async (): Promise<void> => {
+    const pollLastShotCsvFile = async (): Promise<void> => {
+        const lastShotData: any[] = await parseCsvToAllRowsAsObjects(props.lastShotCsvPath);
+        console.log("lastShotData", JSON.stringify(lastShotData, null, 2));
+
+        const shotIdFromLastShotCsvFile: number = lastShotData[0]["shot_id"];
+        console.log("lastShotFileChanged", shotIdFromLastShotCsvFile, new Date());
+        if (!!shotIdFromLastShotCsvFile) {
+
+        }
+    }
+
+    const lastShotCsvFileChanged = async (): Promise<void> => {
         const lastShotData: any = await parseCsvToFirstRowAsObject(props.lastShotCsvPath);
-        const shotIdFromLastShotFile: number = lastShotData["shot_id"];
-        if (!!shotIdFromLastShotFile) {
-            console.log(`shot id=${shotIdFromLastShotFile} has been executed, lastShotData: ${JSON.stringify(lastShotData)}`);
+        const shotIdFromLastShotCsvFile: number = lastShotData["shot_id"];
+        if (!!shotIdFromLastShotCsvFile) {
+            console.log(`shot id=${shotIdFromLastShotCsvFile} has been executed, lastShotData: ${JSON.stringify(lastShotData)}`);
             setShotData(new ShotData(
-                shotIdFromLastShotFile,
+                shotIdFromLastShotCsvFile,
                 lastShotData["club"],
                 math.unit(lastShotData["club_head_speed_ms"], "m"),
                 math.unit(lastShotData["carry_m"], "m"),
@@ -65,45 +80,51 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
         }
     }
 
+    let stopPolling: boolean = false;
+    const shouldStopPolling = () => stopPolling;
     React.useEffect((): void => {
-        console.log("startWatcher");
-        const watcher: FSWatcher = Chokidar.watch(
-            props.lastShotCsvPath,
-            {
-                ignored: /[\/\\]\./,
-                ignoreInitial: true,
-                persistent: true
-            });
-        watcher
-            .on('add', (path: string): void => {
-                console.log('File', path, 'has been added');
-                lastShotFileChanged();
-            })
-            .on('addDir', (path: string): void => {
-                console.log('Directory', path, 'has been added');
-            })
-            .on('change', (path: string): void => {
-                console.log('File', path, 'has been changed');
-                lastShotFileChanged();
-            })
-            .on('unlink', function (path: string): void {
-                console.log('File', path, 'has been removed');
-            })
-            .on('unlinkDir', function (path: string): void {
-                console.log('Directory', path, 'has been removed');
-            })
-            .on('error', function (error: Error): void {
-                console.log('Error happened', error);
-            })
-            .on('ready', (): void => {
-                console.info('From here can you check for real changes, the initial scan has been completed.');
-            })
-            .on('raw', function (event: string, path: string, details: any): void {
-                // This event should be triggered everytime something happens.
-                console.log('Raw event info:', event, path, details);
-            });
-
-    }, [props.lastShotCsvPath])
+        if (props.appSettings.getShotsUpdateType() === eventShotsUpdateType) {
+            console.log("start watcher");
+            const watcher: FSWatcher = Chokidar.watch(
+                props.lastShotCsvPath,
+                {
+                    ignored: /[\/\\]\./,
+                    ignoreInitial: true,
+                    persistent: true
+                });
+            watcher
+                .on('add', (path: string): void => {
+                    console.log('File', path, 'has been added');
+                    lastShotCsvFileChanged();
+                })
+                .on('addDir', (path: string): void => {
+                    console.log('Directory', path, 'has been added');
+                })
+                .on('change', (path: string): void => {
+                    console.log('File', path, 'has been changed');
+                    lastShotCsvFileChanged();
+                })
+                .on('unlink', function (path: string): void {
+                    console.log('File', path, 'has been removed');
+                })
+                .on('unlinkDir', function (path: string): void {
+                    console.log('Directory', path, 'has been removed');
+                })
+                .on('error', function (error: Error): void {
+                    console.log('Error happened', error);
+                })
+                .on('ready', (): void => {
+                    console.info('From here can you check for real changes, the initial scan has been completed.');
+                })
+                .on('raw', function (event: string, path: string, details: any): void {
+                    // This event should be triggered everytime something happens.
+                    console.log('Raw event info:', event, path, details);
+                });
+        } else {
+            console.log(`do not start start watcher but start polling every ${props.appSettings.getPollingInterval()} milliseconds for changes of last shots csv file instead`);
+            poll(pollLastShotCsvFile, props.appSettings.getPollingInterval(), shouldStopPolling)
+        }
+    }, [props.appSettings, props.lastShotCsvPath])
 
     React.useEffect((): void => {
         if (!!shotData && (shotDatas.length === 0 || shotData.getId() !== shotDatas[shotDatas.length - 1].getId())) {
@@ -260,6 +281,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                 <div className="back-flex-item flex-item">
                         <span className="back-span"
                               onClick={(): void => {
+                                  stopPolling = true;
                                   props.handleSelectPageClicked(HomePageName)
                               }}
                         >

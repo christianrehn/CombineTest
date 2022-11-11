@@ -211,6 +211,7 @@ const App: React.FC<{}> = (): JSX.Element => {
                                 />
                                 : selectedPage === DrillPageName
                                     ? <DrillPage
+                                        appSettings={appSettings}
                                         lastShotCsvPath={lastShotCsvPath}
                                         selectedPlayer={selectedPlayer}
                                         selectedSession={selectedSession}

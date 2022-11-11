@@ -7,10 +7,12 @@ import {
 } from "../../components/DrillConfiguration/DrillConfigurationSelect/DrillConfigurationSelect";
 import {eventShotsUpdateType, shotsUpdateTypes} from "../../model/SelectValues/ShotsUpdateType";
 import {AppSettings, IAppSettings} from "../../model/AppSettings/AppSettings";
+import {NumberPlusMinusInput} from "../../components/DrillConfiguration/NumberPlusMinusInput/NumberPlusMinusInput";
 
 export const EditAppSettingsPageName: string = "EditSettingsPage";
 
 const DEFAULT_SHOTS_UPDATE_TYPE: string = eventShotsUpdateType;
+const DEFAULT_POLLING_INTERVALL: number = 1000; // 1 second
 
 interface EditAppSettingsPageProps {
     appSettings: IAppSettings;
@@ -22,6 +24,7 @@ export const EditAppSettingsPage: React.FC<EditAppSettingsPageProps> = (props: E
     assert(!!props, "!!props")
 
     const [shotsUpdateType, setShotsUpdateType] = React.useState<string>(props.appSettings.getShotsUpdateType() || DEFAULT_SHOTS_UPDATE_TYPE);
+    const [pollingInterval, setPollingInterval] = React.useState<number>(props.appSettings.getPollingInterval() || DEFAULT_POLLING_INTERVALL);
 
     return (
         <div className="edit-app-settings-page page">
@@ -41,6 +44,7 @@ export const EditAppSettingsPage: React.FC<EditAppSettingsPageProps> = (props: E
                                       new AppSettings(
                                           props.appSettings.getUuid(),
                                           shotsUpdateType,
+                                          pollingInterval
                                       );
                                   props.handleSaveAppSettings(newAppSettings);
 
@@ -60,7 +64,7 @@ export const EditAppSettingsPage: React.FC<EditAppSettingsPageProps> = (props: E
             </div>
 
             <div className="edit-app-settings-input">
-                <div className="shotsUpdateType-select">
+                <div className="shots-update-type-select">
                     <DrillConfigurationSelect
                         label={"Shots Update Type"}
                         index={shotsUpdateTypes.indexOf(shotsUpdateType)}
@@ -71,8 +75,18 @@ export const EditAppSettingsPage: React.FC<EditAppSettingsPageProps> = (props: E
                         }}
                     />
                 </div>
+                <div className="polling-interval-input">
+                    <NumberPlusMinusInput
+                        label={`Polling Intervall in milliseconds`}
+                        value={pollingInterval}
+                        delta={100}
+                        min={100}
+                        handleOnClick={(value: number): void => {
+                            setPollingInterval(value);
+                        }}
+                    />
+                </div>
             </div>
-
         </div>
     );
 }
