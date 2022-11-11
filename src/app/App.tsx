@@ -197,19 +197,18 @@ const App: React.FC<{}> = (): JSX.Element => {
                             handleBackClicked={() => setSelectedPage(HomePageName)}
                             handleSavePlayer={handleSavePlayers}
                         />
-                        : selectedPage === ReportSessionPageName
-                            ? <ReportSessionPage
-                                selectedSession={selectedSession}
+                        : selectedPage === EditDrillConfigurationPageName
+                            ? <EditDrillConfigurationPage
+                                selectedDrillConfiguration={selectedDrillConfiguration}
                                 handleBackClicked={() => setSelectedPage(HomePageName)}
+                                handleSaveDrillConfiguration={handleSaveDrillConfigurations}
+                                averageStrokesDataMap={averageStrokesDataMap}
                             />
-                            : selectedPage === EditDrillConfigurationPageName
-                                ? <EditDrillConfigurationPage
-                                    selectedDrillConfiguration={selectedDrillConfiguration}
+                            : selectedPage === ReportSessionPageName
+                                ? <ReportSessionPage
+                                    selectedSession={selectedSession}
                                     handleBackClicked={() => setSelectedPage(HomePageName)}
-                                    handleSaveDrillConfiguration={handleSaveDrillConfigurations}
-                                    averageStrokesDataMap={averageStrokesDataMap}
                                 />
-
                                 : selectedPage === DrillPageName
                                     ? <DrillPage
                                         lastShotCsvPath={lastShotCsvPath}
