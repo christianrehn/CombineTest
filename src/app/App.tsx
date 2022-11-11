@@ -34,6 +34,10 @@ import {EditPlayerPage, EditPlayerPageName} from "./views/EditPlayerPage/EditPla
 import {Entity} from "./model/base/Entity";
 import {assert} from "chai";
 import {ReportSessionPage, ReportSessionPageName} from "./views/ReportSessionPage/ReportSessionPage";
+import {EditAppSettingsPage, EditAppSettingsPageName} from "./views/EditAppSetttingsPage/EditAppSettingsPage";
+import {IAppSettings} from "./model/AppSettings/AppSettings";
+import {loadAppSettingsAsJson, saveAppSettings} from "./model/AppSettings/AppSettingsFilesystemHandler";
+import {appSettingsFromJson} from "./model/AppSettings/AppSettingsConverter";
 
 const App: React.FC<{}> = (): JSX.Element => {
     // page that is currently visible
@@ -42,6 +46,8 @@ const App: React.FC<{}> = (): JSX.Element => {
     const lastShotCsvPath: string = process.platform !== 'darwin'
         ? "C:/Program Files (x86)/Foresight Sports Experience/System/LastShot.CSV"
         : "/Users/rehn/IdeaProjects/GCQuadCombineTest/test/data/LastShot.CSV";
+
+    const [appSettings, setAppSettings] = React.useState<IAppSettings>(undefined);
 
     const [drillConfigurations, setDrillConfigurations] = React.useState<IDrillConfiguration[]>([]);
     const [selectedDrillConfiguration, setSelectedDrillConfiguration] = React.useState<IDrillConfiguration>();
@@ -54,6 +60,12 @@ const App: React.FC<{}> = (): JSX.Element => {
 
     const [averageStrokesDataMap, setAverageStrokesDataMap] =
         React.useState<Map<string, IAverageStrokesData>>(new Map<string, IAverageStrokesData>());
+
+    React.useEffect((): void => {
+        const appSettingsAsJson: any = loadAppSettingsAsJson();
+        const appSettings: IAppSettings = appSettingsFromJson(appSettingsAsJson || {});
+        setAppSettings(appSettings);
+    }, []);
 
     React.useEffect((): void => {
         const importCsv = async (averageShotsGroundType: string, filePath: string, unit: string): Promise<void> => {
@@ -91,6 +103,14 @@ const App: React.FC<{}> = (): JSX.Element => {
         const drillConfigurations: IDrillConfiguration[] = drillConfigurationsFromJson(drillConfigurationsAsJson, averageStrokesDataMap);
         setDrillConfigurations(drillConfigurations);
     }, [predefinedDrillConfigurationsAsJson, averageStrokesDataMap]);
+
+    const handleSaveAppSettings = (changedAppSettings: IAppSettings): void => {
+        Entity.handleSaveEntity(
+            changedAppSettings,
+            setAppSettings,
+            saveAppSettings
+        )(changedAppSettings);
+    }
 
     const handleSavePlayers = (changedPlayer: IPlayer): void => {
         Entity.handleSaveEntities(
@@ -165,35 +185,41 @@ const App: React.FC<{}> = (): JSX.Element => {
                     handleSelectedDrillConfigurationChanged={handleSelectedDrillConfigurationChanged}
                     handleSelectPageClicked={setSelectedPage}
                 />
-                : selectedPage === EditPlayerPageName
-                    ? <EditPlayerPage
-                        selectedPlayer={selectedPlayer}
+                : selectedPage === EditAppSettingsPageName
+                    ? <EditAppSettingsPage
+                        appSettings={appSettings}
                         handleBackClicked={() => setSelectedPage(HomePageName)}
-                        handleSavePlayer={handleSavePlayers}
+                        handleSaveAppSettings={handleSaveAppSettings}
                     />
-                    : selectedPage === ReportSessionPageName
-                        ? <ReportSessionPage
-                            selectedSession={selectedSession}
+                    : selectedPage === EditPlayerPageName
+                        ? <EditPlayerPage
+                            selectedPlayer={selectedPlayer}
                             handleBackClicked={() => setSelectedPage(HomePageName)}
+                            handleSavePlayer={handleSavePlayers}
                         />
-                        : selectedPage === EditDrillConfigurationPageName
-                            ? <EditDrillConfigurationPage
-                                selectedDrillConfiguration={selectedDrillConfiguration}
+                        : selectedPage === ReportSessionPageName
+                            ? <ReportSessionPage
+                                selectedSession={selectedSession}
                                 handleBackClicked={() => setSelectedPage(HomePageName)}
-                                handleSaveDrillConfiguration={handleSaveDrillConfigurations}
-                                averageStrokesDataMap={averageStrokesDataMap}
                             />
-
-                            : selectedPage === DrillPageName
-                                ? <DrillPage
-                                    lastShotCsvPath={lastShotCsvPath}
-                                    selectedPlayer={selectedPlayer}
-                                    selectedSession={selectedSession}
+                            : selectedPage === EditDrillConfigurationPageName
+                                ? <EditDrillConfigurationPage
                                     selectedDrillConfiguration={selectedDrillConfiguration}
-                                    handleSelectPageClicked={setSelectedPage}
-                                    handleSaveSessions={handleSaveSessions}
+                                    handleBackClicked={() => setSelectedPage(HomePageName)}
+                                    handleSaveDrillConfiguration={handleSaveDrillConfigurations}
+                                    averageStrokesDataMap={averageStrokesDataMap}
                                 />
-                                : null
+
+                                : selectedPage === DrillPageName
+                                    ? <DrillPage
+                                        lastShotCsvPath={lastShotCsvPath}
+                                        selectedPlayer={selectedPlayer}
+                                        selectedSession={selectedSession}
+                                        selectedDrillConfiguration={selectedDrillConfiguration}
+                                        handleSelectPageClicked={setSelectedPage}
+                                        handleSaveSessions={handleSaveSessions}
+                                    />
+                                    : null
             }
         </div>
     );

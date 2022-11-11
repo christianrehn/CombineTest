@@ -32,7 +32,6 @@ export const SelectSession: React.FC<ISelectSessionProps> = (props: ISelectSessi
                                   props.handleSelectPageClicked(ReportSessionPageName)
                               }}
                         >
-
                             <div className="top-button-img-div">
                                 <img className="top-button-img"
                                      src={reportsIcon}

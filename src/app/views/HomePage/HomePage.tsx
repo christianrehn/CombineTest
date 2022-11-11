@@ -13,6 +13,8 @@ import {DrillPageName} from "../DrillPage/DrillPage";
 import {EditPlayerPageName} from "../EditPlayerPage/EditPlayerPage";
 import {assert} from "chai";
 import packageJson from '../../../../package.json';
+import settingsIcon from "../../../assets/settings.png";
+import {EditAppSettingsPageName} from "../EditAppSetttingsPage/EditAppSettingsPage";
 
 export const HomePageName: string = "HomePage";
 
@@ -56,13 +58,30 @@ export const HomePage: React.FC<IHomePageProps> = (props: IHomePageProps): JSX.E
                     </div>
                 </div>
 
+                <div className="top-buttons-flex-item">
+                    <div className="reports-flex-item flex-item">
+                        <span className="reports-span"
+                              onClick={(): void => {
+                                  props.handleSelectPageClicked(EditAppSettingsPageName)
+                              }}
+                        >
+                            <div className="top-button-img-div">
+                                <img className="top-button-img"
+                                     src={settingsIcon}
+                                     alt={"Settings"}
+                                />
+                            </div>
+                        </span>
+                    </div>
+                </div>
+
                 <div className="home-flex-item flex-item">
                     <div className="page-header">
                         <h3>Combine Test{!!version ? ` v${version}` : ""}</h3>
                     </div>
                 </div>
             </div>
-            
+
             <div className="home-main">
                 <SelectPlayer
                     players={props.players}

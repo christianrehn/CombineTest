@@ -201,8 +201,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                           distances.split(" ").map(Number).filter((n: number): boolean => n > 0),
                                           numberOfRounds,
                                           props.averageStrokesDataMap
-                                      )
-                                  ;
+                                      );
                                   props.handleSaveDrillConfiguration(newDrillConfiguration);
 
                                   // back to drill selection page

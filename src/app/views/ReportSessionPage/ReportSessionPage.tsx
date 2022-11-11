@@ -9,13 +9,13 @@ import {ShotsSvg} from "../../components/ShotsSvg/ShotsSvg";
 export const ReportSessionPageName: string = "ReportSessionPage";
 
 
-interface EditPlayerPageProps {
+interface ReportSessionPageProps {
     selectedSession: ISession;
     handleBackClicked: () => void;
 }
 
 
-export const ReportSessionPage: React.FC<EditPlayerPageProps> = (props: EditPlayerPageProps): JSX.Element => {
+export const ReportSessionPage: React.FC<ReportSessionPageProps> = (props: ReportSessionPageProps): JSX.Element => {
     assert(!!props.selectedSession, "!!props.selectedSession")
 
     const allShotsTabName: string = "allShotsTab";

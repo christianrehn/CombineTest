@@ -81,6 +81,27 @@ const createWindow = (): void => {
         app.quit();
     })
 
+    // loadAppSettingsAsString and saveAppSettings listener
+    {
+        const appSettingsFilename: string = path.join(app.getPath('userData'), "AppSettings.json");
+
+        ipcMain.on("loadAppSettingsAsString", (event: Electron.IpcMainEvent, arg: any): void => {
+            console.log("loadAppSettingsAsString - appSettingsFilename=", appSettingsFilename);
+            if (!fs.existsSync(appSettingsFilename)) {
+                console.log("loadAppSettingsAsString - no appSettings file found");
+                event.returnValue = '';
+            } else {
+                event.returnValue = fs.readFileSync(appSettingsFilename, 'utf8');
+            }
+        });
+
+        ipcMain.on("saveAppSettings", (event: Electron.IpcMainEvent, appSettingsAsString: any): void => {
+            console.log("saveAppSettings - appSettingsFilename=", appSettingsFilename);
+            fs.writeFileSync(appSettingsFilename, appSettingsAsString, 'utf8');
+            event.returnValue = true;
+        });
+    }
+
     // loadUserDrillConfigurationsAsString and saveUserDrillConfigurations listener
     {
         const userDrillConfigurationsFilename: string = path.join(app.getPath('userData'), "DrillConfigurations.json");

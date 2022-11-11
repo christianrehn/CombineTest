@@ -1,0 +1,15 @@
+.edit-app-settings-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow: auto;
+}
+
+.edit-app-settings-page .edit-app-settings-top {
+    display: flex;
+    flex-direction: row;
+}
+
+.edit-app-settings-page .edit-app-settings-flex-item {
+    flex: 1;
+}

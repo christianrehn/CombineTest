@@ -20,6 +20,21 @@ export abstract class Entity implements IEntity {
         return this._uuid;
     }
 
+    public static handleSaveEntity = <T extends IEntity>
+    (entity: T,
+     setEntity: Dispatch<SetStateAction<T>>,
+     saveEntity: (entity: T) => void
+    ) => (changedEntity: T): void => {
+        const entityClone: T = {...entity};
+        console.log("handleSaveEntity - entityUuid=", entityClone.getUuid());
+
+        // entity has been updated or is new
+        assert(!!changedEntity.getUuid(), "!changedEntity.getUuid()");
+
+        setEntity(entityClone);
+        saveEntity(entityClone);
+    }
+
     public static handleSaveEntities = <T extends IEntity>
     (entities: T[],
      setEntities: Dispatch<SetStateAction<T[]>>,
