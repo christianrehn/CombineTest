@@ -1,4 +1,4 @@
-export async function poll(
+export async function startPolling(
     functionToBeCalledInLoop: () => any,
     delayOrDelayCallbackInMilliseconds: number | (() => number),
     shouldStopPolling: () => boolean | Promise<boolean> = (): boolean => false

@@ -1,5 +1,10 @@
 .drill-page {
-    // CRTODO: overflow: auto;
+}
+
+.loading-drill-page {
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
 }
 
 // next shot
@@ -21,6 +26,12 @@
     flex: 5;
     display: flex;
     flex-direction: column;
+}
+
+.loading-drill-page .loading-spinner-div {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
 }
 
 .drill-page .tab-links {

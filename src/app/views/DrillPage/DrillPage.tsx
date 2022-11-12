@@ -18,11 +18,12 @@ import {IPlayer} from "../../model/Player/Player";
 import {IAppSettings} from "../../model/AppSettings/AppSettings";
 import {
     eventReadAllShotsUpdateType,
-    eventReadOnlyLatestShotsUpdateType
+    eventReadOnlyLatestShotsUpdateType,
+    pollingShotsUpdateType
 } from "../../model/SelectValues/ShotsUpdateType";
 import moment from "moment/moment";
 import {v4 as uuidv4} from "uuid";
-import {poll} from "../../util/PollingUtil";
+import {startPolling} from "../../util/PollingUtil";
 
 export const DrillPageName: string = "DrillPage";
 
@@ -32,7 +33,6 @@ interface IDrillPageProps {
     selectedPlayer: IPlayer;
     selectedSession: ISession;
     selectedDrillConfiguration: IDrillConfiguration;
-    allShotDataIdsBeforeSession: number[];
     handleSelectPageClicked: (page: string) => void;
     handleSaveSessions: (session: ISession) => void;
 }
@@ -48,7 +48,8 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
 
     const [shotData, setShotData] = React.useState<IShotData | undefined>();
     const [knownShotDatasInSession, setKnownShotDatasInSession] = React.useState<IShotData[]>([]);
-    const allShotDataIdsBeforeSessionRef: React.MutableRefObject<number[]> = React.useRef<number[]>(props.allShotDataIdsBeforeSession);
+    const [allShotDataIdsBeforeSessionRead, setAllShotDataIdsBeforeSessionRead] = React.useState<boolean>(false);
+    const allShotDataIdsBeforeSessionRef: React.MutableRefObject<number[]> = React.useRef<number[]>(undefined);
     console.log("DDDDDDDDDD: the following shot ids belong to an earlier session and are ignored: allShotDataIdsBeforeSessionRef.current=", allShotDataIdsBeforeSessionRef.current);
 
     const [nextDistance, setNextDistance] = React.useState<Unit>(props.selectedDrillConfiguration.getNextDistance(knownShotDatasInSession.length));
@@ -71,7 +72,6 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
             const knownShotDataIdsInSession: number[] = knownShotDatasInSession.map((knownShotDataInSession: IShotData) => knownShotDataInSession.getId());
             if (!!shotData && (knownShotDatasInSession.length === 0 || !knownShotDataIdsInSession.includes(shotData.getId()))) {
                 // new shot detected
-
                 if (knownShotDatasInSession.length >= props.selectedDrillConfiguration.getNumberOfShots()) {
                     // shot executed but number of shots was already reached -> ignore
                     console.log(`shot id=${shotData.getId()} executed but number of shots was already reached -> ignore`);
@@ -162,7 +162,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
         return stopPolling;
     };
 
-    React.useEffect((): void => {
+    const startWatcher = (): void => {
         const callShotUpdateFunction = (): void => {
             if ([eventReadOnlyLatestShotsUpdateType].includes(props.appSettings.getShotsUpdateType())) {
                 checkFirstRowInLastShotCsvFile();
@@ -172,46 +172,62 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                 assert.fail(`shots update type unknown: ${props.appSettings.getShotsUpdateType()}`)
             }
         }
+
+        const watcher: FSWatcher = Chokidar.watch(
+            props.lastShotCsvPath,
+            {
+                ignored: /[\/\\]\./,
+                ignoreInitial: true,
+                persistent: true
+            });
+        watcher
+            .on('add', (path: string): void => {
+                console.log('File', path, 'has been added');
+                callShotUpdateFunction();
+            })
+            .on('addDir', (path: string): void => {
+                console.log('Directory', path, 'has been added');
+            })
+            .on('change', (path: string): void => {
+                console.log('File', path, 'has been changed');
+                callShotUpdateFunction();
+            })
+            .on('unlink', function (path: string): void {
+                console.log('File', path, 'has been removed');
+            })
+            .on('unlinkDir', function (path: string): void {
+                console.log('Directory', path, 'has been removed');
+            })
+            .on('error', function (error: Error): void {
+                console.log('Error happened', error);
+            })
+            .on('ready', (): void => {
+                console.info('From here can you check for real changes, the initial scan has been completed.');
+            })
+            .on('raw', function (event: string, path: string, details: any): void {
+                // This event should be triggered everytime something happens.
+                console.log('Raw event info:', event, path, details);
+            });
+    }
+
+    React.useEffect((): void => {
+        // in case we always read all shots we need to know the ids of earlier shots -> check what is already inside the lastShotData csv file when new session starts
+        (async (): Promise<void> => {
+            allShotDataIdsBeforeSessionRef.current =
+                ([eventReadAllShotsUpdateType, pollingShotsUpdateType].includes(props.appSettings.getShotsUpdateType()))
+                    ? (await parseCsvToAllRowsAsObjects(props.lastShotCsvPath)).map(shotDataBeforeSession => shotDataBeforeSession["shot_id"])
+                    : [];
+            // FOR TESTING OF LOADING ANIMATION: await new Promise(resolve => setTimeout(resolve, 1000));
+            // force redraw of page to show drill/shot data and hide loading animation
+            setAllShotDataIdsBeforeSessionRead(true);
+        })()
+
         if ([eventReadOnlyLatestShotsUpdateType, eventReadAllShotsUpdateType].includes(props.appSettings.getShotsUpdateType())) {
-            console.log("start watcher");
-            const watcher: FSWatcher = Chokidar.watch(
-                props.lastShotCsvPath,
-                {
-                    ignored: /[\/\\]\./,
-                    ignoreInitial: true,
-                    persistent: true
-                });
-            watcher
-                .on('add', (path: string): void => {
-                    console.log('File', path, 'has been added');
-                    callShotUpdateFunction();
-                })
-                .on('addDir', (path: string): void => {
-                    console.log('Directory', path, 'has been added');
-                })
-                .on('change', (path: string): void => {
-                    console.log('File', path, 'has been changed');
-                    callShotUpdateFunction();
-                })
-                .on('unlink', function (path: string): void {
-                    console.log('File', path, 'has been removed');
-                })
-                .on('unlinkDir', function (path: string): void {
-                    console.log('Directory', path, 'has been removed');
-                })
-                .on('error', function (error: Error): void {
-                    console.log('Error happened', error);
-                })
-                .on('ready', (): void => {
-                    console.info('From here can you check for real changes, the initial scan has been completed.');
-                })
-                .on('raw', function (event: string, path: string, details: any): void {
-                    // This event should be triggered everytime something happens.
-                    console.log('Raw event info:', event, path, details);
-                });
+            console.log("start watcher for event-driven shots file reading");
+            startWatcher();
         } else {
             console.log(`do not start start watcher but start polling every ${props.appSettings.getPollingInterval()} milliseconds for changes of last shots csv file instead`);
-            poll(checkAllRowsInLastShotCsvFile, props.appSettings.getPollingInterval(), shouldStopPolling)
+            startPolling(checkAllRowsInLastShotCsvFile, props.appSettings.getPollingInterval(), shouldStopPolling)
         }
     }, [props.appSettings, props.lastShotCsvPath])
 
@@ -336,8 +352,8 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
             </div>
         );
     }
-    return (
-        <div className="drill-page page">
+    return allShotDataIdsBeforeSessionRead
+        ? (<div className="drill-page page">
             {nextDistanceBox()}
             {shotTabs()}
 
@@ -358,6 +374,13 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                         </span>
                 </div>
             </div>
-        </div>
-    );
+        </div>)
+        : (<div className="loading-drill-page page">
+            <div className="loading-spinner-div">
+                Loading last shots CSV file...
+            </div>
+            <div className="loading-spinner-div">
+                <div className="loading-spinner"/>
+            </div>
+        </div>);
 }

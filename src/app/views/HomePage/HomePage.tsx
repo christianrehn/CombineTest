@@ -15,9 +15,7 @@ import {assert} from "chai";
 import packageJson from '../../../../package.json';
 import settingsIcon from "../../../assets/settings.png";
 import {EditAppSettingsPageName} from "../EditAppSetttingsPage/EditAppSettingsPage";
-import {parseCsvToAllRowsAsObjects} from "../../util/CsvParser";
 import {IAppSettings} from "../../model/AppSettings/AppSettings";
-import {eventReadAllShotsUpdateType, pollingShotsUpdateType} from "../../model/SelectValues/ShotsUpdateType";
 
 export const HomePageName: string = "HomePage";
 
@@ -35,7 +33,7 @@ interface IHomePageProps {
     handleDrillConfigurationsChanged: (drillConfigurations: IDrillConfiguration[]) => void;
     selectedDrillConfiguration: IDrillConfiguration;
     handleSelectedDrillConfigurationChanged: (drillConfiguration: IDrillConfiguration) => void;
-    handleSelectPageClicked: (page: string, allShotDataIdsBeforeSession?: number[]) => void;
+    handleSelectPageClicked: (page: string) => void;
 }
 
 export const HomePage: React.FC<IHomePageProps> = (props: IHomePageProps): JSX.Element => {
@@ -108,14 +106,8 @@ export const HomePage: React.FC<IHomePageProps> = (props: IHomePageProps): JSX.E
                     tileClickedHandler={async (drillConfiguration: IDrillConfiguration, editMode: boolean): Promise<void> => {
                         props.handleSelectedDrillConfigurationChanged(drillConfiguration);
 
-                        // check what is already inside the lastShotData csv file when new session starts
-                        const allShotDataIdsBeforeSession: number[] =
-                            ([eventReadAllShotsUpdateType, pollingShotsUpdateType].includes(props.appSettings.getShotsUpdateType()))
-                                ? (await parseCsvToAllRowsAsObjects(props.lastShotCsvPath)).map(shotDataBeforeSession => shotDataBeforeSession["shot_id"])
-                                : [];
-
                         // switch to other page
-                        props.handleSelectPageClicked(editMode ? EditDrillConfigurationPageName : DrillPageName, allShotDataIdsBeforeSession);
+                        props.handleSelectPageClicked(editMode ? EditDrillConfigurationPageName : DrillPageName);
                     }}
                 />
                 <SelectSession
