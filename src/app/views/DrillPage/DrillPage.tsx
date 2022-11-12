@@ -1,7 +1,7 @@
 import React from 'react';
 import Chokidar, {FSWatcher} from 'chokidar';
 import './DrillPage.scss';
-import {parseCsvToAllRowsAsObjects} from "../../util/CsvParser";
+import {parseCsvToAllRowsAsObjects, parseCsvToFirstRowAsObject} from "../../util/CsvParser";
 import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
 import {ShotsSvg} from "../../components/ShotsSvg/ShotsSvg";
 import {IShotData, ShotData} from "../../model/ShotData/ShotData";
@@ -10,14 +10,16 @@ import {assert} from "chai";
 import {NextDistanceBox} from "../../components/NextDistanceBox/NextDistanceBox";
 import backIcon from '../../../assets/back.png';
 import {RestartButton} from "../../components/RestartButton/RestartButton";
-import * as math from 'mathjs'
 import {Unit} from 'mathjs'
 import {AllShotsTable} from "../../components/AllShotsTable/AllShotsTable";
 import {ISession, Session} from "../../model/Session/Session";
 import {HomePageName} from "../HomePage/HomePage";
 import {IPlayer} from "../../model/Player/Player";
 import {IAppSettings} from "../../model/AppSettings/AppSettings";
-import {eventShotsUpdateType} from "../../model/SelectValues/ShotsUpdateType";
+import {
+    eventReadAllShotsUpdateType,
+    eventReadOnlyLatestShotsUpdateType
+} from "../../model/SelectValues/ShotsUpdateType";
 import {poll} from "../../util/PollingUtil";
 import moment from "moment/moment";
 import {v4 as uuidv4} from "uuid";
@@ -46,48 +48,80 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
     const [shotData, setShotData] = React.useState<IShotData | undefined>();
     const [knownShotDatasInSession, setKnownShotDatasInSession] = React.useState<IShotData[]>([]);
     console.log("XXXXXXXXXXXXXXXXXXXXX knownShotDatasInSession", JSON.stringify(knownShotDatasInSession, null, 2));
+    let knownShotDatasInSessionCopy: IShotData[] = knownShotDatasInSession;
     let allShotDataIdsBeforeSession: number[] = [];
     const [nextDistance, setNextDistance] = React.useState<Unit>(props.selectedDrillConfiguration.getNextDistance(knownShotDatasInSession.length));
     const nextDistanceRef: React.MutableRefObject<Unit> = React.useRef<Unit>(nextDistance);
 
-    async function checkLastShotCsvFile(): Promise<void> {
-        const allShotDatas: any[] = await parseCsvToAllRowsAsObjects(props.lastShotCsvPath);
-        const allShotDataIdsInCsvFile: number[] = allShotDatas.map(shotData => shotData["shot_id"])
+    const checkFirstRowInLastShotCsvFile = async (): Promise<void> => {
+        const lastShotDataAsJson: any = await parseCsvToFirstRowAsObject(props.lastShotCsvPath);
+        const shotIdFromLastShotFile: number = lastShotDataAsJson["shot_id"];
+        if (!!shotIdFromLastShotFile) {
+            console.log(`shot id=${shotIdFromLastShotFile} has been executed, lastShotData: ${JSON.stringify(lastShotDataAsJson)}`);
+            const shotData: ShotData = ShotData.fromJson(lastShotDataAsJson, nextDistanceRef.current);
+            setShotData(shotData);
+        }
+        // the rest is done in effect for shotData changes
+    }
+
+    React.useEffect((): void => {
+        const knownShotDataIdsInSession: number[] = knownShotDatasInSession.map((knownShotDataInSession: IShotData) => knownShotDataInSession.getId());
+        if (!!shotData && (knownShotDatasInSession.length === 0 || !knownShotDataIdsInSession.includes(shotData.getId()))) {
+            // new shot detected
+
+            if (knownShotDatasInSession.length >= props.selectedDrillConfiguration.getNumberOfShots()) {
+                // shot executed but number of shots was already reached -> ignore
+                console.log(`shot id=${shotData.getId()} executed but number of shots was already reached -> ignore`);
+            } else {
+                // add new shot to array
+                const knownShotDatasInSessionClone: IShotData[] = [...knownShotDatasInSession];
+                knownShotDatasInSessionClone.push(shotData);
+                setKnownShotDatasInSession(knownShotDatasInSessionClone);
+
+                // pick new distance for next shot
+                if (knownShotDatasInSessionClone.length < props.selectedDrillConfiguration.getNumberOfShots()) {
+                    nextDistanceRef.current = props.selectedDrillConfiguration.getNextDistance(knownShotDatasInSessionClone.length);
+                } else {
+                    // all shots finished -> set nextDistanceRef to undefined
+                    const sessionName: string = moment(new Date()).format("YYMMDD_HHmmss");
+                    console.log(`all shots executed -> save session ${sessionName}`);
+                    nextDistanceRef.current = undefined;
+                    props.handleSaveSessions(new Session(
+                        uuidv4(),
+                        sessionName,
+                        props.selectedPlayer?.getUuid(),
+                        props.selectedDrillConfiguration,
+                        knownShotDatasInSessionClone))
+                }
+                setNextDistance(nextDistanceRef.current);
+            }
+        }
+    }, [shotData]);
+
+    async function checkAllRowsInLastShotCsvFile(): Promise<void> {
+        const allShotDatasAsJson: any[] = await parseCsvToAllRowsAsObjects(props.lastShotCsvPath);
+        const allShotDataIdsInCsvFile: number[] = allShotDatasAsJson.map(shotDataAsJson => shotDataAsJson["shot_id"])
         const allShotDataIdsInSession: number[] = allShotDataIdsInCsvFile.filter((shotDataId: number) => !allShotDataIdsBeforeSession.includes(shotDataId));
-        const knownShotDataIdsInSession: number[] = knownShotDatasInSession.map((shotData: IShotData) => shotData.getId())
-        const newShotDataIdsInSession: number[] = allShotDataIdsInSession.filter((shotDataId: number) => !knownShotDataIdsInSession.includes(shotDataId));
         console.log("allShotDataIdsInCsvFile", allShotDataIdsInCsvFile, new Date());
         console.log("allShotDataIdsBeforeSession", allShotDataIdsBeforeSession);
         console.log("allShotDataIdsInSession", allShotDataIdsInSession);
-        console.log("YYYYYYYYYYYYYYYYYYYY knownShotDatasInSession", JSON.stringify(knownShotDatasInSession, null, 2));
-        console.log("knownShotDataIdsInSession", knownShotDataIdsInSession);
-        console.log("newShotDataIdsInSession", newShotDataIdsInSession);
 
-        if (newShotDataIdsInSession.length > 0) {
-            // new shot(s) detected
-            const knownShotDatasInSessionClone: IShotData[] = [...knownShotDatasInSession];
+        console.log("YYYYYYYYYYYYYYYYYYYY knownShotDatasInSessionCopy", JSON.stringify(knownShotDatasInSessionCopy, null, 2));
+
+        if (allShotDataIdsInSession.length > 0) {
+            // at least one shot in session
+            const knownShotDatasInSessionClone: IShotData[] = [];
             let lastShotData: ShotData = undefined;
-            for (let i: number = 0; i < newShotDataIdsInSession.length; i++) {
-                const newShotDataIdInSession: number = newShotDataIdsInSession[i];
-                console.log(`new shot with id=${newShotDataIdInSession} detected`);
-                const newShotData: any = allShotDatas.find(shotData => shotData["shot_id"] === newShotDataIdInSession)
-                const shotData: ShotData = new ShotData(
-                    newShotDataIdInSession,
-                    newShotData["club"],
-                    math.unit(newShotData["club_head_speed_ms"], "m"),
-                    math.unit(newShotData["carry_m"], "m"),
-                    math.unit(newShotData["total_distance_m"], "m"),
-                    math.unit(newShotData["offline_m"], "m"),
-                    newShotData["total_spin_rpm"],
-                    newShotData["side_spin_rpm"],
-                    newShotData["back_spin_rpm"],
-                    nextDistanceRef.current
-                );
+            for (let i: number = 0; i < allShotDataIdsInSession.length; i++) {
+                const shotDataIdInSession: number = allShotDataIdsInSession[i];
+                console.log(`shot in session with id=${shotDataIdInSession} detected`);
+                const shotDataAsJson: any = allShotDatasAsJson.find(shotData => shotData["shot_id"] === shotDataIdInSession)
+                const shotData: ShotData = ShotData.fromJson(shotDataAsJson, nextDistanceRef.current); // CRTODO: nextDistanceRef stimmt nicht
                 if (knownShotDatasInSessionClone.length >= props.selectedDrillConfiguration.getNumberOfShots()) {
                     // shot executed but number of shots was already reached -> ignore and do not add to known shots
                     console.log(`shot id=${shotData.getId()} executed but number of shots was already reached -> ignore`);
                 } else {
-                    // add new shot to array of known shots
+                    // add shot to array of known shots
                     knownShotDatasInSessionClone.push(shotData);
 
                     // this shot might have been the last one
@@ -98,6 +132,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
             assert(!!lastShotData, "!lastShotData");
             setShotData(lastShotData); // show data of the last shot
             setKnownShotDatasInSession(knownShotDatasInSessionClone);
+            knownShotDatasInSessionCopy = knownShotDatasInSessionClone;
 
             // finally pick new distance for next shot
             if (knownShotDatasInSessionClone.length < props.selectedDrillConfiguration.getNumberOfShots()) {
@@ -125,7 +160,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
         console.log("shotDataIdsBeforeSession", allShotDataIdsBeforeSession);
         console.log("DONE reading shotDataIds before session DONE -> start polling now")
 
-        poll(checkLastShotCsvFile, props.appSettings.getPollingInterval(), shouldStopPolling)
+        poll(checkAllRowsInLastShotCsvFile, props.appSettings.getPollingInterval(), shouldStopPolling)
     }
 
     let stopPolling: boolean = false;
@@ -136,7 +171,16 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
     };
 
     React.useEffect((): void => {
-        if (props.appSettings.getShotsUpdateType() === eventShotsUpdateType) {
+        const callShotUpdateFunction = (): void => {
+            if ([eventReadOnlyLatestShotsUpdateType].includes(props.appSettings.getShotsUpdateType())) {
+                checkFirstRowInLastShotCsvFile();
+            } else if ([eventReadOnlyLatestShotsUpdateType].includes(props.appSettings.getShotsUpdateType())) {
+                checkAllRowsInLastShotCsvFile();
+            } else {
+                assert.fail(`shots update type unknown: ${props.appSettings.getShotsUpdateType()}`)
+            }
+        }
+        if ([eventReadOnlyLatestShotsUpdateType, eventReadAllShotsUpdateType].includes(props.appSettings.getShotsUpdateType())) {
             console.log("start watcher");
             const watcher: FSWatcher = Chokidar.watch(
                 props.lastShotCsvPath,
@@ -148,14 +192,14 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
             watcher
                 .on('add', (path: string): void => {
                     console.log('File', path, 'has been added');
-                    checkLastShotCsvFile();
+                    callShotUpdateFunction();
                 })
                 .on('addDir', (path: string): void => {
                     console.log('Directory', path, 'has been added');
                 })
                 .on('change', (path: string): void => {
                     console.log('File', path, 'has been changed');
-                    checkLastShotCsvFile();
+                    callShotUpdateFunction();
                 })
                 .on('unlink', function (path: string): void {
                     console.log('File', path, 'has been removed');

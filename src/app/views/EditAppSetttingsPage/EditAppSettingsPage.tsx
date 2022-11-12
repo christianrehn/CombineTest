@@ -5,13 +5,13 @@ import {assert} from "chai";
 import {
     DrillConfigurationSelect
 } from "../../components/DrillConfiguration/DrillConfigurationSelect/DrillConfigurationSelect";
-import {eventShotsUpdateType, shotsUpdateTypes} from "../../model/SelectValues/ShotsUpdateType";
+import {eventReadOnlyLatestShotsUpdateType, shotsUpdateTypes} from "../../model/SelectValues/ShotsUpdateType";
 import {AppSettings, IAppSettings} from "../../model/AppSettings/AppSettings";
 import {NumberPlusMinusInput} from "../../components/DrillConfiguration/NumberPlusMinusInput/NumberPlusMinusInput";
 
 export const EditAppSettingsPageName: string = "EditSettingsPage";
 
-const DEFAULT_SHOTS_UPDATE_TYPE: string = eventShotsUpdateType;
+const DEFAULT_SHOTS_UPDATE_TYPE: string = eventReadOnlyLatestShotsUpdateType;
 const DEFAULT_POLLING_INTERVALL: number = 1000; // 1 second
 
 interface EditAppSettingsPageProps {

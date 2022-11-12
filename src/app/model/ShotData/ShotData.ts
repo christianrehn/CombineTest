@@ -1,3 +1,4 @@
+import * as math from "mathjs";
 import {Unit} from "mathjs";
 
 export interface IShotData {
@@ -90,7 +91,21 @@ export class ShotData implements IShotData {
         return this._targetDistance;
     }
 
-
+    public static fromJson = (shotDataAsJson: any, targetDistance: Unit): ShotData => {
+        const shotData: ShotData = new ShotData(
+            shotDataAsJson["shot_id"],
+            shotDataAsJson["club"],
+            math.unit(shotDataAsJson["club_head_speed_ms"], "m"),
+            math.unit(shotDataAsJson["carry_m"], "m"),
+            math.unit(shotDataAsJson["total_distance_m"], "m"),
+            math.unit(shotDataAsJson["offline_m"], "m"),
+            shotDataAsJson["total_spin_rpm"],
+            shotDataAsJson["side_spin_rpm"],
+            shotDataAsJson["back_spin_rpm"],
+            targetDistance
+        );
+        return shotData;
+    }
     public toJson = (): any => {
         return {
             id: this.getId(),
