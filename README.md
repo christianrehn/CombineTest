@@ -81,7 +81,7 @@ Or for all shots in current session (without dispersion):
 
 ### Shots Update Type
 
-Starting from version 2.3 you can select between different drill types:
+Starting from version 2.3 you can select between different shots update types:
 
 #### Event - read only latest shot
 
