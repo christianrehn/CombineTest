@@ -53,6 +53,9 @@ Microsoft for a code validation certificate.
 
 ## Usage
 
+Open app settings and select the method to read the shots CSV file that is written by FSX2020:
+![Open settings](screenshots/221112_Combine Test_OpenSettings.png)
+
 Create a new Player:
 ![Create player 1](screenshots/220912_CombineTest_CreatePlayer1.png)
 ![Create player 2](screenshots/220912_CombineTest_CreatePlayer2.png)

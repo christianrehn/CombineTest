@@ -10,6 +10,20 @@
     flex-direction: row;
 }
 
+.edit-app-settings-page .edit-app-settings-input {
+    padding-left: var(--page-margin-horizontal);
+    padding-right: var(--page-margin-horizontal);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    height: 100%;
+}
+
 .edit-app-settings-page .edit-app-settings-flex-item {
     flex: 1;
+}
+
+.edit-app-settings-page .shots-update-type-select {
+    width: calc(22em + 16px);
 }
