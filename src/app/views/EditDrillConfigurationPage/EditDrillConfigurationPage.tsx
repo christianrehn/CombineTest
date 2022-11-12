@@ -338,6 +338,8 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                     <NumberPlusMinusInput
                         label={`Target Circle Radius for a score of 100 in ${lengthUnit}`}
                         hidden={![targetCircleDrillType].includes(drillType) || !targetCircleRadiusAsUnitNotPercent}
+                        delta={0.1}
+                        decimalPlaces={1}
                         value={targetCircleRadiusScore100InUnit}
                         min={MIN_TARGET_CIRCLE_RADIUS_SCORE_100_IN_UNIT}
                         handleOnClick={(value: number): void => {

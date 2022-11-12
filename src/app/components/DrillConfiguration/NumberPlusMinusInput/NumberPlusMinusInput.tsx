@@ -1,10 +1,12 @@
 import React from "react";
 import './NumberOfShotsInput.scss';
+import * as math from "mathjs";
 
 export interface NumberOfShotsInputProps {
     label: string;
     value: number;
     delta?: number;
+    decimalPlaces?: number;
     min?: number;
     max?: number;
     hidden?: boolean;
@@ -13,6 +15,14 @@ export interface NumberOfShotsInputProps {
 
 export const NumberPlusMinusInput: React.FC<NumberOfShotsInputProps> = (props: NumberOfShotsInputProps): any => {
     const delta: number = props.delta ?? 1;
+
+    const computeNewValue = (minusNotPlus: boolean): number => {
+        const newValue: number = minusNotPlus ? props.value - delta : props.value + delta;
+        if (props.decimalPlaces > 0) {
+            return math.round(newValue, props.decimalPlaces);
+        }
+        return newValue;
+    }
     return (props.hidden ? null :
             <div className="number-of-shots-input-container">
                 <label
@@ -21,8 +31,9 @@ export const NumberPlusMinusInput: React.FC<NumberOfShotsInputProps> = (props: N
                 <div className="btn-change-box">
                 <span className="btn-change minus icon icon-minus"
                       onClick={(): void => {
-                          if (!props.min || props.value - delta >= props.min) {
-                              props.handleOnClick(props.value - delta);
+                          const newValue: number = computeNewValue(true);
+                          if (!props.min || newValue >= props.min) {
+                              props.handleOnClick(newValue);
                           }
                       }}>
                     -
@@ -36,8 +47,9 @@ export const NumberPlusMinusInput: React.FC<NumberOfShotsInputProps> = (props: N
                     />
                     <span className="btn-change plus icon icon-plus"
                           onClick={(): void => {
-                              if (!props.max || props.value + delta <= props.max) {
-                                  props.handleOnClick(props.value + delta);
+                              const newValue: number = computeNewValue(false);
+                              if (!props.max || newValue <= props.max) {
+                                  props.handleOnClick(newValue);
                               }
                           }}>
                     +
