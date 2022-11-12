@@ -73,14 +73,14 @@ export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
                     <path d="M0,0 v10 h10" stroke="#57c4ff" fill="none"/>
                 </pattern>
                 <radialGradient id="TargetCircleRadialGradient100">
-                    <stop offset="0" stop-opacity="1" stop-color="darkgoldenrod"/>
-                    <stop offset="0.5" stop-opacity="0.8" stop-color="darkgoldenrod"/>
-                    <stop offset="1" stop-opacity="0.4" stop-color="darkgoldenrod"/>
+                    <stop offset="0" stopOpacity="1" stopColor="darkgoldenrod"/>
+                    <stop offset="0.5" stopOpacity="0.8" stopColor="darkgoldenrod"/>
+                    <stop offset="1" stopOpacity="0.4" stopColor="darkgoldenrod"/>
                 </radialGradient>
                 <radialGradient id="TargetCircleRadialGradient0">
-                    <stop offset="0" stop-opacity="1" stop-color="gold"/>
-                    <stop offset="0.4" stop-opacity="0.8" stop-color="gold"/>
-                    <stop offset="0.9" stop-opacity="0.3" stop-color="gold"/>
+                    <stop offset="0" stopOpacity="1" stopColor="gold"/>
+                    <stop offset="0.4" stopOpacity="0.8" stopColor="gold"/>
+                    <stop offset="0.9" stopOpacity="0.3" stopColor="gold"/>
                 </radialGradient>
             </defs>
 
