@@ -266,7 +266,7 @@ abstract class AbstractDrillConfiguration extends Entity {
             return this._averageStrokesDataMap.get(matchingEndGroundConfig.type)?.computeAverageStrokesToHole(endDistance);
         }
 
-        // CRTODO: case !greenIncluded is not implementes -> use green as end ground type
+        // CRTODO: case !greenIncluded is not implemented -> use green as end ground type
         return this._averageStrokesDataMap?.get(Green)?.computeAverageStrokesToHole(endDistance);
     }
 }

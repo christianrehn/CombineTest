@@ -43,6 +43,8 @@ const App: React.FC<{}> = (): JSX.Element => {
     // page that is currently visible
     const [selectedPage, setSelectedPage] = React.useState<string>(HomePageName);
 
+    const [allShotDataIdsBeforeSession, setAllShotDataIdsBeforeSession] = React.useState<number[]>([]);
+
     const lastShotCsvPath: string = process.platform !== 'darwin'
         ? "C:/Program Files (x86)/Foresight Sports Experience/System/LastShot.CSV"
         : "/Users/rehn/IdeaProjects/GCQuadCombineTest/test/data/LastShot.CSV";
@@ -168,10 +170,18 @@ const App: React.FC<{}> = (): JSX.Element => {
         )(changedDrillConfiguration);
     }
 
+    const handleSelectPageClicked = (page: string, allShotDataIdsBeforeSession?: number[]): void => {
+        // DO NOT CHANGE ORDER OF STATE SETTERS
+        setAllShotDataIdsBeforeSession(allShotDataIdsBeforeSession ?? []);
+        setSelectedPage(page);
+    }
+
     return (
         <div className="app">
             {selectedPage === HomePageName
                 ? <HomePage
+                    appSettings={appSettings}
+                    lastShotCsvPath={lastShotCsvPath}
                     players={players}
                     selectedPlayer={selectedPlayer}
                     handlePlayersChanged={handlePlayersChanged}
@@ -183,7 +193,7 @@ const App: React.FC<{}> = (): JSX.Element => {
                     handleDrillConfigurationsChanged={handleDrillConfigurationsChanged}
                     selectedDrillConfiguration={selectedDrillConfiguration}
                     handleSelectedDrillConfigurationChanged={handleSelectedDrillConfigurationChanged}
-                    handleSelectPageClicked={setSelectedPage}
+                    handleSelectPageClicked={handleSelectPageClicked}
                 />
                 : selectedPage === EditAppSettingsPageName
                     ? <EditAppSettingsPage
@@ -216,6 +226,7 @@ const App: React.FC<{}> = (): JSX.Element => {
                                         selectedPlayer={selectedPlayer}
                                         selectedSession={selectedSession}
                                         selectedDrillConfiguration={selectedDrillConfiguration}
+                                        allShotDataIdsBeforeSession={allShotDataIdsBeforeSession}
                                         handleSelectPageClicked={setSelectedPage}
                                         handleSaveSessions={handleSaveSessions}
                                     />
