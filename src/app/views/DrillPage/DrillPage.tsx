@@ -23,7 +23,6 @@ import {
 } from "../../model/SelectValues/ShotsUpdateType";
 import moment from "moment/moment";
 import {v4 as uuidv4} from "uuid";
-import {startPolling} from "../../util/PollingUtil";
 
 export const DrillPageName: string = "DrillPage";
 
@@ -51,6 +50,8 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
     const [allShotDataIdsBeforeSessionRead, setAllShotDataIdsBeforeSessionRead] = React.useState<boolean>(false);
     const allShotDataIdsBeforeSessionRef: React.MutableRefObject<number[]> = React.useRef<number[]>(undefined);
     console.log("DDDDDDDDDD: the following shot ids belong to an earlier session and are ignored: allShotDataIdsBeforeSessionRef.current=", allShotDataIdsBeforeSessionRef.current);
+
+    const stopPollingRef: React.MutableRefObject<boolean> = React.useRef<boolean>(false);
 
     const [nextDistance, setNextDistance] = React.useState<Unit>(props.selectedDrillConfiguration.getNextDistance(knownShotDatasInSession.length));
     const nextDistanceRef: React.MutableRefObject<Unit> = React.useRef<Unit>(nextDistance);
@@ -155,13 +156,6 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
         }
     }
 
-    let stopPolling: boolean = false;
-
-    function shouldStopPolling(): boolean {
-        console.log("@shouldStopPolling - stopPolling=", stopPolling)
-        return stopPolling;
-    };
-
     const startWatcher = (): void => {
         const callShotUpdateFunction = (): void => {
             if ([eventReadOnlyLatestShotsUpdateType].includes(props.appSettings.getShotsUpdateType())) {
@@ -227,7 +221,22 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
             startWatcher();
         } else {
             console.log(`do not start start watcher but start polling every ${props.appSettings.getPollingInterval()} milliseconds for changes of last shots csv file instead`);
-            startPolling(checkAllRowsInLastShotCsvFile, props.appSettings.getPollingInterval(), shouldStopPolling)
+
+            async function startPolling(): Promise<void> {
+                do {
+                    console.log("--- do poll");
+                    await checkAllRowsInLastShotCsvFile();
+
+                    if (stopPollingRef.current) {
+                        break;
+                    }
+
+                    await new Promise(resolve => setTimeout(resolve, Math.max(0, props.appSettings.getPollingInterval())));
+                } while (!stopPollingRef.current)
+                console.log("--- polling loop exited");
+            }
+
+            startPolling()
         }
     }, [props.appSettings, props.lastShotCsvPath])
 
@@ -361,7 +370,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                 <div className="back-flex-item flex-item">
                         <span className="back-span"
                               onClick={(): void => {
-                                  stopPolling = true;
+                                  stopPollingRef.current = true;
                                   props.handleSelectPageClicked(HomePageName)
                               }}
                         >

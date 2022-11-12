@@ -5,7 +5,11 @@ import {assert} from "chai";
 import {
     DrillConfigurationSelect
 } from "../../components/DrillConfiguration/DrillConfigurationSelect/DrillConfigurationSelect";
-import {eventReadOnlyLatestShotsUpdateType, shotsUpdateTypes} from "../../model/SelectValues/ShotsUpdateType";
+import {
+    eventReadOnlyLatestShotsUpdateType,
+    pollingShotsUpdateType,
+    shotsUpdateTypes
+} from "../../model/SelectValues/ShotsUpdateType";
 import {AppSettings, IAppSettings} from "../../model/AppSettings/AppSettings";
 import {NumberPlusMinusInput} from "../../components/DrillConfiguration/NumberPlusMinusInput/NumberPlusMinusInput";
 
@@ -78,9 +82,10 @@ export const EditAppSettingsPage: React.FC<EditAppSettingsPageProps> = (props: E
                 <div className="polling-interval-input">
                     <NumberPlusMinusInput
                         label={`Polling Intervall in milliseconds`}
+                        hidden={![pollingShotsUpdateType].includes(shotsUpdateType)}
                         value={pollingInterval}
                         delta={100}
-                        min={100}
+                        min={500}
                         handleOnClick={(value: number): void => {
                             setPollingInterval(value);
                         }}
