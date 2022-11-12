@@ -361,6 +361,8 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
             </div>
         );
     }
+
+    // HINT: if shots CSV file does not exist the loading animation is shown forever
     return allShotDataIdsBeforeSessionRead
         ? (<div className="drill-page page">
             {nextDistanceBox()}
