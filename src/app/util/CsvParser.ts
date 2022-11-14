@@ -8,16 +8,11 @@ const pipeline = util.promisify(stream.pipeline);
 
 export enum CsvTypeEnum {
     LAST_SHOT,
-    ALL_SHOTS,
     AVERAGE_SHOTS_TO_HOLE
 }
 
 export const parseCsvToFirstRowAsObject = async (csvPath: string): Promise<any> => {
     return parseCsv(csvPath, CsvTypeEnum.LAST_SHOT)
-}
-
-export const parseCsvToAllRowsAsObjects = async (csvPath: string): Promise<any[]> => {
-    return parseCsv(csvPath, CsvTypeEnum.ALL_SHOTS)
 }
 
 export const parseCsvToArrayOfColumnArrays = async (csvPath: string): Promise<[number[], number[]]> => {
@@ -61,9 +56,9 @@ const parseCsv = async (csvPath: string, csvReturnTypeEnum: CsvTypeEnum): Promis
         if (!!results && Array.isArray(results) && results.length > 0) {
             switch (csvReturnTypeEnum) {
                 case CsvTypeEnum.LAST_SHOT:
+                    assert(results.length === 1, `results.length=${results.length} !== 1, csvPath=${csvPath}`)
                     return results[0];
-                case CsvTypeEnum.ALL_SHOTS:
-                    return results;
+
                 case CsvTypeEnum.AVERAGE_SHOTS_TO_HOLE:
                     const distances: number[] = results.map((result, index: number) => {
                             return Number(Object.values(result)[0]);

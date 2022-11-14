@@ -1,5 +1,6 @@
 import * as math from "mathjs";
 import {Unit} from "mathjs";
+import {assert} from "chai";
 
 export interface IShotData {
     getId: () => number;
@@ -91,17 +92,38 @@ export class ShotData implements IShotData {
         return this._targetDistance;
     }
 
-    public static fromJson = (shotDataAsJson: any, targetDistance: Unit): ShotData => {
+    public static fromSessionShotDataJson = (sessionShotDataAsJson: any, targetDistance: Unit): ShotData => {
+        assert(sessionShotDataAsJson.hasOwnProperty("ClubData"), "!sessionShotDataAsJson.hasOwnProperty(ClubData)");
+        assert(sessionShotDataAsJson.hasOwnProperty("BallData"), "!sessionShotDataAsJson.hasOwnProperty(BallData)");
+        assert(sessionShotDataAsJson.hasOwnProperty("FlightData"), "!sessionShotDataAsJson.hasOwnProperty(FlightData)");
+        console.log("sessionShotDataAsJson", sessionShotDataAsJson)
+
         const shotData: ShotData = new ShotData(
-            shotDataAsJson["shot_id"],
-            shotDataAsJson["club"],
-            math.unit(shotDataAsJson["club_head_speed_ms"], "m"),
-            math.unit(shotDataAsJson["carry_m"], "m"),
-            math.unit(shotDataAsJson["total_distance_m"], "m"),
-            math.unit(shotDataAsJson["offline_m"], "m"),
-            shotDataAsJson["total_spin_rpm"],
-            shotDataAsJson["side_spin_rpm"],
-            shotDataAsJson["back_spin_rpm"],
+            sessionShotDataAsJson["ID"] ?? -1,
+            sessionShotDataAsJson["ClubName"] ?? "",
+            math.unit(sessionShotDataAsJson["ClubData"]["ClubSpeed_MS"] ?? 0, "m"),
+            math.unit(sessionShotDataAsJson["FlightData"]["CarryDistrance_M"] ?? 0, "m"),
+            math.unit(sessionShotDataAsJson["FlightData"]["TotalDistance_M"] ?? 0, "m"),
+            math.unit(sessionShotDataAsJson["FlightData"]["OfflineDistance_M"] ?? 0, "m"),
+            sessionShotDataAsJson["BallData"]["TotalSpin_RPM"] ?? 0,
+            sessionShotDataAsJson["BallData"]["SideSpin_RPM"] ?? 0,
+            sessionShotDataAsJson["BallData"]["BackSpin_RPM"] ?? 0,
+            targetDistance
+        );
+        return shotData;
+    }
+
+    public static fromJson = (csvShotDataAsJson: any, targetDistance: Unit): ShotData => {
+        const shotData: ShotData = new ShotData(
+            csvShotDataAsJson["shot_id"],
+            csvShotDataAsJson["club"],
+            math.unit(csvShotDataAsJson["club_head_speed_ms"], "m"),
+            math.unit(csvShotDataAsJson["carry_m"], "m"),
+            math.unit(csvShotDataAsJson["total_distance_m"], "m"),
+            math.unit(csvShotDataAsJson["offline_m"], "m"),
+            csvShotDataAsJson["total_spin_rpm"],
+            csvShotDataAsJson["side_spin_rpm"],
+            csvShotDataAsJson["back_spin_rpm"],
             targetDistance
         );
         return shotData;
