@@ -9,12 +9,12 @@ type StatsType = {
     size: number,
 }
 
-export interface ISessionJsonData {
+export interface ISessionData {
     getSessionID: () => string;
     getShotDataXs: () => ShotDataX[];
 }
 
-export class SessionJsonData implements ISessionJsonData {
+export class SessionData implements ISessionData {
     protected _sessionID: string;
     protected _sessionStartDate: string;
     protected _sessionStartTime: string;
@@ -42,8 +42,8 @@ export class SessionJsonData implements ISessionJsonData {
     public getShotDataXs = (): ShotDataX[] => {
         return this._shotDataXs;
     }
-    
-    public static findShotDataXsInLatestSessionJsonFile = async (sessionJsonDir: string): Promise<SessionJsonData> => {
+
+    public static findShotDataXsInLatestSessionJsonFile = async (sessionJsonDir: string): Promise<SessionData> => {
         // get all all files in props.sessionJsonDir
         const sessionFileNames: string[] = await fs.readdirSync(sessionJsonDir);
         const sessionFileStats: StatsType[] = sessionFileNames.map((fileName: string): StatsType => {
@@ -71,7 +71,7 @@ export class SessionJsonData implements ISessionJsonData {
 
                 // convert json objects to ShotData objects
                 const shotDatasX: ShotDataX[] = (sessionShotDatasAsJson.map((sessionShotDataAsJson: any) => ShotData.fromSessionShotDataJson(sessionShotDataAsJson))) ?? [];
-                return new SessionJsonData(
+                return new SessionData(
                     sessionJsonData["SessionID"],
                     sessionJsonData["SessionStartDate"],
                     sessionJsonData["SessionStartTime"],
