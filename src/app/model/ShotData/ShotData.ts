@@ -1,31 +1,13 @@
 import * as math from "mathjs";
 import {Unit} from "mathjs";
-import {assert} from "chai";
+import {IShotDataX, ShotDataX} from "./ShotDataX";
 
-export interface IShotData {
-    getId: () => number;
-    getClub: () => string;
-    getClubHeadSpeed: () => Unit;
-    getCarry: () => Unit;
-    getTotalDistance: () => Unit;
-    getOffline: () => Unit;
-    getTotalSpin: () => number;
-    getSideSpin: () => number;
-    getBackSpin: () => number;
+export interface IShotData extends IShotDataX {
     getTargetDistance: () => Unit;
     toJson: () => any;
 }
 
-export class ShotData implements IShotData {
-    protected _id: number;
-    protected _club: string;
-    protected _clubHeadSpeed: Unit;
-    protected _carry: Unit;
-    protected _totalDistance: Unit;
-    protected _offline: Unit;
-    protected _totalSpin: number;
-    protected _sideSpin: number;
-    protected _backSpin: number;
+export class ShotData extends ShotDataX implements IShotData {
     protected _targetDistance: Unit;
 
     constructor(
@@ -40,94 +22,40 @@ export class ShotData implements IShotData {
         backSpin: number,
         targetDistance: Unit,
     ) {
-        this._id = id;
-        this._club = club;
-        this._clubHeadSpeed = clubHeadSpeed;
-        this._carry = carry;
-        this._totalDistance = totalDistance;
-        this._offline = offline;
-        this._totalSpin = totalSpin;
-        this._sideSpin = sideSpin;
-        this._backSpin = backSpin;
+        super(
+            id,
+            club,
+            clubHeadSpeed,
+            carry,
+            totalDistance,
+            offline,
+            totalSpin,
+            sideSpin,
+            backSpin);
+
         this._targetDistance = targetDistance;
-    }
-
-    public getId = (): number => {
-        return this._id;
-    }
-
-    public getClub = (): string => {
-        return this._club;
-    }
-
-    public getClubHeadSpeed = (): Unit => {
-        return this._clubHeadSpeed;
-    }
-
-    public getCarry = (): Unit => {
-        return this._carry;
-    }
-
-    public getTotalDistance = (): Unit => {
-        return this._totalDistance;
-    }
-
-    public getOffline = (): Unit => {
-        return this._offline;
-    }
-
-    public getTotalSpin = (): number => {
-        return this._totalSpin;
-    }
-
-    public getSideSpin = (): number => {
-        return this._sideSpin;
-    }
-
-    public getBackSpin = (): number => {
-        return this._backSpin;
     }
 
     public getTargetDistance = (): Unit => {
         return this._targetDistance;
     }
 
-    public static fromSessionShotDataJson = (sessionShotDataAsJson: any, targetDistance: Unit): ShotData => {
-        assert(sessionShotDataAsJson.hasOwnProperty("ClubData"), "!sessionShotDataAsJson.hasOwnProperty(ClubData)");
-        assert(sessionShotDataAsJson.hasOwnProperty("BallData"), "!sessionShotDataAsJson.hasOwnProperty(BallData)");
-        assert(sessionShotDataAsJson.hasOwnProperty("FlightData"), "!sessionShotDataAsJson.hasOwnProperty(FlightData)");
-        console.log("sessionShotDataAsJson", sessionShotDataAsJson)
-
+    public static fromLastShotCsvAsJson = (lastShotCsvAsJson: any, targetDistance: Unit): ShotData => {
         const shotData: ShotData = new ShotData(
-            sessionShotDataAsJson["ID"] ?? -1,
-            sessionShotDataAsJson["ClubName"] ?? "",
-            math.unit(sessionShotDataAsJson["ClubData"]["ClubSpeed_MS"] ?? 0, "m"),
-            math.unit(sessionShotDataAsJson["FlightData"]["CarryDistrance_M"] ?? 0, "m"),
-            math.unit(sessionShotDataAsJson["FlightData"]["TotalDistance_M"] ?? 0, "m"),
-            math.unit(sessionShotDataAsJson["FlightData"]["OfflineDistance_M"] ?? 0, "m"),
-            sessionShotDataAsJson["BallData"]["TotalSpin_RPM"] ?? 0,
-            sessionShotDataAsJson["BallData"]["SideSpin_RPM"] ?? 0,
-            sessionShotDataAsJson["BallData"]["BackSpin_RPM"] ?? 0,
+            lastShotCsvAsJson["shot_id"],
+            lastShotCsvAsJson["club"],
+            math.unit(lastShotCsvAsJson["club_head_speed_ms"], "m"),
+            math.unit(lastShotCsvAsJson["carry_m"], "m"),
+            math.unit(lastShotCsvAsJson["total_distance_m"], "m"),
+            math.unit(lastShotCsvAsJson["offline_m"], "m"),
+            lastShotCsvAsJson["total_spin_rpm"],
+            lastShotCsvAsJson["side_spin_rpm"],
+            lastShotCsvAsJson["back_spin_rpm"],
             targetDistance
         );
         return shotData;
     }
 
-    public static fromJson = (csvShotDataAsJson: any, targetDistance: Unit): ShotData => {
-        const shotData: ShotData = new ShotData(
-            csvShotDataAsJson["shot_id"],
-            csvShotDataAsJson["club"],
-            math.unit(csvShotDataAsJson["club_head_speed_ms"], "m"),
-            math.unit(csvShotDataAsJson["carry_m"], "m"),
-            math.unit(csvShotDataAsJson["total_distance_m"], "m"),
-            math.unit(csvShotDataAsJson["offline_m"], "m"),
-            csvShotDataAsJson["total_spin_rpm"],
-            csvShotDataAsJson["side_spin_rpm"],
-            csvShotDataAsJson["back_spin_rpm"],
-            targetDistance
-        );
-        return shotData;
-    }
     public toJson = (): any => {
         return {
             id: this.getId(),
