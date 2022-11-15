@@ -23,7 +23,8 @@ import {
 } from "../../model/SelectValues/ShotsUpdateType";
 import moment from "moment/moment";
 import {v4 as uuidv4} from "uuid";
-import fs from "fs";
+import {ShotDataX} from "../../model/ShotData/ShotDataX";
+import {SessionData} from "../../model/ShotData/SessionData";
 
 export const DrillPageName: string = "DrillPage";
 
@@ -58,46 +59,6 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
     const [nextDistance, setNextDistance] = React.useState<Unit>(props.selectedDrillConfiguration.getNextDistance(knownShotDatasInSession.length));
     const nextDistanceRef: React.MutableRefObject<Unit> = React.useRef<Unit>(nextDistance);
 
-    type StatsType = {
-        name: string,
-        atime: number,
-        mtime: number,
-        size: number,
-    }
-    const parseJsonToAllRowsAsObjects = async (): Promise<ShotData[]> => {
-        // get all all files in props.sessionJsonDir
-        const dir: string = props.sessionJsonDir;
-        const sessionFileNames: string[] = await fs.readdirSync(dir);
-        const sessionFileStats: StatsType[] = sessionFileNames.map((fileName: string): StatsType => {
-            const stats: fs.Stats = fs.statSync(`${dir}/${fileName}`);
-            return {
-                name: fileName,
-                atime: stats.atime.getTime(),
-                mtime: stats.mtime.getTime(),
-                size: stats.size,
-            };
-        })
-            .sort((a: StatsType, b: StatsType) => a.mtime - b.mtime);
-        console.log("all session files", sessionFileStats.map((file: StatsType) => file.name));
-
-        if (sessionFileStats.length > 0) {
-            // find the latest session file and read it
-            const latestSessionFileStat: StatsType = sessionFileStats[0];
-            console.log("latest session file", latestSessionFileStat);
-            let sessionRawData: Buffer = fs.readFileSync(`${dir}/${latestSessionFileStat.name}`);
-            let sessionJsonData = JSON.parse(sessionRawData.toString());
-            console.log("jsonData", sessionJsonData);
-            if (sessionJsonData.hasOwnProperty("Shots")) {
-                const shotDatasAsJson: any[] = sessionJsonData.Shots;
-                console.log("shotDatasAsJson=", shotDatasAsJson);
-
-                // convert json objects to ShotData objects
-                const shotDatas: ShotData[] = shotDatasAsJson.map((shotDataAsJson: any) => ShotData.fromSessionShotDataJson(shotDataAsJson, nextDistanceRef.current));
-            }
-        }
-
-        return [];
-    };
 
     const checkFirstRowInLastShotCsvFile = async (): Promise<void> => {
         console.log("checkFirstRowInLastShotCsvFile");
@@ -105,7 +66,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
         const shotIdFromLastShotFile: number = lastShotDataAsJson["shot_id"];
         if (!!shotIdFromLastShotFile) {
             console.log(`shot id=${shotIdFromLastShotFile} has been executed, lastShotData: ${JSON.stringify(lastShotDataAsJson)}`);
-            const shotData: ShotData = ShotData.fromJson(lastShotDataAsJson, nextDistanceRef.current);
+            const shotData: ShotData = ShotData.fromLastShotCsvAsJson(lastShotDataAsJson, nextDistanceRef.current);
             setShotData(shotData);
             // the rest is done in effect for shotData changes
         }
@@ -147,24 +108,28 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
         }
     }, [shotData]);
 
-    async function checkAllRowsInLastShotCsvFile(): Promise<void> {
-        const allShotDatasAsJson: any[] = await parseJsonToAllRowsAsObjects();
-        const allShotDataIdsInFile: number[] = allShotDatasAsJson.map(shotDataAsJson => shotDataAsJson["shot_id"])
-        console.log("DDDDDDDDDD: the following shot ids were found in CSV file: allShotDataIdsInCsvFile=", allShotDataIdsInFile);
+    async function checkAllShotsInSessionJsonFile(): Promise<void> {
+        const sessionJsonData: SessionData = await SessionData.findShotDataXsInLatestSessionJsonFile(props.sessionJsonDir);
+        const allShotDataXs: ShotDataX[] = sessionJsonData?.getShotDataXs() ?? [];
+        const allShotDataIdsInSessionJsonFile: number[] = allShotDataXs.map((shotData: ShotData) => shotData.getId())
+        console.log("DDDDDDDDDD: the following shot ids were found in session json file: allShotDataIdsInSessionJsonFile=", allShotDataIdsInSessionJsonFile);
 
-        // all shots that belong to session are in CSV file but do not belong to an earlier session
-        const allShotDataIdsInSession: number[] = allShotDataIdsInFile.filter((shotDataId: number) => !allShotDataIdsBeforeSessionRef.current.includes(shotDataId));
-        console.log("DDDDDDDDDD: the following shot ids were found in CSV file and belong to current session: allShotDataIdsInSession=", allShotDataIdsInSession);
+        // all shots that belong to session are in the json file but do not belong to an earlier session
+        const allShotDataIdsInSession: number[] = allShotDataIdsInSessionJsonFile.filter((shotDataId: number) => !allShotDataIdsBeforeSessionRef.current.includes(shotDataId));
+        console.log("DDDDDDDDDD: the following shot ids were found in json file and belong to current session: allShotDataIdsInSession=", allShotDataIdsInSession);
 
+        // sort ids ascending to get the earliest shot in session first and the latest one last
+        allShotDataIdsInSession.sort();
         if (allShotDataIdsInSession.length > 0) {
             // at least one shot in session
             const knownShotDatasInSessionClone: IShotData[] = [];
-            let lastShotData: ShotData = undefined;
+            let lastInSessionShotData: ShotData = undefined;
             for (let i: number = 0; i < allShotDataIdsInSession.length; i++) {
                 const shotDataIdInSession: number = allShotDataIdsInSession[i];
                 console.log(`shot in session with id=${shotDataIdInSession} detected`);
-                const shotDataAsJson: any = allShotDatasAsJson.find(shotData => shotData["shot_id"] === shotDataIdInSession)
-                const shotData: ShotData = ShotData.fromJson(shotDataAsJson, props.selectedDrillConfiguration.getNextDistance(allShotDataIdsInSession.length - 1 - i));
+                const shotDataX: ShotDataX = allShotDataXs.find((shotDataX: ShotDataX): boolean => shotDataX.getId() === shotDataIdInSession)
+                const shotData: ShotData = shotDataX.toShotData(props.selectedDrillConfiguration.getNextDistance(i));
+
                 if (knownShotDatasInSessionClone.length >= props.selectedDrillConfiguration.getNumberOfShots()) {
                     // shot executed but number of shots was already reached -> ignore and do not add to known shots
                     console.log(`shot id=${shotData.getId()} executed but number of shots was already reached -> ignore`);
@@ -173,12 +138,12 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                     knownShotDatasInSessionClone.push(shotData);
 
                     // this shot might have been the last one
-                    lastShotData = shotData;
+                    lastInSessionShotData = shotData;
                 }
             }
             // update states
-            assert(!!lastShotData, "!lastShotData");
-            setShotData(lastShotData); // show data of the last shot
+            assert(!!lastInSessionShotData, "!lastInSessionShotData");
+            setShotData(lastInSessionShotData); // show data of the last shot in session
             setKnownShotDatasInSession(knownShotDatasInSessionClone);
 
             // finally pick new distance for next shot
@@ -205,7 +170,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
             if ([eventReadOnlyLatestShotsUpdateType].includes(props.appSettings.getShotsUpdateType())) {
                 checkFirstRowInLastShotCsvFile();
             } else if ([eventReadAllShotsUpdateType].includes(props.appSettings.getShotsUpdateType())) {
-                checkAllRowsInLastShotCsvFile();
+                checkAllShotsInSessionJsonFile();
             } else {
                 assert.fail(`shots update type unknown: ${props.appSettings.getShotsUpdateType()}`)
             }
@@ -249,11 +214,12 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
     }
 
     React.useEffect((): void => {
-        // in case we always read all shots we need to know the ids of earlier shots -> check what is already inside the lastShotData csv file when new session starts
+        // in case we always read all shots we need to know the ids of earlier shots -> check what is already inside the session json file when new session starts
         (async (): Promise<void> => {
             allShotDataIdsBeforeSessionRef.current =
                 ([eventReadAllShotsUpdateType, pollingShotsUpdateType].includes(props.appSettings.getShotsUpdateType()))
-                    ? (await parseJsonToAllRowsAsObjects()).map(shotDataBeforeSession => shotDataBeforeSession["shot_id"])
+                    ? ((await SessionData.findShotDataXsInLatestSessionJsonFile(props.sessionJsonDir))?.getShotDataXs() ?? [])
+                        .map((shotDataBeforeSession: ShotData) => shotDataBeforeSession.getId())
                     : [];
             // FOR TESTING OF LOADING ANIMATION: await new Promise(resolve => setTimeout(resolve, 1000));
             // force redraw of page to show drill/shot data and hide loading animation
@@ -267,17 +233,21 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
             console.log(`do not start start watcher but start polling every ${props.appSettings.getPollingInterval()} milliseconds for changes of last shots csv file instead`);
 
             async function startPolling(): Promise<void> {
-                do {
-                    console.log("--- do poll");
-                    await checkAllRowsInLastShotCsvFile();
+                try {
+                    do {
+                        console.log("--- do poll");
+                        await checkAllShotsInSessionJsonFile();
 
-                    if (stopPollingRef.current) {
-                        break;
-                    }
+                        if (stopPollingRef.current) {
+                            break;
+                        }
 
-                    await new Promise(resolve => setTimeout(resolve, Math.max(0, props.appSettings.getPollingInterval())));
-                } while (!stopPollingRef.current)
-                console.log("--- polling loop exited");
+                        await new Promise(resolve => setTimeout(resolve, Math.max(0, props.appSettings.getPollingInterval())));
+                    } while (!stopPollingRef.current)
+                    console.log("--- polling loop exited");
+                } catch (error) {
+                    console.error(`exception in poll loop: ${error}`);
+                }
             }
 
             startPolling()
