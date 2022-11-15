@@ -119,7 +119,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
         console.log("DDDDDDDDDD: the following shot ids were found in json file and belong to current session: allShotDataIdsInSession=", allShotDataIdsInSession);
 
         // sort ids ascending to get the earliest shot in session first and the latest one last
-        allShotDataIdsInSession.sort();
+        allShotDataIdsInSession.sort((a: number, b: number): number => a - b);
         if (allShotDataIdsInSession.length > 0) {
             // at least one shot in session
             const knownShotDatasInSessionClone: IShotData[] = [];

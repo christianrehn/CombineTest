@@ -58,29 +58,34 @@ export class SessionData implements ISessionData {
             .sort((a: StatsType, b: StatsType) => b.mtime - a.mtime);
         console.log("all session files", sessionFileStats.map((file: StatsType) => file.name));
 
-        if (sessionFileStats.length > 0) {
-            // find the latest session file and read it
-            const latestSessionFileStat: StatsType = sessionFileStats[0];
-            console.log("latest session file", latestSessionFileStat);
-            let sessionRawData: Buffer = fs.readFileSync(`${sessionJsonDir}/${latestSessionFileStat.name}`);
-            let sessionJsonData = JSON.parse(sessionRawData.toString());
-            console.log("sessionJsonData", sessionJsonData);
-            if (sessionJsonData.hasOwnProperty("Shots")) {
-                const sessionShotDatasAsJson: any[] = sessionJsonData.Shots;
-                console.log("shotDatasAsJson=", sessionShotDatasAsJson);
+        try {
+            if (sessionFileStats.length > 0) {
+                // find the latest session file and read it
+                const latestSessionFileStat: StatsType = sessionFileStats[0];
+                console.log("latest session file", latestSessionFileStat);
+                let sessionRawData: Buffer = fs.readFileSync(`${sessionJsonDir}/${latestSessionFileStat.name}`);
+                let sessionJsonData = JSON.parse(sessionRawData.toString());
+                console.log("sessionJsonData", sessionJsonData);
+                if (sessionJsonData.hasOwnProperty("Shots")) {
+                    const sessionShotDatasAsJson: any[] = sessionJsonData.Shots;
+                    console.log("shotDatasAsJson=", sessionShotDatasAsJson);
 
-                // convert json objects to ShotData objects
-                const shotDatasX: ShotDataX[] = (sessionShotDatasAsJson.map((sessionShotDataAsJson: any) => ShotData.fromSessionShotDataJson(sessionShotDataAsJson))) ?? [];
-                return new SessionData(
-                    sessionJsonData["SessionID"],
-                    sessionJsonData["SessionStartDate"],
-                    sessionJsonData["SessionStartTime"],
-                    sessionJsonData["SessionType"],
-                    shotDatasX);
+                    // convert json objects to ShotData objects
+                    const shotDatasX: ShotDataX[] = (sessionShotDatasAsJson.map((sessionShotDataAsJson: any) => ShotData.fromSessionShotDataJson(sessionShotDataAsJson))) ?? [];
+                    return new SessionData(
+                        sessionJsonData["SessionID"],
+                        sessionJsonData["SessionStartDate"],
+                        sessionJsonData["SessionStartTime"],
+                        sessionJsonData["SessionType"],
+                        shotDatasX);
+                }
             }
-        }
 
-        return undefined;
+            return undefined;
+        } catch (error) {
+            console.error(`@findShotDataXsInLatestSessionJsonFile - error reading session file: ${error}`);
+            return undefined;
+        }
     };
 
 }
