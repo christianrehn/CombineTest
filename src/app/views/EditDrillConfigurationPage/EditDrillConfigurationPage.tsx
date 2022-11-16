@@ -23,7 +23,7 @@ import {
     RANDOM_FROM_FIXED_DISTANCES_GENERATOR
 } from "../../model/DrillConfiguration/DistanceGenerator";
 import {IAverageStrokesData} from "../../model/AverageStrokesData/AverageStrokesData";
-import {NumberPlusMinusInput} from "../../components/DrillConfiguration/NumberPlusMinusInput/NumberPlusMinusInput";
+import {NumberPlusMinusInput} from "../../components/NumberPlusMinusInput/NumberPlusMinusInput";
 import {EndGroundConfigsTable} from "../../components/DrillConfiguration/EndGroundConfigsTable/EndGroundConfigsTable";
 import {startGroundTypes,} from "../../model/AverageStrokesData/GroundType";
 import {

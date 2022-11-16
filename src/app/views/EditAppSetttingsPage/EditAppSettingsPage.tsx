@@ -11,7 +11,7 @@ import {
     shotsUpdateTypes
 } from "../../model/SelectValues/ShotsUpdateType";
 import {AppSettings, IAppSettings} from "../../model/AppSettings/AppSettings";
-import {NumberPlusMinusInput} from "../../components/DrillConfiguration/NumberPlusMinusInput/NumberPlusMinusInput";
+import {NumberPlusMinusInput} from "../../components/NumberPlusMinusInput/NumberPlusMinusInput";
 
 export const EditAppSettingsPageName: string = "EditSettingsPage";
 
@@ -20,6 +20,8 @@ const DEFAULT_POLLING_INTERVALL: number = 1000; // 1 second
 
 interface EditAppSettingsPageProps {
     appSettings: IAppSettings;
+    lastShotCsvPath: string;
+    sessionJsonDir: string;
     handleBackClicked: () => void;
     handleSaveAppSettings: (changedAppSettings: IAppSettings) => void;
 }

@@ -47,8 +47,8 @@ const App: React.FC<{}> = (): JSX.Element => {
         ? "C:/Program Files (x86)/Foresight Sports Experience/System/LastShot.CSV"
         : "/Users/rehn/IdeaProjects/GCQuadCombineTest/test/data/LastShot.CSV";
     const sessionJsonDir: string = process.platform !== 'darwin'
-        ? "C:/Program Files (x86)/Foresight Sports Experience/System/Sessions/"
-        : "/Users/rehn/IdeaProjects/GCQuadCombineTest/test/data/sessions/";
+        ? "C:/Program Files (x86)/Foresight Sports Experience/SessionData/"
+        : "/Users/rehn/IdeaProjects/GCQuadCombineTest/test/data/SessionData/";
 
     const [appSettings, setAppSettings] = React.useState<IAppSettings>(undefined);
 
@@ -193,6 +193,8 @@ const App: React.FC<{}> = (): JSX.Element => {
                 : selectedPage === EditAppSettingsPageName
                     ? <EditAppSettingsPage
                         appSettings={appSettings}
+                        lastShotCsvPath={lastShotCsvPath}
+                        sessionJsonDir={sessionJsonDir}
                         handleBackClicked={() => setSelectedPage(HomePageName)}
                         handleSaveAppSettings={handleSaveAppSettings}
                     />

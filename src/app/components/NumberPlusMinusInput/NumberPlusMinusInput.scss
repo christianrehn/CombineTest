@@ -1,10 +1,10 @@
-.number-of-shots-input-container {
+.number-plus-minus-input-container {
     display: inline-block;
     padding-right: 15px;
     padding-top: 10px;
 }
 
-.number-of-shots-input-container .btn-change {
+.number-plus-minus-input-container .btn-change {
     display: inline-block;
     cursor: pointer;
     user-select: none;
@@ -18,15 +18,15 @@
     color: var(--background-dark);
 }
 
-.number-of-shots-input-container .btn-change .minus {
+.number-plus-minus-input-container .btn-change .minus {
     margin-right: 8px;
 }
 
-.number-of-shots-input-container .btn-change .plus {
+.number-plus-minus-input-container .btn-change .plus {
     margin-left: 8px;
 }
 
-.number-of-shots-input-container .number-of-shots-input {
+.number-plus-minus-input-container .number-plus-minus-input {
     border: none;
     border: none;
     padding: 8px;

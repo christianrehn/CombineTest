@@ -1,5 +1,5 @@
 import React from "react";
-import './NumberOfShotsInput.scss';
+import './NumberPlusMinusInput.scss';
 import * as math from "mathjs";
 
 export interface NumberOfShotsInputProps {
@@ -24,10 +24,10 @@ export const NumberPlusMinusInput: React.FC<NumberOfShotsInputProps> = (props: N
         return newValue;
     }
     return (props.hidden ? null :
-            <div className="number-of-shots-input-container">
+            <div className="number-plus-minus-input-container">
                 <label
-                    className="number-of-shots-input-label"
-                    htmlFor="number-of-shots-input">{props.label}</label>
+                    className="number-plus-minus-input-label"
+                    htmlFor="number-plus-minus-input">{props.label}</label>
                 <div className="btn-change-box">
                 <span className="btn-change minus icon icon-minus"
                       onClick={(): void => {
@@ -39,7 +39,7 @@ export const NumberPlusMinusInput: React.FC<NumberOfShotsInputProps> = (props: N
                     -
                 </span>
                     <input
-                        className="number-of-shots-input input-css"
+                        className="number-plus-minus-input input-css"
                         type="text"
                         value={props.value}
                         min="1"
