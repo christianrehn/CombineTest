@@ -5,6 +5,7 @@ export interface ITextInputProps {
     label: string;
     type: string;
     value?: string | number | undefined;
+    disabled?: boolean;
     checked?: boolean | undefined;
     minLength?: number;
     maxLength?: number;
@@ -12,7 +13,7 @@ export interface ITextInputProps {
     max?: number;
     error?: boolean;
     hidden?: boolean;
-    handleOnChange: (value: string) => void;
+    handleOnChange?: (value: string) => void;
 }
 
 export const TextInput: React.FC<ITextInputProps> = (props: ITextInputProps): any => {
@@ -27,6 +28,7 @@ export const TextInput: React.FC<ITextInputProps> = (props: ITextInputProps): an
                         className={`text-input input-css ${props.error ? "error " : ""} ${props.type === "checkbox" ? "drill-configuration-checkbox" : ""}`}
                         type={props.type}
                         value={props.value}
+                        disabled={props.disabled}
                         checked={props.checked}
                         minLength={props.minLength}
                         maxLength={props.maxLength}

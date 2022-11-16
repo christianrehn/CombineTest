@@ -12,6 +12,7 @@ import {
 } from "../../model/SelectValues/ShotsUpdateType";
 import {AppSettings, IAppSettings} from "../../model/AppSettings/AppSettings";
 import {NumberPlusMinusInput} from "../../components/NumberPlusMinusInput/NumberPlusMinusInput";
+import {TextInput} from "../../components/TextInput/TextInput";
 
 export const EditAppSettingsPageName: string = "EditSettingsPage";
 
@@ -70,6 +71,22 @@ export const EditAppSettingsPage: React.FC<EditAppSettingsPageProps> = (props: E
             </div>
 
             <div className="edit-app-settings-input">
+                <div className="last-shot-csv-path-input">
+                    <TextInput
+                        label={"Last Shot CSV Path"}
+                        type={"text"}
+                        value={props.lastShotCsvPath}
+                        disabled={true}
+                    />
+                </div>
+                <div className="session-json-dir-input">
+                    <TextInput
+                        label={"Session Json Directory"}
+                        type={"text"}
+                        value={props.sessionJsonDir}
+                        disabled={true}
+                    />
+                </div>
                 <div className="shots-update-type-select">
                     <DrillConfigurationSelect
                         label={"Shots Update Type"}
