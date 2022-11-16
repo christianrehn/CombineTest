@@ -6,9 +6,7 @@ import {
     IFixedDistancesGenerator,
     IRandomDistancesGenerator
 } from "../../model/DrillConfiguration/DrillConfiguration";
-import {
-    DrillConfigurationTextInput
-} from "../../components/DrillConfiguration/DrillConfigurationTextInput/DrillConfigurationTextInput";
+import {TextInput} from "../../components/TextInput/TextInput";
 import deleteIcon from "../../../assets/delete.png";
 import backIcon from '../../../assets/back.png';
 import {
@@ -221,7 +219,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
 
             <div className="edit-drill-configuration-input">
                 <div className="name-input">
-                    <DrillConfigurationTextInput
+                    <TextInput
                         label={"Name"}
                         error={nameError}
                         type={"text"}
@@ -234,7 +232,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                     />
                 </div>
                 <div className="description-input">
-                    <DrillConfigurationTextInput
+                    <TextInput
                         label={"Description"}
                         type={"text"}
                         value={description}
@@ -277,7 +275,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                     />
                 </div>
                 <div className="target-rpm-per-unit-input">
-                    <DrillConfigurationTextInput
+                    <TextInput
                         label={`Target Spin in RPM per ${lengthUnit}`}
                         hidden={![spinDrillType].includes(drillType)}
                         error={targetSpinInRpmPerUnitError}
@@ -291,7 +289,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                     />
                 </div>
                 <div className="max-deviation-as-unit-not-percent-input">
-                    <DrillConfigurationTextInput
+                    <TextInput
                         label={`Max. Carry Deviation as ${lengthUnit} or %`}
                         hidden={![spinDrillType].includes(drillType)}
                         type="checkbox"
@@ -324,7 +322,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                     />
                 </div>
                 <div className="target-circle-radius-as-unit-not-percent-input">
-                    <DrillConfigurationTextInput
+                    <TextInput
                         label={`Target Circle Radius as ${lengthUnit} or %`}
                         hidden={![targetCircleDrillType].includes(drillType)}
                         type="checkbox"
@@ -434,7 +432,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 {distanceGenerator === RANDOM_DISTANCES_GENERATOR
                     ? <>
                         <div className="min-included-distance-input">
-                            <DrillConfigurationTextInput
+                            <TextInput
                                 label={"Minimum Included Distance"}
                                 error={minIncludedDistanceError}
                                 type="number"
@@ -448,7 +446,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                             />
                         </div>
                         <div className="max-excluded-distance-input">
-                            <DrillConfigurationTextInput
+                            <TextInput
                                 label={"Maximum Excluded Distance"}
                                 error={maxExcludedDistanceError}
                                 type="number"
@@ -475,7 +473,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                     : [FIXED_DISTANCES_GENERATOR, RANDOM_FROM_FIXED_DISTANCES_GENERATOR].includes(distanceGenerator)
                         ? <>
                             <div className="distances-input">
-                                <DrillConfigurationTextInput
+                                <TextInput
                                     label={"Distances"}
                                     error={distancesError}
                                     type={"text"}

@@ -1,7 +1,7 @@
 import React from "react";
-import './DrillConfigurationTextInput.scss';
+import './TextInput.scss';
 
-export interface IDrillConfigurationTextInputProps {
+export interface ITextInputProps {
     label: string;
     type: string;
     value?: string | number | undefined;
@@ -15,16 +15,16 @@ export interface IDrillConfigurationTextInputProps {
     handleOnChange: (value: string) => void;
 }
 
-export const DrillConfigurationTextInput: React.FC<IDrillConfigurationTextInputProps> = (props: IDrillConfigurationTextInputProps): any => {
+export const TextInput: React.FC<ITextInputProps> = (props: ITextInputProps): any => {
     return (props.hidden ? null :
-            <div className="drill-configuration-text-input-container">
+            <div className="text-input-container">
                 <label
-                    className="drill-configuration-text-input-label"
-                    htmlFor="drill-configuration-text-input">{props.label}
+                    className="text-input-label"
+                    htmlFor="text-input">{props.label}
                 </label>
-                <div className="drill-configuration-text-input-box">
+                <div className="text-input-box">
                     <input
-                        className={`drill-configuration-text-input input-css ${props.error ? "error " : ""} ${props.type === "checkbox" ? "drill-configuration-checkbox" : ""}`}
+                        className={`text-input input-css ${props.error ? "error " : ""} ${props.type === "checkbox" ? "drill-configuration-checkbox" : ""}`}
                         type={props.type}
                         value={props.value}
                         checked={props.checked}

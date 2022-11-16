@@ -1,8 +1,6 @@
 import React from 'react';
 import './EditPlayerPage.scss';
-import {
-    DrillConfigurationTextInput
-} from "../../components/DrillConfiguration/DrillConfigurationTextInput/DrillConfigurationTextInput";
+import {TextInput} from "../../components/TextInput/TextInput";
 import deleteIcon from "../../../assets/delete.png";
 import backIcon from '../../../assets/back.png';
 import {assert} from "chai";
@@ -105,7 +103,7 @@ export const EditPlayerPage: React.FC<EditPlayerPageProps> = (props: EditPlayerP
 
             <div className="edit-player-input">
                 <div className="lastname-input">
-                    <DrillConfigurationTextInput
+                    <TextInput
                         label={"Lastname"}
                         error={lastnameError}
                         type={"text"}
@@ -118,7 +116,7 @@ export const EditPlayerPage: React.FC<EditPlayerPageProps> = (props: EditPlayerP
                     />
                 </div>
                 <div className="firstname-input">
-                    <DrillConfigurationTextInput
+                    <TextInput
                         label={"Firstname"}
                         error={firstnameError}
                         type={"text"}

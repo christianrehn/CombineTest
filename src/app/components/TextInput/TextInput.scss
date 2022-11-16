@@ -1,11 +1,11 @@
-.drill-configuration-text-input-container {
+.text-input-container {
     display: inline-block;
     padding-right: 15px;
     padding-top: 10px;
     width: 100%;
 }
 
-.drill-configuration-text-input-container .drill-configuration-text-input {
+.text-input-container .text-input {
     border: 2px solid transparent;
     padding: 8px;
     text-align: left;
@@ -17,6 +17,6 @@
     width: 100%;
 }
 
-.drill-configuration-text-input-container .drill-configuration-checkbox {
+.text-input-container .drill-configuration-checkbox {
     width: 35px;
 }
