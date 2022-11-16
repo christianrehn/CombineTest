@@ -87,14 +87,17 @@ export class ShotDataX implements IShotDataX {
     }
 
     public static fromSessionShotDataJson = (sessionShotDataAsJson: any): ShotDataX => {
-        assert(sessionShotDataAsJson.hasOwnProperty("ClubData"), "!sessionShotDataAsJson.hasOwnProperty(ClubData)");
         assert(sessionShotDataAsJson.hasOwnProperty("BallData"), "!sessionShotDataAsJson.hasOwnProperty(BallData)");
         assert(sessionShotDataAsJson.hasOwnProperty("FlightData"), "!sessionShotDataAsJson.hasOwnProperty(FlightData)");
+        // hint: property ClubData is optional
 
         const shotDataX: ShotDataX = new ShotDataX(
             sessionShotDataAsJson["ID"] ?? -1,
             sessionShotDataAsJson["ClubName"] ?? "",
-            math.unit(sessionShotDataAsJson["ClubData"]["ClubSpeed_MS"] ?? 0, "m"),
+            math.unit(sessionShotDataAsJson.hasOwnProperty("ClubData")
+                    ? sessionShotDataAsJson["ClubData"]["ClubSpeed_MS"] ?? 0
+                    : 0
+                , "m"),
             math.unit(sessionShotDataAsJson["FlightData"]["CarryDistrance_M"] ?? 0, "m"),
             math.unit(sessionShotDataAsJson["FlightData"]["TotalDistance_M"] ?? 0, "m"),
             math.unit(sessionShotDataAsJson["FlightData"]["OfflineDistance_M"] ?? 0, "m"),

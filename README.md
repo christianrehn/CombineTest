@@ -81,11 +81,11 @@ Or for all shots in current session (without dispersion):
 
 ### Shots Update Type
 
-Starting from version 2.3 you can select between different shots update types:
+Starting from version 2.4 you can select between different shots update types:
 
 #### Event - read only latest shot
 
-This was the only shots update type before versions 2.3.
+This was the only shots update type before versions 2.4.
 Whenever a change in the shots CSV file written by FSX2020 is detected the Combine Test App is triggert and the latest
 shot (first data row in file) is considered to be a new shot in the current session.
 For me this works fine but some people reported that it takes up to 20 seconds until the lates shot data is displayed
@@ -95,18 +95,19 @@ event.
 
 #### Event - read all shots
 
-Whenever a change in the shots CSV file written by FSX2020 is detected the Combine Test App is triggert and the all
-shots are read and all new shots are added to the current session.
+Whenever a change is detected in the current session JSON file by FSX2020 (you can find all session JSON files in the
+SessionData directory under "C:/Program Files (x86)/Foresight Sports Experience/SessionData/") the Combine Test App is
+triggert and the all shots are read and all new shots are added to the current session.
 The idea of this shots update type is that still events are used to trigger the Combine Test App but all shots are read
 so that shots are cannot get "lost".
 
 #### Polling
 
 The polling shots update type should be used if events are not triggered reliably on your computer.
-Polling always has to read all shots.
-If you select this shots update type you also have to set the polling intervall. The shorter the intervall the bette ist
+Polling always has to read all shots so there is no "read only latest shot" for polling.
+If you select this shots update type you also have to set the polling intervall. The shorter the intervall the better is
 the response of the Combine Test App but this also increases the load on your computer. After every polling intervall
-the shots CVS file has to be read and parsed completely in order to check for new shot data.
+the current session JSON file has to be read and parsed completely in order to check for new shot data.
 
 ### Drill Type
 
