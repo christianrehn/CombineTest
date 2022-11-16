@@ -55,6 +55,13 @@ Microsoft for a code validation certificate.
 
 Open app settings and select the method to read the shots CSV file that is written by FSX2020:
 ![Open settings](screenshots/221112_CombineTest_OpenSettings.png)
+IMPORTANT: if you use shots update type "Event (read all shots)" or "Polling" in version 2.4.0 you must first start a
+range session in FSX2020 and if the session has been created you can select a drill.
+This is necessary because for those shots update types the FSX2020 session json file is used instead of the last shot
+csv file. Therefore the latest session file has to be created before you select a drill. You do not have to start a new
+session in case you restart a drill or change to a different drill. Just make sure that if you start a drill no new
+session file will be created else the Combine Test App is confused by the mixture of session files. This will be
+improved in the next version.
 
 ![Open settings](screenshots/221112_CombineTest_EditAppSettings.png)
 
