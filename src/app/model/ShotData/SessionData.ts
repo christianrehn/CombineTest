@@ -1,6 +1,5 @@
 import {ShotDataX} from "./ShotDataX";
 import fs from "fs";
-import {ShotData} from "./ShotData";
 
 type StatsType = {
     name: string,
@@ -71,7 +70,8 @@ export class SessionData implements ISessionData {
                     console.log("shotDatasAsJson=", sessionShotDatasAsJson);
 
                     // convert json objects to ShotData objects
-                    const shotDatasX: ShotDataX[] = (sessionShotDatasAsJson.map((sessionShotDataAsJson: any) => ShotData.fromSessionShotDataJson(sessionShotDataAsJson))) ?? [];
+                    const shotDatasX: ShotDataX[] = (sessionShotDatasAsJson.map((sessionShotDataAsJson: any) =>
+                        ShotDataX.fromSessionShotDataJson(sessionShotDataAsJson))) ?? [];
                     return new SessionData(
                         sessionJsonData["SessionID"],
                         sessionJsonData["SessionStartDate"],

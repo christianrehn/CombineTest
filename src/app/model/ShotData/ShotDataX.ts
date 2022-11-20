@@ -98,7 +98,7 @@ export class ShotDataX implements IShotDataX {
                     ? sessionShotDataAsJson["ClubData"]["ClubSpeed_MS"] ?? 0
                     : 0
                 , "m"),
-            math.unit(sessionShotDataAsJson["FlightData"]["CarryDistrance_M"] ?? 0, "m"),
+            math.unit(sessionShotDataAsJson["FlightData"]["CarryDistance_M"] ?? 0, "m"),
             math.unit(sessionShotDataAsJson["FlightData"]["TotalDistance_M"] ?? 0, "m"),
             math.unit(sessionShotDataAsJson["FlightData"]["OfflineDistance_M"] ?? 0, "m"),
             sessionShotDataAsJson["BallData"]["TotalSpin_RPM"] ?? 0,
