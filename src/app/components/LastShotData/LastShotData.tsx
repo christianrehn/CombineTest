@@ -20,7 +20,7 @@ import {
     targetCircleDrillType,
     trackmanScoreAndShotsGainedDrillType
 } from "../../model/SelectValues/DrillType";
-import {computeSpinScore} from "../../model/SpinScore";
+import {computeSpinScore, SpinScoreType} from "../../model/SpinScore";
 import {computeTargetCircleScore} from "../../model/TargetCircleScore";
 
 const SHOW_ADDITIONAL_DATA_FOR_ALL_SHOTS: boolean = false;
@@ -233,9 +233,9 @@ const spinScoreData = (props: ILastShotDataProps): JSX.Element[] => {
         return [];
     }
 
-    const spinScore: number = computeSpinScore(props.selectedDrillConfiguration, props.lastShot.getTargetDistance(), props.lastShot.getTotalSpin(), props.lastShot.getCarry());
+    const spinScore: SpinScoreType = computeSpinScore(props.selectedDrillConfiguration, props.lastShot.getTargetDistance(), props.lastShot.getTotalSpin(), props.lastShot.getCarry(), props.lastShot.getTotalDistance());
 
-    const spinScoreValues: number[] = props.shotDatas.map((shotData: IShotData) => computeSpinScore(props.selectedDrillConfiguration, shotData.getTargetDistance(), shotData.getTotalSpin(), shotData.getCarry()));
+    const spinScoreValues: number[] = props.shotDatas.map((shotData: IShotData) => computeSpinScore(props.selectedDrillConfiguration, shotData.getTargetDistance(), shotData.getTotalSpin(), shotData.getCarry(), shotData.getTotalDistance()).spinScore);
 
     return [
         <div
@@ -243,7 +243,7 @@ const spinScoreData = (props: ILastShotDataProps): JSX.Element[] => {
             className="last-shot__row last-shot__spinscore-row">
             <div className="last-shot-item__label">Spin Score</div>
             <div className="last-shot-item__data"> {
-                !!props.lastShot ? spinScore.toFixed(1) : ""
+                !!props.lastShot ? spinScore.spinScore.toFixed(1) : ""
             } </div>
         </div>,
         <div
