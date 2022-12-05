@@ -48,6 +48,11 @@ const DEFAULT_DEVIATION_IN_UNIT: number = 3;
 const MIN_DEVIATION_IN_PERCENT: number = 1;
 const DEFAULT_DEVIATION_IN_PERCENT: number = 30;
 
+const DEFAULT_MAX_COASTING_IN_UNIT: number = 2;
+const MIN_MAX_COASTING_IN_UNIT: number = 0;
+const DEFAULT_MINUS_1_SCORE_PER_COASTING_IN_UNIT: number = 0.01;
+const MIN_MINUS_1_SCORE_PER_COASTING_IN_UNIT: number = 0.01;
+
 const MIN_TARGET_CIRCLE_RADIUS_SCORE_100_IN_UNIT: number = 0.1;
 const DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_100_IN_UNIT: number = 1.8;
 const DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_0_IN_UNIT: number = 10.0;
@@ -90,6 +95,8 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     const [maxDeviationInUnit, setMaxDeviationInUnit] = React.useState<number>(props.selectedDrillConfiguration.getMaxDeviationInUnit() || DEFAULT_DEVIATION_IN_UNIT);
     const [maxDeviationInPercent, setMaxDeviationInPercent] = React.useState<number>(props.selectedDrillConfiguration.getMaxDeviationInPercent() || DEFAULT_DEVIATION_IN_PERCENT);
     const [considerCoastingBehavior, setConsiderCoastingBehavior] = React.useState<boolean>(props.selectedDrillConfiguration.getConsiderCoastingBehavior() ?? true);
+    const [maxCoastingInUnit, setMaxCoastingInUnit] = React.useState<number>(props.selectedDrillConfiguration.getMaxCoastingInUnit() ?? DEFAULT_MAX_COASTING_IN_UNIT);
+    const [minus1ScorePerCoastingInUnit, setMinus1ScorePerCoastingInUnit] = React.useState<number>(props.selectedDrillConfiguration.getMinus1ScorePerCoastingInUnit() ?? DEFAULT_MINUS_1_SCORE_PER_COASTING_IN_UNIT);
     const [targetCircleRadiusAsUnitNotPercent, setTargetCircleRadiusAsUnitNotPercent] = React.useState<boolean>(props.selectedDrillConfiguration.getTargetCircleRadiusAsUnitNotPercent() ?? true);
     const [targetCircleRadiusScore100InUnit, setTargetCircleRadiusScore100InUnit] = React.useState<number>(props.selectedDrillConfiguration.getTargetCircleRadiusScore100InUnit() || DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_100_IN_UNIT);
     const [targetCircleRadiusScore0InUnit, setTargetCircleRadiusScore0InUnit] = React.useState<number>(props.selectedDrillConfiguration.getTargetCircleRadiusScore0InUnit() || DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_0_IN_UNIT);
@@ -187,6 +194,8 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                           maxDeviationInUnit,
                                           maxDeviationInPercent,
                                           considerCoastingBehavior,
+                                          maxCoastingInUnit,
+                                          minus1ScorePerCoastingInUnit,
                                           targetCircleRadiusAsUnitNotPercent,
                                           targetCircleRadiusScore100InUnit,
                                           targetCircleRadiusScore0InUnit,
@@ -325,12 +334,38 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 </div>
                 <div className="consider-coasting-behavior-input">
                     <TextInput
-                        label={`Consider Coasting Behavior (Total Distance)`}
+                        label={`Consider coasting behavior (total distance)`}
                         hidden={![spinDrillType].includes(drillType)}
                         type="checkbox"
                         checked={considerCoastingBehavior}
                         handleOnChange={(): void => {
                             setConsiderCoastingBehavior(!considerCoastingBehavior);
+                        }}
+                    />
+                </div>
+                <div className="max-coasting-in-unit-input">
+                    <NumberPlusMinusInput
+                        label={`Maximum coasting without score deduction in ${lengthUnit}`}
+                        hidden={![spinDrillType].includes(drillType) || !considerCoastingBehavior}
+                        delta={0.1}
+                        decimalPlaces={1}
+                        value={maxCoastingInUnit}
+                        min={MIN_MAX_COASTING_IN_UNIT}
+                        handleOnClick={(value: number): void => {
+                            setMaxCoastingInUnit(value);
+                        }}
+                    />
+                </div>
+                <div className="minus-1-score-per-coasting-in-unit-input">
+                    <NumberPlusMinusInput
+                        label={`Reduce score by -1 per additional coasting in ${lengthUnit}`}
+                        hidden={![spinDrillType].includes(drillType) || !considerCoastingBehavior}
+                        delta={0.01}
+                        decimalPlaces={2}
+                        value={minus1ScorePerCoastingInUnit}
+                        min={MIN_MINUS_1_SCORE_PER_COASTING_IN_UNIT}
+                        handleOnClick={(value: number): void => {
+                            setMinus1ScorePerCoastingInUnit(value);
                         }}
                     />
                 </div>

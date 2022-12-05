@@ -157,6 +157,9 @@
         "targetSpinInRpmPerUnit": 250,
         "maxDeviationAsUnitNotPercent": true,
         "maxDeviationInUnit": 2,
+        "considerCoastingBehavior": true,
+        "maxCoastingInUnit": 2.0,
+        "minus1ScorePerCoastingInUnit": 0.01,
         "distanceGenerator": {
             "type": "FixedDistancesGenerator",
             "distances": [
@@ -175,6 +178,9 @@
         "targetSpinInRpmPerUnit": 250,
         "maxDeviationAsUnitNotPercent": false,
         "maxDeviationInPercent": 30,
+        "considerCoastingBehavior": true,
+        "maxCoastingInUnit": 2.0,
+        "minus1ScorePerCoastingInUnit": 0.01,
         "distanceGenerator": {
             "type": "FixedDistancesGenerator",
             "distances": [
