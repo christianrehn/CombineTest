@@ -89,6 +89,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     const [maxDeviationAsUnitNotPercent, setMaxDeviationAsUnitNotPercent] = React.useState<boolean>(props.selectedDrillConfiguration.getMaxDeviationAsUnitNotPercent() ?? true);
     const [maxDeviationInUnit, setMaxDeviationInUnit] = React.useState<number>(props.selectedDrillConfiguration.getMaxDeviationInUnit() || DEFAULT_DEVIATION_IN_UNIT);
     const [maxDeviationInPercent, setMaxDeviationInPercent] = React.useState<number>(props.selectedDrillConfiguration.getMaxDeviationInPercent() || DEFAULT_DEVIATION_IN_PERCENT);
+    const [considerCoastingBehavior, setConsiderCoastingBehavior] = React.useState<boolean>(props.selectedDrillConfiguration.getConsiderCoastingBehavior() ?? true);
     const [targetCircleRadiusAsUnitNotPercent, setTargetCircleRadiusAsUnitNotPercent] = React.useState<boolean>(props.selectedDrillConfiguration.getTargetCircleRadiusAsUnitNotPercent() ?? true);
     const [targetCircleRadiusScore100InUnit, setTargetCircleRadiusScore100InUnit] = React.useState<number>(props.selectedDrillConfiguration.getTargetCircleRadiusScore100InUnit() || DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_100_IN_UNIT);
     const [targetCircleRadiusScore0InUnit, setTargetCircleRadiusScore0InUnit] = React.useState<number>(props.selectedDrillConfiguration.getTargetCircleRadiusScore0InUnit() || DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_0_IN_UNIT);
@@ -185,6 +186,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                           maxDeviationAsUnitNotPercent,
                                           maxDeviationInUnit,
                                           maxDeviationInPercent,
+                                          considerCoastingBehavior,
                                           targetCircleRadiusAsUnitNotPercent,
                                           targetCircleRadiusScore100InUnit,
                                           targetCircleRadiusScore0InUnit,
@@ -318,6 +320,17 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         min={MIN_DEVIATION_IN_PERCENT}
                         handleOnClick={(value: number): void => {
                             setMaxDeviationInPercent(value);
+                        }}
+                    />
+                </div>
+                <div className="consider-coasting-behavior-input">
+                    <TextInput
+                        label={`Consider Coasting Behavior (Total Distance)`}
+                        hidden={![spinDrillType].includes(drillType)}
+                        type="checkbox"
+                        checked={considerCoastingBehavior}
+                        handleOnChange={(): void => {
+                            setConsiderCoastingBehavior(!considerCoastingBehavior);
                         }}
                     />
                 </div>

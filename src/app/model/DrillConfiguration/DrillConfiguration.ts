@@ -42,6 +42,7 @@ export interface IDrillConfiguration extends IEntity {
     getMaxDeviationAsUnitNotPercent: () => boolean;
     getMaxDeviationInUnit: () => number;
     getMaxDeviationInPercent: () => number;
+    getConsiderCoastingBehavior: () => boolean;
     getTargetCircleRadiusAsUnitNotPercent: () => boolean;
     getTargetCircleRadiusScore100InUnit: () => number;
     getTargetCircleRadiusScore0InUnit: () => number;
@@ -80,6 +81,7 @@ abstract class AbstractDrillConfiguration extends Entity {
     protected _maxDeviationAsUnitNotPercent: boolean;
     protected _maxDeviationInUnit: number;
     protected _maxDeviationInPercent: number;
+    protected _considerCoastingBehavior: boolean;
     protected _targetCircleRadiusAsUnitNotPercent: boolean;
     protected _targetCircleRadiusScore100InUnit: number;
     protected _targetCircleRadiusScore0InUnit: number;
@@ -100,6 +102,7 @@ abstract class AbstractDrillConfiguration extends Entity {
         maxDeviationAsUnitNotPercent: boolean,
         maxDeviationInUnit: number,
         maxDeviationInPercent: number,
+        considerCoastingBehavior: boolean,
         targetCircleRadiusAsUnitNotPercent: boolean,
         targetCircleRadiusScore100InUnit: number,
         targetCircleRadiusScore0InUnit: number,
@@ -119,6 +122,7 @@ abstract class AbstractDrillConfiguration extends Entity {
         this._maxDeviationAsUnitNotPercent = maxDeviationAsUnitNotPercent;
         this._maxDeviationInUnit = maxDeviationInUnit;
         this._maxDeviationInPercent = maxDeviationInPercent;
+        this._considerCoastingBehavior = considerCoastingBehavior;
         this._targetCircleRadiusAsUnitNotPercent = targetCircleRadiusAsUnitNotPercent;
         this._targetCircleRadiusScore100InUnit = targetCircleRadiusScore100InUnit;
         this._targetCircleRadiusScore0InUnit = targetCircleRadiusScore0InUnit;
@@ -159,6 +163,10 @@ abstract class AbstractDrillConfiguration extends Entity {
 
     public getMaxDeviationInPercent = (): number => {
         return this._maxDeviationInPercent;
+    }
+
+    public getConsiderCoastingBehavior = (): boolean => {
+        return this._considerCoastingBehavior;
     }
 
     public getTargetCircleRadiusAsUnitNotPercent = (): boolean => {
@@ -293,6 +301,7 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
         maxDeviationAsUnitNotPercent: boolean,
         maxDeviationInUnit: number,
         maxDeviationInPercent: number,
+        considerCoastingBehavior: boolean,
         targetCircleRadiusAsUnitNotPercent: boolean,
         targetCircleRadiusScore100InUnit: number,
         targetCircleRadiusScore0InUnit: number,
@@ -315,6 +324,7 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
             maxDeviationAsUnitNotPercent,
             maxDeviationInUnit,
             maxDeviationInPercent,
+            considerCoastingBehavior,
             targetCircleRadiusAsUnitNotPercent,
             targetCircleRadiusScore100InUnit,
             targetCircleRadiusScore0InUnit,
@@ -404,6 +414,7 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
         maxDeviationAsUnitNotPercent: boolean,
         maxDeviationInUnit: number,
         maxDeviationInPercent: number,
+        considerCoastingBehavior: boolean,
         targetCircleRadiusAsUnitNotPercent: boolean,
         targetCircleRadiusScore100InUnit: number,
         targetCircleRadiusScore0InUnit: number,
@@ -425,6 +436,7 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
             maxDeviationAsUnitNotPercent,
             maxDeviationInUnit,
             maxDeviationInPercent,
+            considerCoastingBehavior,
             targetCircleRadiusAsUnitNotPercent,
             targetCircleRadiusScore100InUnit,
             targetCircleRadiusScore0InUnit,
@@ -481,6 +493,7 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
             maxDeviationAsUnitNotPercent: this.getMaxDeviationAsUnitNotPercent(),
             maxDeviationInUnit: this.getMaxDeviationInUnit(),
             maxDeviationInPercent: this.getMaxDeviationInPercent(),
+            considerCoastingBehavior: this.getConsiderCoastingBehavior(),
             targetCircleRadiusAsUnitNotPercent: this.getTargetCircleRadiusAsUnitNotPercent(),
             targetCircleRadiusScore100InUnit: this.getTargetCircleRadiusScore100InUnit(),
             targetCircleRadiusScore0InUnit: this.getTargetCircleRadiusScore0InUnit(),
@@ -516,6 +529,7 @@ export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends Dri
         maxDeviationAsUnitNotPercent: boolean,
         maxDeviationInUnit: number,
         maxDeviationInPercent: number,
+        considerCoastingBehavior: boolean,
         targetCircleRadiusAsUnitNotPercent: boolean,
         targetCircleRadiusScore100InUnit: number,
         targetCircleRadiusScore0InUnit: number,
@@ -538,6 +552,7 @@ export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends Dri
             maxDeviationAsUnitNotPercent,
             maxDeviationInUnit,
             maxDeviationInPercent,
+            considerCoastingBehavior,
             targetCircleRadiusAsUnitNotPercent,
             targetCircleRadiusScore100InUnit,
             targetCircleRadiusScore0InUnit,
@@ -605,6 +620,7 @@ export class EmptyDrillConfiguration extends DrillConfigurationWithFixedDistance
             true,
             0,
             0,
+            false,
             true,
             0,
             0,
