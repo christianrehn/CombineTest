@@ -140,9 +140,11 @@ So if you only create half of the predefined target spin per meter/yard you only
 If you create two times the predefined target spin per meter/yard you get a score of 200.
 
 In addition to the positive scores you can configure negative scores for coasting. The idea of the sprin drill is to
-generate stopping power. Therefore a long coasting should be avoided and leads to negative score if "Consider coasting
-behavior" is enabled in a spin drill's configuration. If enabled you can define the maximum coasting that does not lead
-to a reduced score and the amount of additional coasting that leads to a score of -1.
+generate "stopping power" (see for example https://wedgecraft.com). Therefore a long coasting should be avoided and
+leads to
+negative score if "Consider coasting behavior" is enabled in a spin drill's configuration. If enabled you can define the
+maximum coasting that does not lead to a reduced score and the amount of additional coasting that leads to a score of
+-1.
 
 #### Target Circle
 
