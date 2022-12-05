@@ -209,7 +209,7 @@ After cloning the repo you can:
       because it is used in forge.config.js
     * add new versions for auto-update to updates.json file
 * check for outdated packages: yarn outdated
-* upgrade packages: yarn upgrade
+* upgrade electron-forge: yarn upgrade -D electron@latest
 * to see console logs of main in production add --enable-logging command line option
 
 ### To Fix
