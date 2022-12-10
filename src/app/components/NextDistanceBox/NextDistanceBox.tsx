@@ -5,6 +5,7 @@ import * as math from "mathjs";
 import {Unit} from "mathjs";
 import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
 import {
+    asFewStrokesAsPossibleDrillType,
     spinDrillType,
     targetCircleDrillType,
     trackmanScoreAndShotsGainedDrillType
@@ -115,7 +116,26 @@ export const NextDistanceBox: React.FC<INextDistanceBoxProps> = (props: INextDis
                                     </>
                                 }
                             </>
-                            : assert.fail(`drill type unknown: ${props.selectedDrillConfiguration.getDrillType()}`)
+                            : [asFewStrokesAsPossibleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                                ? <>
+                                    <p className="next-distance-as-few-storkes-as-possible-radius-label">
+                                        {`Radius Target Circle`}
+                                    </p>
+                                    {props.selectedDrillConfiguration.getTargetCircleRadiusAsUnitNotPercent() ?
+                                        <p className="next-distance-as-few-storkes-as-possible-radius-in-unit">
+                                            {(props.selectedDrillConfiguration.getTargetCircleRadiusScore100InUnit())}&nbsp;{props.selectedDrillConfiguration.getUnit()}
+                                        </p>
+                                        : <>
+                                            <p className="next-distance-as-few-storkes-as-possible-radius-in-percent">
+                                                {(props.selectedDrillConfiguration.getTargetCircleRadiusScore100InPercent()).toFixed(0)}&nbsp;%
+                                            </p>
+                                            <p className="next-distance-as-few-storkes-as-possible-radius-in-unit">
+                                                {(props.selectedDrillConfiguration.getTargetCircleRadiusScore100InPercent() * nextDistanceInDistancesGeneratorInUnitAsNumber / 100).toFixed(1)}&nbsp;{props.selectedDrillConfiguration.getUnit()}
+                                            </p>
+                                        </>
+                                    }
+                                </>
+                                : assert.fail(`drill type unknown: ${props.selectedDrillConfiguration.getDrillType()}`)
             }
         </div>);
 }

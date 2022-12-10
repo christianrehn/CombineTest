@@ -25,6 +25,7 @@ import {NumberPlusMinusInput} from "../../components/NumberPlusMinusInput/Number
 import {EndGroundConfigsTable} from "../../components/DrillConfiguration/EndGroundConfigsTable/EndGroundConfigsTable";
 import {startGroundTypes,} from "../../model/AverageStrokesData/GroundType";
 import {
+    asFewStrokesAsPossibleDrillType,
     drillTypes,
     spinDrillType,
     targetCircleDrillType,
@@ -267,6 +268,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="number-of-drop-shots-input">
                     <NumberPlusMinusInput
                         label={`Number of worst shots to drop from average calculation`}
+                        hidden={[asFewStrokesAsPossibleDrillType].includes(drillType)}
                         value={numberOfDropShots}
                         min={0}
                         handleOnClick={(value: number): void => {
@@ -372,7 +374,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="target-circle-radius-as-unit-not-percent-input">
                     <TextInput
                         label={`Target Circle Radius as ${lengthUnit} or %`}
-                        hidden={![targetCircleDrillType].includes(drillType)}
+                        hidden={![targetCircleDrillType, asFewStrokesAsPossibleDrillType].includes(drillType)}
                         type="checkbox"
                         checked={targetCircleRadiusAsUnitNotPercent}
                         handleOnChange={(): void => {
@@ -382,8 +384,10 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 </div>
                 <div className="target-circle-radius-in-unit-score-100-input">
                     <NumberPlusMinusInput
-                        label={`Target Circle Radius for a score of 100 in ${lengthUnit}`}
-                        hidden={![targetCircleDrillType].includes(drillType) || !targetCircleRadiusAsUnitNotPercent}
+                        label={
+
+                            `Target Circle Radius ${targetCircleDrillType === drillType ? "for a score of 100 " : ""}in ${lengthUnit}`}
+                        hidden={![targetCircleDrillType, asFewStrokesAsPossibleDrillType].includes(drillType) || !targetCircleRadiusAsUnitNotPercent}
                         delta={0.1}
                         decimalPlaces={1}
                         value={targetCircleRadiusScore100InUnit}
@@ -406,8 +410,8 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 </div>
                 <div className="target-circle-radius-in-percent-score-100-input">
                     <NumberPlusMinusInput
-                        label={`Target Circle Radius for a score of 100 in %`}
-                        hidden={![targetCircleDrillType].includes(drillType) || targetCircleRadiusAsUnitNotPercent}
+                        label={`Target Circle Radius ${targetCircleDrillType === drillType ? "for a score of 100 " : ""}in %`}
+                        hidden={![targetCircleDrillType, asFewStrokesAsPossibleDrillType].includes(drillType) || targetCircleRadiusAsUnitNotPercent}
                         value={targetCircleRadiusScore100InPercent}
                         min={MIN_TARGET_CIRCLE_RADIUS_SCORE_100_IN_PERCENT}
                         handleOnClick={(value: number): void => {
@@ -429,7 +433,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="start-ground-type-select">
                     <DrillConfigurationSelect
                         label={"Start Ground Type"}
-                        hidden={[spinDrillType, targetCircleDrillType].includes(drillType)}
+                        hidden={[spinDrillType, targetCircleDrillType, asFewStrokesAsPossibleDrillType].includes(drillType)}
                         index={startGroundTypes.indexOf(startGroundType)}
                         stringValues={startGroundTypes}
                         handleOnChange={(index: number): void => {
@@ -443,7 +447,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 <div className="end-ground-types-table">
                     <EndGroundConfigsTable
                         label="End Ground Types"
-                        hidden={[spinDrillType, targetCircleDrillType].includes(drillType)}
+                        hidden={[spinDrillType, targetCircleDrillType, asFewStrokesAsPossibleDrillType].includes(drillType)}
                         endGroundConfigs={endGroundConfigs}
                         handleEndGroundConfigChanged={(endGroundConfig: IEndGroundConfig, endGroundConfigsIndex: number, newNotCHanged: boolean): void => {
                             assert(endGroundConfigsIndex >= 0, `endGroundConfigsIndex < 0: ${endGroundConfigsIndex}`);

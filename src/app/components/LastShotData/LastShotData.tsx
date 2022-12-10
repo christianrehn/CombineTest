@@ -16,6 +16,7 @@ import {
     computeSum
 } from "../../util/MathUtil";
 import {
+    asFewStrokesAsPossibleDrillType,
     spinDrillType,
     targetCircleDrillType,
     trackmanScoreAndShotsGainedDrillType
@@ -389,7 +390,7 @@ export const LastShotData: React.FC<ILastShotDataProps> = (props: ILastShotDataP
                 <div
                     className="last-shot-item__unit"> {rpmUnit} </div>
             </div>
-            {[trackmanScoreAndShotsGainedDrillType, targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+            {[trackmanScoreAndShotsGainedDrillType, targetCircleDrillType, asFewStrokesAsPossibleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
                 ? <>
                     <div className="last-shot__row">
                         <div className="last-shot-item__label">Side Spin</div>

@@ -51,7 +51,7 @@
     font-size: 30px;
 }
 
-.next-distance-target-circle-radius-label {
+.next-distance-target-circle-radius-label, .next-distance-as-few-storkes-as-possible-radius-label {
     padding-top: 55px;
     font-size: 16px;
 }
@@ -61,7 +61,9 @@
     font-size: 16px;
 }
 
-.next-distance-target-circle-radius-score-100-in-unit, .next-distance-target-circle-radius-score-100-in-percent {
+.next-distance-target-circle-radius-score-100-in-unit, .next-distance-target-circle-radius-score-100-in-percent,
+.next-distance-as-few-storkes-as-possible-radius-in-unit, .next-distance-as-few-storkes-as-possible-radius-in-percent,
+{
     padding-top: 10px;
     font-size: 30px;
 }
