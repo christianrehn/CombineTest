@@ -5,7 +5,11 @@ import './ShotsSvg.scss';
 import {Unit} from "mathjs";
 import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
 import {computeAbsoluteDeviation} from "../../util/MathUtil";
-import {spinDrillType, targetCircleDrillType} from "../../model/SelectValues/DrillType";
+import {
+    asFewStrokesAsPossibleDrillType,
+    spinDrillType,
+    targetCircleDrillType
+} from "../../model/SelectValues/DrillType";
 
 const NUMBER_OF_CIRCLES: number = 5;
 
@@ -129,7 +133,7 @@ export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
 
             {/*circle for lastShotTargetCircleRadiusScore100InUnitAsNumber*/}
             {
-                [targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType()) ?
+                [targetCircleDrillType, asFewStrokesAsPossibleDrillType].includes(props.selectedDrillConfiguration.getDrillType()) ?
                     <circle className="shots_svg_lasttargetcircle_score100"
                             r={lastShotTargetCircleRadiusScore100InUnitAsNumber * svgScaleFactor}/>
                     : null
@@ -137,7 +141,7 @@ export const ShotsSvg: React.FC<IShotsSvg> = (props: IShotsSvg) => {
 
             {/*circle for nextShotTargetCircleRadiusScore100InUnitAsNumber*/}
             {
-                [targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType()) ?
+                [targetCircleDrillType, asFewStrokesAsPossibleDrillType].includes(props.selectedDrillConfiguration.getDrillType()) ?
                     <circle className="shots_svg_nexttargetcircle_score100"
                             r={nextShotTargetCircleRadiusScore100InUnitAsNumber * svgScaleFactor}/>
                     : null
