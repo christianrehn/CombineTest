@@ -157,6 +157,12 @@ If your shot is outside or on the 0 score cirecle you get a score of 0.
 Between the 0 and the 100 score circle you get a score between 0 and 100. The score distribution is linear.
 Inside the 100 score circle the linear distribution is continued so that you get a score greater than 100.
 
+#### As Few Strokes As Possible
+
+Starting from version 3.0 you can play this variation of the target circle drill. If you shoot into the target
+circle you are allowed to progress to the next distance. If not you have to retry the same distance again.
+The aim of the game is to hit as few shots as possible to finish all distances.
+
 ## Track your golf training data
 
 Maybe you also want to check out my 100% free iOS App: [Golf Logbook](https://christianrehn.github.io/golf-logbook/)
