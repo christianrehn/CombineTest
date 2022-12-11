@@ -40,7 +40,7 @@ export const computeTargetCircleScore = (drillConfiguration: IDrillConfiguration
     const targetCircleRadiusDeltaInUnitAsNumber: number = targetCircleRadiusScore0InUnitAsNumber - targetCircleRadiusScore100InUnitAsNumber;
     console.log("targetCircleRadiusDeltaInUnitAsNumber", targetCircleRadiusDeltaInUnitAsNumber);
 
-    // fromPinDeltaInUnitAsNumber is negative outside inner circle
+    // fromPinDeltaInUnitAsNumber is negative inside inner circle
     const fromPinDeltaInUnitAsNumber: number = fromPinInUnitAsNumber - targetCircleRadiusScore100InUnitAsNumber;
     console.log("fromPinDeltaInUnitAsNumber", fromPinDeltaInUnitAsNumber);
 

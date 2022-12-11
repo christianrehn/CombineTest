@@ -25,6 +25,9 @@ import moment from "moment/moment";
 import {v4 as uuidv4} from "uuid";
 import {ShotDataX} from "../../model/ShotData/ShotDataX";
 import {SessionData} from "../../model/ShotData/SessionData";
+import {asFewStrokesAsPossibleDrillType} from "../../model/SelectValues/DrillType";
+import {computeAbsoluteDeviation} from "../../util/MathUtil";
+import {computeAsFewStrokesAsPossibleScore} from "../../model/AsFewStrocesAsPossibleScore";
 
 export const DrillPageName: string = "DrillPage";
 
@@ -87,26 +90,41 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                     knownShotDatasInSessionClone.push(shotData);
                     setKnownShotDatasInSession(knownShotDatasInSessionClone);
 
-                    // pick new distance for next shot
-                    if (knownShotDatasInSessionClone.length < props.selectedDrillConfiguration.getNumberOfShots()) {
-                        nextDistanceRef.current = props.selectedDrillConfiguration.getNextDistance(knownShotDatasInSessionClone.length);
-                    } else {
-                        // all shots finished -> set nextDistanceRef to undefined
-                        const sessionName: string = moment(new Date()).format("YYMMDD_HHmmss");
-                        console.log(`all shots executed -> save session ${sessionName}`);
-                        nextDistanceRef.current = undefined;
-                        props.handleSaveSessions(new Session(
-                            uuidv4(),
-                            sessionName,
-                            props.selectedPlayer?.getUuid(),
-                            props.selectedDrillConfiguration,
-                            knownShotDatasInSessionClone))
-                    }
-                    setNextDistance(nextDistanceRef.current);
+                    // finally pick new distance for next shot
+                    pickDistanceForNextShot(knownShotDatasInSessionClone);
                 }
             }
         }
     }, [shotData]);
+
+    function pickDistanceForNextShot(knownShotDatasInSessionClone: IShotData[]) {
+        assert(!!knownShotDatasInSessionClone, "!knownShotDatasInSessionClone");
+        assert(knownShotDatasInSessionClone.length > 0, "!(knownShotDatasInSessionClone.length > 0)")
+        console.log("knownShotDatasInSessionClone", knownShotDatasInSessionClone)
+
+        const shotDatasToConsider: IShotData[] = asFewStrokesAsPossibleDrillType !== props.selectedDrillConfiguration.getDrillType()
+            ? knownShotDatasInSessionClone
+            : // consider only shots that were inside the target circle
+            knownShotDatasInSessionClone.filter((shotData: IShotData) =>
+                computeAsFewStrokesAsPossibleScore(props.selectedDrillConfiguration, shotData.getTargetDistance(), computeAbsoluteDeviation(shotData)));
+        console.log("shotDatasToConsider", shotDatasToConsider)
+
+        if (shotDatasToConsider.length < props.selectedDrillConfiguration.getNumberOfShots()) {
+            nextDistanceRef.current = props.selectedDrillConfiguration.getNextDistance(shotDatasToConsider.length);
+        } else {
+            // all shots finished -> set nextDistanceRef to undefined
+            const sessionName: string = moment(new Date()).format("YYMMDD_HHmmss");
+            console.log(`all shots executed -> save session ${sessionName}`);
+            nextDistanceRef.current = undefined;
+            props.handleSaveSessions(new Session(
+                uuidv4(),
+                sessionName,
+                props.selectedPlayer?.getUuid(),
+                props.selectedDrillConfiguration,
+                knownShotDatasInSessionClone))
+        }
+        setNextDistance(nextDistanceRef.current);
+    }
 
     async function checkAllShotsInSessionJsonFile(): Promise<void> {
         const sessionJsonData: SessionData = await SessionData.findShotDataXsInLatestSessionJsonFile(props.sessionJsonDir);
@@ -147,21 +165,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
             setKnownShotDatasInSession(knownShotDatasInSessionClone);
 
             // finally pick new distance for next shot
-            if (knownShotDatasInSessionClone.length < props.selectedDrillConfiguration.getNumberOfShots()) {
-                nextDistanceRef.current = props.selectedDrillConfiguration.getNextDistance(knownShotDatasInSessionClone.length);
-            } else {
-                // all shots finished -> set nextDistanceRef to undefined
-                const sessionName: string = moment(new Date()).format("YYMMDD_HHmmss");
-                console.log(`all shots executed -> save session ${sessionName}`);
-                nextDistanceRef.current = undefined;
-                props.handleSaveSessions(new Session(
-                    uuidv4(),
-                    sessionName,
-                    props.selectedPlayer?.getUuid(),
-                    props.selectedDrillConfiguration,
-                    knownShotDatasInSessionClone))
-            }
-            setNextDistance(nextDistanceRef.current);
+            pickDistanceForNextShot(knownShotDatasInSessionClone);
         }
     }
 
@@ -376,7 +380,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
         );
     }
 
-    // HINT: if shot csv or session json files do not exist the loading animation will be shown shown forever
+    // HINT: if shot csv or session json files do not exist the loading animation will be shown forever
     return allShotDataIdsBeforeSessionRead
         ? (<div className="drill-page page">
             {nextDistanceBox()}
