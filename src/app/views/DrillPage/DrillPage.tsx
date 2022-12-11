@@ -81,7 +81,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
             const knownShotDataIdsInSession: number[] = knownShotDatasInSession.map((knownShotDataInSession: IShotData) => knownShotDataInSession.getId());
             if (!!shotData && (knownShotDatasInSession.length === 0 || !knownShotDataIdsInSession.includes(shotData.getId()))) {
                 // new shot detected
-                if (knownShotDatasInSession.length >= props.selectedDrillConfiguration.getNumberOfShots()) {
+                if (getShotDatasToConsider(knownShotDatasInSession).length >= props.selectedDrillConfiguration.getNumberOfShots()) {
                     // shot executed but number of shots was already reached -> ignore
                     console.log(`shot id=${shotData.getId()} executed but number of shots was already reached -> ignore`);
                 } else {
@@ -97,18 +97,19 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
         }
     }, [shotData]);
 
-    function pickDistanceForNextShot(knownShotDatasInSessionClone: IShotData[]) {
-        assert(!!knownShotDatasInSessionClone, "!knownShotDatasInSessionClone");
-        assert(knownShotDatasInSessionClone.length > 0, "!(knownShotDatasInSessionClone.length > 0)")
-        console.log("knownShotDatasInSessionClone", knownShotDatasInSessionClone)
-
-        const shotDatasToConsider: IShotData[] = asFewStrokesAsPossibleDrillType !== props.selectedDrillConfiguration.getDrillType()
+    function getShotDatasToConsider(knownShotDatasInSessionClone: IShotData[]) {
+        return asFewStrokesAsPossibleDrillType !== props.selectedDrillConfiguration.getDrillType()
             ? knownShotDatasInSessionClone
             : // consider only shots that were inside the target circle
             knownShotDatasInSessionClone.filter((shotData: IShotData) =>
                 computeAsFewStrokesAsPossibleScore(props.selectedDrillConfiguration, shotData.getTargetDistance(), computeAbsoluteDeviation(shotData)));
-        console.log("shotDatasToConsider", shotDatasToConsider)
+    }
 
+    function pickDistanceForNextShot(knownShotDatasInSessionClone: IShotData[]) {
+        assert(!!knownShotDatasInSessionClone, "!knownShotDatasInSessionClone");
+        assert(knownShotDatasInSessionClone.length > 0, "!(knownShotDatasInSessionClone.length > 0)")
+
+        const shotDatasToConsider: IShotData[] = getShotDatasToConsider(knownShotDatasInSessionClone);
         if (shotDatasToConsider.length < props.selectedDrillConfiguration.getNumberOfShots()) {
             nextDistanceRef.current = props.selectedDrillConfiguration.getNextDistance(shotDatasToConsider.length);
         } else {
@@ -148,7 +149,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                 const shotDataX: ShotDataX = allShotDataXs.find((shotDataX: ShotDataX): boolean => shotDataX.getId() === shotDataIdInSession)
                 const shotData: ShotData = shotDataX.toShotData(props.selectedDrillConfiguration.getNextDistance(i));
 
-                if (knownShotDatasInSessionClone.length >= props.selectedDrillConfiguration.getNumberOfShots()) {
+                if (getShotDatasToConsider(knownShotDatasInSessionClone).length >= props.selectedDrillConfiguration.getNumberOfShots()) {
                     // shot executed but number of shots was already reached -> ignore and do not add to known shots
                     console.log(`shot id=${shotData.getId()} executed but number of shots was already reached -> ignore`);
                 } else {

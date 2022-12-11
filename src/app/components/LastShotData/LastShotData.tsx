@@ -23,6 +23,7 @@ import {
 } from "../../model/SelectValues/DrillType";
 import {computeSpinScore, SpinScoreType} from "../../model/SpinScore";
 import {computeTargetCircleScore} from "../../model/TargetCircleScore";
+import {computeAsFewStrokesAsPossibleScore} from "../../model/AsFewStrocesAsPossibleScore";
 
 const SHOW_ADDITIONAL_DATA_FOR_ALL_SHOTS: boolean = false;
 
@@ -307,6 +308,38 @@ const targetCircleScoreData = (props: ILastShotDataProps): JSX.Element[] => {
     ];
 }
 
+const asFewStrokesAsPossibleScoreData = (props: ILastShotDataProps): JSX.Element[] => {
+    if (!props.lastShot) {
+        return [];
+    }
+
+    const absoluteDeviation: Unit = computeAbsoluteDeviation(props.lastShot);
+    const asFewStrokesAsPossibleScore: boolean = computeAsFewStrokesAsPossibleScore(props.selectedDrillConfiguration, props.lastShot.getTargetDistance(), absoluteDeviation);
+
+    const asFewStrokesAsPossibleScoreValues: number[] = props.shotDatas.map((shotData: IShotData) => computeAsFewStrokesAsPossibleScore(props.selectedDrillConfiguration, shotData.getTargetDistance(), computeAbsoluteDeviation(shotData)) ? 1 : 0);
+
+    return [
+        <div
+            key="asFewStrokesAsPossibleScore"
+            className="last-shot__row last-shot__asfewstrokesaspossiblescore-row">
+            <div className="last-shot-item__label">Inside TC</div>
+            <div className="last-shot-item__data"> {
+                !!props.lastShot ? (asFewStrokesAsPossibleScore ? "yes" : "no") : ""
+            } </div>
+        </div>,
+        <div
+            key="averageTargetCircleScore"
+            className="last-shot__row last-shot__asfewstrokesaspossiblescore-row last-shot__avg-asfewstrokesaspossiblescore-row">
+            {lastShotAverageDivs("Average Inside TC", asFewStrokesAsPossibleScoreValues, false, 1, props)}
+        </div>,
+        <div
+            key="consistencyTargetCircleScore"
+            className="last-shot__row last-shot__asfewstrokesaspossiblescore-row last-shot__consistency-asfewstrokesaspossiblescore-row">
+            {lastShotConsistencyDivs("Consistency Inside TC", asFewStrokesAsPossibleScoreValues, 1, props)}
+        </div>
+    ];
+}
+
 export interface ILastShotDataProps {
     lastShot: IShotData,
     shotDatas: IShotData[],
@@ -419,6 +452,9 @@ export const LastShotData: React.FC<ILastShotDataProps> = (props: ILastShotDataP
                 : null}
             {[targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
                 ? targetCircleScoreData(props)
+                : null}
+            {[asFewStrokesAsPossibleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                ? asFewStrokesAsPossibleScoreData(props)
                 : null}
 
             {/* data for all shots */}

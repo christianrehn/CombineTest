@@ -21,6 +21,7 @@ import {
 } from "../../model/SelectValues/DrillType";
 import {computeSpinScore, SpinScoreType} from "../../model/SpinScore";
 import {computeTargetCircleScore} from "../../model/TargetCircleScore";
+import {computeAsFewStrokesAsPossibleScore} from "../../model/AsFewStrocesAsPossibleScore";
 
 
 export interface IAllShotsTableProps {
@@ -42,6 +43,7 @@ export const AllShotsTable: React.FC<IAllShotsTableProps> = (props: IAllShotsTab
     let spinRateScoreValues: number[] = [];
     let coastingPenaltyScoreValues: number[] = [];
     let targerCircleScoreValues: number[] = [];
+    let asFewStrokesAsPossibleScoreValues: number[] = [];
     let targetDistanceInUnitAsNumberValues: number[] = [];
     let carryValues: number[] = [];
     let totalDistanceInUnitAsNumberValues: number[] = [];
@@ -71,6 +73,9 @@ export const AllShotsTable: React.FC<IAllShotsTableProps> = (props: IAllShotsTab
                         : null}
                     {[targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
                         ? <td>TC Score</td>
+                        : null}
+                    {[asFewStrokesAsPossibleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                        ? <td>Inside TC</td>
                         : null}
                     <td>Target</td>
                     <td>Carry</td>
@@ -109,6 +114,9 @@ export const AllShotsTable: React.FC<IAllShotsTableProps> = (props: IAllShotsTab
                     {[targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
                         ? <td>{empty}</td>
                         : null}
+                    {[asFewStrokesAsPossibleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                        ? <td>{empty}</td>
+                        : null}
                     <td>{props.selectedDrillConfiguration.getUnit()}</td>
                     <td>{props.selectedDrillConfiguration.getUnit()}</td>
                     <td>{props.selectedDrillConfiguration.getUnit()}</td>
@@ -145,8 +153,11 @@ export const AllShotsTable: React.FC<IAllShotsTableProps> = (props: IAllShotsTab
                         spinRateScoreValues.push(spinScore.spinRateScore);
                         coastingPenaltyScoreValues.push(spinScore.coastingPenaltyScore);
 
-                        const targerCircleScore: number = computeTargetCircleScore(props.selectedDrillConfiguration, shotData.getTargetDistance(), absoluteDeviation);
-                        targerCircleScoreValues.push(targerCircleScore);
+                        const targetCircleScore: number = computeTargetCircleScore(props.selectedDrillConfiguration, shotData.getTargetDistance(), absoluteDeviation);
+                        targerCircleScoreValues.push(targetCircleScore);
+
+                        const asFewStrokesAsPossibleScore: boolean = computeAsFewStrokesAsPossibleScore(props.selectedDrillConfiguration, shotData.getTargetDistance(), absoluteDeviation);
+                        asFewStrokesAsPossibleScoreValues.push(asFewStrokesAsPossibleScore ? 1 : 0);
 
                         const targetDistanceInUnitAsNumber: number = shotData.getTargetDistance().toNumber(props.selectedDrillConfiguration.getUnit());
                         targetDistanceInUnitAsNumberValues.push(targetDistanceInUnitAsNumber);
@@ -202,7 +213,10 @@ export const AllShotsTable: React.FC<IAllShotsTableProps> = (props: IAllShotsTab
                                 </>
                                 : null}
                             {[targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
-                                ? <td>{targerCircleScore.toFixed(1)}</td>
+                                ? <td>{targetCircleScore.toFixed(1)}</td>
+                                : null}
+                            {[asFewStrokesAsPossibleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                                ? <td>{asFewStrokesAsPossibleScore ? "yes" : "no"}</td>
                                 : null}
                             <td>{targetDistanceInUnitAsNumber.toFixed(2)}</td>
                             <td>{carry.toFixed(2)}</td>
@@ -255,6 +269,10 @@ export const AllShotsTable: React.FC<IAllShotsTableProps> = (props: IAllShotsTab
                         ?
                         <td>{props.shotDatas.length > 0 ? computeAverage(targerCircleScoreValues).toFixed(1) : ""}</td>
                         : null}
+                    {[asFewStrokesAsPossibleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                        ?
+                        <td>{props.shotDatas.length > 0 ? computeAverage(asFewStrokesAsPossibleScoreValues).toFixed(1) : ""}</td>
+                        : null}
                     <td>{props.shotDatas.length > 0 ? computeAverage(targetDistanceInUnitAsNumberValues).toFixed(2) : ""}</td>
                     <td>{props.shotDatas.length > 0 ? computeAverage(carryValues).toFixed(2) : ""}</td>
                     <td>{props.shotDatas.length > 0 ? computeAverage(totalDistanceInUnitAsNumberValues).toFixed(2) : ""}</td>
@@ -305,6 +323,10 @@ export const AllShotsTable: React.FC<IAllShotsTableProps> = (props: IAllShotsTab
                             ?
                             <td>{props.shotDatas.length > 0 ? computeAverage(targerCircleScoreValues, props.selectedDrillConfiguration.getNumberOfDropShots()).toFixed(1) : ""}</td>
                             : null}
+                        {[asFewStrokesAsPossibleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                            ?
+                            <td>{props.shotDatas.length > 0 ? computeAverage(asFewStrokesAsPossibleScoreValues, props.selectedDrillConfiguration.getNumberOfDropShots()).toFixed(1) : ""}</td>
+                            : null}
                         <td>{props.shotDatas.length > 0 ? computeAverage(targetDistanceInUnitAsNumberValues, props.selectedDrillConfiguration.getNumberOfDropShots()).toFixed(2) : ""}</td>
                         <td>{props.shotDatas.length > 0 ? computeAverage(carryValues, props.selectedDrillConfiguration.getNumberOfDropShots()).toFixed(2) : ""}</td>
                         <td>{props.shotDatas.length > 0 ? computeAverage(totalDistanceInUnitAsNumberValues, props.selectedDrillConfiguration.getNumberOfDropShots()).toFixed(2) : ""}</td>
@@ -354,6 +376,10 @@ export const AllShotsTable: React.FC<IAllShotsTableProps> = (props: IAllShotsTab
                     {[targetCircleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
                         ?
                         <td>{props.shotDatas.length > 0 ? computeStandardDeviationEntirePopulation(targerCircleScoreValues).toFixed(1) : ""}</td>
+                        : null}
+                    {[asFewStrokesAsPossibleDrillType].includes(props.selectedDrillConfiguration.getDrillType())
+                        ?
+                        <td>{props.shotDatas.length > 0 ? computeStandardDeviationEntirePopulation(asFewStrokesAsPossibleScoreValues).toFixed(1) : ""}</td>
                         : null}
                     <td></td>
                     <td>{props.shotDatas.length > 0 ? computeStandardDeviationEntirePopulation(carryValues).toFixed(2) : ""}</td>
