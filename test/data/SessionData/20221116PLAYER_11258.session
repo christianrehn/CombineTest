@@ -1,0 +1,125 @@
+{
+    "PlayerName": "PLAYER 1",
+    "PlayerHandicap": "0",
+    "PlayerHandedness": "Right",
+    "SessionType": "Improve",
+    "SessionStartDate": "2022.11.16",
+    "SessionStartTime": "12:58:40",
+    "Timestamp": "2022.11.16T11:58:40",
+    "SessionID": "d34dc75d-4d1f-4d2d-aeae-700d39fb1699",
+    "Shots": [
+        {
+            "ID": 1,
+            "Timestamp": "13:01:19",
+            "Enabled": true,
+            "ClubType": "1w",
+            "ClubName": "Driver",
+            "ClubColor": "0xffffff00",
+            "BallType": "Stnd",
+            "BallName": "Standard",
+            "BallData": {
+                "BallSpeed_MS": 1.324394,
+                "Azimuth_DEG": 67.140373,
+                "LaunchAngle_DEG": 17.303316,
+                "BackSpin_RPM": -1,
+                "SideSpin_RPM": 0,
+                "TotalSpin_RPM": 1,
+                "SpinAxis_DEG": 180
+            },
+            "FlightData": {
+                "CarryDistance_M": 0.126449,
+                "TotalDistance_M": 0.341708,
+                "OfflineDistance_M": 0.314848,
+                "DistanceToPin_M": 342.318634,
+                "MaxHeight_M": 0.011932,
+                "DescentAngle_DEG": 20.982557
+            }
+        },
+        {
+            "ID": 2,
+            "Timestamp": "13:01:29",
+            "Enabled": true,
+            "ClubType": "1w",
+            "ClubName": "Driver",
+            "ClubColor": "0xffffff00",
+            "BallType": "Stnd",
+            "BallName": "Standard",
+            "BallData": {
+                "BallSpeed_MS": 15.479255,
+                "Azimuth_DEG": 2.612842,
+                "LaunchAngle_DEG": 29.516186,
+                "BackSpin_RPM": 3188,
+                "SideSpin_RPM": 245,
+                "TotalSpin_RPM": 3197,
+                "SpinAxis_DEG": 4.394583
+            },
+            "FlightData": {
+                "CarryDistance_M": 20.730852,
+                "TotalDistance_M": 28.22506,
+                "OfflineDistance_M": 1.456169,
+                "DistanceToPin_M": 315.297455,
+                "MaxHeight_M": 3.17984,
+                "DescentAngle_DEG": 32.603035
+            },
+            "ClubData": {
+                "ClubSpeed_MS": null,
+                "ClubSpeedAtImpact_MS": null,
+                "Efficiency": null,
+                "VerticalPath_DEG": null,
+                "HorizontalPath_DEG": null,
+                "Lie_DEG": null,
+                "Loft_DEG": null,
+                "FAxis_DEG": null,
+                "FaceImpactHorizontal_MM": null,
+                "FaceImpactVertical_MM": null,
+                "FaceToTarget_DEG": null,
+                "FaceToPath_DEG": 0,
+                "ClosureRate_DEG": null,
+                "Algorithm": ""
+            }
+        },
+        {
+            "ID": 3,
+            "Timestamp": "13:02:24",
+            "Enabled": true,
+            "ClubType": "1w",
+            "ClubName": "Driver",
+            "ClubColor": "0xffffff00",
+            "BallType": "Stnd",
+            "BallName": "Standard",
+            "BallData": {
+                "BallSpeed_MS": 15.316348,
+                "Azimuth_DEG": 2.77051,
+                "LaunchAngle_DEG": 30.358652,
+                "BackSpin_RPM": 3637,
+                "SideSpin_RPM": 608,
+                "TotalSpin_RPM": 3687,
+                "SpinAxis_DEG": 9.490426
+            },
+            "FlightData": {
+                "CarryDistance_M": 20.53969,
+                "TotalDistance_M": 27.353127,
+                "OfflineDistance_M": 1.696168,
+                "DistanceToPin_M": 316.216217,
+                "MaxHeight_M": 3.269806,
+                "DescentAngle_DEG": 33.551991
+            },
+            "ClubData": {
+                "ClubSpeed_MS": null,
+                "ClubSpeedAtImpact_MS": null,
+                "Efficiency": null,
+                "VerticalPath_DEG": null,
+                "HorizontalPath_DEG": null,
+                "Lie_DEG": null,
+                "Loft_DEG": null,
+                "FAxis_DEG": null,
+                "FaceImpactHorizontal_MM": null,
+                "FaceImpactVertical_MM": null,
+                "FaceToTarget_DEG": null,
+                "FaceToPath_DEG": 0,
+                "ClosureRate_DEG": null,
+                "Algorithm": ""
+            }
+        }
+    ]
+}
