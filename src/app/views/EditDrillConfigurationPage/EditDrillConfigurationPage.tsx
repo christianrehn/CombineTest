@@ -32,6 +32,10 @@ import {
     trackmanScoreAndShotsGainedDrillType
 } from "../../model/SelectValues/DrillType";
 import {lengthUnits} from "../../model/SelectValues/LengthUnit";
+import {
+    outsideTargetCircleActions,
+    retryOutsideTargetCircleAction
+} from "../../model/SelectValues/OutsideTargetCircleAction";
 
 export const EditDrillConfigurationPageName: string = "EditDrillConfigurationPage";
 
@@ -61,6 +65,8 @@ const DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_0_IN_UNIT: number = 10.0;
 const MIN_TARGET_CIRCLE_RADIUS_SCORE_100_IN_PERCENT: number = 1;
 const DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_100_IN_PERCENT: number = 5;
 const DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_0_IN_PERCENT: number = 30;
+
+const DEFAULT_OUTSIDE_TARGET_CIRCLE_ACTION: string = retryOutsideTargetCircleAction;
 
 const MIN_NAME: number = 1;
 const MAX_NAME: number = 30;
@@ -103,6 +109,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
     const [targetCircleRadiusScore0InUnit, setTargetCircleRadiusScore0InUnit] = React.useState<number>(props.selectedDrillConfiguration.getTargetCircleRadiusScore0InUnit() || DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_0_IN_UNIT);
     const [targetCircleRadiusScore100InPercent, setTargetCircleRadiusScore100InPercent] = React.useState<number>(props.selectedDrillConfiguration.getTargetCircleRadiusScore100InPercent() || DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_100_IN_PERCENT);
     const [targetCircleRadiusScore0InPercent, setTargetCircleRadiusScore0InPercent] = React.useState<number>(props.selectedDrillConfiguration.getTargetCircleRadiusScore0InPercent() || DEFAULT_TARGET_CIRCLE_RADIUS_SCORE_0_IN_PERCENT);
+    const [outsideTargetCircleAction, setOutsideTargetCircleAction] = React.useState<string>(props.selectedDrillConfiguration.getOutsideTargetCircleAction() || DEFAULT_OUTSIDE_TARGET_CIRCLE_ACTION);
     const [startGroundType, setStartGroundType] = React.useState<string>(props.selectedDrillConfiguration.getStartGroundType());
     const [endGroundConfigs, setEndGroundConfigs] = React.useState<IEndGroundConfig[]>(props.selectedDrillConfiguration.getEndGroundConfigs());
     const [distanceGenerator, setDistanceGenerator] = React.useState<string>(props.selectedDrillConfiguration.getDistanceGenerator());
@@ -184,6 +191,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                   // save changes
                                   const newDrillConfiguration: IDrillConfiguration =
                                       createNewDrillConfigurationWithDistanceGenerator(
+                                          distanceGenerator,
                                           props.selectedDrillConfiguration.getUuid(),
                                           name,
                                           description,
@@ -202,7 +210,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                                           targetCircleRadiusScore0InUnit,
                                           targetCircleRadiusScore100InPercent,
                                           targetCircleRadiusScore0InPercent,
-                                          distanceGenerator,
+                                          outsideTargetCircleAction,
                                           startGroundType,
                                           endGroundConfigs,
                                           minIncludedDistance,
@@ -427,6 +435,18 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                         min={targetCircleRadiusScore100InPercent}
                         handleOnClick={(value: number): void => {
                             setTargetCircleRadiusScore0InPercent(value);
+                        }}
+                    />
+                </div>
+                <div className="outside-target-circle-action-select">
+                    <DrillConfigurationSelect
+                        label={"If shot is outside of target circle"}
+                        hidden={![asFewStrokesAsPossibleDrillType].includes(drillType)}
+                        index={outsideTargetCircleActions.indexOf(outsideTargetCircleAction)}
+                        stringValues={outsideTargetCircleActions}
+                        handleOnChange={(index: number): void => {
+                            assert(index >= 0, "index < 0");
+                            setOutsideTargetCircleAction(outsideTargetCircleActions[index]);
                         }}
                     />
                 </div>

@@ -14,6 +14,7 @@ export const RANDOM_FROM_FIXED_DISTANCES_GENERATOR: string = "RandomFromFixedDis
 export const distanceGenerators: string[] = [RANDOM_DISTANCES_GENERATOR, FIXED_DISTANCES_GENERATOR, RANDOM_FROM_FIXED_DISTANCES_GENERATOR];
 
 export const createNewDrillConfigurationWithDistanceGenerator = (
+    distanceGenerator: string,
     uuid: string,
     name: string,
     description: string,
@@ -32,7 +33,7 @@ export const createNewDrillConfigurationWithDistanceGenerator = (
     targetCircleRadiusScore0InUnit: number,
     targetCircleRadiusScore100InPercent: number,
     targetCircleRadiusScore0InPercent: number,
-    distanceGenerator: string,
+    outsideTargetCircleAction: string,
     startGroundType: string,
     endGroundConfigs: IEndGroundConfig[],
     minIncludedDistance: number,
@@ -63,6 +64,7 @@ export const createNewDrillConfigurationWithDistanceGenerator = (
                 targetCircleRadiusScore0InUnit,
                 targetCircleRadiusScore100InPercent,
                 targetCircleRadiusScore0InPercent,
+                outsideTargetCircleAction,
                 startGroundType,
                 endGroundConfigs,
                 minIncludedDistance,
@@ -89,6 +91,7 @@ export const createNewDrillConfigurationWithDistanceGenerator = (
                 targetCircleRadiusScore0InUnit,
                 targetCircleRadiusScore100InPercent,
                 targetCircleRadiusScore0InPercent,
+                outsideTargetCircleAction,
                 startGroundType,
                 endGroundConfigs,
                 distances,
@@ -114,6 +117,7 @@ export const createNewDrillConfigurationWithDistanceGenerator = (
                 targetCircleRadiusScore0InUnit,
                 targetCircleRadiusScore100InPercent,
                 targetCircleRadiusScore0InPercent,
+                outsideTargetCircleAction,
                 startGroundType,
                 endGroundConfigs,
                 distances,

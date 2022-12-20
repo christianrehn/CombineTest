@@ -12,6 +12,7 @@ import {
 import {trackmanScoreAndShotsGainedDrillType} from "../SelectValues/DrillType";
 import {meterLengthUnit} from "../SelectValues/LengthUnit";
 import {Entity, IEntity} from "../base/Entity";
+import {restartOutsideTargetCircleAction} from "../SelectValues/OutsideTargetCircleAction";
 
 /**
  * Create random integer between [min, max[.
@@ -50,6 +51,7 @@ export interface IDrillConfiguration extends IEntity {
     getTargetCircleRadiusScore0InUnit: () => number;
     getTargetCircleRadiusScore100InPercent: () => number;
     getTargetCircleRadiusScore0InPercent: () => number;
+    getOutsideTargetCircleAction: () => string;
     getStartGroundType: () => string;
     getEndGroundConfigs: () => IEndGroundConfig[]
     getDistanceGenerator: () => string;
@@ -91,6 +93,7 @@ abstract class AbstractDrillConfiguration extends Entity {
     protected _targetCircleRadiusScore0InUnit: number;
     protected _targetCircleRadiusScore100InPercent: number;
     protected _targetCircleRadiusScore0InPercent: number;
+    protected _outsideTargetCircleAction: string;
     protected _startGroundType: string;
     protected _endGroundConfigs: IEndGroundConfig[];
     protected readonly _averageShotsStartGroundType: string;
@@ -114,6 +117,7 @@ abstract class AbstractDrillConfiguration extends Entity {
         targetCircleRadiusScore0InUnit: number,
         targetCircleRadiusScore100InPercent: number,
         targetCircleRadiusScore0InPercent: number,
+        outsideTargetCircleAction: string,
         startGroundType: string,
         endGroundConfigs: IEndGroundConfig[],
         averageStrokesDataMap: Map<string, IAverageStrokesData>,
@@ -136,6 +140,7 @@ abstract class AbstractDrillConfiguration extends Entity {
         this._targetCircleRadiusScore0InUnit = targetCircleRadiusScore0InUnit;
         this._targetCircleRadiusScore100InPercent = targetCircleRadiusScore100InPercent;
         this._targetCircleRadiusScore0InPercent = targetCircleRadiusScore0InPercent;
+        this._outsideTargetCircleAction = outsideTargetCircleAction;
         this._startGroundType = startGroundType;
         this._endGroundConfigs = endGroundConfigs;
         this._averageShotsStartGroundType = startGroundType;
@@ -201,6 +206,10 @@ abstract class AbstractDrillConfiguration extends Entity {
 
     public getTargetCircleRadiusScore0InPercent = (): number => {
         return this._targetCircleRadiusScore0InPercent;
+    }
+
+    public getOutsideTargetCircleAction = (): string => {
+        return this._outsideTargetCircleAction;
     }
 
     public getStartGroundType = (): string => {
@@ -323,6 +332,7 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
         targetCircleRadiusScore0InUnit: number,
         targetCircleRadiusScore100InPercent: number,
         targetCircleRadiusScore0InPercent: number,
+        outsideTargetCircleAction: string,
         startGroundType: string,
         endGroundConfigs: IEndGroundConfig[],
         minIncludedDistance: number,
@@ -348,6 +358,7 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
             targetCircleRadiusScore0InUnit,
             targetCircleRadiusScore100InPercent,
             targetCircleRadiusScore0InPercent,
+            outsideTargetCircleAction,
             startGroundType,
             endGroundConfigs,
             averageStrokesDataMap);
@@ -408,6 +419,7 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
             targetCircleRadiusScore0InUnit: this.getTargetCircleRadiusScore0InUnit(),
             targetCircleRadiusScore100InPercent: this.getTargetCircleRadiusScore100InPercent(),
             targetCircleRadiusScore0InPercent: this.getTargetCircleRadiusScore0InPercent(),
+            outsideTargetCircleAction: this.getOutsideTargetCircleAction(),
             distanceGenerator: {
                 minIncludedDistance: this._minIncludedDistance,
                 maxExcludedDistance: this._maxExcludedDistance,
@@ -443,6 +455,7 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
         targetCircleRadiusScore0InUnit: number,
         targetCircleRadiusScore100InPercent: number,
         targetCircleRadiusScore0InPercent: number,
+        outsideTargetCircleAction: string,
         startGroundType: string,
         endGroundConfigs: IEndGroundConfig[],
         distances: number[],
@@ -467,6 +480,7 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
             targetCircleRadiusScore0InUnit,
             targetCircleRadiusScore100InPercent,
             targetCircleRadiusScore0InPercent,
+            outsideTargetCircleAction,
             startGroundType,
             endGroundConfigs,
             averageStrokesDataMap);
@@ -493,6 +507,7 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
     }
 
     public getNextDistance(index: number): Unit {
+        console.log("this", this)
         assert(index >= 0, "index < 0");
 
         return math.unit(this._distances[index % this._distances.length], this._unit);
@@ -526,6 +541,7 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
             targetCircleRadiusScore0InUnit: this.getTargetCircleRadiusScore0InUnit(),
             targetCircleRadiusScore100InPercent: this.getTargetCircleRadiusScore100InPercent(),
             targetCircleRadiusScore0InPercent: this.getTargetCircleRadiusScore0InPercent(),
+            outsideTargetCircleAction: this.getOutsideTargetCircleAction(),
             distanceGenerator: {
                 type: distanceGeneratorType,
                 distances: this._distances,
@@ -564,6 +580,7 @@ export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends Dri
         targetCircleRadiusScore0InUnit: number,
         targetCircleRadiusScore100InPercent: number,
         targetCircleRadiusScore0InPercent: number,
+        outsideTargetCircleAction: string,
         startGroundType: string,
         endGroundConfigs: IEndGroundConfig[],
         distances: number[],
@@ -589,6 +606,7 @@ export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends Dri
             targetCircleRadiusScore0InUnit,
             targetCircleRadiusScore100InPercent,
             targetCircleRadiusScore0InPercent,
+            outsideTargetCircleAction,
             startGroundType,
             endGroundConfigs,
             distances,
@@ -659,6 +677,7 @@ export class EmptyDrillConfiguration extends DrillConfigurationWithFixedDistance
             0,
             0,
             0,
+            restartOutsideTargetCircleAction,
             Fairway,
             [{type: Green, to: 5}, {type: Fairway}],
             [],

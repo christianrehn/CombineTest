@@ -31,11 +31,11 @@
     width: auto;
 }
 
-.edit-drill-configuration-page .unit-select {
-    width: calc(22em + 16px);
-}
-
-.edit-drill-configuration-page .drillType-select {
+.edit-drill-configuration-page .unit-select,
+.edit-drill-configuration-page .drillType-select,
+.edit-drill-configuration-page .start-ground-type-select,
+.edit-drill-configuration-page .distance-generator-select,
+.edit-drill-configuration-page .outside-target-circle-action-select {
     width: calc(22em + 16px);
 }
 
@@ -43,22 +43,12 @@
     width: 22em;
 }
 
-.edit-drill-configuration-page .start-ground-type-select {
-    width: calc(22em + 16px);
-}
-
 .edit-drill-configuration-page .end-ground-types-table {
     width: 50em;
 }
 
-.edit-drill-configuration-page .distance-generator-select {
-    width: calc(22em + 16px);
-}
 
-.edit-drill-configuration-page .min-included-distance-input {
-    width: 22em;
-}
-
+.edit-drill-configuration-page .min-included-distance-input,
 .edit-drill-configuration-page .max-excluded-distance-input {
     width: 22em;
 }
