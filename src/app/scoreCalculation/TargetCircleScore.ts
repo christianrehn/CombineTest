@@ -1,7 +1,7 @@
 import {Unit} from "mathjs";
 import {assert} from "chai";
-import {IDrillConfiguration} from "./DrillConfiguration/DrillConfiguration";
-import {targetCircleDrillType} from "./SelectValues/DrillType";
+import {IDrillConfiguration} from "../model/DrillConfiguration/DrillConfiguration";
+import {targetCircleDrillType} from "../model/SelectValues/DrillType";
 
 /**
  * If fromPin equals the radius of the inner circle score is 100.

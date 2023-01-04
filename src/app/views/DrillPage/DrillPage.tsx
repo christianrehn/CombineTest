@@ -27,7 +27,7 @@ import {ShotDataX} from "../../model/ShotData/ShotDataX";
 import {SessionData} from "../../model/ShotData/SessionData";
 import {asFewStrokesAsPossibleDrillType} from "../../model/SelectValues/DrillType";
 import {computeAbsoluteDeviation} from "../../util/MathUtil";
-import {computeAsFewStrokesAsPossibleScore} from "../../model/AsFewStrocesAsPossibleScore";
+import {computeAsFewStrokesAsPossibleScore} from "../../scoreCalculation/AsFewStrocesAsPossibleScore";
 
 export const DrillPageName: string = "DrillPage";
 
@@ -131,11 +131,11 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
         const sessionJsonData: SessionData = await SessionData.findShotDataXsInLatestSessionJsonFile(props.sessionJsonDir);
         const allShotDataXs: ShotDataX[] = sessionJsonData?.getShotDataXs() ?? [];
         const allShotDataIdsInSessionJsonFile: number[] = allShotDataXs.map((shotData: ShotData) => shotData.getId())
-        console.log("DDDDDDDDDD: the following shot ids were found in session json file: allShotDataIdsInSessionJsonFile=", allShotDataIdsInSessionJsonFile);
+        console.log("The following shot ids were found in session json file: allShotDataIdsInSessionJsonFile=", allShotDataIdsInSessionJsonFile);
 
         // all shots that belong to session are in the json file but do not belong to an earlier session
         const allShotDataIdsInSession: number[] = allShotDataIdsInSessionJsonFile.filter((shotDataId: number) => !allShotDataIdsBeforeSessionRef.current.includes(shotDataId));
-        console.log("DDDDDDDDDD: the following shot ids were found in json file and belong to current session: allShotDataIdsInSession=", allShotDataIdsInSession);
+        console.log("The following shot ids were found in json file and belong to current session: allShotDataIdsInSession=", allShotDataIdsInSession);
 
         // sort ids ascending to get the earliest shot in session first and the latest one last
         allShotDataIdsInSession.sort((a: number, b: number): number => a - b);

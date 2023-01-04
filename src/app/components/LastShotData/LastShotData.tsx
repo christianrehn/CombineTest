@@ -5,8 +5,8 @@ import * as math from "mathjs";
 import {Unit} from "mathjs";
 import {assert} from "chai";
 import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
-import {computeTrackmanScore} from "../../model/TrackmanScore";
-import {computeStrokesGained} from "../../model/StrokesGained";
+import {computeTrackmanScore} from "../../scoreCalculation/TrackmanScore";
+import {computeStrokesGained} from "../../scoreCalculation/StrokesGained";
 import {
     computeAbsoluteDeviation,
     computeAverage,
@@ -21,9 +21,9 @@ import {
     targetCircleDrillType,
     trackmanScoreAndShotsGainedDrillType
 } from "../../model/SelectValues/DrillType";
-import {computeSpinScore, SpinScoreType} from "../../model/SpinScore";
-import {computeTargetCircleScore} from "../../model/TargetCircleScore";
-import {computeAsFewStrokesAsPossibleScore} from "../../model/AsFewStrocesAsPossibleScore";
+import {computeSpinScore, SpinScoreType} from "../../scoreCalculation/SpinScore";
+import {computeTargetCircleScore} from "../../scoreCalculation/TargetCircleScore";
+import {computeAsFewStrokesAsPossibleScore} from "../../scoreCalculation/AsFewStrocesAsPossibleScore";
 
 const SHOW_ADDITIONAL_DATA_FOR_ALL_SHOTS: boolean = false;
 

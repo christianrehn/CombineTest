@@ -4,8 +4,8 @@ import './AllShotsTable.scss';
 import {assert} from "chai";
 import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
 import {Unit} from "mathjs";
-import {computeStrokesGained} from "../../model/StrokesGained";
-import {computeTrackmanScore} from "../../model/TrackmanScore";
+import {computeStrokesGained} from "../../scoreCalculation/StrokesGained";
+import {computeTrackmanScore} from "../../scoreCalculation/TrackmanScore";
 import {
     computeAbsoluteDeviation,
     computeAverage,
@@ -19,9 +19,9 @@ import {
     targetCircleDrillType,
     trackmanScoreAndShotsGainedDrillType
 } from "../../model/SelectValues/DrillType";
-import {computeSpinScore, SpinScoreType} from "../../model/SpinScore";
-import {computeTargetCircleScore} from "../../model/TargetCircleScore";
-import {computeAsFewStrokesAsPossibleScore} from "../../model/AsFewStrocesAsPossibleScore";
+import {computeSpinScore, SpinScoreType} from "../../scoreCalculation/SpinScore";
+import {computeTargetCircleScore} from "../../scoreCalculation/TargetCircleScore";
+import {computeAsFewStrokesAsPossibleScore} from "../../scoreCalculation/AsFewStrocesAsPossibleScore";
 
 
 export interface IAllShotsTableProps {

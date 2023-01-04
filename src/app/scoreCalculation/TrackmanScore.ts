@@ -1,6 +1,6 @@
 import {Unit} from "mathjs";
 import {assert} from "chai";
-import {meterLengthUnit} from "./SelectValues/LengthUnit";
+import {meterLengthUnit} from "../model/SelectValues/LengthUnit";
 
 // slope m and y-intercept t of a linear functions f(x) = m*x + t
 // where f(x) is fromPin in meter and x is 100 - trackman score

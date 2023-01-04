@@ -1,7 +1,7 @@
 import {Unit} from "mathjs";
 import {assert} from "chai";
-import {IDrillConfiguration} from "./DrillConfiguration/DrillConfiguration";
-import {spinDrillType} from "./SelectValues/DrillType";
+import {IDrillConfiguration} from "../model/DrillConfiguration/DrillConfiguration";
+import {spinDrillType} from "../model/SelectValues/DrillType";
 
 export type SpinScoreType = { spinScore: number, spinRateScore: number, coastingPenaltyScore: number };
 

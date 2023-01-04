@@ -1,7 +1,7 @@
 import {Unit} from "mathjs";
 import {assert} from "chai";
-import {IDrillConfiguration} from "./DrillConfiguration/DrillConfiguration";
-import {asFewStrokesAsPossibleDrillType} from "./SelectValues/DrillType";
+import {IDrillConfiguration} from "../model/DrillConfiguration/DrillConfiguration";
+import {asFewStrokesAsPossibleDrillType} from "../model/SelectValues/DrillType";
 
 /**
  * Returns null if drillType is wrong, true if inside target circle, else false.
