@@ -9,6 +9,28 @@
     padding-bottom: 50px;
 }
 
+.auto-restarted {
+    font-size: 20px;
+    padding-bottom: 10px;
+    color: red;
+    animation-name: animation_blink;
+    animation-timing-function: ease-in;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes animation_blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.1;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
 .next-distance-number {
     font-size: 120px;
 }

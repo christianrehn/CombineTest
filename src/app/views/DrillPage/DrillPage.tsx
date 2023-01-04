@@ -57,6 +57,8 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
     const allShotDataIdsBeforeSessionRef: React.MutableRefObject<number[]> = React.useRef<number[]>(undefined);
     console.log("DDDDDDDDDD: the following shot ids belong to an earlier session and are ignored: allShotDataIdsBeforeSessionRef.current=", allShotDataIdsBeforeSessionRef.current);
 
+    const [autoRestarted, setAutoRestarted] = React.useState<boolean>(false);
+
     const stopPollingRef: React.MutableRefObject<boolean> = React.useRef<boolean>(false);
 
     const [nextDistance, setNextDistance] = React.useState<Unit>(props.selectedDrillConfiguration.getNextDistance(knownShotDatasInSession.length));
@@ -90,14 +92,19 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                     knownShotDatasInSessionClone.push(shotData);
                     setKnownShotDatasInSession(knownShotDatasInSessionClone);
 
-                    // finally pick new distance for next shot
-                    pickDistanceForNextShot(knownShotDatasInSessionClone);
+                    // finally check if restart has to be triggered or pick new distance for next shot
+                    restartOrPickDistanceForNextShot(shotData, knownShotDatasInSessionClone);
                 }
             }
         }
     }, [shotData]);
 
-    function getShotDatasToConsider(knownShotDatasInSessionClone: IShotData[]) {
+    function triggerRestartRequired(lastShotData: IShotData): boolean {
+        return asFewStrokesAsPossibleDrillType === props.selectedDrillConfiguration.getDrillType()
+            && !computeAsFewStrokesAsPossibleScore(props.selectedDrillConfiguration, lastShotData.getTargetDistance(), computeAbsoluteDeviation(lastShotData));
+    }
+
+    function getShotDatasToConsider(knownShotDatasInSessionClone: IShotData[]): IShotData[] {
         return asFewStrokesAsPossibleDrillType !== props.selectedDrillConfiguration.getDrillType()
             ? knownShotDatasInSessionClone
             : // consider only shots that were inside the target circle
@@ -105,7 +112,18 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                 computeAsFewStrokesAsPossibleScore(props.selectedDrillConfiguration, shotData.getTargetDistance(), computeAbsoluteDeviation(shotData)));
     }
 
-    function pickDistanceForNextShot(knownShotDatasInSessionClone: IShotData[]) {
+    function restartOrPickDistanceForNextShot(lastShotData: IShotData, knownShotDatasInSessionClone: IShotData[]): void {
+        if (triggerRestartRequired(lastShotData)) {
+            setAutoRestarted(true);
+            restart();
+        } else {
+            setAutoRestarted(false);
+            // finally pick new distance for next shot
+            pickDistanceForNextShot(knownShotDatasInSessionClone);
+        }
+    }
+
+    function pickDistanceForNextShot(knownShotDatasInSessionClone: IShotData[]): void {
         assert(!!knownShotDatasInSessionClone, "!knownShotDatasInSessionClone");
         assert(knownShotDatasInSessionClone.length > 0, "!(knownShotDatasInSessionClone.length > 0)")
 
@@ -165,8 +183,8 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
             setShotData(lastInSessionShotData); // show data of the last shot in session
             setKnownShotDatasInSession(knownShotDatasInSessionClone);
 
-            // finally pick new distance for next shot
-            pickDistanceForNextShot(knownShotDatasInSessionClone);
+            // finally check if restart has to be triggered or pick new distance for next shot
+            restartOrPickDistanceForNextShot(lastInSessionShotData, knownShotDatasInSessionClone);
         }
     }
 
@@ -284,6 +302,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
                 <div className="NextDistanceBox">
                     <NextDistanceBox
                         nextDistance={nextDistance}
+                        autoRestarted={autoRestarted}
                         selectedDrillConfiguration={props.selectedDrillConfiguration}
                     />
                 </div>

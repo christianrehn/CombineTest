@@ -13,6 +13,7 @@ import {
 
 export interface INextDistanceBoxProps {
     nextDistance: Unit;
+    autoRestarted: boolean;
     selectedDrillConfiguration: IDrillConfiguration;
 }
 
@@ -30,6 +31,7 @@ export const NextDistanceBox: React.FC<INextDistanceBoxProps> = (props: INextDis
         : null;
     return (
         <div className="next-distance box">
+            <p className="auto-restarted">{props.autoRestarted ? "auto restarted" : <span>&nbsp;</span>}</p>
             <p className="next-distance-number">{!!nextDistanceInDistancesGeneratorInUnitAsNumber ? nextDistanceInDistancesGeneratorInUnitAsNumber :
                 <span>&nbsp;</span>}</p>
             <p className="next-distance-unit"> {!!nextDistanceInDistancesGeneratorInUnitAsNumber ? props.selectedDrillConfiguration.getUnit() : "DONE"}</p>
