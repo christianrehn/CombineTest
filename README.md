@@ -159,8 +159,9 @@ Inside the 100 score circle the linear distribution is continued so that you get
 
 #### As Few Strokes As Possible
 
-Starting from version 3.0 you can play this variation of the target circle drill. If you shoot into the target
-circle you are allowed to progress to the next distance. If not you have to retry the same distance again.
+Starting from version 3 you can play this variation of the target circle drill. If your shot lands in the target
+circle you are allowed to progress to the next distance. If not you can configure what happens:
+Retry the same distance again, drop back to previous distance or restart the drill.
 The aim of the game is to hit as few shots as possible to finish all distances.
 
 ## Track your golf training data
