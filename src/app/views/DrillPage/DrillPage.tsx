@@ -99,7 +99,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
         }
     }, [shotData]);
 
-    function triggerRestartRequired(lastShotData: IShotData): boolean {
+    function isAutoRestart(lastShotData: IShotData): boolean {
         return asFewStrokesAsPossibleDrillType === props.selectedDrillConfiguration.getDrillType()
             && !computeAsFewStrokesAsPossibleScore(props.selectedDrillConfiguration, lastShotData.getTargetDistance(), computeAbsoluteDeviation(lastShotData));
     }
@@ -113,12 +113,12 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
     }
 
     function restartOrPickDistanceForNextShot(lastShotData: IShotData, knownShotDatasInSessionClone: IShotData[]): void {
-        if (triggerRestartRequired(lastShotData)) {
+        if (isAutoRestart(lastShotData)) {
             setAutoRestarted(true);
             restart();
         } else {
             setAutoRestarted(false);
-            // finally pick new distance for next shot
+            // pick new distance for next shot
             pickDistanceForNextShot(knownShotDatasInSessionClone);
         }
     }
