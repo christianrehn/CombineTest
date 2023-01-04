@@ -29,8 +29,10 @@ import {asFewStrokesAsPossibleDrillType} from "../../model/SelectValues/DrillTyp
 import {computeAbsoluteDeviation} from "../../util/MathUtil";
 import {computeAsFewStrokesAsPossibleScore} from "../../scoreCalculation/AsFewStrocesAsPossibleScore";
 import {
+    backToFirstDistanceOutsideTargetCircleAction,
     backToPreviousDistanceOutsideTargetCircleAction,
-    restartOutsideTargetCircleAction
+    restartOutsideTargetCircleAction,
+    retryOutsideTargetCircleAction
 } from "../../model/SelectValues/OutsideTargetCircleAction";
 
 export const DrillPageName: string = "DrillPage";
@@ -111,21 +113,30 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
             knownShotDatasInSession.length;
         }
 
-        if (backToPreviousDistanceOutsideTargetCircleAction !== props.selectedDrillConfiguration.getOutsideTargetCircleAction()) {
+        if (retryOutsideTargetCircleAction === props.selectedDrillConfiguration.getOutsideTargetCircleAction()) {
             // consider only shots that were inside the target circle
             const knownShotDatasInSessionInsideTargetCircle = knownShotDatasInSession.filter((shotData: IShotData) =>
                 computeAsFewStrokesAsPossibleScore(props.selectedDrillConfiguration, shotData.getTargetDistance(), computeAbsoluteDeviation(shotData)));
             return knownShotDatasInSessionInsideTargetCircle.length;
         }
 
-        let shotDistanceIndex: number = 0;
-        for (let i: number = 0; i < knownShotDatasInSession.length; i++) {
-            const shotData: IShotData = knownShotDatasInSession[i];
-            const insideTargetCircle: boolean = computeAsFewStrokesAsPossibleScore(props.selectedDrillConfiguration, shotData.getTargetDistance(), computeAbsoluteDeviation(shotData));
-            shotDistanceIndex = insideTargetCircle ? shotDistanceIndex + 1 : shotDistanceIndex - 1
-            shotDistanceIndex = Math.max(shotDistanceIndex, 0)
+        if (backToPreviousDistanceOutsideTargetCircleAction === props.selectedDrillConfiguration.getOutsideTargetCircleAction()) {
+            let shotDistanceIndex: number = 0;
+            for (let i: number = 0; i < knownShotDatasInSession.length; i++) {
+                const shotData: IShotData = knownShotDatasInSession[i];
+                const insideTargetCircle: boolean = computeAsFewStrokesAsPossibleScore(props.selectedDrillConfiguration, shotData.getTargetDistance(), computeAbsoluteDeviation(shotData));
+                shotDistanceIndex = insideTargetCircle ? shotDistanceIndex + 1 : shotDistanceIndex - 1
+                shotDistanceIndex = Math.max(shotDistanceIndex, 0)
+            }
+            return shotDistanceIndex;
         }
-        return shotDistanceIndex;
+
+        if (backToFirstDistanceOutsideTargetCircleAction === props.selectedDrillConfiguration.getOutsideTargetCircleAction()
+            || restartOutsideTargetCircleAction === props.selectedDrillConfiguration.getOutsideTargetCircleAction()) {
+            return 0;
+        }
+
+        assert.fail("outsideTargetCircleAction unknown")
     }
 
     function isAutoRestart(lastShotData: IShotData): boolean {
