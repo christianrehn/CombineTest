@@ -7,6 +7,7 @@
         "unit": "meter",
         "targetCircleRadiusAsUnitNotPercent": true,
         "targetCircleRadiusScore100InUnit": 1.8,
+        "outsideTargetCircleAction": "Retry same distance",
         "distanceGenerator": {
             "type": "FixedDistancesGenerator",
             "distances": [
