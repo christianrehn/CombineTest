@@ -133,7 +133,13 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
 
         if (backToFirstDistanceOutsideTargetCircleAction === props.selectedDrillConfiguration.getOutsideTargetCircleAction()
             || restartOutsideTargetCircleAction === props.selectedDrillConfiguration.getOutsideTargetCircleAction()) {
-            return 0;
+            let shotDistanceIndex: number = 0;
+            for (let i: number = 0; i < knownShotDatasInSession.length; i++) {
+                const shotData: IShotData = knownShotDatasInSession[i];
+                const insideTargetCircle: boolean = computeAsFewStrokesAsPossibleScore(props.selectedDrillConfiguration, shotData.getTargetDistance(), computeAbsoluteDeviation(shotData));
+                shotDistanceIndex = insideTargetCircle ? shotDistanceIndex + 1 : 0
+            }
+            return shotDistanceIndex;
         }
 
         assert.fail("outsideTargetCircleAction unknown")
