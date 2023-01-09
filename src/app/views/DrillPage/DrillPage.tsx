@@ -61,7 +61,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
     const [knownShotDatasInSession, setKnownShotDatasInSession] = React.useState<IShotData[]>([]);
     const [allShotDataIdsBeforeSessionRead, setAllShotDataIdsBeforeSessionRead] = React.useState<boolean>(false);
     const allShotDataIdsBeforeSessionRef: React.MutableRefObject<number[]> = React.useRef<number[]>(undefined);
-    console.log("DDDDDDDDDD: the following shot ids belong to an earlier session and are ignored: allShotDataIdsBeforeSessionRef.current=", allShotDataIdsBeforeSessionRef.current);
+    console.log("The following shot ids belong to an earlier session and are ignored: allShotDataIdsBeforeSessionRef.current=", allShotDataIdsBeforeSessionRef.current);
 
     const [autoRestarted, setAutoRestarted] = React.useState<boolean>(false);
 
@@ -110,7 +110,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
         assert(!!knownShotDatasInSession, "!knownShotDatasInSession");
 
         if (asFewStrokesAsPossibleDrillType !== props.selectedDrillConfiguration.getDrillType()) {
-            knownShotDatasInSession.length;
+            return knownShotDatasInSession.length;
         }
 
         if (retryOutsideTargetCircleAction === props.selectedDrillConfiguration.getOutsideTargetCircleAction()) {
@@ -167,6 +167,7 @@ export const DrillPage: React.FC<IDrillPageProps> = (props: IDrillPageProps): JS
         assert(knownShotDatasInSession.length > 0, "!(knownShotDatasInSession.length > 0)")
 
         const shotIndex: number = computeShotIndex(knownShotDatasInSession);
+        console.log("pickDistanceForNextShot - shotIndex=", shotIndex)
         if (shotIndex < props.selectedDrillConfiguration.getNumberOfShots()) {
             nextDistanceRef.current = props.selectedDrillConfiguration.getNextDistance(shotIndex);
         } else {
