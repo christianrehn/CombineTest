@@ -1,8 +1,8 @@
 {
     "win32-x64-prod": {
-        "readme": "Release 3.2.1",
-        "update": "https://github.com/christianrehn/GCQuadCombineTest/releases/download/v3.2.1",
-        "install": "https://github.com/christianrehn/GCQuadCombineTest/releases/download/v3.2.1/CombineTest-3.2.1.Setup.exe",
-        "version": "3.2.1"
+        "readme": "Release 3.2.2",
+        "update": "https://github.com/christianrehn/GCQuadCombineTest/releases/download/v3.2.2",
+        "install": "https://github.com/christianrehn/GCQuadCombineTest/releases/download/v3.2.2/CombineTest-3.2.2.Setup.exe",
+        "version": "3.2.2"
     }
 }
