@@ -66,7 +66,8 @@ export const ReportSessionPage: React.FC<ReportSessionPageProps> = (props: Repor
                 <div className="report-session-flex-item flex-item">
                     <div className="page-header">
                         <h3>Session "{props.selectedSession.getName()}"<br/>
-                            for Drill "{props.selectedSession.getDrillConfiguration().getName()}"
+                            for Drill
+                            "{props.selectedSession.getDrillConfiguration()?.getName() ?? "unknown drill configuration"}"
                         </h3>
                     </div>
                 </div>
