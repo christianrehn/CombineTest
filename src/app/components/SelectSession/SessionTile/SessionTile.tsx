@@ -18,7 +18,7 @@ export const SessionTile: React.FC<ISessionTileProps> = (props: ISessionTileProp
             <div className={!!props.session ? "session-tile-name" : "session-tile-new"}>
                 {!!props.session ? <div>
                     {props.session.getName()}<br/>
-                    {props.session.getDrillConfiguration().getName()}
+                    {props.session.getDrillConfiguration()?.getName() ?? "unknown drill configuration"}
                 </div> : "+"}
             </div>
         </div>
