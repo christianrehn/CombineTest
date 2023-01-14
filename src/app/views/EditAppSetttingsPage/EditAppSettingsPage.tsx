@@ -13,8 +13,9 @@ import {
 import {AppSettings, IAppSettings} from "../../model/AppSettings/AppSettings";
 import {NumberPlusMinusInput} from "../../components/NumberPlusMinusInput/NumberPlusMinusInput";
 import {TextInput} from "../../components/TextInput/TextInput";
+import {PageNamesType} from "../PageNamesType";
 
-export const EditAppSettingsPageName: string = "EditSettingsPage";
+export const EditAppSettingsPageName: PageNamesType = "EditSettingsPage";
 
 const DEFAULT_SHOTS_UPDATE_TYPE: string = eventReadOnlyLatestShotsUpdateType;
 const DEFAULT_POLLING_INTERVALL: number = 1000; // 1 second

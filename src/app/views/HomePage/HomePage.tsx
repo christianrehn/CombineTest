@@ -16,8 +16,9 @@ import packageJson from '../../../../package.json';
 import settingsIcon from "../../../assets/settings.png";
 import {EditAppSettingsPageName} from "../EditAppSetttingsPage/EditAppSettingsPage";
 import {IAppSettings} from "../../model/AppSettings/AppSettings";
+import {PageNamesType} from "../PageNamesType";
 
-export const HomePageName: string = "HomePage";
+export const HomePageName: PageNamesType = "HomePage";
 
 interface IHomePageProps {
     appSettings: IAppSettings;
@@ -33,7 +34,7 @@ interface IHomePageProps {
     handleDrillConfigurationsChanged: (drillConfigurations: IDrillConfiguration[]) => void;
     selectedDrillConfiguration: IDrillConfiguration;
     handleSelectedDrillConfigurationChanged: (drillConfiguration: IDrillConfiguration) => void;
-    handleSelectPageClicked: (page: string) => void;
+    handleSelectPageClicked: (page: PageNamesType) => void;
 }
 
 export const HomePage: React.FC<IHomePageProps> = (props: IHomePageProps): JSX.Element => {
@@ -109,6 +110,7 @@ export const HomePage: React.FC<IHomePageProps> = (props: IHomePageProps): JSX.E
                         // switch to other page
                         props.handleSelectPageClicked(editMode ? EditDrillConfigurationPageName : DrillPageName);
                     }}
+                    handleSelectPageClicked={props.handleSelectPageClicked}
                 />
                 <SelectSession
                     selectedPlayer={props.selectedPlayer}

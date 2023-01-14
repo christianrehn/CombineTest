@@ -34,8 +34,9 @@ import {
     restartOutsideTargetCircleAction,
     retryOutsideTargetCircleAction
 } from "../../model/SelectValues/OutsideTargetCircleAction";
+import {PageNamesType} from "../PageNamesType";
 
-export const DrillPageName: string = "DrillPage";
+export const DrillPageName: PageNamesType = "DrillPage";
 
 interface IDrillPageProps {
     appSettings: IAppSettings;
@@ -44,7 +45,7 @@ interface IDrillPageProps {
     selectedPlayer: IPlayer;
     selectedSession: ISession;
     selectedDrillConfiguration: IDrillConfiguration;
-    handleSelectPageClicked: (page: string) => void;
+    handleSelectPageClicked: (page: PageNamesType) => void;
     handleSaveSessions: (session: ISession) => void;
 }
 

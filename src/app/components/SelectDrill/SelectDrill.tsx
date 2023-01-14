@@ -2,9 +2,11 @@ import React from 'react';
 import './SelectDrill.scss';
 import {IDrillConfiguration} from "../../model/DrillConfiguration/DrillConfiguration";
 import editIcon from '../../../assets/edit.png';
+import settingIcon from "../../../assets/setting.png";
 import glassesIcon from "../../../assets/glasses.png";
 import {DrillTile} from "./DrillTile/DrillTile";
 import {IPlayer} from "../../model/Player/Player";
+import {EditDrillConfigurationsPageName} from "../../views/EditDrillConfigurationsPage/EditDrillConfigurationsPage";
 
 interface ISelectDrillProps {
     players: IPlayer[];
@@ -13,6 +15,7 @@ interface ISelectDrillProps {
     handleDrillConfigurationsChanged: (drillConfigurations: IDrillConfiguration[]) => void;
     selectedDrillConfiguration: IDrillConfiguration;
     tileClickedHandler: (drillConfiguration: IDrillConfiguration, editMode: boolean) => void;
+    handleSelectPageClicked: (page: string) => void;
 }
 
 export const SelectDrill: React.FC<ISelectDrillProps> = (props: ISelectDrillProps): JSX.Element => {
@@ -43,6 +46,23 @@ export const SelectDrill: React.FC<ISelectDrillProps> = (props: ISelectDrillProp
                             </div>
                         </span>
                     </div>
+                    {true ? null :
+                        // CRTODO: implement new page and add button with only one wheel
+                        <div className="edit-drill-configurations-flex-item flex-item">
+                        <span className="edit-drill-configurations-span"
+                              onClick={(): void => {
+                                  props.handleSelectPageClicked(EditDrillConfigurationsPageName)
+                              }}
+                        >
+                            <div className="top-button-img-div">
+                                <img className="top-button-img"
+                                     src={settingIcon}
+                                     alt={"Reports"}
+                                />
+                            </div>
+                        </span>
+                        </div>
+                    }
                 </div>
             </div>
 

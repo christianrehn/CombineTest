@@ -38,10 +38,16 @@ import {EditAppSettingsPage, EditAppSettingsPageName} from "./views/EditAppSettt
 import {IAppSettings} from "./model/AppSettings/AppSettings";
 import {loadAppSettingsAsJson, saveAppSettings} from "./model/AppSettings/AppSettingsFilesystemHandler";
 import {appSettingsFromJson} from "./model/AppSettings/AppSettingsConverter";
+import {
+    EditDrillConfigurationsPage,
+    EditDrillConfigurationsPageName
+} from "./views/EditDrillConfigurationsPage/EditDrillConfigurationsPage";
+import {PageNamesType} from "./views/PageNamesType";
 
 const App: React.FC<{}> = (): JSX.Element => {
     // page that is currently visible
-    const [selectedPage, setSelectedPage] = React.useState<string>(HomePageName);
+
+    const [selectedPage, setSelectedPage] = React.useState<PageNamesType>(HomePageName);
 
     const lastShotCsvPath: string = process.platform !== 'darwin'
         ? "C:/Program Files (x86)/Foresight Sports Experience/System/LastShot.CSV"
@@ -211,23 +217,31 @@ const App: React.FC<{}> = (): JSX.Element => {
                                 handleSaveDrillConfiguration={handleSaveDrillConfigurations}
                                 averageStrokesDataMap={averageStrokesDataMap}
                             />
-                            : selectedPage === ReportSessionPageName
-                                ? <ReportSessionPage
-                                    selectedSession={selectedSession}
+                            : selectedPage === EditDrillConfigurationsPageName
+                                ? <EditDrillConfigurationsPage
+                                    allDrillConfigurations={drillConfigurations}
                                     handleBackClicked={() => setSelectedPage(HomePageName)}
+                                    handleSaveDrillConfigurations={() => {
+                                        console.log("TODO: save all drill configs")
+                                    }}
                                 />
-                                : selectedPage === DrillPageName
-                                    ? <DrillPage
-                                        appSettings={appSettings}
-                                        lastShotCsvPath={lastShotCsvPath}
-                                        sessionJsonDir={sessionJsonDir}
-                                        selectedPlayer={selectedPlayer}
+                                : selectedPage === ReportSessionPageName
+                                    ? <ReportSessionPage
                                         selectedSession={selectedSession}
-                                        selectedDrillConfiguration={selectedDrillConfiguration}
-                                        handleSelectPageClicked={setSelectedPage}
-                                        handleSaveSessions={handleSaveSessions}
+                                        handleBackClicked={() => setSelectedPage(HomePageName)}
                                     />
-                                    : null
+                                    : selectedPage === DrillPageName
+                                        ? <DrillPage
+                                            appSettings={appSettings}
+                                            lastShotCsvPath={lastShotCsvPath}
+                                            sessionJsonDir={sessionJsonDir}
+                                            selectedPlayer={selectedPlayer}
+                                            selectedSession={selectedSession}
+                                            selectedDrillConfiguration={selectedDrillConfiguration}
+                                            handleSelectPageClicked={setSelectedPage}
+                                            handleSaveSessions={handleSaveSessions}
+                                        />
+                                        : null
             }
         </div>
     );

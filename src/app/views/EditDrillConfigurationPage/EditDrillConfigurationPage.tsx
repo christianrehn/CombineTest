@@ -36,8 +36,9 @@ import {
     outsideTargetCircleActions,
     retryOutsideTargetCircleAction
 } from "../../model/SelectValues/OutsideTargetCircleAction";
+import {PageNamesType} from "../PageNamesType";
 
-export const EditDrillConfigurationPageName: string = "EditDrillConfigurationPage";
+export const EditDrillConfigurationPageName: PageNamesType = "EditDrillConfigurationPage";
 
 
 const DEFAULT_DRILL_TYPE: string = trackmanScoreAndShotsGainedDrillType;
@@ -88,6 +89,9 @@ interface IEditDrillConfigurationPageProps {
 
 export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPageProps> = (props: IEditDrillConfigurationPageProps): JSX.Element => {
     assert(!!props.selectedDrillConfiguration, "EditDrillConfigurationPage - !props.selectedDrillConfiguration");
+    assert(!!props.handleBackClicked, "EditDrillConfigurationPage - !props.handleBackClicked");
+    assert(!!props.handleSaveDrillConfiguration, "EditDrillConfigurationPage - !props.handleSaveDrillConfiguration");
+    assert(!!props.averageStrokesDataMap, "EditDrillConfigurationPage - !props.averageStrokesDataMap");
     console.log("EditDrillConfigurationPage - props.selectedDrillConfiguration", props.selectedDrillConfiguration);
 
     const [name, setName] = React.useState<string>(props.selectedDrillConfiguration.getName());

@@ -5,8 +5,9 @@ import {ISession} from "../../model/Session/Session";
 import {assert} from "chai";
 import {AllShotsTable} from "../../components/AllShotsTable/AllShotsTable";
 import {ShotsSvg} from "../../components/ShotsSvg/ShotsSvg";
+import {PageNamesType} from "../PageNamesType";
 
-export const ReportSessionPageName: string = "ReportSessionPage";
+export const ReportSessionPageName: PageNamesType = "ReportSessionPage";
 
 
 interface ReportSessionPageProps {

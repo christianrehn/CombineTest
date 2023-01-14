@@ -5,8 +5,9 @@ import deleteIcon from "../../../assets/delete.png";
 import backIcon from '../../../assets/back.png';
 import {assert} from "chai";
 import {IPlayer, Player} from "../../model/Player/Player";
+import {PageNamesType} from "../PageNamesType";
 
-export const EditPlayerPageName: string = "EditPlayerPage";
+export const EditPlayerPageName: PageNamesType = "EditPlayerPage";
 
 
 const MIN_LASTNAME: number = 1;
