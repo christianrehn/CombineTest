@@ -13,10 +13,14 @@ export abstract class Entity implements IEntity {
     constructor(
         uuid: string,
     ) {
+        assert(!!uuid, "!uuid");
+
         this._uuid = uuid;
     }
 
     public getUuid = (): string => {
+        assert(!!this._uuid, "getUuid - !this._uuid");
+
         return this._uuid;
     }
 

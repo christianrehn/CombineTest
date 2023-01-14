@@ -17,7 +17,7 @@ import {restartOutsideTargetCircleAction} from "../SelectValues/OutsideTargetCir
 /**
  * Create random integer between [min, max[.
  */
-const createRandomNumber = (minIncluded: number, maxExcluded: number): number => {
+function createRandomNumber(minIncluded: number, maxExcluded: number): number {
     assert(minIncluded <= maxExcluded, `min (${minIncluded}) > max (${maxExcluded})`);
 
     if (minIncluded === maxExcluded) {
@@ -147,87 +147,90 @@ abstract class AbstractDrillConfiguration extends Entity {
         this._averageStrokesDataMap = averageStrokesDataMap;
     }
 
-    public getName = (): string => {
+    public getName(): string {
         return this._name;
     }
 
-    public getDescription = (): string => {
+    public getDescription(): string {
         return this._description;
     }
-    public getDrillType = (): string => {
+
+    public getDrillType(): string {
         return this._drillType;
     }
 
-    public getNumberOfDropShots = (): number => {
+    public getNumberOfDropShots(): number {
         return this._numberOfDropShots;
     }
 
-    public getTargetSpinInRpmPerUnit = (): number => {
+    public getTargetSpinInRpmPerUnit(): number {
         return this._targetSpinInRpmPerUnit;
     }
 
-    public getMaxDeviationAsUnitNotPercent = (): boolean => {
+    public getMaxDeviationAsUnitNotPercent(): boolean {
         return this._maxDeviationAsUnitNotPercent;
     }
 
-    public getMaxDeviationInUnit = (): number => {
+    public getMaxDeviationInUnit(): number {
         return this._maxDeviationInUnit;
     }
 
-    public getMaxDeviationInPercent = (): number => {
+    public getMaxDeviationInPercent(): number {
         return this._maxDeviationInPercent;
     }
 
-    public getConsiderCoastingBehavior = (): boolean => {
+    public getConsiderCoastingBehavior(): boolean {
         return this._considerCoastingBehavior;
     }
-    public getMaxCoastingInUnit = (): number => {
+
+    public getMaxCoastingInUnit(): number {
         return this._maxCoastingInUnit;
     }
-    public getMinus1ScorePerCoastingInUnit = (): number => {
+
+    public getMinus1ScorePerCoastingInUnit(): number {
         return this._minus1ScorePerCoastingInUnit;
     }
 
-    public getTargetCircleRadiusAsUnitNotPercent = (): boolean => {
+    public getTargetCircleRadiusAsUnitNotPercent(): boolean {
         return this._targetCircleRadiusAsUnitNotPercent;
     }
 
-    public getTargetCircleRadiusScore100InUnit = (): number => {
+    public getTargetCircleRadiusScore100InUnit(): number {
         return this._targetCircleRadiusScore100InUnit;
     }
 
-    public getTargetCircleRadiusScore0InUnit = (): number => {
+    public getTargetCircleRadiusScore0InUnit(): number {
         return this._targetCircleRadiusScore0InUnit;
     }
 
-    public getTargetCircleRadiusScore100InPercent = (): number => {
+    public getTargetCircleRadiusScore100InPercent(): number {
         return this._targetCircleRadiusScore100InPercent;
     }
 
-    public getTargetCircleRadiusScore0InPercent = (): number => {
+    public getTargetCircleRadiusScore0InPercent(): number {
         return this._targetCircleRadiusScore0InPercent;
     }
 
-    public getOutsideTargetCircleAction = (): string => {
+    public getOutsideTargetCircleAction(): string {
         return this._outsideTargetCircleAction;
     }
 
-    public getStartGroundType = (): string => {
+    public getStartGroundType(): string {
         return this._startGroundType;
     }
 
-    public getEndGroundConfigs = (): IEndGroundConfig[] => {
+    public getEndGroundConfigs(): IEndGroundConfig[] {
         return this._endGroundConfigs;
     }
 
-    public computeAverageStrokesFromStartDistance = (startDistance: Unit): number => {
+    public computeAverageStrokesFromStartDistance(startDistance: Unit): number {
         const averageStrokesFromStartDistance: number = this._averageStrokesDataMap?.get(this._averageShotsStartGroundType)?.computeAverageStrokesToHole(startDistance);
         console.log("computeAverageStrokesFromStartDistance - this._averageShotsStartGroundType=", this._averageShotsStartGroundType);
         console.log("computeAverageStrokesFromStartDistance - averageStrokesFromStartDistance=", averageStrokesFromStartDistance);
         return averageStrokesFromStartDistance;
     }
 
-    public computeAverageStrokesFromEndDistance = (endDistance: Unit): number | undefined => {
+    public computeAverageStrokesFromEndDistance(endDistance: Unit): number | undefined {
         if (!this._averageStrokesDataMap) {
             return 0;
         }
@@ -391,15 +394,15 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
         return math.unit(createRandomNumber(this._minIncludedDistance, this._maxExcludedDistance), this._unit);
     }
 
-    public getNumberOfShots = (): number => {
+    public getNumberOfShots(): number {
         return this._numberOfShots;
     }
 
-    public getUnit = (): string => {
+    public getUnit(): string {
         return this._unit;
     }
 
-    public toJson = (): any => {
+    public toJson(): any {
         return {
             uuid: this.getUuid(),
             name: this.getName(),
@@ -513,11 +516,11 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
         return math.unit(this._distances[index % this._distances.length], this._unit);
     }
 
-    public getNumberOfShots = (): number => {
+    public getNumberOfShots(): number {
         return this._distances.length * this._numberOfRounds;
     }
 
-    public getUnit = (): string => {
+    public getUnit(): string {
         return this._unit;
     }
 
@@ -552,7 +555,7 @@ export class DrillConfigurationWithFixedDistancesGenerator extends AbstractDrill
         }
     }
 
-    public toJson = (): any => {
+    public toJson(): any {
         return this.toJsonHelper("FixedDistancesGenerator");
     }
 }
@@ -649,7 +652,7 @@ export class DrillConfigurationWithRandomFromFixedDistancesGenerator extends Dri
         return math.unit(next[0], this._unit);
     }
 
-    public toJson = (): any => {
+    public toJson(): any {
         return this.toJsonHelper("RandomFromFixedDistancesGenerator");
     }
 }

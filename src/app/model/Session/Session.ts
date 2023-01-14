@@ -1,6 +1,7 @@
 import {IDrillConfiguration} from "../DrillConfiguration/DrillConfiguration";
 import {IShotData} from "../ShotData/ShotData";
 import {Entity, IEntity} from "../base/Entity";
+import {assert} from "chai";
 
 export interface ISession extends IEntity {
     getPlayerUuid: () => string;
@@ -21,6 +22,12 @@ export class Session extends Entity implements ISession {
         drillConfiguration: IDrillConfiguration,
         shotDatas: IShotData[],
     ) {
+        assert(!!uuid, "!uuid");
+        assert(!!name, "!name");
+        assert(!!playerUuid, "!playerUuid");
+        assert(!!drillConfiguration, "!drillConfiguration");
+        assert(!!shotDatas, "!shotDatas");
+
         super(uuid);
 
         this._name = name;
@@ -29,23 +36,29 @@ export class Session extends Entity implements ISession {
         this._shotDatas = shotDatas;
     }
 
-    public getName = (): string => {
+    public getName(): string {
+        assert(!!this._name, "getName - !this._name");
+
         return this._name;
     }
 
-    public getPlayerUuid = (): string => {
+    public getPlayerUuid(): string {
+        assert(!!this._playerUuid, "getPlayerUuid - !this._playerUuid");
+
         return this._playerUuid;
     }
 
-    public getDrillConfiguration = (): IDrillConfiguration => {
+    public getDrillConfiguration(): IDrillConfiguration {
+        assert(!!this._drillConfiguration, "getDrillConfiguration - !this._drillConfiguration");
+
         return this._drillConfiguration;
     }
 
-    public getShotDatas = (): IShotData[] => {
+    public getShotDatas(): IShotData[] {
         return this._shotDatas;
     }
 
-    public toJson = (): any => {
+    public toJson(): any {
         return {
             uuid: this.getUuid(),
             name: this.getName(),
