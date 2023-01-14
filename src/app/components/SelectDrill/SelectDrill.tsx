@@ -46,7 +46,7 @@ export const SelectDrill: React.FC<ISelectDrillProps> = (props: ISelectDrillProp
                             </div>
                         </span>
                     </div>
-                    {true ? null :
+                    {false ? null :
                         // CRTODO: implement new page and add button with only one wheel
                         <div className="edit-drill-configurations-flex-item flex-item">
                         <span className="edit-drill-configurations-span"
