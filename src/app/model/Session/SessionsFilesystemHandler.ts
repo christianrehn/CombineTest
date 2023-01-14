@@ -2,15 +2,27 @@ import {ipcRenderer} from "electron";
 import {ISession} from "./Session";
 import {sessionsToString} from "./SessionConverter";
 
-export const loadSessionsAsJson = (): any[] => {
-    const sessionAsString: string = ipcRenderer.sendSync('loadSessionsAsString', undefined);
-    if (!sessionAsString) {
+type LoadSessionsAsStringReturnType = { sessionsFilename: string, sessionsAsString: string }
+export type LoadSessionsAsJsonReturnType = { sessionsFilename: string, sessionsAsJson: any[] }
+
+export const loadSessionsAsJson = (): LoadSessionsAsJsonReturnType => {
+    const {
+        sessionsFilename,
+        sessionsAsString,
+    }: LoadSessionsAsStringReturnType = ipcRenderer.sendSync('loadSessionsAsString', undefined);
+    if (!sessionsAsString) {
         console.log("loadSessionsAsJson - no sessions file found");
-        return [];
+        return {
+            sessionsFilename,
+            sessionsAsJson: [],
+        };
     }
-    const sessionAsJson = JSON.parse(sessionAsString);
-    console.log("loadSessionsAsJson - sessionAsJson=", sessionAsJson)
-    return sessionAsJson;
+    const sessionsAsJson = JSON.parse(sessionsAsString);
+    console.log("loadSessionsAsJson - sessionsAsJson=", sessionsAsJson)
+    return {
+        sessionsFilename,
+        sessionsAsJson
+    };
 }
 
 export const saveSessions = (sessions: ISession[]): void => {

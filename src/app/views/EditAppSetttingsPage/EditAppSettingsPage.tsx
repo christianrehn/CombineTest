@@ -23,7 +23,11 @@ const DEFAULT_POLLING_INTERVALL: number = 1000; // 1 second
 interface EditAppSettingsPageProps {
     appSettings: IAppSettings;
     lastShotCsvPath: string;
-    sessionJsonDir: string;
+    fsx2020SessionJsonDir: string;
+    appSettingsFilename: string;
+    playersFilename: string;
+    userDrillConfigurationsFilename: string;
+    sessionsFilename: string;
     handleBackClicked: () => void;
     handleSaveAppSettings: (changedAppSettings: IAppSettings) => void;
 }
@@ -80,11 +84,43 @@ export const EditAppSettingsPage: React.FC<EditAppSettingsPageProps> = (props: E
                         disabled={true}
                     />
                 </div>
-                <div className="session-json-dir-input">
+                <div className="fsx2020-session-json-dir-input">
                     <TextInput
-                        label={"Session Json Directory"}
+                        label={"FSX2020 Session Json Directory"}
                         type={"text"}
-                        value={props.sessionJsonDir}
+                        value={props.fsx2020SessionJsonDir}
+                        disabled={true}
+                    />
+                </div>
+                <div className="app-settings-filename-input">
+                    <TextInput
+                        label={"App Settings File"}
+                        type={"text"}
+                        value={props.appSettingsFilename}
+                        disabled={true}
+                    />
+                </div>
+                <div className="players-filename-input">
+                    <TextInput
+                        label={"Players File"}
+                        type={"text"}
+                        value={props.playersFilename}
+                        disabled={true}
+                    />
+                </div>
+                <div className="user-drill-configurations-filename-input">
+                    <TextInput
+                        label={"User Drill Configurations File"}
+                        type={"text"}
+                        value={props.userDrillConfigurationsFilename}
+                        disabled={true}
+                    />
+                </div>
+                <div className="sessions-filename-input">
+                    <TextInput
+                        label={"Sessions File"}
+                        type={"text"}
+                        value={props.sessionsFilename}
                         disabled={true}
                     />
                 </div>

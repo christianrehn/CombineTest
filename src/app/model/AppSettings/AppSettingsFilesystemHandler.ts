@@ -2,15 +2,24 @@ import {ipcRenderer} from "electron";
 import {IAppSettings} from "./AppSettings";
 import {appSettingsToString} from "./AppSettingsConverter";
 
-export const loadAppSettingsAsJson = (): any => {
-    const appSettingsAsString: string = ipcRenderer.sendSync('loadAppSettingsAsString', undefined);
+type LoadAppSettingsAsStringReturnType = { appSettingsFilename: string, appSettingsAsString: string }
+export type LoadAppSettingsAsJsonReturnType = { appSettingsFilename: string, appSettingsAsJson: any }
+
+export const loadAppSettingsAsJson = (): LoadAppSettingsAsJsonReturnType => {
+    const {
+        appSettingsFilename,
+        appSettingsAsString,
+    }: LoadAppSettingsAsStringReturnType = ipcRenderer.sendSync('loadAppSettingsAsString', undefined);
     if (!appSettingsAsString) {
         console.log("loadAppSettingsAsJson - no settings file found");
-        return {};
+        return {
+            appSettingsFilename,
+            appSettingsAsJson: {},
+        };
     }
     const appSettingsAsJson = JSON.parse(appSettingsAsString);
     console.log("loadAppSettingsAsJson - appSettingsAsJson=", appSettingsAsJson)
-    return appSettingsAsJson;
+    return {appSettingsFilename, appSettingsAsJson};
 }
 
 export const saveAppSettings = (appSettings: IAppSettings): void => {

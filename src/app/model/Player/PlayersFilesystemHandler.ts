@@ -2,15 +2,24 @@ import {ipcRenderer} from "electron";
 import {IPlayer} from "./Player";
 import {playersToString} from "./PlayerConverter";
 
-export const loadPlayersAsJson = (): any[] => {
-    const playerAsString: string = ipcRenderer.sendSync('loadPlayersAsString', undefined);
-    if (!playerAsString) {
+type LoadPlayersAsStringReturnType = { playersFilename: string, playersAsString: string }
+export type LoadPlayersAsJsonReturnType = { playersFilename: string, playersAsJson: any[] }
+
+export const loadPlayersAsJson = (): LoadPlayersAsJsonReturnType => {
+    const {
+        playersFilename,
+        playersAsString
+    }: LoadPlayersAsStringReturnType = ipcRenderer.sendSync('loadPlayersAsString', undefined);
+    if (!playersAsString) {
         console.log("loadPlayersAsJson - no players file found");
-        return [];
+        return {
+            playersFilename,
+            playersAsJson: [],
+        };
     }
-    const playerAsJson = JSON.parse(playerAsString);
-    console.log("loadPlayersAsJson - playerAsJson=", playerAsJson)
-    return playerAsJson;
+    const playersAsJson = JSON.parse(playersAsString);
+    console.log("loadPlayersAsJson - playersAsJson=", playersAsJson)
+    return {playersFilename, playersAsJson};
 }
 
 export const savePlayers = (players: IPlayer[]): void => {

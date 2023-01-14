@@ -2,13 +2,23 @@ import {ipcRenderer} from "electron";
 import {drillConfigurationsToString} from "./DrillConfigurationConverter";
 import {IDrillConfiguration} from "./DrillConfiguration";
 
-export const loadUserDrillConfigurationsAsJson = (): any[] => {
-    const userDrillConfigurationsAsString: string = ipcRenderer.sendSync('loadUserDrillConfigurationsAsString', undefined);
+type LoadUserDrillConfigurationsAsStringReturnType = { userDrillConfigurationsFilename: string, userDrillConfigurationsAsString: string }
+export type LoadUserDrillConfigurationsAsJsonReturnType = { userDrillConfigurationsFilename: string, userDrillConfigurationsAsJson: any[] }
+
+export const loadUserDrillConfigurationsAsJson = (): LoadUserDrillConfigurationsAsJsonReturnType => {
+    const {
+        userDrillConfigurationsFilename,
+        userDrillConfigurationsAsString
+    }: LoadUserDrillConfigurationsAsStringReturnType = ipcRenderer.sendSync('loadUserDrillConfigurationsAsString', undefined);
     if (!userDrillConfigurationsAsString) {
         console.log("loadUserDrillConfigurationsAsJson - no user configuration file found");
-        return [];
+        return {
+            userDrillConfigurationsFilename,
+            userDrillConfigurationsAsJson: []
+        };
     }
-    return JSON.parse(userDrillConfigurationsAsString);
+    const userDrillConfigurationsAsJson = JSON.parse(userDrillConfigurationsAsString)
+    return {userDrillConfigurationsFilename, userDrillConfigurationsAsJson};
 }
 
 export const saveUserDrillConfigurations = (drillConfigurations: IDrillConfiguration[]): void => {

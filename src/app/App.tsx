@@ -20,10 +20,15 @@ import {drillConfigurationsFromJson} from "./model/DrillConfiguration/DrillConfi
 import {Fairway, Green, Rough, Tee} from "./model/AverageStrokesData/GroundType";
 import {
     loadUserDrillConfigurationsAsJson,
+    LoadUserDrillConfigurationsAsJsonReturnType,
     saveUserDrillConfigurations
 } from "./model/DrillConfiguration/DrillConfigurationsFilesystemHandler";
-import {loadPlayersAsJson, savePlayers} from "./model/Player/PlayersFilesystemHandler";
-import {loadSessionsAsJson, saveSessions} from "./model/Session/SessionsFilesystemHandler";
+import {loadPlayersAsJson, LoadPlayersAsJsonReturnType, savePlayers} from "./model/Player/PlayersFilesystemHandler";
+import {
+    loadSessionsAsJson,
+    LoadSessionsAsJsonReturnType,
+    saveSessions
+} from "./model/Session/SessionsFilesystemHandler";
 import {ISession} from "./model/Session/Session";
 import {sessionsFromJson} from "./model/Session/SessionConverter";
 import {HomePage, HomePageName} from "./views/HomePage/HomePage";
@@ -36,7 +41,11 @@ import {assert} from "chai";
 import {ReportSessionPage, ReportSessionPageName} from "./views/ReportSessionPage/ReportSessionPage";
 import {EditAppSettingsPage, EditAppSettingsPageName} from "./views/EditAppSetttingsPage/EditAppSettingsPage";
 import {IAppSettings} from "./model/AppSettings/AppSettings";
-import {loadAppSettingsAsJson, saveAppSettings} from "./model/AppSettings/AppSettingsFilesystemHandler";
+import {
+    loadAppSettingsAsJson,
+    LoadAppSettingsAsJsonReturnType,
+    saveAppSettings
+} from "./model/AppSettings/AppSettingsFilesystemHandler";
 import {appSettingsFromJson} from "./model/AppSettings/AppSettingsConverter";
 import {
     EditDrillConfigurationsPage,
@@ -52,18 +61,22 @@ const App: React.FC<{}> = (): JSX.Element => {
     const lastShotCsvPath: string = process.platform !== 'darwin'
         ? "C:/Program Files (x86)/Foresight Sports Experience/System/LastShot.CSV"
         : "/Users/rehn/IdeaProjects/GCQuadCombineTest/test/data/LastShot.CSV";
-    const sessionJsonDir: string = process.platform !== 'darwin'
+    const fsx2020SessionJsonDir: string = process.platform !== 'darwin'
         ? "C:/Program Files (x86)/Foresight Sports Experience/SessionData/"
         : "/Users/rehn/IdeaProjects/GCQuadCombineTest/test/data/SessionData/";
 
+    const [appSettingsFilename, setAppSettingsFilename] = React.useState<string>("");
     const [appSettings, setAppSettings] = React.useState<IAppSettings>(undefined);
 
+    const [userDrillConfigurationsFilename, setUserDrillConfigurationsFilename] = React.useState<string>("");
     const [drillConfigurations, setDrillConfigurations] = React.useState<IDrillConfiguration[]>([]);
     const [selectedDrillConfiguration, setSelectedDrillConfiguration] = React.useState<IDrillConfiguration>();
 
+    const [playersFilename, setPlayersFilename] = React.useState<string>("");
     const [players, setPlayers] = React.useState<IPlayer[]>([]);
     const [selectedPlayer, setSelectedPlayer] = React.useState<IPlayer>(undefined);
 
+    const [sessionsFilename, setSessionsFilename] = React.useState<string>("");
     const [sessions, setSessions] = React.useState<ISession[]>([]);
     const [selectedSession, setSelectedSession] = React.useState<ISession>(undefined);
 
@@ -71,7 +84,8 @@ const App: React.FC<{}> = (): JSX.Element => {
         React.useState<Map<string, IAverageStrokesData>>(new Map<string, IAverageStrokesData>());
 
     React.useEffect((): void => {
-        const appSettingsAsJson: any = loadAppSettingsAsJson();
+        const {appSettingsFilename, appSettingsAsJson}: LoadAppSettingsAsJsonReturnType = loadAppSettingsAsJson();
+        setAppSettingsFilename(appSettingsFilename);
         const appSettings: IAppSettings = appSettingsFromJson(appSettingsAsJson || {});
         setAppSettings(appSettings);
     }, []);
@@ -92,20 +106,26 @@ const App: React.FC<{}> = (): JSX.Element => {
     }, [averageShotsFromTeeCsvPath, averageShotsFromFairwayCsvPath, averageShotsFromRoughCsvPath, averageShotsFromGreenCsvPath])
 
     React.useEffect((): void => {
-        const playersAsJson: any[] = loadPlayersAsJson();
+        const {playersFilename, playersAsJson}: LoadPlayersAsJsonReturnType = loadPlayersAsJson();
+        setPlayersFilename(playersFilename)
         const players: IPlayer[] = playersFromJson(playersAsJson || []);
         setPlayers(players);
     }, []);
 
 
     React.useEffect((): void => {
-        const sessionsAsJson: any[] = loadSessionsAsJson();
+        const {sessionsFilename, sessionsAsJson}: LoadSessionsAsJsonReturnType = loadSessionsAsJson();
+        setSessionsFilename(sessionsFilename);
         const sessions: ISession[] = sessionsFromJson(sessionsAsJson || [], averageStrokesDataMap);
         setSessions(sessions);
     }, []);
 
     React.useEffect((): void => {
-        const userDrillConfigurationsAsJson: any[] = loadUserDrillConfigurationsAsJson();
+        const {
+            userDrillConfigurationsFilename,
+            userDrillConfigurationsAsJson
+        }: LoadUserDrillConfigurationsAsJsonReturnType = loadUserDrillConfigurationsAsJson();
+        setUserDrillConfigurationsFilename(userDrillConfigurationsFilename);
         const drillConfigurationsAsJson: any[] = !!userDrillConfigurationsAsJson && userDrillConfigurationsAsJson.length > 0
             ? userDrillConfigurationsAsJson
             : predefinedDrillConfigurationsAsJson;
@@ -200,7 +220,11 @@ const App: React.FC<{}> = (): JSX.Element => {
                     ? <EditAppSettingsPage
                         appSettings={appSettings}
                         lastShotCsvPath={lastShotCsvPath}
-                        sessionJsonDir={sessionJsonDir}
+                        fsx2020SessionJsonDir={fsx2020SessionJsonDir}
+                        appSettingsFilename={appSettingsFilename}
+                        playersFilename={playersFilename}
+                        userDrillConfigurationsFilename={userDrillConfigurationsFilename}
+                        sessionsFilename={sessionsFilename}
                         handleBackClicked={() => setSelectedPage(HomePageName)}
                         handleSaveAppSettings={handleSaveAppSettings}
                     />
@@ -234,7 +258,7 @@ const App: React.FC<{}> = (): JSX.Element => {
                                         ? <DrillPage
                                             appSettings={appSettings}
                                             lastShotCsvPath={lastShotCsvPath}
-                                            sessionJsonDir={sessionJsonDir}
+                                            sessionJsonDir={fsx2020SessionJsonDir}
                                             selectedPlayer={selectedPlayer}
                                             selectedSession={selectedSession}
                                             selectedDrillConfiguration={selectedDrillConfiguration}

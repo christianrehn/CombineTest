@@ -89,36 +89,21 @@ const createWindow = (): void => {
             console.log("loadAppSettingsAsString - appSettingsFilename=", appSettingsFilename);
             if (!fs.existsSync(appSettingsFilename)) {
                 console.log("loadAppSettingsAsString - no appSettings file found");
-                event.returnValue = '';
+                event.returnValue = {
+                    appSettingsFilename,
+                    appSettingsAsString: '',
+                };
             } else {
-                event.returnValue = fs.readFileSync(appSettingsFilename, 'utf8');
+                event.returnValue = {
+                    appSettingsFilename,
+                    appSettingsAsString: fs.readFileSync(appSettingsFilename, 'utf8'),
+                };
             }
         });
 
         ipcMain.on("saveAppSettings", (event: Electron.IpcMainEvent, appSettingsAsString: any): void => {
             console.log("saveAppSettings - appSettingsFilename=", appSettingsFilename);
             fs.writeFileSync(appSettingsFilename, appSettingsAsString, 'utf8');
-            event.returnValue = true;
-        });
-    }
-
-    // loadUserDrillConfigurationsAsString and saveUserDrillConfigurations listener
-    {
-        const userDrillConfigurationsFilename: string = path.join(app.getPath('userData'), "DrillConfigurations.json");
-
-        ipcMain.on("loadUserDrillConfigurationsAsString", (event: Electron.IpcMainEvent, arg: any): void => {
-            console.log("loadUserDrillConfigurationsAsString - userDrillConfigurationsFilename=", userDrillConfigurationsFilename);
-            if (!fs.existsSync(userDrillConfigurationsFilename)) {
-                console.log("loadUserDrillConfigurationsAsString - no user configuration file found");
-                event.returnValue = '';
-            } else {
-                event.returnValue = fs.readFileSync(userDrillConfigurationsFilename, 'utf8');
-            }
-        });
-
-        ipcMain.on("saveUserDrillConfigurations", (event: Electron.IpcMainEvent, drillConfigurationsAsString: any): void => {
-            console.log("saveUserDrillConfigurations - userDrillConfigurationsFilename=", userDrillConfigurationsFilename);
-            fs.writeFileSync(userDrillConfigurationsFilename, drillConfigurationsAsString, 'utf8');
             event.returnValue = true;
         });
     }
@@ -131,15 +116,48 @@ const createWindow = (): void => {
             console.log("loadPlayersAsString - playersFilename=", playersFilename);
             if (!fs.existsSync(playersFilename)) {
                 console.log("loadPlayersAsString - no players file found");
-                event.returnValue = '';
+                event.returnValue = {
+                    playersFilename,
+                    playersAsString: '',
+                };
             } else {
-                event.returnValue = fs.readFileSync(playersFilename, 'utf8');
+                event.returnValue = {
+                    playersFilename,
+                    playersAsString: fs.readFileSync(playersFilename, 'utf8'),
+                };
             }
         });
 
         ipcMain.on("savePlayers", (event: Electron.IpcMainEvent, playersAsString: any): void => {
             console.log("savePlayers - playersFilename=", playersFilename);
             fs.writeFileSync(playersFilename, playersAsString, 'utf8');
+            event.returnValue = true;
+        });
+    }
+
+    // loadUserDrillConfigurationsAsString and saveUserDrillConfigurations listener
+    {
+        const userDrillConfigurationsFilename: string = path.join(app.getPath('userData'), "DrillConfigurations.json");
+
+        ipcMain.on("loadUserDrillConfigurationsAsString", (event: Electron.IpcMainEvent, arg: any): void => {
+            console.log("loadUserDrillConfigurationsAsString - userDrillConfigurationsFilename=", userDrillConfigurationsFilename);
+            if (!fs.existsSync(userDrillConfigurationsFilename)) {
+                console.log("loadUserDrillConfigurationsAsString - no user configuration file found");
+                event.returnValue = {
+                    userDrillConfigurationsFilename,
+                    userDrillConfigurationsAsString: '',
+                };
+            } else {
+                event.returnValue = {
+                    userDrillConfigurationsFilename,
+                    userDrillConfigurationsAsString: fs.readFileSync(userDrillConfigurationsFilename, 'utf8'),
+                };
+            }
+        });
+
+        ipcMain.on("saveUserDrillConfigurations", (event: Electron.IpcMainEvent, drillConfigurationsAsString: any): void => {
+            console.log("saveUserDrillConfigurations - userDrillConfigurationsFilename=", userDrillConfigurationsFilename);
+            fs.writeFileSync(userDrillConfigurationsFilename, drillConfigurationsAsString, 'utf8');
             event.returnValue = true;
         });
     }
@@ -152,9 +170,15 @@ const createWindow = (): void => {
             console.log("loadSessionsAsString - sessionsFilename=", sessionsFilename);
             if (!fs.existsSync(sessionsFilename)) {
                 console.log("loadSessionsAsString - no sessions file found");
-                event.returnValue = '';
+                event.returnValue = {
+                    sessionsFilename,
+                    sessionsAsString: '',
+                };
             } else {
-                event.returnValue = fs.readFileSync(sessionsFilename, 'utf8');
+                event.returnValue = {
+                    sessionsFilename,
+                    sessionsAsString: fs.readFileSync(sessionsFilename, 'utf8')
+                };
             }
         });
 
