@@ -14,6 +14,9 @@ import {EditPlayerPageName} from "../EditPlayerPage/EditPlayerPage";
 import {assert} from "chai";
 import packageJson from '../../../../package.json';
 import settingsIcon from "../../../assets/settings.png";
+import zoomInIcon from "../../../assets/zoomIn.png";
+import zoomOutIcon from "../../../assets/zoomOut.png";
+import zoomResetIcon from "../../../assets/zoomReset.png";
 import {EditAppSettingsPageName} from "../EditAppSetttingsPage/EditAppSettingsPage";
 import {IAppSettings} from "../../model/AppSettings/AppSettings";
 import {PageNamesType} from "../PageNamesType";
@@ -63,8 +66,8 @@ export const HomePage: React.FC<IHomePageProps> = (props: IHomePageProps): JSX.E
                 </div>
 
                 <div className="top-buttons-flex-item">
-                    <div className="reports-flex-item flex-item">
-                        <span className="reports-span"
+                    <div className="edit-app-settings-flex-item flex-item">
+                        <span className="edit-app-settings-span"
                               onClick={(): void => {
                                   props.handleSelectPageClicked(EditAppSettingsPageName)
                               }}
@@ -73,6 +76,64 @@ export const HomePage: React.FC<IHomePageProps> = (props: IHomePageProps): JSX.E
                                 <img className="top-button-img"
                                      src={settingsIcon}
                                      alt={"Settings"}
+                                />
+                            </div>
+                        </span>
+                    </div>
+                </div>
+
+                <div className="top-buttons-flex-item">
+                    <div className="zoom-in-flex-item flex-item">
+                        <span className="zoom-in-span"
+                              onClick={(): void => {
+                                  const currentValue: string = (document.body.style as any).zoom || "100%";
+                                  const newValueAsNumber: number = Number(currentValue.replace('%', '')) + 10;
+                                  (document.body.style as any).zoom = `${Math.min(newValueAsNumber, 200)}%`;
+                                  console.log("zoom", (document.body.style as any).zoom)
+                              }}
+                        >
+                            <div className="top-button-img-div">
+                                <img className="top-button-img"
+                                     src={zoomInIcon}
+                                     alt={"Zoom In"}
+                                />
+                            </div>
+                        </span>
+                    </div>
+                </div>
+
+                <div className="top-buttons-flex-item">
+                    <div className="zoom-out-flex-item flex-item">
+                        <span className="zoom-out-span"
+                              onClick={(): void => {
+                                  const currentValue: string = (document.body.style as any).zoom || "100%";
+                                  const newValueAsNumber: number = Number(currentValue.replace('%', '')) - 10;
+                                  (document.body.style as any).zoom = `${Math.max(newValueAsNumber, 30)}%`;
+                                  console.log("zoom", (document.body.style as any).zoom)
+                              }}
+                        >
+                            <div className="top-button-img-div">
+                                <img className="top-button-img"
+                                     src={zoomOutIcon}
+                                     alt={"Zoom Out"}
+                                />
+                            </div>
+                        </span>
+                    </div>
+                </div>
+
+                <div className="top-buttons-flex-item">
+                    <div className="zoom-reset-flex-item flex-item">
+                        <span className="zoom-reset-span"
+                              onClick={(): void => {
+                                  (document.body.style as any).zoom = "100%";
+                                  console.log("zoom", (document.body.style as any).zoom)
+                              }}
+                        >
+                            <div className="top-button-img-div">
+                                <img className="top-button-img"
+                                     src={zoomResetIcon}
+                                     alt={"Zoom Reset"}
                                 />
                             </div>
                         </span>
