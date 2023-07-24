@@ -424,6 +424,7 @@ export class DrillConfigurationWithRandomDistancesGenerator extends AbstractDril
             targetCircleRadiusScore0InPercent: this.getTargetCircleRadiusScore0InPercent(),
             outsideTargetCircleAction: this.getOutsideTargetCircleAction(),
             distanceGenerator: {
+                type: this.getDistanceGenerator(),
                 minIncludedDistance: this._minIncludedDistance,
                 maxExcludedDistance: this._maxExcludedDistance,
                 numberOfShots: this._numberOfShots
