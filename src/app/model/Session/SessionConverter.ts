@@ -3,6 +3,7 @@ import {ISession, Session} from "./Session";
 import {drillConfigurationsFromJson} from "../DrillConfiguration/DrillConfigurationConverter";
 import {IAverageStrokesData} from "../AverageStrokesData/AverageStrokesData";
 import {shotDatasFromJson} from "../ShotData/ShotDataConverter";
+import {IDrillConfiguration} from "../DrillConfiguration/DrillConfiguration";
 
 export const sessionsToString = (
     sessions: ISession[],
@@ -26,12 +27,15 @@ export const sessionsFromJson = (
 
     return sessionsAsJson
         .map((sessionAsJson: any): ISession => {
-            return new Session(
-                sessionAsJson.uuid,
-                sessionAsJson.name,
-                sessionAsJson.playerUuid,
-                drillConfigurationsFromJson([sessionAsJson.drillConfiguration], averageStrokesDataMap)[0],
-                shotDatasFromJson(sessionAsJson.shotDatas))
+            const drillConfiguration: IDrillConfiguration = drillConfigurationsFromJson([sessionAsJson.drillConfiguration], averageStrokesDataMap)[0];
+            return !!drillConfiguration
+                ? new Session(
+                    sessionAsJson.uuid,
+                    sessionAsJson.name,
+                    sessionAsJson.playerUuid,
+                    drillConfiguration,
+                    shotDatasFromJson(sessionAsJson.shotDatas))
+                : null; // this might happen if json session file is not correct -> ignore
         })
         .filter((session: ISession) => !!session);
 }
