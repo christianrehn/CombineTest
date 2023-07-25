@@ -27,22 +27,16 @@ module.exports = [
     {
         test: /\.scss$/,
         exclude: /(node_modules|\.webpack)/,
-        loaders: [
-            "style-loader",
-            "css-loader",
-            // "postcss-loader",
-            "sass-loader"
-        ]
-        // use: [
-        //     {loader: 'style-loader'},
-        //     {
-        //         loader: 'css-loader',
-        //         // options: {
-        //         //     modules: true,
-        //         // },
-        //     },
-        //     {loader: 'sass-loader'},
-        // ],
+        use: [
+            {loader: 'style-loader'},
+            {
+                loader: 'css-loader',
+                // options: {
+                //     modules: true,
+                // },
+            },
+            {loader: 'sass-loader'},
+        ],
     },
     {
         test: /\.css$/,
