@@ -43,6 +43,7 @@ module.exports = {
                 mainConfig: "./webpack.main.config.js",
                 renderer: {
                     config: "./webpack.renderer.config.js",
+                    nodeIntegration: true, // Implies `target: 'electron-renderer'` for all entry points
                     entryPoints: [
                         {
                             html: "./src/index.html",
