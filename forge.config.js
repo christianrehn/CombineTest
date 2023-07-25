@@ -37,9 +37,9 @@ module.exports = {
         }
     ],
     plugins: [
-        {
-            name: "@electron-forge/plugin-webpack",
-            config: {
+        [
+            "@electron-forge/plugin-webpack",
+            {
                 mainConfig: "./webpack.main.config.js",
                 renderer: {
                     config: "./webpack.renderer.config.js",
@@ -54,6 +54,6 @@ module.exports = {
                 "port": 3011,
                 "loggerPort": 9011
             }
-        }
+        ]
     ]
 }
