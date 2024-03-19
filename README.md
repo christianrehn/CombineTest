@@ -175,7 +175,7 @@ Maybe you also want to check out my 100% free iOS App: [Golf Logbook](https://ch
 * I do not have the formulas to calculate the Trackman scores but approximations so there might be a small delta
   compared to the original Trackman score calculation. But all Trackman scores that I have to develop and test my
   calculation (more than 300 shots)  are identical.
-* I think (I am not sure) the offline value in LastShot.CSV is the total offline, not the carry offline that I would
+* The offline value in LastShot.CSV is the total offline, not the carry offline that I would
   need to calculate shots gained rating and the Trackman score. But currently it is the best approximation I
   have.
 
