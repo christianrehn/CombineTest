@@ -359,7 +359,7 @@ export const EditDrillConfigurationPage: React.FC<IEditDrillConfigurationPagePro
                 </div>
                 <div className="max-coasting-in-unit-input">
                     <NumberPlusMinusInput
-                        label={`Maximum coasting without score deduction in ${lengthUnit}`}
+                        label={`Maximum coasting without score reduction in ${lengthUnit}`}
                         hidden={![spinDrillType].includes(drillType) || !considerCoastingBehavior}
                         delta={0.1}
                         decimalPlaces={1}
