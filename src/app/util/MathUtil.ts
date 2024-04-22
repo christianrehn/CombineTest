@@ -15,6 +15,7 @@ export const computeNumberOfShotsToDrop = (numberOfValues: number, numberOfDropS
 
     return Math.max(Math.min(numberOfDropShots, numberOfValues - 1), 0);
 }
+
 export const computeAverage = (values: number[], numberOfDropShots: number = 0) => {
     assert(values.length > 0, "!values.length > 0");
 
