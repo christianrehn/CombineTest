@@ -20,7 +20,7 @@
     alignment-baseline: middle;
 }
 
-.shots_svg_shotcircle, .shots_svg_lastshotcircle {
+.shots_svg_shotcircle, .shots_svg_latestshotcircle {
     stroke-width: 1;
     fill: none;
     r: 5px;
@@ -32,11 +32,11 @@
     stroke: blue;
 }
 
-.shots_svg_lastshotcircle {
+.shots_svg_latestshotcircle {
     stroke: red;
 }
 
-.shots_svg_shotcircletext, .shots_svg_lastshotcircletext {
+.shots_svg_shotcircletext, .shots_svg_latestshotcircletext {
     text-anchor: middle;
     stroke-width: 0.2;
     font-size: 7px;
@@ -48,12 +48,12 @@
     fill: blue;
 }
 
-.shots_svg_lastshotcircletext {
+.shots_svg_latestshotcircletext {
     stroke: red;
     fill: red;
 }
 
-.shots_svg_lastmaxdeviation {
+.shots_svg_latestmaxdeviation {
     stroke: red;
     stroke-width: 0.6;
 }
@@ -63,7 +63,7 @@
     stroke-width: 0.6;
 }
 
-.shots_svg_lasttargetcircle_score100 {
+.shots_svg_latesttargetcircle_score100 {
     stroke: red;
     stroke-width: 0.6;
     fill: none;
@@ -80,7 +80,7 @@
     cy: 0;
 }
 
-.shots_svg_lasttargetcircle_score0 {
+.shots_svg_latesttargetcircle_score0 {
     stroke: red;
     stroke-width: 0.6;
     fill: none;
