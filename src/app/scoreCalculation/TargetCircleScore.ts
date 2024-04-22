@@ -14,7 +14,7 @@ export const computeTargetCircleScore = (drillConfiguration: IDrillConfiguration
     assert(!!fromPin, "!fromPin");
 
     if (![targetCircleDrillType].includes(drillConfiguration.getDrillType())) {
-        // score can only be computes for drill configuration type spin
+        // score can only be computes for drill configuration type targetCircle
         return 0;
     }
     assert(!drillConfiguration.getTargetCircleRadiusAsUnitNotPercent() || drillConfiguration.getTargetCircleRadiusScore100InUnit() > 0, "!(!drillConfiguration.getTargetCircleRadiusAsUnitNotPercent() || drillConfiguration.getTargetCircleRadiusScore100InUnit() > 0)");
