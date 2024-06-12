@@ -16,9 +16,23 @@ In addition my "Combine Test" program also rates each shot using
 the [shots gained approach](https://www.pgatour.com/news/2016/05/31/strokes-gained-defined.html) which is explained in
 detail in [Mark Broadie's Book Every Shot Counts](https://www.amazon.com/-/es/Mark-Broadie/dp/1592407501).
 
+## Alternative for iPhone and iPad: TrajectoryX (without FSX2020)
+
+<a href="https://trajectoryx.com"><img src="screenshots/TrajectoryX_transparentBackground.png" alt="App Store" width="400"/></a>
+
+Instead of installing the Combine Test App under Microsoft Windows you can use my
+new [TrajectoryX](https://trajectoryx.com)
+[iOS-App](https://apps.apple.com/app/trajectoryx/id6502289160?platform=iphone)
+that provides the same drill functionality without FSX2020.
+You can install this [iOS-App](https://apps.apple.com/app/trajectoryx/id6502289160?platform=iphone) on your iPhone,
+iPad (or MacBook) and take it with you on the outdoor range or even on the golf course.
+
+<a href="https://apps.apple.com/app/trajectoryx/id6502289160?platform=iphone"><img src="screenshots/appstore.png" alt="App Store" width="400"/></a>
+
 ## Prerequisites to run my "Combine Test"
 
 All you need is [QCQuad](https://www.foresightsports.com/gcquad-quadrascopic-launch-monitor)
+, [QuadMAX](https://www.foresightsports.com/pages/quadmax),
 , [GC3](https://www.foresightsports.com/gc3),
 [QC2](https://shop.foresightsports.com/collections/certified-pre-owned-gc-launch-monitors/products/cpo-gc2)
 or [GCHawk](https://www.foresightsports.com/gchawk) connected to [FSX2020](https://www.foresightsports.com/fsx2020) and
@@ -166,7 +180,7 @@ The aim of the game is to hit as few shots as possible to finish all distances.
 
 ## Track your golf training data
 
-Maybe you also want to check out my 100% free iOS App: [Golf Logbook](https://christianrehn.github.io/golf-logbook/)
+Maybe you also want to check out my 100% free iOS-App: [Golf Logbook](https://christianrehn.github.io/golf-logbook/)
 
 ## Known inaccuracies
 
