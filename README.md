@@ -217,7 +217,7 @@ my score calcualtion gets. To share it create a branch in this GitHub repo or ma
 
 ### Technical Details
 
-This program has been built using Node v16, Electron v6, React v18 and Typescript v4. You can define new Tests (
+This program has been built using Node v18, Electron v6, React v18 and Typescript v4. You can define new Tests (
 distances, green size, yards or meter, ...) in file src/data/TestsConfiguration.json
 
 After cloning the repo you can:
