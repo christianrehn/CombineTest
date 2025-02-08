@@ -32,9 +32,9 @@ iPad (or MacBook) and take it with you on the outdoor range or even on the golf 
 ## Prerequisites to run my "Combine Test"
 
 All you need is [QCQuad](https://www.foresightsports.com/gcquad-quadrascopic-launch-monitor)
-, [QuadMAX](https://www.foresightsports.com/pages/quadmax),
-, [GC3](https://www.foresightsports.com/gc3),
-[QC2](https://shop.foresightsports.com/collections/certified-pre-owned-gc-launch-monitors/products/cpo-gc2)
+, [QuadMAX](https://www.foresightsports.com/pages/quadmax)
+, [GC3](https://www.foresightsports.com/gc3)
+, [QC2](https://shop.foresightsports.com/collections/certified-pre-owned-gc-launch-monitors/products/cpo-gc2)
 or [GCHawk](https://www.foresightsports.com/gchawk) connected to [FSX2020](https://www.foresightsports.com/fsx2020) and
 my 100% free and open source "Combine Test"
 program installed on your computer (my software could be easily modified to support other launch monitors, it just needs
